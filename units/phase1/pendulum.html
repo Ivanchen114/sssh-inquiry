@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>單擺與數據處理 · 論證建模 · 探究與實作</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span style="color:var(--phase1)">論證建模</span>
+      <span>›</span>
+      <span>單擺與數據處理</span>
+    </div>
+    <h1>🕰️ 單擺與數據處理</h1>
+    <p class="subtitle">用 Excel 整理數據、畫圖、找關係——第一次完整的數據分析</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag express">表達分享</span>
+      <span class="tag">W5 · 2 節課</span>
+      <span class="tag">Excel 操作</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- 學習目標 -->
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">本單元學習目標</div>
+      <ul>
+        <li>能用 Excel 計算平均值、標準差，並正確格式化數字</li>
+        <li>能畫出 T² vs L 的散佈圖，並加上趨勢線（線性回歸）</li>
+        <li>能從圖形的斜率推算重力加速度 g 的值</li>
+        <li>能用「主張—理由—證據」口頭分享你的發現（第一次小組發表）</li>
+      </ul>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">⏱ 課堂節奏（兩節課）</div>
+      <p><strong>第一節（50 min）：</strong>實際測量（5 種擺長各測 5 次），輸入 Excel，計算平均 T 和 T²。</p>
+      <p style="margin-top:8px;"><strong>第二節（50 min）：</strong>畫 T² vs L 圖、加趨勢線、計算 g、各組發表（5 分鐘/組）。</p>
+    </div>
+
+    <!-- 情境引入 -->
+    <div class="section-title">課題核心</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;margin-bottom:8px;">從數據到 g——第一次完整的科學探究</div>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;">單擺的週期公式是：</p>
+      <div style="text-align:center;padding:16px;font-family:'DM Mono',monospace;font-size:20px;color:var(--text-primary);background:var(--bg);border-radius:6px;margin:12px 0;">
+        T = 2π √(L/g)
+      </div>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;">兩邊平方得到：<strong>T² = (4π²/g) × L</strong></p>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;">這是一個 <strong>T² 和 L 的線性關係</strong>！斜率 = 4π²/g，所以 g = 4π² / 斜率。</p>
+    </div>
+
+    <!-- Excel 操作指引 -->
+    <div class="section-title">Excel 操作指引</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:12px;">📊 建議的表格結構</div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>擺長 L (m)</th>
+              <th>T₁ (s)</th><th>T₂ (s)</th><th>T₃ (s)</th><th>T₄ (s)</th><th>T₅ (s)</th>
+              <th>平均 T (s)</th>
+              <th>T² (s²)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0.20</td><td colspan="5" style="text-align:center;color:var(--text-muted);font-style:italic;">← 同學填入 →</td><td style="color:var(--phase1);">=AVERAGE(B3:F3)</td><td style="color:var(--phase2);">=G3^2</td></tr>
+            <tr><td>0.40</td><td colspan="5" style="text-align:center;color:var(--text-muted);font-style:italic;">← 同學填入 →</td><td style="color:var(--phase1);">…</td><td style="color:var(--phase2);">…</td></tr>
+            <tr><td>0.60</td><td colspan="5" style="text-align:center;color:var(--text-muted);font-style:italic;">← 同學填入 →</td><td style="color:var(--phase1);">…</td><td style="color:var(--phase2);">…</td></tr>
+            <tr><td>0.80</td><td colspan="5" style="text-align:center;color:var(--text-muted);font-style:italic;">← 同學填入 →</td><td style="color:var(--phase1);">…</td><td style="color:var(--phase2);">…</td></tr>
+            <tr><td>1.00</td><td colspan="5" style="text-align:center;color:var(--text-muted);font-style:italic;">← 同學填入 →</td><td style="color:var(--phase1);">…</td><td style="color:var(--phase2);">…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+        <div style="background:var(--bg);border-radius:4px;padding:10px 12px;">
+          <div style="font-weight:700;margin-bottom:6px;color:var(--phase1);">畫散佈圖步驟：</div>
+          <ol style="padding-left:16px;color:var(--text-secondary);line-height:1.9;">
+            <li>選取 L 欄和 T² 欄</li>
+            <li>插入 → 圖表 → 散佈圖</li>
+            <li>右鍵點數據點 → 加趨勢線</li>
+            <li>勾選「顯示方程式」</li>
+          </ol>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:10px 12px;">
+          <div style="font-weight:700;margin-bottom:6px;color:var(--phase2);">從斜率算 g：</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-secondary);line-height:2;">
+            斜率 = 4π²/g<br>
+            → g = 4π²/斜率<br>
+            → g = 4 × 9.87 / 斜率<br>
+            → 理論值：9.8 m/s²
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 課堂活動 -->
+    <div class="section-title">課堂活動</div>
+    <div class="activity-block">
+      <div class="activity-header phase1">活動 · 小組數據分析與發表（第二節，40 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">各組完成 Excel 分析後，準備一個 5 分鐘口頭發表，回答以下問題：</p>
+        <div style="display:grid;gap:8px;margin-bottom:16px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q1：你們算出的 g 值是多少？和標準值 9.8 m/s² 相比，偏差幾個百分比？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q2：你們的 T² vs L 圖，數據點排列整齊嗎？有沒有明顯散開的異常點？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q3：你認為你們測量中誤差最大的來源是什麼？（反應時間？擺長測量？放擺方式？）</div>
+        </div>
+
+        <div style="background:var(--bg);border-radius:4px;padding:12px 16px;font-size:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);margin-bottom:8px;">ORID 口頭反思框架（每人 1 分鐘）</div>
+          <div style="display:grid;gap:6px;">
+            <div style="display:flex;gap:10px;"><span style="background:var(--phase1);color:white;padding:2px 8px;border-radius:3px;font-size:11px;flex-shrink:0;">O</span><span style="color:var(--text-secondary);">客觀：你們量到什麼數字？圖形長什麼樣子？</span></div>
+            <div style="display:flex;gap:10px;"><span style="background:var(--phase2);color:white;padding:2px 8px;border-radius:3px;font-size:11px;flex-shrink:0;">R</span><span style="color:var(--text-secondary);">感受：這個結果讓你感到驚訝嗎？為什麼？</span></div>
+            <div style="display:flex;gap:10px;"><span style="background:var(--phase3);color:white;padding:2px 8px;border-radius:3px;font-size:11px;flex-shrink:0;">I</span><span style="color:var(--text-secondary);">詮釋：你覺得 g 值的偏差，主要是什麼原因造成的？</span></div>
+            <div style="display:flex;gap:10px;"><span style="background:var(--express);color:white;padding:2px 8px;border-radius:3px;font-size:11px;flex-shrink:0;">D</span><span style="color:var(--text-secondary);">決定：如果重做，你會改變哪個測量步驟？</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">討論引導問題</div>
+      <ul>
+        <li>「如果你的 g 值是 9.2 m/s²，偏低 6%——這個偏差是你量錯了，還是測量必然有不確定度？怎麼判斷？」</li>
+        <li>「為什麼要畫 T² vs L，而不是 T vs L？（引導：T vs L 是曲線，無法用直線描述；T² vs L 是直線，更好分析）」</li>
+        <li>「你的趨勢線過原點嗎？理論上應該過嗎？」</li>
+      </ul>
+      <div class="teacher-label" style="margin-top:10px;">典型錯誤</div>
+      <p>學生常把「10 次週期的總時間」直接當 T，而不是除以 10。建議在開始測量前明確說明：計時 10 個週期，結果除以 10，這樣精度更高。</p>
+    </div>
+
+    <!-- 延伸思考 -->
+    <div class="section-title">延伸思考</div>
+    <div class="card" style="margin-bottom:24px;">
+      <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+        <li>如果用「計時 1 個週期」vs「計時 10 個週期再除以 10」，哪個方法的不確定度較小？為什麼？</li>
+        <li>你的 T² vs L 圖的截距應該是 0，但實際上不是——可能的原因是什麼？</li>
+        <li>用同樣方法，你能設計實驗驗證「彈簧振子的週期與質量有關」嗎？需要哪些器材、測量哪些量、畫什麼圖？</li>
+      </ol>
+    </div>
+
+    <!-- 學習歷程 -->
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">本單元的 Excel 截圖（含 T² vs L 圖）和你的 g 值計算過程，是放入學習歷程的好素材。加上一段 ORID 反思文字（100-150 字），說明你從這次分析中學到了什麼。</p>
+    </div>
+
+    <!-- 前後導覽 -->
+    <div class="unit-nav">
+      <a href="uncertainty.html">← 上一單元：有效數字與不確定度</a>
+      <a href="../phase2/spring.html">下一站：規劃研究 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

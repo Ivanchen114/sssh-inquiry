@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>有效數字與不確定度 · 論證建模 · 探究與實作</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span style="color:var(--phase1)">論證建模</span>
+      <span>›</span>
+      <span>有效數字與不確定度</span>
+    </div>
+    <h1>📏 有效數字與不確定度</h1>
+    <p class="subtitle">「我量到 1.4 秒」和「我量到 1.42 ± 0.03 秒」有什麼不同？</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">W4 · 2 節課</span>
+      <span class="tag">測量的語言</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- 學習目標 -->
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">本單元學習目標</div>
+      <ul>
+        <li>能正確判斷一個數字有幾位有效數字</li>
+        <li>理解「不確定度」≠「錯誤」——它是對測量範圍的誠實描述</li>
+        <li>能用「最大 − 最小」法估計測量的不確定度</li>
+        <li>計算結果取幾位有效數字，要跟著最不確定的那個測量走</li>
+      </ul>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">對應課綱指標</div>
+      <p>INa-Vc-2 能正確記錄測量結果，並用適當的有效數字表示。<br>
+      INb-Vc-1 能估算測量的不確定度，並用 ± 表示。</p>
+    </div>
+
+    <!-- 情境引入 -->
+    <div class="section-title">情境引入</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;margin-bottom:8px;">「老師，我量到 1.4 秒！」</div>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;">小明說：「我量到 1.4 秒。」小美說：「我量到 1.42 秒。」小華說：「我量到 1.423 秒。」他們三個量的是同一個擺。報告哪個比較正確？哪個比較有誠信？</p>
+      <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+        <div style="background:var(--bg);border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:22px;font-weight:700;color:var(--text-primary);">1.4</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">2 位有效數字</div>
+          <div style="font-size:11px;color:var(--text-muted);">精度：±0.1 s</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:14px;text-align:center;border:2px solid var(--phase1);">
+          <div style="font-family:'DM Mono',monospace;font-size:22px;font-weight:700;color:var(--phase1);">1.42</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">3 位有效數字</div>
+          <div style="font-size:11px;color:var(--phase1);">精度：±0.01 s ✓</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:22px;font-weight:700;color:var(--text-primary);">1.423</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">4 位有效數字</div>
+          <div style="font-size:11px;color:#dc2626;">精度超越儀器？</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">⏱ 課堂節奏（第一節，50 分鐘）</div>
+      <ul>
+        <li>0–10 min：三個數字的情境，讓學生討論哪個最誠實</li>
+        <li>10–25 min：有效數字規則教學 + 練習題 A</li>
+        <li>25–40 min：不確定度概念，「最大-最小」法計算</li>
+        <li>40–50 min：課堂練習 B</li>
+      </ul>
+    </div>
+
+    <!-- 核心概念 -->
+    <div class="section-title">核心概念</div>
+    <div style="display:grid;gap:12px;margin-bottom:24px;">
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🔢 有效數字規則</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+          <div>
+            <div style="font-weight:600;color:var(--text-primary);margin-bottom:6px;">這些數字是有效數字：</div>
+            <ul style="list-style:none;padding:0;color:var(--text-secondary);">
+              <li style="padding:3px 0;">• 非零數字：<code style="background:var(--bg);padding:1px 5px;border-radius:3px;">1, 2, 3…9</code></li>
+              <li style="padding:3px 0;">• 夾在中間的零：<code style="background:var(--bg);padding:1px 5px;border-radius:3px;">1.04</code>（3 位）</li>
+              <li style="padding:3px 0;">• 小數點後面的零：<code style="background:var(--bg);padding:1px 5px;border-radius:3px;">1.40</code>（3 位）</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-weight:600;color:var(--text-primary);margin-bottom:6px;">這些零不算有效數字：</div>
+            <ul style="list-style:none;padding:0;color:var(--text-secondary);">
+              <li style="padding:3px 0;">• 最前面的零：<code style="background:var(--bg);padding:1px 5px;border-radius:3px;">0.042</code>（2 位）</li>
+              <li style="padding:3px 0;">• 整數末尾的零：<code style="background:var(--bg);padding:1px 5px;border-radius:3px;">1400</code>（不確定）</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📊 不確定度是什麼？</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;">
+          <div>
+            <p style="color:var(--text-secondary);line-height:1.7;">寫法：<code style="background:var(--bg);padding:2px 6px;border-radius:3px;font-size:14px;">T = 1.42 ± 0.03 s</code></p>
+            <p style="color:var(--text-secondary);line-height:1.7;margin-top:8px;">意思：「我相信真實值落在 <strong>1.39 s 到 1.45 s 之間</strong>」</p>
+          </div>
+          <div>
+            <div style="font-weight:600;margin-bottom:6px;">簡易估算法（極差法）：</div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;background:var(--bg);padding:12px;border-radius:4px;line-height:2;">
+              最大值 = 1.45<br>
+              最小值 = 1.39<br>
+              不確定度 ≈ (1.45−1.39) / 2 = 0.03
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 課堂活動 -->
+    <div class="section-title">課堂活動</div>
+    <div class="activity-block">
+      <div class="activity-header phase1">練習 A · 判斷有效數字（10 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">請判斷以下數字各有幾位有效數字：</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <span style="font-family:'DM Mono',monospace;font-weight:700;">0.0340</span>
+            <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">→ 幾位？</span>
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <span style="font-family:'DM Mono',monospace;font-weight:700;">3200</span>
+            <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">→ 幾位？（為什麼不確定？）</span>
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <span style="font-family:'DM Mono',monospace;font-weight:700;">2.05 × 10³</span>
+            <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">→ 幾位？</span>
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <span style="font-family:'DM Mono',monospace;font-weight:700;">100.0</span>
+            <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">→ 幾位？</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-block">
+      <div class="activity-header phase1">練習 B · 計算不確定度（第二節，30 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">下表是同學測量一個橡皮筋長度的 6 次結果（單位：cm）：<br>
+        <strong style="font-family:'DM Mono',monospace;">12.3 &nbsp; 12.7 &nbsp; 12.5 &nbsp; 12.4 &nbsp; 12.8 &nbsp; 12.3</strong></p>
+        <div style="display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q1：計算平均值和極差（最大－最小）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q2：用極差法估計不確定度，用「平均值 ± 不確定度」的格式表示結果</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q3：12.8 這個數字看起來像「異常值」——要不要排除？如果排除，不確定度怎麼變？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q4：你的結果應該保留幾位有效數字？為什麼？</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">討論引導問題</div>
+      <ul>
+        <li>「為什麼說 1.423 s 可能是在說謊？計時器的精度到底是多少？」</li>
+        <li>「不確定度大，代表你量得不好嗎？還是只是誠實？」</li>
+        <li>「兩個同學的結果：1.42 ± 0.03 和 1.45 ± 0.02，這兩個結果一致嗎？怎麼判斷？」</li>
+      </ul>
+      <div class="teacher-label" style="margin-top:10px;">答案提示</div>
+      <p>練習 A：3位、2-4位（曖昧）、3位、4位。<br>
+      練習 B：平均 12.50 cm，極差 0.5，不確定度約 ±0.25，寫成 12.5 ± 0.3 cm（保留到小數點後一位）。</p>
+    </div>
+
+    <!-- 延伸思考 -->
+    <div class="section-title">延伸思考</div>
+    <div class="card" style="margin-bottom:24px;">
+      <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+        <li>如果兩個測量值分別是 A = 5.2 ± 0.1 cm 和 B = 5.1 ± 0.2 cm，能說 A > B 嗎？為什麼？</li>
+        <li>用科學記號（科學符號）表示有效數字有什麼好處？試用科學記號重寫 3200 為 3 位有效數字。</li>
+        <li>為什麼「平均值 ± 不確定度」比只寫「平均值」更有科學誠信？</li>
+      </ol>
+    </div>
+
+    <!-- 學習歷程 -->
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">本單元最適合放入學習歷程的是一份「你自己做的測量記錄」，包括：原始數據、計算過程、最終寫成「平均值 ± 不確定度」的結果。這展現了你已能誠實、精確地表達測量結果。</p>
+    </div>
+
+    <!-- 前後導覽 -->
+    <div class="unit-nav">
+      <a href="shm.html">← 上一單元：SHM 週期</a>
+      <a href="pendulum.html">下一單元：單擺與數據處理 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

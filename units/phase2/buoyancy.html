@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>浮力：鐵達尼號 · 規劃研究 · 探究與實作</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span style="color:var(--phase2)">規劃研究</span>
+      <span>›</span>
+      <span>浮力：鐵達尼號</span>
+    </div>
+    <h1>🚢 浮力：鐵達尼號工程挑戰</h1>
+    <p class="subtitle">用鋁箔紙做一艘船——浮起來，還要載最多貨</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag express">表達分享</span>
+      <span class="tag">W10–11 · 4 節課</span>
+      <span class="tag">工程挑戰競賽</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">本單元學習目標</div>
+      <ul>
+        <li>能用浮力原理（阿基米德原理）解釋船為什麼浮</li>
+        <li>能設計並在限定材料下建造一艘載重最大化的船</li>
+        <li>能從失敗中修改設計，理解工程的「迭代」過程</li>
+        <li>能用數據支持你的設計決策（而不是直覺）</li>
+      </ul>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">⏱ 課堂節奏（W10–W11 共 4 節）</div>
+      <ul>
+        <li>W10 第一節：浮力概念建立，計算最大載重理論值</li>
+        <li>W10 第二節：各組設計船型草圖、討論策略</li>
+        <li>W11 第一節：建造 + 測試（允許修改）</li>
+        <li>W11 第二節：正式競賽 + 各組分析為何成功/失敗</li>
+      </ul>
+      <div class="teacher-label" style="margin-top:10px;">競賽規則說明</div>
+      <p>每組限用：20 cm × 30 cm 鋁箔紙一張（不可撕破）、一張學習單大小的紙（可折疊但不可撕）。砝碼每個 10g，每次加一個，船沉了即停。記錄最終載重（克）。</p>
+    </div>
+
+    <div class="section-title">核心概念：為什麼鐵會浮？</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">阿基米德原理</div>
+        <div style="font-family:'DM Mono',monospace;font-size:15px;text-align:center;padding:12px;background:var(--bg);border-radius:4px;margin-bottom:10px;color:var(--phase2);">F浮 = ρ水 × V排 × g</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">物體受到的浮力 = 它排開的水的重量。<br>鐵本身密度 > 水，但做成空心船後，整體平均密度 < 水，所以浮。</p>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">最大載重理論計算</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">當船即將沉沒時，船和貨物的總重 = 浮力最大值。</p>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--bg);padding:10px;border-radius:4px;margin-top:8px;line-height:1.8;color:var(--text-secondary);">
+          最大排水量 = 船內空間體積<br>
+          最大浮力 = ρ水 × V × g<br>
+          最大載重 = 最大浮力 − 船重<br>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:12px;">🔍 設計前的思考：哪些因素影響載重？</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+        <div>
+          <div style="font-weight:600;color:var(--phase2);margin-bottom:6px;">可以設計的因素：</div>
+          <ul style="list-style:none;padding:0;color:var(--text-secondary);">
+            <li style="padding:3px 0;">📐 船的底面積（大 → 排水體積大）</li>
+            <li style="padding:3px 0;">📏 船壁高度（高 → 排水體積大）</li>
+            <li style="padding:3px 0;">🔷 船型（矩形 / 橢圓 / V 形）</li>
+            <li style="padding:3px 0;">⚖️ 如何分配砝碼位置（穩定性）</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-weight:600;color:var(--phase3);margin-bottom:6px;">要注意的風險：</div>
+          <ul style="list-style:none;padding:0;color:var(--text-secondary);">
+            <li style="padding:3px 0;">💧 船壁太薄→水從側面滲入</li>
+            <li style="padding:3px 0;">⚠️ 重心太高→傾覆翻船</li>
+            <li style="padding:3px 0;">🚢 船底破洞（鋁箔折疊不密）</li>
+            <li style="padding:3px 0;">📉 計算錯誤→理論 vs 實際差很多</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">課堂活動</div>
+    <div class="activity-block">
+      <div class="activity-header phase2">W10 活動 · 設計計畫與理論計算（W10 第二節，30 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">各組在正式建造前，先完成設計計畫表：</p>
+        <div style="background:var(--bg);border-radius:6px;padding:14px;font-size:13px;margin-bottom:14px;">
+          <div style="font-weight:700;margin-bottom:10px;">設計計畫表</div>
+          <div style="display:grid;gap:8px;color:var(--text-secondary);">
+            <div>1. 船型選擇（矩形 / 其他）：_________，選擇原因：_________</div>
+            <div>2. 預計底面積：________ cm²，船壁高：________ cm</div>
+            <div>3. 理論排水體積：________ cm³　(= 底面積 × 船壁高)</div>
+            <div>4. 理論最大浮力：________ g　(= 排水體積 × 1 g/cm³)</div>
+            <div>5. 估計船重：________ g　（根據鋁箔面積估算）</div>
+            <div>6. <strong>預測最大載重：________ g</strong></div>
+          </div>
+        </div>
+        <div style="display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q1：你的設計想要最大化哪個量？底面積還是高度？兩者的 tradeoff 是什麼？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q2：你預測最大載重是多少克？計算過程寫出來。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-block">
+      <div class="activity-header phase2">W11 正式競賽 · 記錄與分析（W11 第二節，35 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">競賽完成後，各組分析結果：</p>
+        <table style="margin-bottom:14px;">
+          <thead><tr><th>組別</th><th>預測載重 (g)</th><th>實際載重 (g)</th><th>偏差 (%)</th><th>失敗原因（如有）</th></tr></thead>
+          <tbody>
+            <tr><td>第一組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>第二組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>第三組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>第四組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <div style="display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q3：實際載重 vs 理論預測，差距多少？差距的主要原因是什麼？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q4：哪組的船最有效率（載重/船重比最高）？他們的設計有什麼特別之處？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q5：如果可以重做，你會改變設計的哪個部分？為什麼？</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">討論引導問題</div>
+      <ul>
+        <li>「同樣面積的鋁箔，不同形狀的船為什麼載重差很多？什麼形狀的截面積最大？」</li>
+        <li>「你的船在加到多少克後開始傾斜？傾斜和沉沒是兩個不同的失敗模式——你有辦法預防傾斜嗎？」</li>
+        <li>「有組的預測值和實際值非常接近——這代表什麼？（阿基米德原理確實有效，前提是測量準確）」</li>
+      </ul>
+      <div class="teacher-label" style="margin-top:10px;">同儕評估探究歷程說明</div>
+      <p>重點不是誰的船最重，而是誰的「設計—預測—執行—分析」流程最完整。建議讓學生根據研究過程（而非結果）互評。</p>
+    </div>
+
+    <div class="section-title">延伸思考</div>
+    <div class="card" style="margin-bottom:24px;">
+      <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+        <li>真正的鐵達尼號排水量是 52,310 噸——它為什麼沉？（提示：船體進水後排水量減少）</li>
+        <li>潛水艇如何在水中沉浮？它的工作原理與浮力的關係是什麼？</li>
+        <li>如果把這個實驗改到鹽水中進行，相同的船能承載更多還是更少的重量？如何計算？</li>
+      </ol>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">本單元最好的學習歷程素材：設計草圖 + 理論計算過程 + 實際測試照片 + 分析「預測 vs 實際差距」的反思。特別是失敗後如何修改設計——這展現了工程思維的成長。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="report.html">← 上一單元：報告撰寫規範</a>
+      <a href="../phase3/roller.html">下一站：發現問題 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

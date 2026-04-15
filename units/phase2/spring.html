@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>彈簧變因設計 · 規劃研究 · 探究與實作</title>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span style="color:var(--phase2)">規劃研究</span>
+      <span>›</span>
+      <span>彈簧變因設計</span>
+    </div>
+    <h1>🌀 彈簧變因設計</h1>
+    <p class="subtitle">從「什麼可以改變？」到「我要測哪個變因？」</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">W6–7 · 4 節課</span>
+      <span class="tag">控制變因入門</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- 學習目標 -->
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">本單元學習目標</div>
+      <ul>
+        <li>能列出影響彈簧秤重（彈力）的可能因素，並分類為操縱/控制/應變變因</li>
+        <li>能設計一個「公平比較」的實驗：一次只改變一個變因</li>
+        <li>理解「操縱變因」需要設定多個水準，而不只是「有/沒有」</li>
+        <li>能預測實驗結果，並在實驗後比對預測與實際結果的差異</li>
+      </ul>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">對應課綱指標</div>
+      <p>INb-Vc-2 能設計並執行實驗，控制無關變因以確保比較的公平性。<br>
+      INc-Vc-2 能根據研究問題，選擇適切的變因並說明其操作型定義。</p>
+      <div class="teacher-label" style="margin-top:10px;">⏱ 課堂節奏（W6–W7 共 4 節）</div>
+      <p>W6 第一節：橡皮筋實驗（快速建立感覺），彈力概念引入。<br>
+      W6 第二節：三種變因分類，各組設計彈簧實驗。<br>
+      W7 第一節：進行實驗、收集數據。<br>
+      W7 第二節：數據討論、各組分享設計邏輯。</p>
+    </div>
+
+    <!-- 核心概念 -->
+    <div class="section-title">核心概念：三種變因</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div class="card" style="border-top:3px solid var(--phase1);">
+        <div style="font-weight:700;font-size:13px;color:var(--phase1);margin-bottom:6px;">操縱變因</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">你<strong>主動改變</strong>的那個因素。<br><br>例：改變掛在彈簧上的砝碼質量（100g, 200g, 300g）</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--phase2);">
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:6px;">控制變因</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">你<strong>維持不變</strong>的所有其他因素。<br><br>例：彈簧種類、懸掛高度、室溫</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:6px;">應變變因</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">你<strong>觀察並記錄</strong>的結果。<br><br>例：彈簧伸長的長度（cm）</div>
+      </div>
+    </div>
+
+    <!-- 情境引入 -->
+    <div class="section-title">情境引入</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;margin-bottom:8px;">橡皮筋能秤重嗎？</div>
+      <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;">老師拿出一條橡皮筋和幾個砝碼。問題：「這條橡皮筋能當成秤嗎？我要怎麼設計實驗，讓它能測出一個未知物體的質量？」</p>
+      <div style="margin-top:14px;background:var(--bg);border-radius:6px;padding:14px;font-size:13px;color:var(--text-secondary);">
+        <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;">「影響橡皮筋伸長量」的可能因素，你能想到哪些？</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:white;border-radius:4px;padding:8px 12px;">掛的重量（質量）</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">橡皮筋的長度（原長）</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">橡皮筋的粗細</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">橡皮筋的材質</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">溫度</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">你能想到的其他因素…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 課堂活動 -->
+    <div class="section-title">課堂活動</div>
+    <div class="activity-block">
+      <div class="activity-header phase2">活動一 · 彈簧實驗設計（W6 第二節，30 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">各組從以下研究問題中選一個，設計實驗計畫（填入學習單）：</p>
+        <div style="display:grid;gap:10px;margin-bottom:16px;">
+          <div style="border-left:3px solid var(--phase2);padding:10px 16px;background:var(--bg);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px;">問題 A：彈簧的伸長量和掛的重量有什麼關係？</div>
+            <div style="font-size:12px;color:var(--text-muted);">操縱變因：砝碼質量　應變變因：伸長量</div>
+          </div>
+          <div style="border-left:3px solid var(--phase2);padding:10px 16px;background:var(--bg);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px;">問題 B：彈簧原長如何影響相同重量下的伸長量？</div>
+            <div style="font-size:12px;color:var(--text-muted);">操縱變因：彈簧原長（用不同圈數）　應變變因：伸長量</div>
+          </div>
+          <div style="border-left:3px solid var(--phase2);padding:10px 16px;background:var(--bg);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px;">問題 C：兩條橡皮筋串聯 vs 並聯，哪個伸長更多？</div>
+            <div style="font-size:12px;color:var(--text-muted);">操縱變因：串/並聯方式　應變變因：伸長量</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:14px;font-size:13px;">
+          <div style="font-weight:700;margin-bottom:10px;">學習單：實驗計畫表</div>
+          <div style="display:grid;gap:8px;color:var(--text-secondary);">
+            <div>1. 研究問題（從上方選一個，或自訂）：___________</div>
+            <div>2. 操縱變因：___________ 　水準：___________</div>
+            <div>3. 控制變因（列出至少 3 個）：___________</div>
+            <div>4. 應變變因（如何測量）：___________</div>
+            <div>5. 預測：我認為結果會是___________，因為___________</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-block">
+      <div class="activity-header phase2">活動二 · 執行實驗並記錄數據（W7 第一節，40 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">每組依照計畫進行實驗，將數據整理至下方格式：</p>
+        <div style="overflow-x:auto;margin-bottom:12px;">
+          <table>
+            <thead>
+              <tr><th>操縱變因（數值）</th><th>測量 1</th><th>測量 2</th><th>測量 3</th><th>平均值</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+              <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+              <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+              <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q1：你的控制變因都有確實控制嗎？哪個最難控制？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q2：你的結果和預測一致嗎？如果不一致，可能的原因是什麼？</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">討論引導問題</div>
+      <ul>
+        <li>「你怎麼確定彈簧沒有被永久拉伸（超過彈性限度）？如何在實驗設計中預防？」</li>
+        <li>「問題 A 的結果如果是線性的，代表什麼定律？（虎克定律：F = kx）」</li>
+        <li>「如果問題 C 的結果，串聯伸長 = 並聯伸長的 4 倍，你能用什麼概念解釋？」</li>
+      </ul>
+      <div class="teacher-label" style="margin-top:10px;">常見問題</div>
+      <p>學生設計實驗時常忘記「測量幾個水準」的問題——2 個水準不夠看出趨勢，建議至少 4–5 個。老師可以先讓各組設計完再互相審查，找出漏洞。</p>
+    </div>
+
+    <!-- 延伸思考 -->
+    <div class="section-title">延伸思考</div>
+    <div class="card" style="margin-bottom:24px;">
+      <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+        <li>虎克定律 F = kx 中的 k 是「彈力常數」。你的實驗中，k 等於什麼？它的單位是什麼？</li>
+        <li>彈簧被拉超過彈性限度後，F vs x 還是線性的嗎？如何設計實驗驗證這件事？</li>
+        <li>橡皮筋和金屬彈簧的 F-x 關係一樣嗎？你能設計實驗比較嗎？</li>
+      </ol>
+    </div>
+
+    <!-- 學習歷程 -->
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">本單元最好的學習歷程素材是你的「實驗計畫表」——特別是你如何列出控制變因，以及你預測和實際結果的比較與分析。這展現了「規劃研究」能力的成長。</p>
+    </div>
+
+    <!-- 前後導覽 -->
+    <div class="unit-nav">
+      <a href="../phase1/pendulum.html">← 第一站：單擺</a>
+      <a href="power-law.html">下一單元：冪級數與線性化 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>
