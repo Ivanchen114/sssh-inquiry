@@ -33,8 +33,8 @@ body {
   font-family: 'Noto Sans TC', sans-serif;
   background: var(--bg);
   color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.75;
+  font-size: 15.5px;
+  line-height: 1.8;
   display: flex;
   min-height: 100vh;
 }
@@ -207,31 +207,32 @@ h1, h2, h3, h4 {
 
 /* ── 頁面 Header ──────────────────────────────────── */
 .page-header {
-  padding: 40px 48px 32px;
+  padding: 44px 52px 36px;
   border-bottom: 1px solid var(--border-light);
   background: var(--sidebar-bg);
 }
 .page-header .breadcrumb {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 .page-header .breadcrumb a:hover { color: var(--text-secondary); }
 .page-header h1 {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 900;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .page-header .subtitle {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-secondary);
+  line-height: 1.65;
 }
 .page-header .meta-tags {
-  margin-top: 12px;
+  margin-top: 14px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -239,8 +240,9 @@ h1, h2, h3, h4 {
 
 /* ── 主內容 ──────────────────────────────────────── */
 .page-body {
-  padding: 36px 48px;
-  max-width: 860px;
+  padding: 36px 52px;
+  max-width: 900px;
+  font-size: 15px;
 }
 
 /* ── 標籤 ────────────────────────────────────────── */
@@ -263,8 +265,8 @@ h1, h2, h3, h4 {
 .card {
   background: var(--sidebar-bg);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 20px 24px;
+  border-radius: 8px;
+  padding: 22px 26px;
   transition: box-shadow 0.15s;
 }
 .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
@@ -333,33 +335,33 @@ h1, h2, h3, h4 {
   border: 1px solid #fde68a;
   border-left: 3px solid #d97706;
   border-radius: 0 6px 6px 0;
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin: 20px 0;
-  font-size: 13px;
+  font-size: 14px;
 }
 .teacher-only .teacher-label {
   font-weight: 700;
   color: #92400e;
-  font-size: 12px;
+  font-size: 13px;
   margin-bottom: 6px;
   letter-spacing: 0.03em;
 }
 .teacher-only p, .teacher-only li {
   color: #78350f;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 .teacher-only ul { padding-left: 16px; }
 
 /* ── 活動區塊 ─────────────────────────────────────── */
 .activity-block {
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 .activity-header {
-  padding: 10px 18px;
-  font-size: 12px;
+  padding: 11px 20px;
+  font-size: 13px;
   font-weight: 700;
   color: white;
   display: flex;
@@ -369,41 +371,43 @@ h1, h2, h3, h4 {
 .activity-header.phase1 { background: var(--phase1); }
 .activity-header.phase2 { background: var(--phase2); }
 .activity-header.phase3 { background: var(--phase3); }
-.activity-body { padding: 18px; background: var(--sidebar-bg); }
+.activity-body { padding: 20px; background: var(--sidebar-bg); }
 
 /* ── 學習目標方塊 ─────────────────────────────────── */
 .objective-box {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 18px 20px;
-  margin-bottom: 24px;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
 }
 .objective-box ul { list-style: none; padding: 0; }
 .objective-box li {
   display: flex;
   gap: 8px;
-  padding: 4px 0;
-  font-size: 13px;
+  padding: 5px 0;
+  font-size: 14.5px;
   color: var(--text-secondary);
+  line-height: 1.7;
 }
 .objective-box li::before { content: '—'; color: var(--text-muted); flex-shrink: 0; }
 
 /* ── 表格 ────────────────────────────────────────── */
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
 th {
   background: var(--bg);
   color: var(--text-secondary);
   font-weight: 600;
-  padding: 8px 12px;
+  padding: 9px 14px;
   text-align: left;
   border: 1px solid var(--border);
-  font-size: 12px;
+  font-size: 13px;
 }
 td {
-  padding: 8px 12px;
+  padding: 9px 14px;
   border: 1px solid var(--border-light);
   color: var(--text-primary);
+  line-height: 1.6;
 }
 tr:nth-child(even) td { background: #fafaf8; }
 
@@ -445,19 +449,19 @@ tr:nth-child(even) td { background: #fafaf8; }
 
 /* ── 首頁特殊 ─────────────────────────────────────── */
 .home-hero {
-  padding: 48px 48px 36px;
+  padding: 52px 52px 40px;
   border-bottom: 1px solid var(--border-light);
 }
 .home-hero h1 {
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 900;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .home-hero .lead {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-secondary);
-  max-width: 480px;
-  line-height: 1.7;
+  max-width: 520px;
+  line-height: 1.75;
 }
 
 /* ── 週次時間軸 ──────────────────────────────────── */
