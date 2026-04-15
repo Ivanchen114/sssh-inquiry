@@ -3,100 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>工具箱 · 松山高中探究與實作</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>工具箱 · 探究與實作</title>
   <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
 <div id="reading-bar" style="width:0%"></div>
 
-<nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
-    <a href="../index.html" class="flex items-center gap-2 font-black text-gray-900 text-lg">
-      <span class="text-2xl">🔬</span><span>探究與實作</span>
-    </a>
-    <div class="hidden md:flex items-center gap-6 text-sm text-gray-600">
-      <a href="../index.html" class="hover:text-blue-600">首頁</a>
-      <a href="../about.html" class="hover:text-blue-600">關於課程</a>
-      <a href="index.html" class="font-bold text-violet-600">工具箱</a>
-      <a href="../practice/index.html" class="hover:text-blue-600">練習場</a>
-    </div>
-    <button id="teacher-toggle"
-      class="text-xs px-3 py-1.5 rounded-full transition-all duration-200 bg-slate-300 text-slate-700 font-medium">
-      👤 教師模式：關閉
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
     </button>
   </div>
-</nav>
 
-<div class="bg-gradient-to-r from-violet-700 to-violet-500 text-white py-12 px-4">
-  <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl md:text-4xl font-black mb-2">🧰 工具箱</h1>
-    <p class="text-violet-100 text-lg">每週都用到的核心技能——報告、反思、數據、學習歷程</p>
+  <div class="page-header">
+    <div class="breadcrumb"><a href="../index.html">首頁</a> › 工具箱</div>
+    <h1>🧰 工具箱</h1>
+    <p class="subtitle">每週都用到的核心技能——報告、反思、數據、學習歷程</p>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-title">常用工具</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+      <a href="report.html" class="card" style="display:block;cursor:pointer;">
+        <div style="font-size:22px;margin-bottom:10px;">📝</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">報告怎麼寫</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">從目的、方法、結果到討論，標準結構說明 + NG 範例對照</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="tag">NG 對照</span><span class="tag">評分規準</span>
+        </div>
+      </a>
+
+      <a href="orid.html" class="card" style="display:block;cursor:pointer;">
+        <div style="font-size:22px;margin-bottom:10px;">🪞</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">ORID 反思框架</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">O 客觀 → R 感受 → I 詮釋 → D 決定。讓心得不只是「今天我學了什麼」</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="tag">心得框架</span><span class="tag">學習歷程</span>
+        </div>
+      </a>
+
+      <a href="excel.html" class="card" style="display:block;cursor:pointer;">
+        <div style="font-size:22px;margin-bottom:10px;">📊</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Excel 數據分析</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">平均數、標準差、作圖、趨勢線——實驗數據整理的基本功</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="tag">Excel 操作</span><span class="tag">不確定度</span>
+        </div>
+      </a>
+
+      <a href="portfolio.html" class="card" style="display:block;cursor:pointer;">
+        <div style="font-size:22px;margin-bottom:10px;">📂</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">學習歷程檔案指引</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">什麼適合放？如何寫說明文字？大學端怎麼看這份檔案？</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="tag">選件建議</span><span class="tag">說明範例</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">教師提示：工具箱的使用時機</div>
+      <p>工具箱不是獨立的一節課，而是每個單元的配套資源。建議在每個單元發表前，讓學生瀏覽「報告怎麼寫」；每次心得後，引導用 ORID 框架改寫。學習歷程指引建議學期中段和學期末各提醒一次。</p>
+    </div>
+
   </div>
 </div>
 
-<main class="max-w-4xl mx-auto px-4 py-12">
-
-  <div class="grid md:grid-cols-2 gap-6">
-
-    <!-- 報告撰寫 -->
-    <a href="report.html" class="unit-card block bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:no-underline group">
-      <div class="text-4xl mb-3">📝</div>
-      <h2 class="text-xl font-black text-gray-800 group-hover:text-violet-600 mb-1">報告怎麼寫</h2>
-      <p class="text-sm text-gray-500 mb-3">從目的、方法、結果、討論的標準結構，到常見 NG 寫法的對照說明</p>
-      <div class="flex gap-2 flex-wrap">
-        <span class="badge bg-violet-100 text-violet-600">NG 範例對照</span>
-        <span class="badge bg-violet-100 text-violet-600">評分規準</span>
-      </div>
-    </a>
-
-    <!-- ORID -->
-    <a href="orid.html" class="unit-card block bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:no-underline group">
-      <div class="text-4xl mb-3">🪞</div>
-      <h2 class="text-xl font-black text-gray-800 group-hover:text-violet-600 mb-1">ORID 反思框架</h2>
-      <p class="text-sm text-gray-500 mb-3">O 客觀 → R 感受 → I 詮釋 → D 決定。讓心得不只是「今天我學了什麼」</p>
-      <div class="flex gap-2 flex-wrap">
-        <span class="badge bg-violet-100 text-violet-600">心得框架</span>
-        <span class="badge bg-violet-100 text-violet-600">學習歷程</span>
-      </div>
-    </a>
-
-    <!-- Excel 數據分析 -->
-    <a href="excel.html" class="unit-card block bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:no-underline group">
-      <div class="text-4xl mb-3">📊</div>
-      <h2 class="text-xl font-black text-gray-800 group-hover:text-violet-600 mb-1">Excel 數據分析</h2>
-      <p class="text-sm text-gray-500 mb-3">平均數、標準差、作圖、趨勢線——實驗數據整理的基本功</p>
-      <div class="flex gap-2 flex-wrap">
-        <span class="badge bg-violet-100 text-violet-600">Excel 操作</span>
-        <span class="badge bg-violet-100 text-violet-600">不確定度</span>
-      </div>
-    </a>
-
-    <!-- 學習歷程 -->
-    <a href="portfolio.html" class="unit-card block bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:no-underline group">
-      <div class="text-4xl mb-3">📂</div>
-      <h2 class="text-xl font-black text-gray-800 group-hover:text-violet-600 mb-1">學習歷程檔案指引</h2>
-      <p class="text-sm text-gray-500 mb-3">什麼適合放？怎麼寫說明文字？大學端怎麼看這份檔案？</p>
-      <div class="flex gap-2 flex-wrap">
-        <span class="badge bg-violet-100 text-violet-600">選件建議</span>
-        <span class="badge bg-violet-100 text-violet-600">說明文字範例</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- 教師專區 -->
-  <div class="teacher-only hidden mt-8">
-    <p class="font-bold text-amber-800 mb-2">🎓 教師提示：工具箱的使用時機</p>
-    <p class="text-sm text-amber-900">工具箱不是「單獨上課的一節」，而是每個單元結尾的配套資源。建議在每個單元發表前，讓學生先瀏覽「報告怎麼寫」；每次心得後，引導學生用 ORID 框架改寫。學習歷程指引建議在學期中段和學期末各提醒一次。</p>
-  </div>
-
-</main>
-
-<footer class="bg-slate-900 text-slate-400 py-6 px-4 text-center text-sm mt-10">
-  <p class="font-bold text-white mb-1">松山高中 探究與實作</p>
-  <p>108 課綱 · 自然科必修</p>
-</footer>
 <script src="../assets/js/main.js"></script>
 </body>
 </html>
