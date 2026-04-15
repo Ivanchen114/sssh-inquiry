@@ -128,6 +128,38 @@
           </div>
           <div style="margin-top:10px;font-size:12px;color:var(--text-muted);">每個問題旁標注：✅ 可探究 / ⚠️ 需要修改 / ❌ 無法探究</div>
         </div>
+
+        <!-- 問題深度評估框架 -->
+        <div style="margin-top:14px;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+          <div style="background:var(--phase3);color:white;padding:10px 16px;font-size:13px;font-weight:700;">🔍 問題深度評估框架（用這個篩選你最好的問題）</div>
+          <div style="padding:16px;background:var(--sidebar-bg);">
+            <div style="display:grid;gap:8px;font-size:13px;">
+              <div style="display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;background:var(--bg);border-radius:6px;">
+                <span style="font-size:16px;">1️⃣</span>
+                <span style="color:var(--text-secondary);"><strong>可測量性</strong>：應變變因能用數字記錄嗎？（音量用分貝計？振幅用尺？）</span>
+                <span style="font-size:11px;color:var(--text-muted);">□ 可<br>□ 不可</span>
+              </div>
+              <div style="display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;background:var(--bg);border-radius:6px;">
+                <span style="font-size:16px;">2️⃣</span>
+                <span style="color:var(--text-secondary);"><strong>可操縱性</strong>：操縱變因能在教室裡精確控制嗎？（頻率可以；室溫很難）</span>
+                <span style="font-size:11px;color:var(--text-muted);">□ 可<br>□ 不可</span>
+              </div>
+              <div style="display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;background:var(--bg);border-radius:6px;">
+                <span style="font-size:16px;">3️⃣</span>
+                <span style="color:var(--text-secondary);"><strong>足夠複雜</strong>：這個問題的答案不是「查一下就知道」，需要自己做實驗嗎？</span>
+                <span style="font-size:11px;color:var(--text-muted);">□ 是<br>□ 否</span>
+              </div>
+              <div style="display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;background:var(--bg);border-radius:6px;">
+                <span style="font-size:16px;">4️⃣</span>
+                <span style="color:var(--text-secondary);"><strong>真正好奇</strong>：你真的想知道答案嗎？還是只是覺得「好像可以做」？</span>
+                <span style="font-size:11px;color:var(--text-muted);">□ 是<br>□ 只是方便</span>
+              </div>
+            </div>
+            <div style="margin-top:12px;padding:10px 12px;background:#fff7ed;border-radius:6px;border:1px solid #fed7aa;font-size:12px;color:#9a3412;">
+              💡 <strong>選題建議：</strong>3 個「✅ 可」＋第 4 項「真正好奇」，是最理想的選題。如果第 4 項是「只是方便」，這個探究往往半途而廢。
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

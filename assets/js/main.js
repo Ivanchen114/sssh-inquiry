@@ -12,6 +12,7 @@ const NAV_DATA = [
     sublabel: '第一站 · 論證建模',
     phase: 1,
     items: [
+      { name: '課程說明', path: 'units/phase1/intro.html', week: 'W1' },
       { name: '疫苗選擇', path: 'units/phase1/vaccine.html', week: 'W2' },
       { name: 'SHM 週期', path: 'units/phase1/shm.html', week: 'W3' },
       { name: '有效數字與不確定度', path: 'units/phase1/uncertainty.html', week: 'W4' },
@@ -41,6 +42,9 @@ const NAV_DATA = [
     label: '資源',
     items: [
       { name: '工具箱', path: 'tools/index.html' },
+      { name: '　ORID 反思框架', path: 'tools/orid.html' },
+      { name: '　Excel 數據分析', path: 'tools/excel.html' },
+      { name: '　學習歷程指引', path: 'tools/portfolio.html' },
       { name: '練習場', path: 'practice/index.html' },
     ]
   }

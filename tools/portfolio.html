@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>學習歷程指引 · 工具箱 · 探究與實作</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a>
+      <span>›</span>
+      <a href="index.html">工具箱</a>
+      <span>›</span>
+      <span>學習歷程指引</span>
+    </div>
+    <h1>📂 學習歷程檔案指引</h1>
+    <p class="subtitle">什麼值得放？怎麼寫說明文字？大學端怎麼看？</p>
+    <div class="meta-tags">
+      <span class="tag">學習歷程</span>
+      <span class="tag express">表達分享</span>
+      <span class="tag">貫穿全學期</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- 學習歷程是什麼 -->
+    <div class="section-title">學習歷程是什麼？</div>
+    <div class="card" style="margin-bottom:24px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:10px;">不是作業集，不是成績單——是你成長的脈絡</div>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">學習歷程檔案的目的，是讓大學端看到你「怎麼學習」，而不只是你「學到了什麼」。同樣做了一個彈簧實驗，一個人只交了一張數據表，另一個人交了「第一次嘗試的失敗+修改後的成功+說明我為什麼這樣修改」——哪個更有說服力？</p>
+      <div style="background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:12px 16px;font-size:13px;color:#15803d;">
+        核心概念：<strong>展現歷程（過程）比展現成果（結果分數）更重要。</strong>
+      </div>
+    </div>
+
+    <!-- 選件指引 -->
+    <div class="section-title">選件指引：什麼值得放？</div>
+    <div style="display:grid;gap:10px;margin-bottom:24px;">
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px 18px;">
+        <div style="font-weight:700;color:#15803d;font-size:13px;margin-bottom:10px;">✅ 適合放入的作品</div>
+        <div style="display:grid;gap:6px;font-size:13px;color:var(--text-secondary);">
+          <div style="display:flex;gap:8px;"><span>→</span><span><strong>展現成長的比較</strong>：修改前後的報告片段，加上「我改了什麼、為什麼」的說明</span></div>
+          <div style="display:flex;gap:8px;"><span>→</span><span><strong>有深度的反思</strong>：用 ORID 框架寫的心得，特別是 I 和 D 層次有真實想法</span></div>
+          <div style="display:flex;gap:8px;"><span>→</span><span><strong>探究歷程記錄</strong>：問題如何演變、數據如何改變你的想法、如何從失敗修正</span></div>
+          <div style="display:flex;gap:8px;"><span>→</span><span><strong>你自己的問題</strong>：在翻滾仔或揚聲器中，你自己提出的問題候選清單和篩選過程</span></div>
+          <div style="display:flex;gap:8px;"><span>→</span><span><strong>定量分析</strong>：有圖有數字，結論有根據的分析（而不是「結果如下表」）</span></div>
+        </div>
+      </div>
+      <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:16px 18px;">
+        <div style="font-weight:700;color:#dc2626;font-size:13px;margin-bottom:10px;">❌ 不建議放入的作品</div>
+        <div style="display:grid;gap:6px;font-size:13px;color:var(--text-secondary);">
+          <div style="display:flex;gap:8px;"><span>→</span><span>全班都一樣的學習單（沒有你的個人思考）</span></div>
+          <div style="display:flex;gap:8px;"><span>→</span><span>只有結果的截圖，沒有說明你做了什麼</span></div>
+          <div style="display:flex;gap:8px;"><span>→</span><span>心得只有一兩行（「今天很充實」「這個實驗很有趣」）</span></div>
+          <div style="display:flex;gap:8px;"><span>→</span><span>分數很高但沒有你的思考痕跡的作業</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 數量建議 -->
+    <div class="section-title">建議放幾件？</div>
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">以探究與實作這門課來說，建議從整學期的作品中選出 <strong>2–3 件代表作</strong>，而不是全部都放。</p>
+      <div style="background:var(--bg);border-radius:6px;padding:14px;font-size:13px;margin-bottom:12px;">
+        <div style="font-weight:700;margin-bottom:8px;">選件邏輯建議：</div>
+        <div style="display:grid;gap:6px;color:var(--text-secondary);">
+          <div>1. 一件展現<strong>論證能力</strong>（例如疫苗選擇 + 主張—理由—證據）</div>
+          <div>2. 一件展現<strong>規劃研究能力</strong>（例如彈簧實驗的設計 + 分析 + 修改歷程）</div>
+          <div>3. 一件展現<strong>自主探究能力</strong>（例如揚聲器或翻滾仔的完整歷程）</div>
+        </div>
+      </div>
+      <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:10px 14px;font-size:12px;color:#6d28d9;">
+        💡 不一定要選「分數最高的」，選「最能說明你成長的」。有時候一份修改過三次的草稿，比一份完美的成品更有說服力。
+      </div>
+    </div>
+
+    <!-- 說明文字框架 -->
+    <div class="section-title">說明文字怎麼寫？</div>
+    <div class="card" style="margin-bottom:24px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:12px;">每件作品附上 100–200 字的說明，用以下框架：</div>
+      <div style="background:var(--bg);border-radius:8px;padding:16px;font-size:13px;font-family:'Noto Sans TC',sans-serif;line-height:2.2;color:var(--text-secondary);margin-bottom:14px;">
+        「這是我在<strong style="color:var(--phase1);">【單元名稱，例如：彈簧變因設計】</strong>的作品，形式是<strong style="color:var(--phase1);">【作品類型，例如：實驗報告】</strong>。<br>
+        <br>
+        在這個單元中，我負責<strong style="color:var(--phase2);">【做了什麼】</strong>，最大的挑戰是<strong style="color:var(--phase2);">【說明困難之處】</strong>。<br>
+        <br>
+        透過這個探究，我學到了<strong style="color:var(--phase3);">【具體學到的技能或概念】</strong>。我把這件作品放入學習歷程，是因為它展現了我在<strong style="color:var(--phase3);">【論/規/發/表】</strong>方面的探究能力，特別是<strong style="color:var(--phase3);">【具體說明怎麼展現】</strong>。」
+      </div>
+
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:12px 16px;font-size:12px;color:#9a3412;margin-bottom:12px;">
+        ⚠️ 不要用第三人稱說「本作品展現了……」——用第一人稱「我」。學習歷程是你的故事，不是報告。
+      </div>
+
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px;">實際範例：</div>
+      <div style="background:#f0fdf4;border-radius:6px;padding:14px;font-size:13px;color:var(--text-secondary);line-height:1.85;border:1px solid #bbf7d0;">
+        「這是我在『報告撰寫規範』單元的互評報告修改記錄。在這個單元中，我評了鄰組的彈簧報告，指出他們的研究目的沒有操作型定義，誤差分析只寫了『人為誤差』。這讓我回頭看了自己上週的報告，發現同樣的問題——我根本不知道操作型定義是什麼。修改後，我的研究目的從『研究彈簧』改成了『探討掛載質量（g）對彈簧伸長量（cm）的影響，以直尺測量自然長為基準的伸長量』。我選擇這份記錄，是因為它展現了我在表達分享（表）方面的成長：我從『不知道如何評估別人的報告』，學到了用六個具體向度評估報告品質。」
+      </div>
+    </div>
+
+    <!-- 大學端的角度 -->
+    <div class="section-title">大學端怎麼看你的學習歷程？</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🔍</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">看你有沒有「自己想」</div>
+        <p style="font-size:12px;color:var(--text-secondary);">老師給你的表單，和你自己在上面的批注、反思、延伸問題——差距很大。</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">📈</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">看你有沒有「持續成長」</div>
+        <p style="font-size:12px;color:var(--text-secondary);">學期初的困惑和學期末的解決——比一開始就完美的作品更有說服力。</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🤝</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">看你有沒有「說得清楚」</div>
+        <p style="font-size:12px;color:var(--text-secondary);">教授沒時間猜測你的意思。說明文字清楚、結構完整，是最起碼的門檻。</p>
+      </div>
+    </div>
+
+    <!-- 各單元對應建議 -->
+    <div class="section-title">各單元素材速查</div>
+    <table style="margin-bottom:24px;">
+      <thead>
+        <tr><th>單元</th><th>建議素材</th><th>展現能力</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>疫苗選擇</td><td>論證卡片 + 發表修改前後</td><td>論</td></tr>
+        <tr><td>SHM 週期</td><td>主張—理由—證據練習</td><td>論</td></tr>
+        <tr><td>有效數字</td><td>NG 範例修正 + 說明</td><td>論</td></tr>
+        <tr><td>單擺與數據處理</td><td>Excel 圖表 + g 值計算歷程</td><td>論 + 規</td></tr>
+        <tr><td>彈簧變因設計</td><td>實驗計畫 + 實際數據圖表</td><td>規</td></tr>
+        <tr><td>冪級數與線性化</td><td>log-log 圖 + 斜率判斷說明</td><td>規</td></tr>
+        <tr><td>報告撰寫規範</td><td>修改前後的報告對比 + ORID</td><td>規 + 表</td></tr>
+        <tr><td>浮力：鐵達尼號</td><td>設計草圖 + 預測 vs 實際分析</td><td>規</td></tr>
+        <tr><td>翻滾仔</td><td>問題演變清單 + 四週歷程記錄</td><td>發</td></tr>
+        <tr><td>揚聲器</td><td>完整自主探究歷程（問題→結論）</td><td>發 + 規</td></tr>
+        <tr><td>期末成果發表</td><td>發表投影片 + 同儕互評回饋</td><td>表</td></tr>
+      </tbody>
+    </table>
+
+    <div class="unit-nav">
+      <a href="excel.html">← Excel 數據分析</a>
+      <a href="index.html">工具箱首頁 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
