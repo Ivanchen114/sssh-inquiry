@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>松山高中 探究與實作</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- 閱讀進度條 -->
+<div id="reading-bar" style="width:0%"></div>
+
+<!-- ══ 導覽列 ══════════════════════════════════════════════════════ -->
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
+    <a href="index.html" class="flex items-center gap-2 font-black text-gray-900 text-lg">
+      <span class="text-2xl">🔬</span>
+      <span>探究與實作</span>
+      <span class="text-xs font-normal text-gray-400 hidden sm:inline">松山高中</span>
+    </a>
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-6 text-sm text-gray-600">
+      <a href="index.html" class="hover:text-blue-600 transition-colors">首頁</a>
+      <a href="about.html" class="hover:text-blue-600 transition-colors">關於課程</a>
+      <a href="units/phase1/vaccine.html" class="hover:text-blue-600 transition-colors">學期旅程</a>
+      <a href="tools/index.html" class="hover:text-blue-600 transition-colors">工具箱</a>
+      <a href="practice/index.html" class="hover:text-blue-600 transition-colors">練習場</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <!-- 教師模式切換 -->
+      <button id="teacher-toggle"
+        class="text-xs px-3 py-1.5 rounded-full transition-all duration-200 bg-slate-300 text-slate-700 font-medium">
+        👤 教師模式：關閉
+      </button>
+      <!-- 手機選單 -->
+      <button id="menu-btn" class="md:hidden p-2 rounded text-gray-600 hover:bg-gray-100">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-2 text-sm text-gray-700">
+    <a href="index.html" class="block py-1">首頁</a>
+    <a href="about.html" class="block py-1">關於課程</a>
+    <a href="units/phase1/vaccine.html" class="block py-1">學期旅程</a>
+    <a href="tools/index.html" class="block py-1">工具箱</a>
+    <a href="practice/index.html" class="block py-1">練習場</a>
+  </div>
+</nav>
+
+<!-- ══ Hero ════════════════════════════════════════════════════════ -->
+<section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white py-20 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="fade-in fade-in-1">
+      <span class="badge bg-blue-500 text-white mb-4">108 課綱 · 自然科必修</span>
+    </div>
+    <h1 class="text-4xl md:text-6xl font-black mt-4 mb-4 fade-in fade-in-2">
+      探究與實作
+    </h1>
+    <p class="text-lg md:text-xl text-blue-200 max-w-2xl mx-auto fade-in fade-in-3">
+      從讀懂別人的探究，到自己提問、設計、執行——<br>
+      一學期帶你走完真正的科學探究歷程。
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3 fade-in fade-in-4">
+      <a href="#journey" class="bg-blue-500 hover:bg-blue-400 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+        開始學期旅程 →
+      </a>
+      <a href="about.html" class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+        認識這門課
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 四大探究能力 ════════════════════════════════════════════════ -->
+<section class="py-16 px-4 bg-white">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl font-black text-center text-gray-900 mb-2">這門課要你學什麼？</h2>
+    <p class="text-center text-gray-500 mb-10">108 課綱定義的四大探究能力，本課程全部涵蓋</p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <!-- 論證建模 -->
+      <div class="text-center p-5 rounded-2xl border-2 border-blue-200 bg-blue-50 unit-card">
+        <div class="text-4xl mb-3">📊</div>
+        <div class="badge bg-blue-100 text-blue-700 mb-2">第一站</div>
+        <h3 class="font-black text-blue-800 text-base">論證建模</h3>
+        <p class="text-xs text-blue-600 mt-1">看數據、說理由、建模型</p>
+      </div>
+      <!-- 規劃研究 -->
+      <div class="text-center p-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50 unit-card">
+        <div class="text-4xl mb-3">🔧</div>
+        <div class="badge bg-emerald-100 text-emerald-700 mb-2">第二站</div>
+        <h3 class="font-black text-emerald-800 text-base">規劃研究</h3>
+        <p class="text-xs text-emerald-600 mt-1">自己設計實驗與變因</p>
+      </div>
+      <!-- 發現問題 -->
+      <div class="text-center p-5 rounded-2xl border-2 border-amber-200 bg-amber-50 unit-card">
+        <div class="text-4xl mb-3">💡</div>
+        <div class="badge bg-amber-100 text-amber-700 mb-2">第三站</div>
+        <h3 class="font-black text-amber-800 text-base">發現問題</h3>
+        <p class="text-xs text-amber-600 mt-1">從生活中自己提問</p>
+      </div>
+      <!-- 表達分享 -->
+      <div class="text-center p-5 rounded-2xl border-2 border-violet-200 bg-violet-50 unit-card">
+        <div class="text-4xl mb-3">🗣️</div>
+        <div class="badge bg-violet-100 text-violet-700 mb-2">貫穿全學期</div>
+        <h3 class="font-black text-violet-800 text-base">表達分享</h3>
+        <p class="text-xs text-violet-600 mt-1">報告、口報、反思</p>
+      </div>
+    </div>
+
+    <!-- 教師說明 -->
+    <div class="teacher-only hidden mt-8">
+      <p class="font-bold text-amber-800 mb-1">🎓 教師提示：為什麼從論證建模開始？</p>
+      <p class="text-sm text-amber-900">學生從國中起習慣照步驟做實驗，對「論證」已有基本直覺（看結果、說對不對）。從熟悉的切入點出發，逐步撤除鷹架，最終達到完全自主的「發現問題」。這是認知負荷理論的刻意應用，不是課程順序的偶然。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 學期旅程（三站）════════════════════════════════════════════ -->
+<section id="journey" class="py-16 px-4 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl font-black text-center text-gray-900 mb-2">你的學期旅程</h2>
+    <p class="text-center text-gray-500 mb-12">18 週 · 36 節課 · 三個探究階段</p>
+
+    <!-- 第一站 -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full phase1-bg flex items-center justify-center text-white font-black text-lg">1</div>
+        <div>
+          <h3 class="text-xl font-black phase1-text">第一站：論證建模</h3>
+          <p class="text-sm text-gray-500">第 1–5 週 · 讀懂別人的探究</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 ml-0 md:ml-13">
+        <a href="units/phase1/vaccine.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">💉</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-blue-600">疫苗選擇</h4>
+          <p class="text-xs text-gray-500 mt-1">社會議題論證入門</p>
+          <div class="mt-2"><span class="badge bg-blue-100 text-blue-600">第2週</span></div>
+        </a>
+        <a href="units/phase1/shm.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">🌊</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-blue-600">SHM 週期</h4>
+          <p class="text-xs text-gray-500 mt-1">數據中找規律</p>
+          <div class="mt-2"><span class="badge bg-blue-100 text-blue-600">第3週</span></div>
+        </a>
+        <a href="units/phase1/uncertainty.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">📏</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-blue-600">有效數字與不確定度</h4>
+          <p class="text-xs text-gray-500 mt-1">測量的語言</p>
+          <div class="mt-2"><span class="badge bg-blue-100 text-blue-600">第4週</span></div>
+        </a>
+        <a href="units/phase1/pendulum.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-blue-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">🕰️</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-blue-600">單擺與數據處理</h4>
+          <p class="text-xs text-gray-500 mt-1">Excel + 標準差</p>
+          <div class="mt-2"><span class="badge bg-blue-100 text-blue-600">第5週</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 第二站 -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full phase2-bg flex items-center justify-center text-white font-black text-lg">2</div>
+        <div>
+          <h3 class="text-xl font-black phase2-text">第二站：規劃研究</h3>
+          <p class="text-sm text-gray-500">第 6–11 週 · 自己設計實驗</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <a href="units/phase2/spring.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-emerald-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">🌀</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-emerald-600">彈簧變因設計</h4>
+          <p class="text-xs text-gray-500 mt-1">什麼可以改變？</p>
+          <div class="mt-2"><span class="badge bg-emerald-100 text-emerald-600">第6–7週</span></div>
+        </a>
+        <a href="units/phase2/power-law.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-emerald-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">📈</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-emerald-600">冪級數與線性化</h4>
+          <p class="text-xs text-gray-500 mt-1">讓曲線變直的魔法</p>
+          <div class="mt-2"><span class="badge bg-emerald-100 text-emerald-600">第8週</span></div>
+        </a>
+        <a href="units/phase2/report.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-emerald-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">📝</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-emerald-600">報告撰寫規範</h4>
+          <p class="text-xs text-gray-500 mt-1">NG 範例 → 好範例</p>
+          <div class="mt-2"><span class="badge bg-emerald-100 text-emerald-600">第9週</span></div>
+        </a>
+        <a href="units/phase2/buoyancy.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-emerald-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">🚢</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-emerald-600">浮力：鐵達尼號</h4>
+          <p class="text-xs text-gray-500 mt-1">工程挑戰競賽</p>
+          <div class="mt-2"><span class="badge bg-emerald-100 text-emerald-600">第10–11週</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 第三站 -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full phase3-bg flex items-center justify-center text-white font-black text-lg">3</div>
+        <div>
+          <h3 class="text-xl font-black phase3-text">第三站：發現問題</h3>
+          <p class="text-sm text-gray-500">第 12–18 週 · 從零開始自主探究</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="units/phase3/roller.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-amber-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">🎡</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-amber-600">翻滾仔</h4>
+          <p class="text-xs text-gray-500 mt-1">觀察 → 提問 → 設計 → 比賽</p>
+          <div class="mt-2"><span class="badge bg-amber-100 text-amber-600">第12–15週</span></div>
+        </a>
+        <a href="units/phase3/speaker.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-amber-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">🔊</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-amber-600">揚聲器：你的完整探究</h4>
+          <p class="text-xs text-gray-500 mt-1">自訂題、規劃、執行、發表</p>
+          <div class="mt-2"><span class="badge bg-amber-100 text-amber-600">第16–17週</span></div>
+        </a>
+        <a href="units/phase3/final.html" class="unit-card bg-white rounded-xl p-4 border-l-4 border-amber-400 shadow-sm hover:no-underline group">
+          <div class="text-2xl mb-2">🏆</div>
+          <h4 class="font-bold text-gray-800 text-sm group-hover:text-amber-600">期末成果發表</h4>
+          <p class="text-xs text-gray-500 mt-1">完整探究歷程呈現</p>
+          <div class="mt-2"><span class="badge bg-amber-100 text-amber-600">第18週</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 教師：學期節奏說明 -->
+    <div class="teacher-only hidden">
+      <p class="font-bold text-amber-800 mb-1">🎓 教師提示：三站的鷹架設計</p>
+      <p class="text-sm text-amber-900">第一站老師給數據、給情境、給問題→第二站老師給情境和問題，學生決定「怎麼量」→第三站只給材料和情境，學生自己提問、設計、執行。每一站都比上一站少一個鷹架。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 貫穿全學期：表達分享 ════════════════════════════════════════ -->
+<section class="py-12 px-4 bg-violet-50 border-y border-violet-100">
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+    <div class="text-6xl">🗣️</div>
+    <div>
+      <span class="badge bg-violet-500 text-white mb-2">每週穿插</span>
+      <h3 class="text-xl font-black text-violet-900 mt-2">表達與分享</h3>
+      <p class="text-violet-700 mt-1 max-w-xl">
+        報告撰寫規範、口頭報告技巧、ORID 反思框架、學習歷程檔案——不是課程末尾的加法，而是每個單元都在練習的核心能力。
+      </p>
+      <a href="tools/index.html" class="inline-block mt-3 text-violet-700 font-bold hover:text-violet-900 underline">
+        前往工具箱 →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 快速入口 ════════════════════════════════════════════════════ -->
+<section class="py-14 px-4 bg-white">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl font-black text-center text-gray-900 mb-8">快速入口</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <a href="tools/index.html" class="unit-card block bg-gray-50 rounded-2xl p-6 text-center border border-gray-200 hover:no-underline group">
+        <div class="text-4xl mb-3">🧰</div>
+        <h3 class="font-black text-gray-800 group-hover:text-blue-600">工具箱</h3>
+        <p class="text-sm text-gray-500 mt-1">報告撰寫・ORID・Excel・學習歷程</p>
+      </a>
+      <a href="practice/index.html" class="unit-card block bg-gray-50 rounded-2xl p-6 text-center border border-gray-200 hover:no-underline group">
+        <div class="text-4xl mb-3">✏️</div>
+        <h3 class="font-black text-gray-800 group-hover:text-blue-600">練習場</h3>
+        <p class="text-sm text-gray-500 mt-1">依探究能力分類的練習題</p>
+      </a>
+      <a href="about.html" class="unit-card block bg-gray-50 rounded-2xl p-6 text-center border border-gray-200 hover:no-underline group">
+        <div class="text-4xl mb-3">📖</div>
+        <h3 class="font-black text-gray-800 group-hover:text-blue-600">關於課程</h3>
+        <p class="text-sm text-gray-500 mt-1">設計理念・108課綱・四大能力</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Footer ════════════════════════════════════════════════════ -->
+<footer class="bg-slate-900 text-slate-400 py-8 px-4 text-center text-sm">
+  <p class="font-bold text-white mb-1">松山高中 探究與實作</p>
+  <p>108 課綱 · 自然科必修 · 松山高中自然科教師團隊</p>
+  <p class="mt-3 text-xs text-slate-600">本網站依課程設計持續更新</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

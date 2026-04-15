@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>疫苗選擇 · 論證建模 · 松山高中探究與實作</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<div id="reading-bar" style="width:0%"></div>
+
+<!-- 導覽列 -->
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
+    <a href="../../index.html" class="flex items-center gap-2 font-black text-gray-900 text-lg">
+      <span class="text-2xl">🔬</span><span>探究與實作</span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-gray-600">
+      <a href="../../index.html" class="hover:text-blue-600">首頁</a>
+      <a href="../../about.html" class="hover:text-blue-600">關於課程</a>
+      <a href="../../tools/index.html" class="hover:text-blue-600">工具箱</a>
+      <a href="../../practice/index.html" class="hover:text-blue-600">練習場</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="teacher-toggle"
+        class="text-xs px-3 py-1.5 rounded-full transition-all duration-200 bg-slate-300 text-slate-700 font-medium">
+        👤 教師模式：關閉
+      </button>
+      <button id="menu-btn" class="md:hidden p-2 rounded text-gray-600 hover:bg-gray-100">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-2 text-sm">
+    <a href="../../index.html" class="block py-1">首頁</a>
+    <a href="../../tools/index.html" class="block py-1">工具箱</a>
+    <a href="../../practice/index.html" class="block py-1">練習場</a>
+  </div>
+</nav>
+
+<!-- 麵包屑 -->
+<div class="max-w-4xl mx-auto px-4 py-3 text-sm text-gray-500 flex items-center gap-2">
+  <a href="../../index.html" class="hover:text-blue-600">首頁</a>
+  <span>›</span>
+  <span class="phase1-text font-medium">論證建模</span>
+  <span>›</span>
+  <span class="text-gray-800 font-medium">疫苗選擇</span>
+</div>
+
+<!-- 單元 Hero -->
+<div class="bg-gradient-to-r from-blue-700 to-blue-500 text-white py-10 px-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="badge bg-white/20 text-white">論證建模</span>
+      <span class="badge bg-white/20 text-white">第 2 週</span>
+      <span class="badge bg-white/20 text-white">2 節課</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-black mb-2">💉 疫苗選擇</h1>
+    <p class="text-blue-100 text-lg">我們怎麼從數據中做出理性判斷？</p>
+    <div class="mt-4 flex flex-wrap gap-2 text-sm">
+      <span class="bg-white/10 px-3 py-1 rounded-full">📊 數據分析</span>
+      <span class="bg-white/10 px-3 py-1 rounded-full">🗣️ 小組論證</span>
+      <span class="bg-white/10 px-3 py-1 rounded-full">❓ 無物理背景需求</span>
+    </div>
+  </div>
+</div>
+
+<!-- 主內容 -->
+<main class="max-w-4xl mx-auto px-4 py-10">
+
+  <!-- 本單元學習目標 -->
+  <section class="mb-10 p-6 bg-blue-50 rounded-2xl border border-blue-200">
+    <h2 class="font-black text-blue-800 text-lg mb-3">🎯 本單元你會學到什麼</h2>
+    <ul class="space-y-2 text-sm text-blue-900">
+      <li class="flex gap-2"><span>✔</span><span>從一份數據表中，找出支持或反對某個主張的證據</span></li>
+      <li class="flex gap-2"><span>✔</span><span>理解「比較」需要控制的條件（為什麼不能直接比較不同疫苗的數字）</span></li>
+      <li class="flex gap-2"><span>✔</span><span>用「主張—理由—證據」的架構表達自己的立場</span></li>
+      <li class="flex gap-2"><span>✔</span><span>聆聽別人的論點，找出其中的漏洞或假設</span></li>
+    </ul>
+    <div class="teacher-only hidden mt-4">
+      <p class="font-bold text-amber-800 text-sm">🎓 對應課綱指標</p>
+      <p class="text-xs text-amber-900 mt-1">INc-Vc-1 能從數據中找出規律或異常，並能評估他人詮釋的合理性。<br>
+      INd-Vc-2 能以適當的語言形式，對探究的方法或結果進行說明與辯護。</p>
+    </div>
+  </section>
+
+  <!-- 情境引入 -->
+  <section class="mb-10">
+    <h2 class="text-xl font-black text-gray-900 mb-4">📰 情境引入</h2>
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+      <p class="text-lg font-bold text-gray-800 mb-3">
+        「你會選哪支疫苗？」
+      </p>
+      <p class="text-gray-600 mb-4">
+        2021 年新冠疫苗剛開放時，市場上有多種選擇：AZ、BNT、莫德納……<br>
+        你的家人問你：「哪支比較好？」你怎麼回答？
+      </p>
+      <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-700">
+        <p class="font-bold mb-2">📺 課堂影片</p>
+        <p>請先觀看：<em>Vox — 為什麼你不能直接比較新冠肺炎疫苗的有效率？</em></p>
+        <p class="text-gray-500 mt-1 text-xs">（老師播放班上共同觀看，或學生自行掃描QR code）</p>
+      </div>
+    </div>
+
+    <!-- 教師提示 -->
+    <div class="teacher-only hidden">
+      <p class="font-bold text-amber-800 mb-1">🎓 教師提示：引入這個情境的原因</p>
+      <p class="text-sm text-amber-900">疫苗選擇不需要任何物理知識，但它完美示範了「數據比較需要控制條件」的概念。學生對這個議題有生活經驗，有情感連結，更容易真正投入討論而不是走過場。這比任何物理實驗都更容易讓學生感受到「論證」的必要性。</p>
+      <p class="font-bold text-amber-800 mt-3 mb-1">⏱ 課堂節奏建議（第一節，50分鐘）</p>
+      <ul class="text-sm text-amber-900 space-y-1">
+        <li>0–5 min：發問：你選哪支？為什麼？（讓學生直觀反應）</li>
+        <li>5–15 min：播放 Vox 影片</li>
+        <li>15–35 min：小組討論學習單第一、二部分</li>
+        <li>35–50 min：各組代表分享，全班交叉質疑</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 核心概念 -->
+  <section class="mb-10">
+    <h2 class="text-xl font-black text-gray-900 mb-4">💡 核心概念</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+
+      <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 mb-2">🚫 為什麼不能直接比較？</h3>
+        <p class="text-sm text-gray-600">
+          AZ 有效率 70%、BNT 有效率 95%——代表 BNT 比較好嗎？
+          這兩個數字來自不同的試驗、不同的地區、不同的試驗時間點，
+          <strong>比較的基準不同，數字就沒有可比性</strong>。
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+        <h3 class="font-bold text-gray-800 mb-2">✅ 論證的基本架構</h3>
+        <div class="text-sm text-gray-600 space-y-1">
+          <p><strong>主張</strong>（Claim）：我認為……</p>
+          <p><strong>理由</strong>（Reasoning）：因為……</p>
+          <p><strong>證據</strong>（Evidence）：數據顯示……</p>
+          <p class="text-gray-400 text-xs mt-2">這個架構在科學和日常生活中都適用</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 課堂活動 -->
+  <section class="mb-10">
+    <h2 class="text-xl font-black text-gray-900 mb-4">🔬 課堂活動</h2>
+    <div class="space-y-4">
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="phase1-bg text-white px-5 py-3 flex items-center gap-2">
+          <span class="font-bold">活動一</span>
+          <span class="text-blue-200 text-sm">個人思考 → 小組討論（20分鐘）</span>
+        </div>
+        <div class="p-5">
+          <p class="text-sm text-gray-600 mb-3">
+            下表是假設的三款疫苗試驗數據。請閱讀後回答問題。
+          </p>
+          <!-- 假設數據表 -->
+          <div class="overflow-x-auto">
+            <table class="text-sm w-full border-collapse">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="border border-gray-200 px-3 py-2 text-left">疫苗</th>
+                  <th class="border border-gray-200 px-3 py-2">試驗地點</th>
+                  <th class="border border-gray-200 px-3 py-2">試驗人數</th>
+                  <th class="border border-gray-200 px-3 py-2">接種組感染率</th>
+                  <th class="border border-gray-200 px-3 py-2">對照組感染率</th>
+                  <th class="border border-gray-200 px-3 py-2">有效率</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="border border-gray-200 px-3 py-2 font-medium">α疫苗</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">南美洲</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">40,000</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">0.5%</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">5%</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center font-bold text-blue-600">90%</td>
+                </tr>
+                <tr class="bg-gray-50">
+                  <td class="border border-gray-200 px-3 py-2 font-medium">β疫苗</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">英國</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">20,000</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">1.5%</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">10%</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center font-bold text-blue-600">85%</td>
+                </tr>
+                <tr>
+                  <td class="border border-gray-200 px-3 py-2 font-medium">γ疫苗</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">台灣</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">8,000</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">0.1%</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center">0.5%</td>
+                  <td class="border border-gray-200 px-3 py-2 text-center font-bold text-blue-600">80%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-4 space-y-3">
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">Q1：光看「有效率」，你會選哪支疫苗？</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">Q2：如果你住在台灣，三支疫苗的「有效率」還能直接比較嗎？為什麼？</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">Q3：你認為在選擇疫苗時，除了有效率，還應該考慮哪些數據？</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="phase1-bg text-white px-5 py-3 flex items-center gap-2">
+          <span class="font-bold">活動二</span>
+          <span class="text-blue-200 text-sm">小組發表（第二節，20分鐘）</span>
+        </div>
+        <div class="p-5">
+          <p class="text-sm text-gray-600 mb-3">
+            每組用「主張—理由—證據」架構，向全班說明你們的疫苗選擇。<br>
+            其他組可以提出質疑，發表組必須回應。
+          </p>
+          <div class="bg-gray-50 rounded-lg p-4 text-sm">
+            <p class="font-bold text-gray-700 mb-2">📋 論證評分規準（同儕互評）</p>
+            <div class="space-y-2 text-gray-600">
+              <div class="flex gap-2"><span class="text-green-600 font-bold">★★★</span><span>主張明確、理由有邏輯、有具體數據支持</span></div>
+              <div class="flex gap-2"><span class="text-yellow-500 font-bold">★★☆</span><span>有主張和理由，但數據引用不夠精確</span></div>
+              <div class="flex gap-2"><span class="text-red-500 font-bold">★☆☆</span><span>只有主張，缺乏理由或證據</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 教師提示：活動二 -->
+    <div class="teacher-only hidden">
+      <p class="font-bold text-amber-800 mb-1">🎓 教師提示：課堂討論引導問題</p>
+      <ul class="text-sm text-amber-900 space-y-1">
+        <li>→「γ疫苗在台灣試驗，對照組只有 0.5% 感染率——這代表什麼？」（引導：當地感染率低，對照組都不太會感染，有效率意義就小）</li>
+        <li>→「如果你是衛生署長，你需要訂購一億劑疫苗，你會要求廠商提供哪些數據？」</li>
+        <li>→「『論證』跟『吵架』有什麼不同？」</li>
+      </ul>
+      <p class="font-bold text-amber-800 mt-3 mb-1">⚠ 常見學生迷思</p>
+      <p class="text-sm text-amber-900">學生傾向只看「有效率數字高低」，忽略試驗條件差異。重點在引導他們問「這個數字是怎麼算出來的？」——這個問題意識是整門課的核心。</p>
+    </div>
+  </section>
+
+  <!-- 延伸思考 -->
+  <section class="mb-10">
+    <h2 class="text-xl font-black text-gray-900 mb-4">🤔 延伸思考</h2>
+    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-3 text-sm text-gray-700">
+      <p>1. 如果兩支疫苗在完全相同的條件下做試驗，有效率還會不同嗎？還有哪些因素會影響？</p>
+      <p>2. 除了「預防感染」，疫苗還有哪些可以衡量的指標？（提示：重症率、死亡率、副作用頻率……）</p>
+      <p>3. 科學家如何設計「公平的比較」？「雙盲隨機對照試驗」是什麼意思？</p>
+    </div>
+  </section>
+
+  <!-- 學習歷程提示 -->
+  <section class="mb-10">
+    <div class="bg-violet-50 rounded-xl border border-violet-200 p-5">
+      <h3 class="font-black text-violet-800 mb-2">📂 學習歷程提示</h3>
+      <p class="text-sm text-violet-700">
+        本單元的小組論證紀錄、你的個人反思（ORID格式）都可以放入學習歷程檔案。
+        重點是呈現「你如何從只看數字，到開始質疑數字背後的條件」的思維轉變過程。
+      </p>
+      <a href="../../tools/orid.html" class="inline-block mt-2 text-violet-700 font-bold text-sm hover:text-violet-900 underline">
+        → ORID 反思框架怎麼寫
+      </a>
+    </div>
+  </section>
+
+  <!-- 前後單元導覽 -->
+  <nav class="flex justify-between mt-8">
+    <a href="../../index.html" class="text-sm text-gray-500 hover:text-blue-600">← 返回首頁</a>
+    <a href="shm.html" class="text-sm text-blue-600 font-bold hover:text-blue-800">下一單元：SHM 週期 →</a>
+  </nav>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-slate-900 text-slate-400 py-6 px-4 text-center text-sm mt-10">
+  <p class="font-bold text-white mb-1">松山高中 探究與實作</p>
+  <p>108 課綱 · 自然科必修</p>
+</footer>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

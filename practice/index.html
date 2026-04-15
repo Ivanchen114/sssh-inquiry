@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>練習場 · 松山高中探究與實作</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+<div id="reading-bar" style="width:0%"></div>
+
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
+    <a href="../index.html" class="flex items-center gap-2 font-black text-gray-900 text-lg">
+      <span class="text-2xl">🔬</span><span>探究與實作</span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-gray-600">
+      <a href="../index.html" class="hover:text-blue-600">首頁</a>
+      <a href="../tools/index.html" class="hover:text-blue-600">工具箱</a>
+      <a href="index.html" class="font-bold text-gray-900">練習場</a>
+    </div>
+    <button id="teacher-toggle"
+      class="text-xs px-3 py-1.5 rounded-full transition-all duration-200 bg-slate-300 text-slate-700 font-medium">
+      👤 教師模式：關閉
+    </button>
+  </div>
+</nav>
+
+<div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl md:text-4xl font-black mb-2">✏️ 練習場</h1>
+    <p class="text-gray-300 text-lg">依探究能力分類，隨時測試自己的理解</p>
+    <p class="text-gray-400 text-sm mt-1">（非歷年試題——每題都是針對探究能力設計的情境題）</p>
+  </div>
+</div>
+
+<main class="max-w-4xl mx-auto px-4 py-12 space-y-10">
+
+  <!-- 論證建模 -->
+  <section>
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-8 h-8 rounded-full phase1-bg flex items-center justify-center text-white text-sm font-bold">論</div>
+      <h2 class="text-xl font-black phase1-text">論證建模練習</h2>
+    </div>
+    <div class="space-y-4">
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="badge bg-blue-100 text-blue-600 mb-2">論證建模</span>
+              <h3 class="font-bold text-gray-800">題目 1：找出數據中的問題</h3>
+            </div>
+          </div>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-sm text-gray-600 mb-4">
+            小明進行單擺實驗，測量 10 次週期（單位：秒）：<br>
+            <span class="font-mono bg-gray-100 px-2 py-1 rounded text-xs">1.98, 2.01, 1.99, 2.03, 1.97, 2.00, 5.52, 1.98, 2.02, 2.00</span>
+          </p>
+          <div class="space-y-3">
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">（A）這組數據有什麼問題？你如何判斷？</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">（B）如果把這筆數據直接拿來計算平均數，會對結果產生什麼影響？</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">（C）你會建議小明怎麼處理這個異常值？說明你的理由。</p>
+            </div>
+          </div>
+
+          <!-- 教師解答 -->
+          <div class="teacher-only hidden mt-4 border-t border-amber-200 pt-4">
+            <p class="font-bold text-amber-800 text-sm mb-1">🎓 參考解答</p>
+            <p class="text-xs text-amber-900">（A）第7筆 5.52 秒明顯偏離其他數據（其餘約在 1.97–2.03 之間），差距超過 3 個標準差，是明顯的異常值（outlier）。判斷依據：與平均值差距過大，且物理上不合理（不可能突然變成其他值的 2.7 倍）。<br>
+            （B）直接納入計算，平均數會從約 2.00 偏移至 2.55，嚴重失真。<br>
+            （C）應先記錄此異常值並探究原因（可能是計時錯誤、漏拍或筆誤），確認為測量失誤後，排除此筆數據再計算，並在報告中說明處理方式。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <span class="badge bg-blue-100 text-blue-600 mb-2">論證建模</span>
+          <h3 class="font-bold text-gray-800">題目 2：評估他人的論證</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-sm text-gray-600 mb-4">
+            小華說：「我的實驗證明，彈簧越長，彈力常數越小。因為我用了三條長度不同的彈簧，測到的彈力常數分別是 5、3、2 N/m，長度越長數值越小。」
+          </p>
+          <div class="space-y-3">
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">（A）小華的論證結構完整嗎？找出他的「主張」、「理由」和「證據」。</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">（B）這個論證有什麼漏洞？（提示：三條彈簧的其他條件一樣嗎？）</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-blue-800">（C）如果你要讓這個結論更有說服力，你會如何重新設計實驗？</p>
+            </div>
+          </div>
+          <div class="teacher-only hidden mt-4 border-t border-amber-200 pt-4">
+            <p class="font-bold text-amber-800 text-sm mb-1">🎓 參考解答</p>
+            <p class="text-xs text-amber-900">（A）主張：長度越長彈力常數越小。理由：測量了三條不同長度的彈簧。證據：5、3、2 N/m 的數值。<br>
+            （B）三條彈簧除了長度不同，材質、線徑、圈數可能也不同——沒有控制其他變因，無法確定是「長度」造成彈力常數不同。<br>
+            （C）使用同一條彈簧，截成不同長度；或使用線徑、材質、圈數均相同、只有長度不同的彈簧組，確保單一變因。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 規劃研究 -->
+  <section>
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-8 h-8 rounded-full phase2-bg flex items-center justify-center text-white text-sm font-bold">規</div>
+      <h2 class="text-xl font-black phase2-text">規劃研究練習</h2>
+    </div>
+    <div class="space-y-4">
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <span class="badge bg-emerald-100 text-emerald-600 mb-2">規劃研究</span>
+          <h3 class="font-bold text-gray-800">題目 3：找出變因設計的漏洞</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-sm text-gray-600 mb-4">
+            小美想研究「水溫是否影響砂糖溶解速度」，她的實驗設計如下：<br>
+            <span class="italic">分別在 20°C 和 80°C 的水中加入砂糖，用手攪拌，記錄完全溶解所需的時間。</span>
+          </p>
+          <div class="space-y-3">
+            <div class="bg-emerald-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-emerald-800">（A）這個實驗設計有哪些需要控制但可能沒有控制的變因？</p>
+            </div>
+            <div class="bg-emerald-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-emerald-800">（B）「用手攪拌」作為操作方式有什麼問題？如何改進？</p>
+            </div>
+            <div class="bg-emerald-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-emerald-800">（C）重新設計這個實驗，列出：操縱變因、控制變因、應變變因。</p>
+            </div>
+          </div>
+          <div class="teacher-only hidden mt-4 border-t border-amber-200 pt-4">
+            <p class="font-bold text-amber-800 text-sm mb-1">🎓 參考解答</p>
+            <p class="text-xs text-amber-900">（A）砂糖用量、水量、容器大小、攪拌力道/速度、顆粒大小等均未控制。<br>
+            （B）「手攪拌」無法控制攪拌速度和力道，每次操作不一致，不具重複性。改進：使用機械攪拌器設定固定轉速，或規定「以相同頻率/圈數攪拌」。<br>
+            （C）操縱：水溫。控制：水量（如100ml）、砂糖量（如5g）、顆粒大小（同批砂糖）、攪拌方式（機械定速）。應變：完全溶解時間。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 發現問題 -->
+  <section>
+    <div class="flex items-center gap-3 mb-5">
+      <div class="w-8 h-8 rounded-full phase3-bg flex items-center justify-center text-white text-sm font-bold">發</div>
+      <h2 class="text-xl font-black phase3-text">發現問題練習</h2>
+    </div>
+    <div class="space-y-4">
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100">
+          <span class="badge bg-amber-100 text-amber-600 mb-2">發現問題</span>
+          <h3 class="font-bold text-gray-800">題目 4：把問題變得可以探究</h3>
+        </div>
+        <div class="px-5 py-4">
+          <p class="text-sm text-gray-600 mb-4">
+            以下是幾個學生提出的「探究問題」，有些可以科學探究，有些不行或需要修改。
+          </p>
+          <div class="space-y-2 text-sm mb-4">
+            <div class="flex gap-2 bg-gray-50 rounded-lg p-3">
+              <span class="font-bold text-gray-500">①</span>
+              <span>為什麼橋會塌？</span>
+            </div>
+            <div class="flex gap-2 bg-gray-50 rounded-lg p-3">
+              <span class="font-bold text-gray-500">②</span>
+              <span>音量越大，吉他弦振動的振幅越大嗎？</span>
+            </div>
+            <div class="flex gap-2 bg-gray-50 rounded-lg p-3">
+              <span class="font-bold text-gray-500">③</span>
+              <span>AI 是否比人類更有智慧？</span>
+            </div>
+            <div class="flex gap-2 bg-gray-50 rounded-lg p-3">
+              <span class="font-bold text-gray-500">④</span>
+              <span>鋼鐵比竹子更適合蓋橋嗎？</span>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="bg-amber-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-amber-800">（A）判斷上面四個問題哪些「可以科學探究」，哪些不行，並說明理由。</p>
+            </div>
+            <div class="bg-amber-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-amber-800">（B）把問題①改寫成一個「可以用實驗探究的問題」。</p>
+            </div>
+            <div class="bg-amber-50 rounded-lg p-3">
+              <p class="text-sm font-bold text-amber-800">（C）看這張圖片：<em>（老師在課堂上展示一張日常生活情境圖）</em><br>
+              請提出至少三個你認為「可以探究的問題」，其中至少一個要是你真正好奇想知道的。</p>
+            </div>
+          </div>
+          <div class="teacher-only hidden mt-4 border-t border-amber-200 pt-4">
+            <p class="font-bold text-amber-800 text-sm mb-1">🎓 參考解答</p>
+            <p class="text-xs text-amber-900">（A）②可探究（有明確的操縱/應變變因）。①太廣泛，需縮窄。③「智慧」無統一定義，難以測量。④涉及價值判斷和多種情境，需先定義「適合」的標準。<br>
+            （B）例：「在固定跨距下，橋面承受的重量與橋墩數量的關係為何？」<br>
+            （C）開放題，評量重點在「問題是否可操作測量」，而非答案本身。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="bg-slate-900 text-slate-400 py-6 px-4 text-center text-sm mt-10">
+  <p class="font-bold text-white mb-1">松山高中 探究與實作</p>
+  <p>108 課綱 · 自然科必修</p>
+</footer>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
