@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冪級數與線性化 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="冪級數與線性化：將非線性關係轉化為線性回歸的數學方法教學。">
+  <meta property="og:title" content="冪級數與線性化 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="冪級數與線性化：將非線性關係轉化為線性回歸的數學方法教學。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/power-law.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span style="color:var(--phase2)">規劃研究</span>
+      <span>›</span>
+      <span>冪級數與線性化</span>
+    </div>
+    <h1>📈 冪級數與線性化</h1>
+    <p class="subtitle">讓曲線變直——用取 log 把冪次關係轉成直線</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">W8 · 2 節課</span>
+      <span class="tag">數據分析工具</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">本單元學習目標</div>
+      <ul>
+        <li>理解冪次關係 y = axⁿ 的圖形長什麼樣子</li>
+        <li>能用取對數（log-log 圖）把冪次關係線性化</li>
+        <li>能從 log-log 圖的斜率判斷冪次 n 的值</li>
+        <li>能選擇適合的圖形化方式表達數據的關係</li>
+      </ul>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">⏱ 課堂節奏</div>
+      <p>第一節：冪次關係概念 + 手動計算 log 值。<br>第二節：Excel 操作（log 轉換 + log-log 圖 + 斜率解讀）。</p>
+      <div class="teacher-label" style="margin-top:10px;">數學底線說明</div>
+      <p>不需要學生精熟對數計算，重點是「讓圖變直、從斜率讀冪次」的操作流程。計算機或 Excel 做 log 即可。</p>
+    </div>
+
+    <div class="section-title">情境引入</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;margin-bottom:10px;">為什麼曲線很麻煩？</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div style="text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">原始圖（曲線）</div>
+          <div style="background:var(--bg);border-radius:6px;padding:20px;position:relative;height:120px;display:flex;align-items:flex-end;justify-content:space-around;">
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:10%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:22%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:40%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:62%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:90%"></div>
+            <div style="position:absolute;top:8px;right:10px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);">y = x²</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">y vs x：曲線，無法算斜率</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:12px;font-weight:700;color:var(--phase2);margin-bottom:8px;">線性化圖（直線）✓</div>
+          <div style="background:var(--bg);border-radius:6px;padding:20px;position:relative;height:120px;display:flex;align-items:flex-end;justify-content:space-around;">
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:15%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:32%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:50%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:68%"></div>
+            <div style="width:8px;background:var(--phase2);border-radius:2px;height:85%"></div>
+            <div style="position:absolute;top:8px;right:10px;font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);">log y = 2 log x</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">log y vs log x：直線，斜率 = 冪次</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">核心概念</div>
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:12px;">線性化的步驟</div>
+      <div style="display:grid;gap:10px;font-size:13px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--phase2);color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-weight:600;">原始關係</div>
+            <div style="font-family:'DM Mono',monospace;background:var(--bg);padding:8px 12px;border-radius:4px;margin-top:4px;">y = a · xⁿ</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--phase2);color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-weight:600;">兩邊取 log</div>
+            <div style="font-family:'DM Mono',monospace;background:var(--bg);padding:8px 12px;border-radius:4px;margin-top:4px;">log y = log a + n · log x</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--phase2);color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-weight:600;">令 Y = log y，X = log x</div>
+            <div style="font-family:'DM Mono',monospace;background:var(--bg);padding:8px 12px;border-radius:4px;margin-top:4px;">Y = (log a) + n · X　← 這是直線！</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--phase1);color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">✓</div>
+          <div>
+            <div style="font-weight:600;color:var(--phase1);">結論：log-log 圖的斜率 = 冪次 n</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">截距 = log a，所以 a = 10^(截距)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:10px;">常見的冪次關係例子</div>
+      <table>
+        <thead><tr><th>物理情境</th><th>關係</th><th>冪次 n</th><th>log-log 斜率</th></tr></thead>
+        <tbody>
+          <tr><td>單擺週期 vs 擺長</td><td>T ∝ L^(1/2)</td><td>0.5</td><td>0.5</td></tr>
+          <tr><td>行星公轉週期 vs 軌道半徑</td><td>T ∝ r^(3/2)</td><td>1.5</td><td>1.5</td></tr>
+          <tr><td>自由落體距離 vs 時間</td><td>d ∝ t²</td><td>2</td><td>2</td></tr>
+          <tr><td>彈簧彈力 vs 伸長量</td><td>F ∝ x¹</td><td>1</td><td>1（線性）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">課堂活動</div>
+    <div class="activity-block">
+      <div class="activity-header phase2">活動 · 從數據找冪次（第一節，30 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">下表是某行星衛星的軌道數據。請計算 log 值，畫出 log T vs log r 圖，並從斜率推測冪次：</p>
+        <div style="overflow-x:auto;margin-bottom:14px;">
+          <table>
+            <thead><tr><th>軌道半徑 r (×10⁸ m)</th><th>週期 T (天)</th><th>log r</th><th>log T</th></tr></thead>
+            <tbody>
+              <tr><td>4.22</td><td>1.77</td><td>—</td><td>—</td></tr>
+              <tr><td>6.71</td><td>3.55</td><td>—</td><td>—</td></tr>
+              <tr><td>10.7</td><td>7.15</td><td>—</td><td>—</td></tr>
+              <tr><td>18.8</td><td>16.7</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q1：計算每列的 log r 和 log T（用計算機或 Excel）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q2：在座標紙（或 Excel）畫出 log T vs log r 的散佈圖並加趨勢線</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q3：斜率是多少？這對應到什麼冪次？你認識的哪個天文定律？</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-block">
+      <div class="activity-header phase2">Excel 操作：log-log 圖（第二節，20 分鐘）</div>
+      <div class="activity-body">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">使用上週彈簧實驗的數據，試試看：</div>
+        <div style="background:var(--bg);border-radius:6px;padding:14px;font-size:12px;margin-bottom:12px;">
+          <div style="font-weight:700;margin-bottom:8px;">步驟：</div>
+          <ol style="padding-left:16px;color:var(--text-secondary);line-height:2;">
+            <li>在新欄位輸入 <code>=LOG10(A2)</code> 計算 log(操縱變因)</li>
+            <li>在另一欄位計算 log(應變變因)</li>
+            <li>用這兩欄畫散佈圖 → 加趨勢線 → 顯示方程式</li>
+            <li>斜率即為冪次 n，檢查是否接近整數或簡單分數</li>
+          </ol>
+        </div>
+        <div style="display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q4：彈簧伸長量和質量的冪次是幾？這和虎克定律預測一致嗎？</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">討論引導問題</div>
+      <ul>
+        <li>「斜率是 1.52，我說這個系統的冪次是 3/2——你同意嗎？誤差在實驗上能接受嗎？」</li>
+        <li>「如果 log-log 圖的斜率不是整數也不是簡單分數怎麼辦？代表什麼？」</li>
+        <li>「線性化的技術除了 log-log，還有什麼？（提示：半log圖，用於指數衰減）」</li>
+      </ul>
+      <div class="teacher-label" style="margin-top:10px;">答案</div>
+      <p>衛星數據的斜率應接近 1.5（克卜勒第三定律：T² ∝ r³，即 T ∝ r^1.5）。這是一個很好的「數據驗證定律」的範例。</p>
+    </div>
+
+    <div class="section-title">延伸思考</div>
+    <div class="card" style="margin-bottom:24px;">
+      <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+        <li>如果兩個變因不是冪次關係，而是指數關係（y = a·bˣ），取什麼 log 會讓它變直線？斜率代表什麼？</li>
+        <li>回顧單擺實驗：如果你畫 T vs L（原始），和 T² vs L（線性化），哪個更好用？為什麼？</li>
+        <li>科學家如何用 log-log 圖判斷一個關係「是不是」冪次關係？如果不是，圖形會有什麼特徵？</li>
+      </ol>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">本單元可以放入完整的「線性化分析」：原始 y vs x 曲線、log-log 直線圖、以及你如何從斜率判斷冪次。這展現了進階的數據分析能力。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="spring.html">← 上一單元：彈簧變因設計</a>
+      <a href="report.html">下一單元：報告撰寫規範 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

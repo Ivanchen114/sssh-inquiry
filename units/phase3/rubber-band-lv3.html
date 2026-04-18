@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>橡皮筋動力罐 Lv3 · 發現問題 · 探究與實作</title>
+  <meta name="description" content="橡皮筋動力罐 Lv3 發現問題：精準回滾競賽。">
+  <meta property="og:title" content="橡皮筋動力罐 Lv3 · 發現問題 · 探究與實作">
+  <meta property="og:description" content="橡皮筋動力罐 Lv3 發現問題：精準回滾競賽。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/rubber-band-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·橡皮筋動力罐</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>🥫 橡皮筋動力罐模組 · Lv3 發現問題</h1>
+    <p class="subtitle">讓罐子「回滾到指定位置」——設計一個精準的動力罐，然後問出更好的問題。</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">競賽 + 自主探究</span>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
+    <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
+    <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
+    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- STEP 1: 挑戰規則 -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="step-panel active">
+      <!-- 教學目標 -->
+      <div class="collapsible teacher-toggle">
+        <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>透過「精準度競賽」讓學生整合 Lv1–2 的能量知識，解決真實設計問題</li>
+            <li>從競賽失敗中自然產生「想進一步探究」的問題</li>
+            <li>培養「從現象到問題」的科學思維</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 學習目標 -->
+      <div class="collapsible goal-toggle open">
+        <div class="collapsible-header">🎯 學習目標<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：推力與回滾距離的關係為何不穩定？）</li>
+            <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：初始推出力度（輕、中、強）如何影響回滾距離的重複性？）</li>
+            <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「地面材質（磁磚 vs 木板 vs 地毯）如何影響回滾距離損耗程度？」vs「怎樣才能精準回滾到 200cm？」）</li>
+            <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 挑戰規則 -->
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🏆 挑戰規則</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">任務</div>
+            製作一個橡皮筋動力罐：推出後讓它回滾，停止位置要盡量接近指定位置（距起點 200 cm）。
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">勝負判定</div>
+            每組測 3 次，記錄回滾停止位置距「200 cm 標線」的距離。最接近的組獲勝。
+          </div>
+        </div>
+        <div class="info-box orange">
+          ⚠️ 競賽重點：不是「能回滾多遠」，而是「能精準控制到目標位置」。這需要你深入理解能量、摩擦、初始推力的關係。
+        </div>
+      </div>
+
+      <!-- 材料限制 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🧰 材料限制</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:12px;color:var(--text-secondary);margin-bottom:12px;text-align:center;">
+          <div style="background:var(--bg);padding:10px;border-radius:6px;"><strong>奶粉罐</strong><br>1 個</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;"><strong>橡皮筋</strong><br>5 條（#18）</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;"><strong>螺帽</strong><br>2 個</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;"><strong>膠帶</strong><br>標準用量</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;"><strong>量尺</strong><br>自備測量</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;"><strong>平坦地面</strong><br>磁磚 / 木板</div>
+        </div>
+        <div class="info-box yellow">
+          💡 材料限制的目的：讓所有組「起點相同」，考察的是設計能力而非資源多寡。
+        </div>
+      </div>
+
+      <!-- 設計提示 -->
+      <div class="collapsible think-first">
+        <div class="collapsible-header">
+          🧠 精準度設計策略（先自己想，再點開看）<span class="toggle-icon">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+            <p><strong>Step 1 · 估算目標能量：</strong>200 cm 的回滾需要多少彈性位能？反推應該轉幾圈（參考 Lv1 數據）。</p>
+            <p style="margin-top:8px;"><strong>Step 2 · 控制推力：</strong>推出距離和回滾距離有「倍數關係」嗎？能否透過控制「初始推出力」來調整回滾距離？</p>
+            <p style="margin-top:8px;"><strong>Step 3 · 測試微調：</strong>組裝好後，先試推 2–3 次，測量回滾距離。如果太遠，減少一圈；太近，加一圈。</p>
+            <p style="margin-top:8px;"><strong>Step 4 · 重複性檢驗：</strong>正式比賽前，確認「每次推出的結果是否一致」。推力不一致會導致回滾距離飄移。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-action" style="background:#f0f4ff;border-left:3px solid var(--phase3);padding:12px 16px;margin:20px 0;font-size:13px;color:var(--text-secondary);">
+        📋 閱讀挑戰規則、準備材料，規劃你的設計策略。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- STEP 2: 製作與測試 -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="step-panel">
+      <!-- 競賽流程 -->
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 1 · 設計與測試（50 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">組裝罐子（轉圈、固定）→ 測試推出和回滾 → 測量距離 → 記錄 → 微調設計（增加或減少圈數、改變推力）→ 反覆驗證，直到回滾距離穩定在目標附近。</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 2 · 正式競賽（25 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">每組依序上場：推罐子 → 罐子滑行並回滾 → 停止後測量距離到 200 cm 標線的誤差。記錄 3 次的結果，比較誤差大小。</p>
+        </div>
+      </div>
+
+      <!-- 競賽數據表 -->
+      <div style="overflow-x:auto;margin-bottom:20px;">
+        <table style="font-size:11px;width:100%;">
+          <thead>
+            <tr style="background:var(--phase3);color:white;">
+              <th style="padding:6px;">組別</th>
+              <th style="padding:6px;">設計轉圈數</th>
+              <th style="padding:6px;">測試①回滾距離(cm)</th>
+              <th style="padding:6px;">測試②回滾距離(cm)</th>
+              <th style="padding:6px;">測試③回滾距離(cm)</th>
+              <th style="padding:6px;">|平均 - 200|(cm)</th>
+              <th style="padding:6px;">排名</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:6px;background:var(--bg);">第 1 組</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;">___</td></tr>
+            <tr><td style="padding:6px;background:var(--bg);">第 2 組</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;">___</td></tr>
+            <tr><td style="padding:6px;background:var(--bg);">第 3 組</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;color:var(--text-muted);">___</td><td style="padding:6px;">___</td></tr>
+            <tr><td style="padding:6px;background:var(--bg);">…</td><td style="padding:6px;"></td><td style="padding:6px;"></td><td style="padding:6px;"></td><td style="padding:6px;"></td><td style="padding:6px;"></td><td style="padding:6px;"></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-action" style="background:#f0f4ff;border-left:3px solid var(--phase3);padding:12px 16px;margin:20px 0;font-size:13px;color:var(--text-secondary);">
+        🔧 組裝、測試你的動力罐，參加正式競賽。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- STEP 3: 從競賽到問題 -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="step-panel">
+      <!-- 賽後反思 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">💭 賽後反思：你在競賽中遇到什麼問題？</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">剛才的比賽，你的設計一定不完美。那些「不完美」、「意外現象」就是問題的起點。</p>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item phase3">
+            <strong>Step 1 · 記錄觀察</strong>：寫下 3 個你在競賽中注意到的現象（例如：「每次推的力度不一樣，回滾距離差很大」「罐子滑出去時會偏向一邊」「橡皮筋鬆開時有聲音」「回滾的速度時快時慢」）
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 2 · 轉化為問題</strong>：用「如果改變___，___會怎樣？」的句型，從觀察中提出至少 3 個問題
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 3 · 篩選品質</strong>：用四條件檢查每個問題——可量化？可操作？非查書題？有變因？選出 1 個最想探究的
+          </div>
+        </div>
+      </div>
+
+      <!-- 好壞問題對照 -->
+      <div class="collapsible think-first">
+        <div class="collapsible-header">
+          🔍 好問題 vs 需要改進的問題（先自己想，再點開對照）<span class="toggle-icon">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div style="overflow-x:auto;">
+            <table style="font-size:12px;">
+              <thead>
+                <tr style="background:var(--phase3);color:white;">
+                  <th style="padding:8px;">❌ 需要改進</th>
+                  <th style="padding:8px;">問題出在哪</th>
+                  <th style="padding:8px;">✅ 好的探究問題</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:8px;">「橡皮筋為什麼會推動罐子？」</td>
+                  <td style="padding:8px;color:var(--text-muted);">查書題，不是探究</td>
+                  <td style="padding:8px;">「初始推出力度（輕、中、強）會影響回滾距離嗎？」</td>
+                </tr>
+                <tr style="background:var(--bg);">
+                  <td style="padding:8px;">「我的設計不準」</td>
+                  <td style="padding:8px;color:var(--text-muted);">不是問題，太模糊</td>
+                  <td style="padding:8px;">「重物位置（靠近軸、靠近罐底）會影響推出和回滾的『距離比』嗎？」</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px;">「怎樣才能精準回滾到 200 cm？」</td>
+                  <td style="padding:8px;color:var(--text-muted);">是技巧問，不是科學問</td>
+                  <td style="padding:8px;">「地面材質（磁磚、木板、地毯）如何影響回滾距離的損耗程度？」</td>
+                </tr>
+                <tr style="background:var(--bg);">
+                  <td style="padding:8px;">「為什麼罐子會偏向一邊？」</td>
+                  <td style="padding:8px;color:var(--text-muted);">觀察模糊，難以操縱變因</td>
+                  <td style="padding:8px;">「重物在罐底的偏心位置（偏左、居中、偏右）會改變罐子的滾行直線性嗎？」</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12px;color:#92400e;margin-top:10px;">→ 完整的問題分類框架，看 <a href="../../tools/good-question.html" style="color:#92400e;font-weight:700;">工具箱：什麼是好的探究問題</a></p>
+        </div>
+      </div>
+
+      <!-- Layer 1: 重複性問題 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你 3 次測試的回滾距離差異大嗎？可能的原因是什麼？</div>
+        <button class="think-toggle">想好了？點擊看分析 →</button>
+        <div class="think-hidden">
+          <p><strong>常見原因：</strong>① 推力不一致（力度、角度、初始位置都會影響）→ 可探究「推力控制方式對重複性的影響」<br>② 地面條件不同（某些地方更光滑或有小障礙物）→ 可探究「地面材質對回滾的影響」<br>③ 橡皮筋的疲勞（轉越多圈，彈力越弱）→ 可探究「轉圈數對累積能量損耗的影響」</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 觀察與問題 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你觀察到的「最不穩定的地方」，以及你想探究的具體問題</div>
+        <textarea class="think-input" data-key="rubber-band-lv3-q1" placeholder="例如：我發現每次推的力度不一樣，回滾距離從 180cm 到 220cm。我想探究「用固定的推力方式能否提高重複性」…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 問題評估 -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 下列哪個問題最適合用「迷你實驗」來探究？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 「初始推出力度（輕、中、強、很強）對回滾距離及其重複性的影響」</button>
+          <button class="think-opt" data-val="b">B. 「橡皮筋為什麼會轉圈？」</button>
+          <button class="think-opt" data-val="c">C. 「怎樣才能回滾到 200cm？」</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          A 對！有明確的操縱變因（推力大小）、可量化的結果（距離和誤差），能用實驗測試。B 是查書題，C 是技巧問題不是科學問題。</div>
+      </div>
+
+      <div class="step-action" style="background:#f0f4ff;border-left:3px solid var(--phase3);padding:12px 16px;margin:20px 0;font-size:13px;color:var(--text-secondary);">
+        💡 反思競賽結果，把觀察轉化為可探究的科學問題。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- STEP 4: 後續探究 -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="step-panel">
+      <!-- 後續探究 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">🔬 後續探究（節 3–4）</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">選定問題後，你可以自己規劃一個小型研究：</p>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📋 寫出實驗計畫（操縱變因、控制變因、應變變因、水準數、重複次數）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🔬 執行實驗、收集數據（用表格或圖表組織）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📊 畫圖、找趨勢、寫結論（結果支持你的預測嗎？）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🎤 5 分鐘口頭報告：觀察現象 → 提出問題 → 設計 → 數據 → 結論 → 新問題</div>
+        </div>
+        <div style="margin-top:12px;" class="info-box yellow">
+          💡 報告訣竅：強調「你發現了什麼意外」和「這如何改變了你對能量的理解」。
+        </div>
+      </div>
+
+      <div class="step-action" style="background:#f0f4ff;border-left:3px solid var(--phase3);padding:12px 16px;margin:20px 0;font-size:13px;color:var(--text-secondary);">
+        🎯 選定問題，規劃並執行後續探究。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>完成 ✓</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- POST-CLASS RESOURCES -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 協作、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body">
+        <!-- 問題發現單 -->
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">💡</span>
+          <div>
+            <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+            <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+          </div>
+        </div>
+
+        <!-- AI 協作 -->
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📐 規劃階段</div>
+              把你的任務限制告訴 AI（材料、規則、目標），請它幫你發想設計方案。記得截圖保存對話——展示你怎麼提問比 AI 給了什麼答案更重要。
+            </div>
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📝 反思階段</div>
+              活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+            </div>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ 規劃時 AI 是設計夥伴；反思時 AI 是文字編輯。兩個階段都是你在主導。</p>
+        </div>
+
+        <!-- 學習歷程提示 -->
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">好素材：設計計算過程 → 競賽記錄表 → 賽後觀察紀錄 → 問題轉化過程 → 問題品質篩選理由 → 後續探究成果。這完整展現了「從現象發現問題」的科學創新能力。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+            <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「第一次船壁做 3cm 太矮改成 5cm」才有說服力。</span>
+          </div>
+        </div>
+
+        <!-- 教師備註 -->
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              精準度競賽的設計邏輯：學生必須綜合 Lv1 的「能量→距離」關係和 Lv2 的變因控制經驗。競賽中最常見的挑戰是「重複性」——推力難以一致導致結果飄移。這自然成為「初始推力」、「摩擦」、「能量損耗」等後續問題的素材。<br><br>
+              階段二的重點不是「找到好問題」而是「經歷從現象到問題的轉化」。如果學生提出的問題偏弱，用「你要怎麼設計實驗來測試這個問題？」引導他們自己發現侷限。強調「看似失敗的競賽結果其實蘊含最豐富的科學問題」。
+            </p>
+          </div>
+        </div>
+
+        <!-- 單元導航 -->
+        <div class="unit-nav">
+          <a href="../phase2/rubber-band-lv2.html">← 橡皮筋動力罐 Lv2 規劃研究</a>
+          <a href="../../index.html">回到課程總覽 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

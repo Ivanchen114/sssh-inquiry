@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>木板載重實驗室 · 探究與實作</title>
+  <meta name="description" content="浮力虛擬實驗室，模擬不同材質物體在水中的載重與浮沉行為。">
+  <meta property="og:title" content="木板載重實驗室 · 探究與實作">
+  <meta property="og:description" content="浮力虛擬實驗室，模擬不同材質物體在水中的載重與浮沉行為。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/buoyancy-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <style>
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-panel: #111827;
+      --bg-surface: #1e293b;
+      --border-dim: #334155;
+      --text-primary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-bright: #f8fafc;
+      --phosphor: #22d3ee;
+      --amber: #fbbf24;
+      --neon-green: #4ade80;
+      --neon-red: #f87171;
+      --accent: #6366f1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    .lab-header { text-align: center; margin-bottom: 18px; }
+    .lab-header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-bright);
+      text-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    }
+    .lab-header p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 14px;
+      max-width: 1000px;
+      margin: 0 auto 20px;
+    }
+
+    .canvas-card {
+      background: var(--bg-panel);
+      border-radius: 12px;
+      border: 1px solid var(--border-dim);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    #experiment-canvas {
+      border-radius: 8px;
+      background: #0f172a;
+      display: block;
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      aspect-ratio: 520 / 380;
+      border: 1px solid var(--border-dim);
+    }
+
+    .canvas-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .control-card {
+      background: var(--bg-panel);
+      border-radius: 12px;
+      border: 1px solid var(--border-dim);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .control-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--text-bright);
+      margin-bottom: 4px;
+    }
+
+    .control-section {
+      border-top: 1px solid var(--border-dim);
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .control-section:first-child {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .control-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Board preset buttons */
+    .board-buttons {
+      display: grid;
+      gap: 6px;
+    }
+    .board-btn {
+      padding: 9px 12px;
+      border-radius: 6px;
+      border: 2px solid var(--border-dim);
+      background: var(--bg-surface);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-primary);
+      text-align: center;
+    }
+    .board-btn:hover {
+      border-color: var(--phosphor);
+      background: rgba(34, 211, 238, 0.1);
+    }
+    .board-btn.selected {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--accent);
+      color: var(--text-bright);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Clay mass slider */
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .slider-value {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .slider-value .value-display {
+      font-weight: 700;
+      color: var(--amber);
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right,
+        var(--accent) 0%,
+        var(--amber) 50%,
+        var(--neon-red) 100%);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--text-bright);
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+      border: 2px solid var(--accent);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--text-bright);
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+      border: 2px solid var(--accent);
+    }
+
+    /* Clay shape & position toggles */
+    .toggle-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .toggle-btn {
+      padding: 8px;
+      border-radius: 6px;
+      border: 2px solid var(--border-dim);
+      background: var(--bg-surface);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-primary);
+      text-align: center;
+    }
+    .toggle-btn:hover {
+      border-color: var(--phosphor);
+    }
+    .toggle-btn.active {
+      background: rgba(34, 211, 238, 0.2);
+      border-color: var(--phosphor);
+      color: var(--text-bright);
+      box-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+    }
+
+    /* Action button */
+    .action-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .action-btn.ready {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+    .action-btn.ready:hover {
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.6);
+    }
+    .action-btn.ready:active {
+      transform: scale(0.96);
+    }
+
+    /* Readout box */
+    .readout-box {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-dim);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+    .readout-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .readout-row:last-child { margin-bottom: 0; }
+    .readout-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .readout-value {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: var(--amber);
+      text-shadow: 0 0 4px rgba(251, 191, 36, 0.4);
+    }
+
+    /* Capsized message */
+    .capsized-msg {
+      background: rgba(248, 113, 113, 0.15);
+      border: 1px solid var(--neon-red);
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--neon-red);
+      font-size: 12px;
+      text-shadow: 0 0 4px rgba(248, 113, 113, 0.4);
+      display: none;
+    }
+    .capsized-msg.show { display: block; }
+
+    /* Data table */
+    .data-table {
+      width: 100%;
+      margin-top: 20px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .data-table-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 10px;
+      text-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+    .data-table table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-dim);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .data-table th {
+      background: rgba(99, 102, 241, 0.2);
+      border-bottom: 2px solid var(--border-dim);
+      padding: 10px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-bright);
+    }
+    .data-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border-dim);
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+      color: var(--text-primary);
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table tr:hover {
+      background: rgba(34, 211, 238, 0.1);
+    }
+    .tipped-yes {
+      color: var(--neon-red);
+      font-weight: 700;
+    }
+    .tipped-no {
+      color: var(--neon-green);
+      font-weight: 700;
+    }
+
+    /* Graph placeholder */
+    .graph-section {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--bg-panel);
+      border-radius: 12px;
+      border: 1px solid var(--border-dim);
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .graph-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 10px;
+      text-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+    #graph-canvas {
+      width: 100%;
+      height: 300px;
+      border-radius: 8px;
+      background: #0f172a;
+      border: 1px solid var(--border-dim);
+      display: block;
+    }
+
+    /* Reset button */
+    .reset-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-dim);
+      background: var(--bg-surface);
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 600;
+    }
+    .reset-btn:hover {
+      border-color: var(--phosphor);
+      color: var(--text-primary);
+      background: rgba(34, 211, 238, 0.1);
+    }
+
+    /* Back link */
+    .back-link {
+      max-width: 900px;
+      margin: 20px auto 0;
+      text-align: center;
+      font-size: 12px;
+    }
+    .back-link a {
+      color: var(--phosphor);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .back-link a:hover {
+      color: var(--text-bright);
+      text-decoration: underline;
+      text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+    }
+
+    @media (max-width: 750px) {
+      .main-grid { grid-template-columns: 1fr; gap: 12px; }
+      .control-card { max-height: none; }
+      #experiment-canvas { aspect-ratio: 480 / 320; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lab-header">
+  <h1>🚢 木板載重實驗室</h1>
+  <p>五種面積、同體積的木板——放上黏土觀察沉入深度，小心別翻船！</p>
+</div>
+
+<div class="main-grid">
+  <div class="canvas-card">
+    <canvas id="experiment-canvas" width="520" height="380"></canvas>
+    <div class="canvas-label">側視圖：木板在水中的沉浮情況</div>
+  </div>
+
+  <div class="control-card">
+    <div class="control-title">⚙️ 實驗控制</div>
+
+    <!-- Board selector -->
+    <div class="control-section">
+      <label class="control-label">選擇木板</label>
+      <div class="board-buttons" id="board-buttons"></div>
+      <div id="board-info" style="font-size:11px;color:var(--text-muted);margin-top:6px;font-family:'Courier New',monospace;">
+        面積 30 cm² · 厚 4.00 cm · 體積 120 cm³ · 板重 60 g
+      </div>
+    </div>
+
+    <!-- Clay mass slider -->
+    <div class="control-section">
+      <label class="control-label">黏土質量</label>
+      <div class="slider-container">
+        <input type="range" id="clay-mass" min="0" max="100" value="0" step="10">
+        <div class="slider-value">
+          <span>0</span>
+          <span class="value-display" id="clay-mass-display">0 g</span>
+          <span>100</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clay shape -->
+    <div class="control-section">
+      <label class="control-label">黏土形狀</label>
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-shape="spread">攤平</button>
+        <button class="toggle-btn" data-shape="lump">集中</button>
+      </div>
+    </div>
+
+    <!-- Clay position -->
+    <div class="control-section">
+      <label class="control-label">黏土位置</label>
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-position="center">中央</button>
+        <button class="toggle-btn" data-position="edge">偏邊</button>
+      </div>
+    </div>
+
+    <!-- Action button -->
+    <button class="action-btn ready" id="place-btn">放上黏土</button>
+
+    <!-- Readout -->
+    <div class="readout-box">
+      <div class="readout-row">
+        <span class="readout-label">沉入深度</span>
+        <span class="readout-value" id="depth-display">0.0 cm</span>
+      </div>
+      <div class="readout-row">
+        <span class="readout-label">浮力</span>
+        <span class="readout-value" id="buoyancy-display">0.00 N</span>
+      </div>
+      <div class="readout-row">
+        <span class="readout-label">狀態</span>
+        <span class="readout-value" id="status-display">就緒</span>
+      </div>
+    </div>
+
+    <!-- Capsized warning -->
+    <div class="capsized-msg" id="capsized-msg">
+      🌊 翻覆！黏土位置不當。
+    </div>
+
+    <!-- Record button -->
+    <button class="action-btn ready" id="record-btn" style="background: var(--neon-green); margin-top: 6px; display: none;">記錄數據</button>
+
+    <!-- Reset button -->
+    <button class="reset-btn" id="reset-btn">↺ 重置</button>
+  </div>
+</div>
+
+<!-- Data table -->
+<div class="data-table">
+  <div class="data-table-title">📊 實驗數據</div>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>木板尺寸</th>
+        <th>黏土質量</th>
+        <th>沉入深度</th>
+        <th>是否翻覆</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
+</div>
+
+<!-- Graph -->
+<div class="graph-section">
+  <div class="graph-title">📈 黏土質量 vs 沉入深度</div>
+  <canvas id="graph-canvas" width="800" height="300"></canvas>
+</div>
+
+<!-- Back link -->
+<div class="back-link">
+  <a href="buoyancy-lv1.html">← 返回浮力 Lv1</a>
+</div>
+
+<script>
+// ═══ BOARD DATA ═══
+// 固定體積 = 120 cm³，改變面積 → 厚度自動調整
+// V = L × W × h = 120 cm³ → h = 120 / (L × W)
+const BOARD_VOLUME = 120; // cm³（固定）
+const BOARDS = [
+  { name: '6×5 cm',  L: 6,  W: 5,  label: 'A' },  // h = 4.00 cm
+  { name: '8×5 cm',  L: 8,  W: 5,  label: 'B' },  // h = 3.00 cm
+  { name: '10×6 cm', L: 10, W: 6,  label: 'C' },  // h = 2.00 cm
+  { name: '12×8 cm', L: 12, W: 8,  label: 'D' },  // h = 1.25 cm
+  { name: '15×10cm', L: 15, W: 10, label: 'E' },  // h = 0.80 cm
+];
+// 每塊板子自動計算厚度
+BOARDS.forEach(b => { b.h = BOARD_VOLUME / (b.L * b.W); });
+
+const BOARD_DENSITY = 0.5; // g/cm³
+const WATER_DENSITY = 1.0; // g/cm³ (1000 kg/m³)
+const GRAVITY = 9.8; // m/s²
+
+// ═══ STATE ═══
+let selectedBoard = 0;
+let clayMass = 0; // grams
+let clayShape = 'spread'; // 'spread' or 'lump'
+let clayPosition = 'center'; // 'center' or 'edge'
+let animationInProgress = false;
+let dataRecords = []; // Array of {boardSize, clayMass, depth, tipped}
+
+// ═══ CANVAS ═══
+const canvas = document.getElementById('experiment-canvas');
+const ctx = canvas.getContext('2d');
+let W = canvas.width;
+let H = canvas.height;
+
+function resizeCanvas() {
+  const container = canvas.parentElement;
+  const rect = container.getBoundingClientRect();
+  const containerWidth = Math.max(rect.width - 28, 1);
+
+  W = Math.min(containerWidth, 520);
+  H = (W / 520) * 380;
+
+  canvas.width = W;
+  canvas.height = H;
+
+  drawScene();
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ═══ PHYSICS CALCULATIONS ═══
+function calculateBoardMass(board) {
+  // 所有板體積相同 = BOARD_VOLUME，所以質量都一樣
+  return BOARD_VOLUME * BOARD_DENSITY; // grams (= 60g for all boards)
+}
+
+function calculateSinkDepth(board, clayMass) {
+  const boardMass = calculateBoardMass(board);
+  const totalMass = boardMass + clayMass;
+  const boardArea = board.L * board.W; // cm²
+
+  // Archimedes: d = m_total / (ρ_water × A)
+  const depth = totalMass / (WATER_DENSITY * boardArea);
+  return Math.min(depth, board.h); // 不能超過該板的厚度
+}
+
+function calculateBuoyancy(board, depth) {
+  // F_buoyancy = ρ_water × g × V_displaced
+  const displaceVolume = board.L * board.W * depth; // cm³ = 1e-6 m³
+  const displaceVolume_m3 = displaceVolume / 1e6;
+  const buoyancy = WATER_DENSITY * GRAVITY * displaceVolume_m3; // In Newtons
+  return buoyancy;
+}
+
+function checkTipping(board, clayMass, shape, position) {
+  if (clayMass === 0) return false;
+  if (shape === 'spread') return false; // 攤平黏土重心低、分散，不會翻
+  if (position === 'center') return false; // 中央放置不會翻
+
+  // 翻覆模型：黏土力矩 > 板子復原力矩
+  // 黏土集中在邊緣：torque_clay = m_clay × (W/2)
+  // 板子復原力矩 ≈ m_board × (W/4)（重心在正中央）
+  // 面積小的板寬窄，更容易翻
+  const boardMass = calculateBoardMass(board);
+  const distance = board.W / 2;
+  const tippingThreshold = boardMass * (board.W / 4);
+  const torque = clayMass * distance;
+
+  return torque > tippingThreshold;
+}
+
+// ═══ CANVAS DRAWING ═══
+function drawScene() {
+  ctx.clearRect(0, 0, W, H);
+
+  const MARGIN = 40;
+  const WATER_COLOR = 'rgba(34, 211, 238, 0.15)';
+  const WATER_LINE_Y = H * 0.65;
+
+  // Water background
+  ctx.fillStyle = WATER_COLOR;
+  ctx.fillRect(MARGIN, WATER_LINE_Y, W - 2 * MARGIN, H - WATER_LINE_Y - MARGIN);
+
+  // Tank border
+  ctx.strokeStyle = '#22d3ee';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(MARGIN, WATER_LINE_Y, W - 2 * MARGIN, H - WATER_LINE_Y - MARGIN);
+
+  // Water line (dashed)
+  ctx.strokeStyle = '#22d3ee';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5, 5]);
+  ctx.beginPath();
+  ctx.moveTo(MARGIN - 10, WATER_LINE_Y);
+  ctx.lineTo(W - MARGIN + 10, WATER_LINE_Y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Ruler on left
+  ctx.font = '10px Courier New';
+  ctx.fillStyle = '#22d3ee';
+  ctx.textAlign = 'right';
+  const rulerX = MARGIN - 8;
+  const rulerHeight = H - WATER_LINE_Y - MARGIN;
+  const rulerStep = rulerHeight / 10; // 10 marks
+  for (let i = 0; i <= 10; i++) {
+    const y = WATER_LINE_Y + i * rulerStep;
+    ctx.beginPath();
+    ctx.moveTo(MARGIN - 3, y);
+    ctx.lineTo(MARGIN, y);
+    ctx.strokeStyle = '#22d3ee';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    if (i % 2 === 0) {
+      ctx.fillText(i * 1 + ' cm', rulerX - 5, y + 3);
+    }
+  }
+
+  // Water label
+  ctx.font = 'bold 11px system-ui';
+  ctx.fillStyle = '#22d3ee';
+  ctx.textAlign = 'left';
+  ctx.fillText('水面', W - MARGIN + 12, WATER_LINE_Y + 3);
+}
+
+function drawBoard(board, depth, isTipping = false) {
+  const MARGIN = 40;
+  const WATER_LINE_Y = H * 0.65;
+  const BOARD_DRAW_WIDTH = (W - 2 * MARGIN) * 0.6; // 60% of tank width
+  const BOARD_X = (W - BOARD_DRAW_WIDTH) / 2;
+
+  // Board visual height (1cm in reality = 20px on screen)
+  const BOARD_DRAW_HEIGHT = board.h * 20;
+
+  // Calculate board Y position based on sink depth
+  // depth is how much submerged; board top should be at (WATER_LINE_Y - (BOARD_THICKNESS - depth) * 20)
+  const submerged_pixels = depth * 20;
+  const BOARD_Y = WATER_LINE_Y - submerged_pixels;
+
+  ctx.save();
+
+  if (isTipping) {
+    // Rotate board slightly to show tipping
+    ctx.translate(BOARD_X + BOARD_DRAW_WIDTH / 2, BOARD_Y + BOARD_DRAW_HEIGHT / 2);
+    ctx.rotate(Math.PI / 8); // 22.5 degrees
+    ctx.translate(-(BOARD_X + BOARD_DRAW_WIDTH / 2), -(BOARD_Y + BOARD_DRAW_HEIGHT / 2));
+  }
+
+  // Board shadow
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+  ctx.fillRect(BOARD_X + 2, BOARD_Y + 2, BOARD_DRAW_WIDTH, BOARD_DRAW_HEIGHT);
+
+  // Board body (brown wood)
+  ctx.fillStyle = '#92400e';
+  ctx.strokeStyle = '#78350f';
+  ctx.lineWidth = 2;
+  ctx.fillRect(BOARD_X, BOARD_Y, BOARD_DRAW_WIDTH, BOARD_DRAW_HEIGHT);
+  ctx.strokeRect(BOARD_X, BOARD_Y, BOARD_DRAW_WIDTH, BOARD_DRAW_HEIGHT);
+
+  // Wood grain effect
+  ctx.strokeStyle = 'rgba(120, 53, 15, 0.3)';
+  ctx.lineWidth = 1;
+  for (let i = 1; i < 5; i++) {
+    const y = BOARD_Y + (BOARD_DRAW_HEIGHT / 5) * i;
+    ctx.beginPath();
+    ctx.moveTo(BOARD_X, y);
+    ctx.lineTo(BOARD_X + BOARD_DRAW_WIDTH, y);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+
+  return { BOARD_X, BOARD_Y, BOARD_DRAW_WIDTH, BOARD_DRAW_HEIGHT };
+}
+
+function drawClay(clayMass, board, position, shape, boardInfo) {
+  if (clayMass === 0) return;
+
+  const MARGIN = 40;
+  const WATER_LINE_Y = H * 0.65;
+  const { BOARD_X, BOARD_Y, BOARD_DRAW_WIDTH, BOARD_DRAW_HEIGHT } = boardInfo;
+
+  // Clay size based on mass (visual)
+  const clayRadius = Math.sqrt(clayMass) * 1.5;
+
+  // Clay X position
+  let clayX = BOARD_X + BOARD_DRAW_WIDTH / 2; // center by default
+  if (position === 'edge') {
+    clayX = BOARD_X + BOARD_DRAW_WIDTH * 0.75; // 75% along board
+  }
+
+  const clayY = BOARD_Y - clayRadius - 5; // On top of board
+
+  // Draw clay
+  if (shape === 'spread') {
+    // Flat rectangle on board
+    const clayWidth = BOARD_DRAW_WIDTH * 0.8;
+    const clayHeight = clayRadius * 0.5;
+    ctx.fillStyle = 'rgba(120, 81, 169, 0.8)'; // Purple-ish clay
+    ctx.strokeStyle = '#7c50a9';
+    ctx.lineWidth = 1;
+    ctx.fillRect(BOARD_X + BOARD_DRAW_WIDTH * 0.1, BOARD_Y - clayHeight, clayWidth, clayHeight);
+    ctx.strokeRect(BOARD_X + BOARD_DRAW_WIDTH * 0.1, BOARD_Y - clayHeight, clayWidth, clayHeight);
+  } else {
+    // Lumpy blob
+    ctx.fillStyle = 'rgba(120, 81, 169, 0.9)';
+    ctx.strokeStyle = '#7c50a9';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(clayX, clayY, clayRadius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+}
+
+function animatePlaceClay(board, clayMass, shape, position, callback) {
+  animationInProgress = true;
+  let progress = 0;
+  const duration = 800; // ms
+  const startTime = Date.now();
+
+  function animate() {
+    const elapsed = Date.now() - startTime;
+    progress = Math.min(elapsed / duration, 1);
+
+    drawScene();
+
+    // Calculate depth at this progress
+    const currentMass = clayMass * progress;
+    const depth = calculateSinkDepth(board, currentMass);
+
+    const boardInfo = drawBoard(board, depth, false);
+    if (currentMass > 0) {
+      drawClay(currentMass, board, position, shape, boardInfo);
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      animationInProgress = false;
+
+      // Check if tipped
+      const isTipped = checkTipping(board, clayMass, shape, position);
+      const finalDepth = calculateSinkDepth(board, clayMass);
+
+      if (isTipped) {
+        // Capsizing animation
+        setTimeout(() => {
+          animateCapsizing(board, clayMass, shape, position, callback);
+        }, 300);
+      } else {
+        callback(finalDepth, isTipped);
+      }
+    }
+  }
+
+  animate();
+}
+
+function animateCapsizing(board, clayMass, shape, position, callback) {
+  let progress = 0;
+  const duration = 600;
+  const startTime = Date.now();
+
+  function animate() {
+    const elapsed = Date.now() - startTime;
+    progress = Math.min(elapsed / duration, 1);
+
+    drawScene();
+
+    // Board rotates and sinks
+    const rotation = (Math.PI / 2) * progress; // 0 to 90 degrees
+    const depth = calculateSinkDepth(board, clayMass) * (1 + progress);
+
+    const MARGIN = 40;
+    const WATER_LINE_Y = H * 0.65;
+    const BOARD_DRAW_WIDTH = (W - 2 * MARGIN) * 0.6;
+    const BOARD_X = (W - BOARD_DRAW_WIDTH) / 2;
+    const BOARD_DRAW_HEIGHT = board.h * 20;
+    const submerged_pixels = Math.min(depth * 20, WATER_LINE_Y - 50);
+    const BOARD_Y = WATER_LINE_Y - submerged_pixels;
+
+    ctx.save();
+    ctx.translate(BOARD_X + BOARD_DRAW_WIDTH / 2, BOARD_Y + BOARD_DRAW_HEIGHT / 2);
+    ctx.rotate(rotation);
+    ctx.translate(-(BOARD_X + BOARD_DRAW_WIDTH / 2), -(BOARD_Y + BOARD_DRAW_HEIGHT / 2));
+
+    ctx.fillStyle = '#92400e';
+    ctx.strokeStyle = '#78350f';
+    ctx.lineWidth = 2;
+    ctx.fillRect(BOARD_X, BOARD_Y, BOARD_DRAW_WIDTH, BOARD_DRAW_HEIGHT);
+    ctx.strokeRect(BOARD_X, BOARD_Y, BOARD_DRAW_WIDTH, BOARD_DRAW_HEIGHT);
+
+    ctx.restore();
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      callback(0, true);
+    }
+  }
+
+  animate();
+}
+
+// ═══ UI INITIALIZATION ═══
+function initBoardButtons() {
+  const container = document.getElementById('board-buttons');
+  container.innerHTML = '';
+  BOARDS.forEach((board, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'board-btn';
+    if (idx === 0) btn.classList.add('selected');
+    btn.textContent = board.name;
+    btn.onclick = () => selectBoard(idx);
+    container.appendChild(btn);
+  });
+}
+
+function selectBoard(idx) {
+  selectedBoard = idx;
+  document.querySelectorAll('.board-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === idx);
+  });
+  const b = BOARDS[idx];
+  const area = b.L * b.W;
+  const mass = calculateBoardMass(b);
+  document.getElementById('board-info').textContent =
+    `面積 ${area} cm² · 厚 ${b.h.toFixed(2)} cm · 體積 ${BOARD_VOLUME} cm³ · 板重 ${mass.toFixed(0)} g`;
+  drawScene();
+  updateReadout();
+}
+
+function updateClayMass(value) {
+  clayMass = parseInt(value);
+  document.getElementById('clay-mass-display').textContent = `${clayMass} g`;
+  updateReadout();
+}
+
+function updateReadout() {
+  if (animationInProgress) return;
+
+  const board = BOARDS[selectedBoard];
+  const depth = calculateSinkDepth(board, clayMass);
+  const buoyancy = calculateBuoyancy(board, depth);
+
+  // Add ±0.5mm noise to depth
+  const noise = (Math.random() - 0.5) * 0.1; // ±0.05 cm
+  const noisyDepth = Math.max(0, depth + noise);
+
+  document.getElementById('depth-display').textContent = `${noisyDepth.toFixed(1)} cm`;
+  document.getElementById('buoyancy-display').textContent = `${buoyancy.toFixed(2)} N`;
+
+  const status = clayMass === 0 ? '就緒' : '沉入中...';
+  document.getElementById('status-display').textContent = status;
+}
+
+// ═══ EVENT LISTENERS ═══
+document.getElementById('clay-mass').addEventListener('input', (e) => {
+  updateClayMass(e.target.value);
+});
+
+document.querySelectorAll('[data-shape]').forEach(btn => {
+  btn.addEventListener('click', function() {
+    clayShape = this.dataset.shape;
+    document.querySelectorAll('[data-shape]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+document.querySelectorAll('[data-position]').forEach(btn => {
+  btn.addEventListener('click', function() {
+    clayPosition = this.dataset.position;
+    document.querySelectorAll('[data-position]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+document.getElementById('place-btn').addEventListener('click', () => {
+  if (animationInProgress) return;
+
+  const board = BOARDS[selectedBoard];
+  animatePlaceClay(board, clayMass, clayShape, clayPosition, (depth, isTipped) => {
+    const capsizedMsg = document.getElementById('capsized-msg');
+    if (isTipped) {
+      capsizedMsg.classList.add('show');
+      document.getElementById('status-display').textContent = '翻覆!';
+    } else {
+      capsizedMsg.classList.remove('show');
+      document.getElementById('status-display').textContent = '穩定';
+
+      // Show record button
+      document.getElementById('record-btn').style.display = 'block';
+    }
+
+    drawScene();
+    drawBoard(board, depth, isTipped);
+    const boardInfo = { BOARD_X: 0, BOARD_Y: 0, BOARD_DRAW_WIDTH: 0, BOARD_DRAW_HEIGHT: 0 };
+    drawClay(clayMass, board, clayPosition, clayShape, boardInfo);
+  });
+});
+
+document.getElementById('record-btn').addEventListener('click', () => {
+  const board = BOARDS[selectedBoard];
+  const depth = calculateSinkDepth(board, clayMass);
+  const isTipped = checkTipping(board, clayMass, clayShape, clayPosition);
+
+  dataRecords.push({
+    boardSize: board.label,
+    clayMass: clayMass,
+    depth: depth,
+    tipped: isTipped
+  });
+
+  addTableRow(board.label, clayMass, depth, isTipped);
+  updateGraph();
+
+  document.getElementById('record-btn').style.display = 'none';
+  document.getElementById('capsized-msg').classList.remove('show');
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  selectedBoard = 0;
+  clayMass = 0;
+  clayShape = 'spread';
+  clayPosition = 'center';
+  animationInProgress = false;
+
+  document.getElementById('clay-mass').value = 0;
+  document.getElementById('clay-mass-display').textContent = '0 g';
+
+  document.querySelectorAll('.board-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === 0);
+  });
+
+  document.querySelectorAll('[data-shape]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.shape === 'spread');
+  });
+
+  document.querySelectorAll('[data-position]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.position === 'center');
+  });
+
+  document.getElementById('record-btn').style.display = 'none';
+  document.getElementById('capsized-msg').classList.remove('show');
+
+  updateReadout();
+  drawScene();
+});
+
+function addTableRow(boardSize, clayMass, depth, tipped) {
+  const tbody = document.getElementById('table-body');
+  const tr = document.createElement('tr');
+
+  const tippedText = tipped ? '是' : '否';
+  const tippedClass = tipped ? 'tipped-yes' : 'tipped-no';
+
+  tr.innerHTML = `
+    <td>${boardSize}</td>
+    <td>${clayMass} g</td>
+    <td>${depth.toFixed(2)} cm</td>
+    <td class="${tippedClass}">${tippedText}</td>
+  `;
+
+  tbody.appendChild(tr);
+}
+
+function updateGraph() {
+  if (dataRecords.length === 0) {
+    drawGraphPlaceholder();
+    return;
+  }
+
+  const graphCanvas = document.getElementById('graph-canvas');
+  const gctx = graphCanvas.getContext('2d');
+  const W_g = graphCanvas.width;
+  const H_g = graphCanvas.height;
+
+  gctx.clearRect(0, 0, W_g, H_g);
+
+  // Axes
+  const margin = 40;
+  const plotW = W_g - 2 * margin;
+  const plotH = H_g - 2 * margin;
+
+  gctx.strokeStyle = '#22d3ee';
+  gctx.lineWidth = 2;
+  gctx.beginPath();
+  gctx.moveTo(margin, H_g - margin);
+  gctx.lineTo(W_g - margin, H_g - margin);
+  gctx.stroke();
+
+  gctx.beginPath();
+  gctx.moveTo(margin, margin);
+  gctx.lineTo(margin, H_g - margin);
+  gctx.stroke();
+
+  // Labels
+  gctx.font = '12px Courier New';
+  gctx.fillStyle = '#22d3ee';
+  gctx.textAlign = 'center';
+  gctx.fillText('黏土質量 (g)', W_g / 2, H_g - 10);
+
+  gctx.save();
+  gctx.translate(15, H_g / 2);
+  gctx.rotate(-Math.PI / 2);
+  gctx.textAlign = 'center';
+  gctx.fillText('沉入深度 (cm)', 0, 0);
+  gctx.restore();
+
+  // Grid
+  gctx.strokeStyle = 'rgba(34, 211, 238, 0.1)';
+  gctx.lineWidth = 1;
+  for (let i = 1; i < 5; i++) {
+    const x = margin + (plotW / 5) * i;
+    gctx.beginPath();
+    gctx.moveTo(x, margin);
+    gctx.lineTo(x, H_g - margin);
+    gctx.stroke();
+
+    const y = margin + (plotH / 5) * i;
+    gctx.beginPath();
+    gctx.moveTo(margin, y);
+    gctx.lineTo(W_g - margin, y);
+    gctx.stroke();
+  }
+
+  // Scale — 最厚板(A)空板沉深=2cm，加滿黏土可到5+cm
+  const maxMass = 100;
+  const maxDepth = 5.5;
+
+  // Plot data
+  gctx.fillStyle = '#6366f1';
+  gctx.strokeStyle = '#4338ca';
+  gctx.lineWidth = 2;
+
+  dataRecords.forEach(record => {
+    const x = margin + (record.clayMass / maxMass) * plotW;
+    const y = H_g - margin - (record.depth / maxDepth) * plotH;
+
+    gctx.beginPath();
+    gctx.arc(x, y, 4, 0, Math.PI * 2);
+    gctx.fill();
+  });
+
+  // Theoretical lines for each board (different colors)
+  const lineColors = ['#f87171', '#fbbf24', '#4ade80', '#22d3ee', '#a78bfa'];
+  BOARDS.forEach((board, idx) => {
+    gctx.strokeStyle = lineColors[idx] || '#4ade80';
+    gctx.lineWidth = 1;
+    gctx.setLineDash([5, 5]);
+    gctx.beginPath();
+
+    for (let mass = 0; mass <= maxMass; mass += 5) {
+      const d = calculateSinkDepth(board, mass);
+      const x = margin + (mass / maxMass) * plotW;
+      const y = H_g - margin - (d / maxDepth) * plotH;
+
+      if (mass === 0) gctx.moveTo(x, y);
+      else gctx.lineTo(x, y);
+    }
+    gctx.stroke();
+    gctx.setLineDash([]);
+
+    // Label
+    gctx.fillStyle = lineColors[idx] || '#4ade80';
+    gctx.font = '9px system-ui';
+    gctx.textAlign = 'left';
+    const labelY = H_g - margin - (calculateSinkDepth(board, maxMass) / maxDepth) * plotH;
+    gctx.fillText(board.label, margin + plotW + 3, Math.max(margin + 8, Math.min(H_g - margin - 2, labelY + 3)));
+  });
+}
+
+function drawGraphPlaceholder() {
+  const graphCanvas = document.getElementById('graph-canvas');
+  const gctx = graphCanvas.getContext('2d');
+  const W_g = graphCanvas.width;
+  const H_g = graphCanvas.height;
+
+  gctx.clearRect(0, 0, W_g, H_g);
+  gctx.fillStyle = '#0f172a';
+  gctx.fillRect(0, 0, W_g, H_g);
+
+  gctx.font = '14px system-ui';
+  gctx.fillStyle = '#94a3b8';
+  gctx.textAlign = 'center';
+  gctx.textBaseline = 'middle';
+  gctx.fillText('記錄數據後將顯示圖表', W_g / 2, H_g / 2);
+}
+
+// ═══ INITIALIZATION ═══
+initBoardButtons();
+updateReadout();
+drawGraphPlaceholder();
+</script>
+
+</body>
+</html>

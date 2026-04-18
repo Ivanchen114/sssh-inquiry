@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>報告撰寫規範 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="科學報告撰寫規範，從摘要到結論的完整報告架構指引。">
+  <meta property="og:title" content="報告撰寫規範 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="科學報告撰寫規範，從摘要到結論的完整報告架構指引。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/report.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .ng-good { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .ng-box { border-radius:6px; padding:14px 16px; font-size:13px; }
+    .ng-box.ng { background:#fff1f2; border:1px solid #fecdd3; }
+    .ng-box.good { background:#f0fdf4; border:1px solid #bbf7d0; }
+    .ng-label { font-size:11px; font-weight:700; letter-spacing:0.08em; margin-bottom:8px; }
+    .ng-label.ng { color:#dc2626; }
+    .ng-label.good { color:#16a34a; }
+    .ng-box p { color:var(--text-secondary); line-height:1.7; margin-bottom:6px; }
+    .ng-box .why { font-size:12px; color:var(--text-muted); font-style:italic; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span style="color:var(--phase2)">規劃研究</span>
+      <span>›</span>
+      <span>報告撰寫規範</span>
+    </div>
+    <h1>📝 報告撰寫規範</h1>
+    <p class="subtitle">NG 範例 vs 好範例——把探究歷程「說清楚」</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag express">表達分享</span>
+      <span class="tag">W9 · 2 節課</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">本單元學習目標</div>
+      <ul>
+        <li>能識別報告中的「描述」vs「分析」vs「詮釋」的差異</li>
+        <li>能寫出完整的研究目的和研究問題（操作型定義）</li>
+        <li>能批判 NG 範例，並說明為什麼它不夠好</li>
+        <li>能用正確格式呈現數據（表格標題、軸標籤、單位）</li>
+      </ul>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">⏱ 課堂節奏</div>
+      <p>第一節：NG 範例逐段分析，全班討論問題出在哪裡。<br>第二節：各組修改一份舊報告（彈簧或單擺），交換互評。</p>
+    </div>
+
+    <!-- 報告五段結構 -->
+    <div class="section-title">探究報告五段結構</div>
+    <div style="display:grid;gap:8px;margin-bottom:24px;">
+      <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase2);color:white;padding:8px 16px;font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;">
+          <span>1. 研究目的與問題</span>
+          <span style="font-size:11px;opacity:0.8;">最重要的第一段</span>
+        </div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">
+          說明你想探究什麼，以及你的<strong>操作型定義</strong>——說清楚「如何測」和「測什麼」。
+          <div style="font-style:italic;color:var(--text-muted);margin-top:4px;">例：「本實驗探討彈簧伸長量 x（公分）與掛載質量 m（克）的關係，以直尺測量伸長前後長度差為 x。」</div>
+        </div>
+      </div>
+      <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase2);color:white;padding:8px 16px;font-size:12px;font-weight:700;">2. 實驗設計</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">三種變因列表（操縱/控制/應變）、器材清單、實驗步驟（可用編號）。別人看完，能重複你的實驗。</div>
+      </div>
+      <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase2);color:white;padding:8px 16px;font-size:12px;font-weight:700;">3. 數據與圖表</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">原始數據表（含單位、標題）、處理後的圖形（含軸標籤、單位、趨勢線）。數字不能孤立呈現，要有脈絡。</div>
+      </div>
+      <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase2);color:white;padding:8px 16px;font-size:12px;font-weight:700;">4. 結果分析與詮釋</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">從圖形/數據得出結論，說明趨勢、計算結果（帶單位）、與理論值比較及偏差分析。</div>
+      </div>
+      <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase2);color:white;padding:8px 16px;font-size:12px;font-weight:700;">5. 反思與改進</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">誤差來源分析（具體說明，不要只寫「人為誤差」）、如何改進、延伸問題。</div>
+      </div>
+    </div>
+
+    <!-- NG vs 好範例 -->
+    <div class="section-title">NG 範例 vs 好範例</div>
+
+    <div style="font-weight:700;font-size:13px;color:var(--text-secondary);margin-bottom:10px;">❶ 研究目的的寫法</div>
+    <div class="ng-good">
+      <div class="ng-box ng">
+        <div class="ng-label ng">❌ NG 寫法</div>
+        <p>「本實驗要研究彈簧。」</p>
+        <p class="why">問題：沒有說「測什麼」「怎麼測」「研究什麼關係」，完全沒有資訊。</p>
+      </div>
+      <div class="ng-box good">
+        <div class="ng-label good">✅ 好範例</div>
+        <p>「本實驗探討掛載質量（m，單位 g）對彈簧伸長量（x，以自然長為基準，直尺測量，單位 cm）的影響，驗證兩者是否呈線性關係。」</p>
+        <p class="why">具體說明了操縱變因、應變變因、測量方式和研究問題。</p>
+      </div>
+    </div>
+
+    <div style="font-weight:700;font-size:13px;color:var(--text-secondary);margin-bottom:10px;">❷ 數據分析的寫法</div>
+    <div class="ng-good">
+      <div class="ng-box ng">
+        <div class="ng-label ng">❌ NG 寫法</div>
+        <p>「數據如下表。從圖可以看出隨著質量增加，彈簧伸長量也增加。」</p>
+        <p class="why">只描述了「方向」，沒有定量化，沒有計算斜率，沒有和理論比較。</p>
+      </div>
+      <div class="ng-box good">
+        <div class="ng-label good">✅ 好範例</div>
+        <p>「從 x vs m 圖的趨勢線得斜率 k = 0.82 cm/g（R² = 0.996），代表每增加 1g，彈簧伸長約 0.82 cm。換算彈力常數 k = mg/x = 0.012 N/cm，與廠商標示值 0.013 N/cm 偏差約 8%。」</p>
+        <p class="why">有定量結果、有單位、有 R² 表示擬合品質、有與理論值比較。</p>
+      </div>
+    </div>
+
+    <div style="font-weight:700;font-size:13px;color:var(--text-secondary);margin-bottom:10px;">❸ 誤差分析的寫法</div>
+    <div class="ng-good">
+      <div class="ng-box ng">
+        <div class="ng-label ng">❌ NG 寫法</div>
+        <p>「誤差來自人為因素和環境因素。」</p>
+        <p class="why">空洞，沒有具體說明是哪種人為因素，也沒有估計影響大小。</p>
+      </div>
+      <div class="ng-box good">
+        <div class="ng-label good">✅ 好範例</div>
+        <p>「主要誤差來源：(1) 彈簧未完全靜止即讀數，估計誤差 ±0.3 cm；(2) 直尺視差（側面讀數），估計 ±0.1 cm；(3) 砝碼質量標示可能有 ±1 g 誤差。若改用數位千分卡和影像分析讀數，可顯著降低誤差。」</p>
+        <p class="why">具體、定量、提出改進方向。</p>
+      </div>
+    </div>
+
+    <!-- 課堂活動 -->
+    <div class="section-title">課堂活動</div>
+    <div class="activity-block">
+      <div class="activity-header phase2">活動 · 修改同學舊報告（第二節，35 分鐘）</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">拿出你（或組員）上週彈簧實驗的報告草稿，用以下評分表自評，然後和鄰組互換評分：</p>
+        <table>
+          <thead>
+            <tr><th>評分項目</th><th>滿分</th><th>自評</th><th>互評</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>研究目的有操作型定義</td><td>2</td><td>—</td><td>—</td></tr>
+            <tr><td>變因表列完整（三種）</td><td>2</td><td>—</td><td>—</td></tr>
+            <tr><td>數據表有標題、欄位名稱、單位</td><td>2</td><td>—</td><td>—</td></tr>
+            <tr><td>圖形有軸標籤、單位、趨勢線</td><td>2</td><td>—</td><td>—</td></tr>
+            <tr><td>分析有定量結果（數字+單位）</td><td>2</td><td>—</td><td>—</td></tr>
+            <tr><td>誤差分析具體（不只是「人為誤差」）</td><td>2</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>總分</strong></td><td><strong>12</strong></td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">互評後：指出對方報告最需要改進的一個地方，並說明如何改進</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">討論引導問題</div>
+      <ul>
+        <li>「為什麼操作型定義這麼重要？不定義的話，別人怎麼重複你的實驗？」</li>
+        <li>「R² = 0.996 代表什麼？如果 R² = 0.7，你的趨勢線還可信嗎？」</li>
+        <li>「有同學只花 3 分鐘寫報告，有同學花了 1 小時——長報告一定比較好嗎？」（引出：精準簡潔 vs 囉嗦模糊）</li>
+      </ul>
+    </div>
+
+    <!-- ORID 心得框架 -->
+    <div class="section-title">🔄 ORID 心得框架</div>
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">完成報告修改後，用 ORID 框架寫一段 100–150 字的課後心得。這個格式也是之後所有單元心得的標準：</p>
+      <div style="display:grid;gap:10px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--phase1);color:white;border-radius:6px;padding:6px 12px;font-weight:700;font-size:13px;flex-shrink:0;min-width:28px;text-align:center;">O</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;">Objective（客觀）</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">我在這節課做了什麼？看到了什麼？拿到了什麼數據？</div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;margin-top:6px;font-size:12px;color:var(--text-secondary);font-style:italic;">範例：「我們用互評表評了鄰組彈簧報告，他們的研究目的沒有操作型定義，誤差分析只寫了『人為誤差』。」</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--phase2);color:white;border-radius:6px;padding:6px 12px;font-weight:700;font-size:13px;flex-shrink:0;min-width:28px;text-align:center;">R</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;">Reflective（感受）</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">我有什麼感受？讓我驚訝或覺得困難的是什麼？</div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;margin-top:6px;font-size:12px;color:var(--text-secondary);font-style:italic;">範例：「沒想到自己上週寫的報告也犯了同樣的問題，看別人的報告比看自己的更容易發現問題。」</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--phase3);color:white;border-radius:6px;padding:6px 12px;font-weight:700;font-size:13px;flex-shrink:0;min-width:28px;text-align:center;">I</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;">Interpretive（詮釋）</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">這代表什麼？我學到了什麼？有沒有改變了我的想法？</div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;margin-top:6px;font-size:12px;color:var(--text-secondary);font-style:italic;">範例：「好報告不是寫得多，而是每一句話都有意義。『人為誤差』的說法之所以沒用，是因為沒有針對具體行為提出可改進的建議。」</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--express);color:white;border-radius:6px;padding:6px 12px;font-weight:700;font-size:13px;flex-shrink:0;min-width:28px;text-align:center;">D</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;">Decisional（決定）</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">下次我會怎麼做？這次學到的東西怎麼用在未來？</div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;margin-top:6px;font-size:12px;color:var(--text-secondary);font-style:italic;">範例：「下次寫誤差分析時，我會針對三個具體步驟各估一個誤差值，並說明如何改善其中最大的那個。」</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card" style="margin-bottom:24px;">
+      <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+        <li>「描述」vs「詮釋」有什麼差？試用彈簧實驗的數據各舉一個例子。</li>
+        <li>科學論文中的「方法」章節為什麼要寫得極度詳細？（想想：可複現性 reproducibility）</li>
+        <li>如果你的結果和理論值差 20%，但你認為實驗設計是對的——你有哪些辦法找出原因？</li>
+      </ol>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">將修改前和修改後的報告片段放在一起，加上說明「你修改了什麼、為什麼這樣修」——這是展現「寫作成長」最有力的方式，非常適合學習歷程。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="power-law.html">← 上一單元：冪級數與線性化</a>
+      <a href="buoyancy.html">下一單元：浮力：鐵達尼號 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

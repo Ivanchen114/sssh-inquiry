@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel 數據分析 · 工具箱 · 探究與實作</title>
+  <meta name="description" content="用 Excel 進行科學數據分析的教學指引，包含公式、圖表製作與線性回歸操作。">
+  <meta property="og:title" content="Excel 數據分析 · 工具箱 · 探究與實作">
+  <meta property="og:description" content="用 Excel 進行科學數據分析的教學指引，包含公式、圖表製作與線性回歸操作。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/excel.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a>
+      <span>›</span>
+      <a href="index.html">工具箱</a>
+      <span>›</span>
+      <span>Excel 數據分析</span>
+    </div>
+    <h1>📊 Excel 數據分析指南</h1>
+    <p class="subtitle">實驗數據整理的基本技能——從輸入到圖表的完整流程</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">W5–W9 常用</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- 基本表格設計 -->
+    <div class="section-title">一、建立數據表的規範</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div class="card" style="border-top:3px solid #dc2626;">
+        <div style="font-weight:700;font-size:13px;color:#dc2626;margin-bottom:10px;">❌ 常見錯誤</div>
+        <ul style="list-style:none;padding:0;font-size:13px;color:var(--text-secondary);">
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #fecdd3;margin-left:4px;">欄位沒有標題（不知道是什麼數據）</li>
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #fecdd3;margin-left:4px;">沒有單位（「1.42」不知道是秒還是公分）</li>
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #fecdd3;margin-left:4px;">手算四捨五入後直接填入（失去精度）</li>
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #fecdd3;margin-left:4px;">把數字和文字混在同一格（公式會失效）</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--phase2);">
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:10px;">✅ 正確做法</div>
+        <ul style="list-style:none;padding:0;font-size:13px;color:var(--text-secondary);">
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #bbf7d0;margin-left:4px;">第一列：欄位標題（如：質量 m (g)）</li>
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #bbf7d0;margin-left:4px;">單位寫在標題括號裡，數字裡不要帶單位</li>
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #bbf7d0;margin-left:4px;">保留原始數字，用公式欄位另外算平均</li>
+          <li style="padding:4px 0 4px 16px;border-left:2px solid #bbf7d0;margin-left:4px;">每格只填一個數值（不要「1.42 ± 0.03」放同格）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 常用函數 -->
+    <div class="section-title">二、常用函數速查</div>
+    <div style="margin-bottom:24px;">
+      <table>
+        <thead>
+          <tr><th>函數</th><th>用途</th><th>範例</th><th>說明</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>=AVERAGE(A2:A6)</code></td>
+            <td>計算平均值</td>
+            <td>A 欄 5 筆數據的平均</td>
+            <td>最常用，取代手算</td>
+          </tr>
+          <tr>
+            <td><code>=MAX(A2:A6)-MIN(A2:A6)</code></td>
+            <td>計算極差</td>
+            <td>最大值 − 最小值</td>
+            <td>估不確定度的簡單方法</td>
+          </tr>
+          <tr>
+            <td><code>=STDEV(A2:A6)</code></td>
+            <td>樣本標準差</td>
+            <td>A 欄 5 筆數據的標準差</td>
+            <td>比極差更準確的離散程度</td>
+          </tr>
+          <tr>
+            <td><code>=LOG10(A2)</code></td>
+            <td>常用對數（log₁₀）</td>
+            <td>log₁₀(A2) 的值</td>
+            <td>線性化冪次關係用</td>
+          </tr>
+          <tr>
+            <td><code>=LN(A2)</code></td>
+            <td>自然對數（ln）</td>
+            <td>lnA2 的值</td>
+            <td>線性化指數關係用</td>
+          </tr>
+          <tr>
+            <td><code>=A2^2</code></td>
+            <td>平方</td>
+            <td>A2 的平方</td>
+            <td>T² vs L 線性化時用</td>
+          </tr>
+          <tr>
+            <td><code>=SQRT(A2)</code></td>
+            <td>開根號</td>
+            <td>√A2</td>
+            <td>計算不確定度傳遞時用</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 散佈圖教學 -->
+    <div class="section-title">三、畫散佈圖（XY 圖）完整步驟</div>
+    <div style="display:grid;gap:10px;margin-bottom:24px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:var(--phase1);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">1</div>
+        <div>
+          <div style="font-weight:700;font-size:13px;">選取數據範圍</div>
+          <div style="font-size:13px;color:var(--text-secondary);">先點 X 欄標題，按住 Ctrl 再點 Y 欄標題（不含單位行，只選數字區域）。</div>
+          <div style="background:#fff7ed;border-radius:4px;padding:6px 10px;margin-top:4px;font-size:12px;color:#9a3412;">⚠️ 不要選到文字欄！Excel 會把文字當 0 處理，圖形會出錯。</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:var(--phase1);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">2</div>
+        <div>
+          <div style="font-weight:700;font-size:13px;">插入 → 圖表 → XY 散佈圖</div>
+          <div style="font-size:13px;color:var(--text-secondary);">選「散佈圖（只有標記，沒有連線）」——不要選折線圖！折線圖會依照順序連點，不是按 X 值排列。</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:var(--phase1);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">3</div>
+        <div>
+          <div style="font-weight:700;font-size:13px;">加趨勢線</div>
+          <div style="font-size:13px;color:var(--text-secondary);">右鍵點圖上的數據點 → 「加趨勢線」→ 選「線性」（通常）→ 勾選：</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
+            <div style="background:var(--bg);border-radius:4px;padding:6px 10px;font-size:12px;color:var(--phase2);font-weight:600;">☑ 在圖表上顯示方程式</div>
+            <div style="background:var(--bg);border-radius:4px;padding:6px 10px;font-size:12px;color:var(--phase2);font-weight:600;">☑ 在圖表上顯示 R² 值</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:var(--phase1);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">4</div>
+        <div>
+          <div style="font-weight:700;font-size:13px;">編輯軸標題和單位</div>
+          <div style="font-size:13px;color:var(--text-secondary);">雙擊 X 軸 / Y 軸 → 在「格式化座標軸」中修改。或點圖表右上角的「+」加入「軸標題」。<br>格式：<strong>物理量名稱（符號）/ 單位</strong>，例如：<code>質量 m / g</code> 或 <code>週期 T / s</code></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="background:var(--phase2);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">✓</div>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);">完成檢查</div>
+          <div style="font-size:13px;color:var(--text-secondary);">最終圖表應包含：標題、X 軸標籤（含單位）、Y 軸標籤（含單位）、趨勢線、方程式、R² 值。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- R² 說明 -->
+    <div class="section-title">四、R² 是什麼？怎麼解讀？</div>
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">R²（決定係數）告訴你：數據點和趨勢線符合的程度。</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center;margin-bottom:14px;">
+        <div style="background:var(--bg);border-radius:6px;padding:12px;border-top:3px solid #16a34a;">
+          <div style="font-size:18px;font-weight:800;color:#16a34a;">0.99+</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">優秀。數據點幾乎都在趨勢線上。</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;border-top:3px solid #ca8a04;">
+          <div style="font-size:18px;font-weight:800;color:#ca8a04;">0.90–0.98</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">良好。略有離散，但關係清楚。</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;border-top:3px solid #dc2626;">
+          <div style="font-size:18px;font-weight:800;color:#dc2626;">&lt; 0.90</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">需要注意。數據很分散，趨勢線不可靠。</div>
+        </div>
+      </div>
+      <div style="background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 14px;font-size:12px;color:#15803d;">
+        💡 R² 低不一定代表實驗失敗——可能是關係根本不是線性的（例如冪次或指數），試試看 log-log 圖或半 log 圖。
+      </div>
+    </div>
+
+    <!-- log-log 特殊操作 -->
+    <div class="section-title">五、log-log 圖（冪次關係）的操作</div>
+    <div class="card" style="margin-bottom:24px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:10px;">當你懷疑兩個量是冪次關係（y = a·xⁿ）</div>
+      <div style="display:grid;gap:8px;font-size:13px;">
+        <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+          <div style="font-weight:600;margin-bottom:4px;">步驟 1：新增 log 欄位</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text-secondary);">在 C 欄填入：=LOG10(A2)　（對 X 值取 log）<br>在 D 欄填入：=LOG10(B2)　（對 Y 值取 log）</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+          <div style="font-weight:600;margin-bottom:4px;">步驟 2：用 C、D 欄畫散佈圖</div>
+          <div style="font-size:12px;color:var(--text-secondary);">這樣畫出來的是 log Y vs log X，如果是冪次關係，圖形會是直線。</div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+          <div style="font-weight:600;margin-bottom:4px;">步驟 3：讀取斜率</div>
+          <div style="font-size:12px;color:var(--text-secondary);">趨勢線的斜率 = 冪次 n。截距 = log a，所以 a = 10^(截距)。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="orid.html">← ORID 反思框架</a>
+      <a href="portfolio.html">學習歷程指引 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

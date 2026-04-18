@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>浮力 Lv1 · 阿基米德原理 · 探究與實作</title>
+  <meta name="description" content="浮力 Lv1 論證建模：阿基米德原理虛擬實驗，探究物體密度與浮沉的關係，揭開鐵船浮力的秘密。">
+  <meta property="og:title" content="浮力 Lv1 · 阿基米德原理 · 探究與實作">
+  <meta property="og:description" content="浮力 Lv1 論證建模：阿基米德原理虛擬實驗，探究物體密度與浮沉的關係，揭開鐵船浮力的秘密。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/buoyancy-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .lab-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 700px) {
+      .lab-wrap { grid-template-columns: 1fr; }
+    }
+    .buoyancy-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .object-btn {
+      width: 100%;
+      padding: 8px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .object-btn:hover { border-color: var(--phase1); background: #f0fdf4; }
+    .object-btn.active { border-color: var(--phase1); background: #d1fae5; color: #065f46; }
+    .object-btn.done { border-color: #6ee7b7; background: #ecfdf5; }
+    .object-btn.done::after { content: ' ✓'; color: #059669; }
+
+    .buoyancy-canvas-wrap {
+      position: relative;
+      width: 200px;
+      height: 320px;
+      margin: 0 auto;
+    }
+    #buoyancyCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+
+    .record-btn {
+      width: 100%;
+      padding: 9px;
+      background: var(--phase1);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .record-btn:hover { opacity: 0.88; }
+    .record-btn:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+
+    .data-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #buoyancyTable { font-size: 12px; width: 100%; }
+    #buoyancyTable th { background: var(--phase1); color: white; padding: 6px 8px; }
+    #buoyancyTable td { padding: 5px 8px; text-align: center; }
+    #buoyancyTable tr:nth-child(even) { background: var(--bg); }
+
+    #buoyancyGraphCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+      width: 100%;
+    }
+    .insight-box {
+      background: #f0fdf4;
+      border: 1px solid #6ee7b7;
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·浮力</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>🚢 浮力 · Lv1 論證建模</h1>
+    <p class="subtitle">鐵塊會沉，鐵船卻浮——用數據驗證阿基米德原理</p>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從數據中辨識趨勢與規律（例如：從密度 vs 浮沉判斷臨界點）</li>
+      <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：用平均密度解釋船為何能浮）</li>
+      <li>能用「主張—證據—推理」的架構進行科學論證</li>
+      <li>能評估模型的適用範圍與限制</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>預測</button>
+    <button class="step-tab"><span class="step-num">2</span>認識概念</button>
+    <button class="step-tab"><span class="step-num">3</span>數據分析</button>
+    <button class="step-tab"><span class="step-num">4</span>延伸與反思</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>一顆高爾夫球和一顆乒乓球，哪個比較重？哪個放進水裡會沉？「重的東西一定會沉」這句話對嗎？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>一塊鐵一定會沉，但鐵做的船卻能浮——你覺得關鍵差異是什麼？
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>如果把木頭丟進水裡，它有多少比例會露出水面？50%？30%？你怎麼猜的？
+      </div>
+
+      <!-- Layer 2: 預測記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測寫下來（P1–P3），活動結束後回來對照。</div>
+        <textarea class="think-input" data-key="buoyancy-lv1-predict" placeholder="P1：我覺得…&#10;P2：鐵船能浮的關鍵是…&#10;P3：木頭露出水面的比例大約…" style="min-height:80px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Interactive: Floating intuition -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 「重的東西會沉」——這句話對嗎？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 對，重的一定沉</button>
+          <button class="think-opt" data-val="b">B. 不一定，取決於「密度」而非「重量」</button>
+          <button class="think-opt" data-val="c">C. 答案取決於水的溫度</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          有趣吧——「重」不等於「沉」，「輕」不等於「浮」。那到底是什麼因素決定浮沉？提示：想想「同樣大小的東西，鐵球和乒乓球有什麼不同？」等下用虛擬水槽實驗來找出真正的關鍵。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：認識概念 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">理解浮力原理和密度的關鍵概念。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">今天的任務</div>
+          把不同物體丟進水裡，記錄浮沉結果。從數據中找出：到底是什麼物理量決定了「浮」還是「沉」？
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">關鍵問題</div>
+          <div style="color:var(--text-secondary);line-height:1.8;">
+            「重的東西會沉」是對的嗎？<br>
+            鐵塊會沉，鐵船卻浮——差在哪裡？
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box blue" style="margin-bottom:16px;">
+        💡 <strong>關鍵概念：平均密度 vs 材料密度</strong><br>
+        船的「平均密度」= 總質量 ÷ 船體總體積（含空氣）。如果形狀夠大，平均密度就會小於水 → 浮！
+      </div>
+
+      <div style="margin-top:16px;">
+        <a href="buoyancy-lab.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
+          🔬 <span><strong style="color:var(--text-primary);">虛擬實驗室</strong>：互動操作，先預測浮沉，再驗證</span> <span style="margin-left:auto;">→</span>
+        </a>
+      </div>
+
+      <!-- Interactive: Archimedes principle concept -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼人在死海比在普通海裡更容易浮？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>死海鹽度極高，水的密度約 1.24 g/cm³（遠高於普通海水 1.03）。人體密度約 1.05，所以在普通海裡幾乎不浮，但在死海卻輕鬆浮起。浮力取決於「排開液體的密度」，而非液體本身的成分。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：數據分析（核心任務）═══ -->
+    <div class="step-panel">
+      <div class="step-action">操作虛擬水槽，測試各種物體的浮沉，驗證阿基米德原理。</div>
+
+      <!-- 主實驗區 -->
+      <div class="lab-wrap">
+        <!-- 左：水槽 -->
+        <div class="buoyancy-panel">
+          <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;">選擇物體：</div>
+          <div id="objectBtns" style="width:100%;display:flex;flex-direction:column;gap:5px;">
+            <button class="object-btn" data-obj="wood">🪵 木塊 (ρ=0.60)</button>
+            <button class="object-btn" data-obj="ice">🧊 冰塊 (ρ=0.92)</button>
+            <button class="object-btn" data-obj="aluminum">⬜ 鋁塊 (ρ=2.70)</button>
+            <button class="object-btn" data-obj="iron">⬛ 鐵塊 (ρ=7.87)</button>
+            <button class="object-btn" data-obj="styrofoam">🟨 保麗龍 (ρ=0.03)</button>
+            <button class="object-btn" data-obj="ship">🚢 鐵船 (ρ_avg=0.30)</button>
+          </div>
+
+          <div class="buoyancy-canvas-wrap">
+            <canvas id="buoyancyCanvas" width="220" height="320"></canvas>
+          </div>
+
+          <div id="resultDisplay" style="font-size:13px;font-weight:700;color:var(--phase1);text-align:center;min-height:20px;">
+            選擇物體開始
+          </div>
+
+          <button class="record-btn" id="recordBuoyancyBtn" disabled>📝 記錄此物體</button>
+          <button id="resetBuoyancyBtn" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;font-size:12px;color:var(--text-secondary);">🔄 重置全部數據</button>
+        </div>
+
+        <!-- 右：數據表 + 圖 -->
+        <div class="data-panel">
+          <div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 記錄表</div>
+            <div style="overflow-x:auto;">
+              <table id="buoyancyTable">
+                <thead>
+                  <tr>
+                    <th>物體</th>
+                    <th>質量 (g)</th>
+                    <th>體積 (cm³)</th>
+                    <th>密度 (g/cm³)</th>
+                    <th>浮/沉</th>
+                    <th>入水比例 (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="buoyancyTableBody">
+                  <tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 📈 散佈圖 + 趨勢線 -->
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <div style="font-weight:700;font-size:13px;">📈 密度 vs 入水比例</div>
+            </div>
+            <div id="trendControls" style="display:flex;align-items:center;gap:5px;margin-bottom:8px;font-size:11px;color:var(--text-secondary);flex-wrap:wrap;">
+              趨勢線：
+              <button class="trend-btn active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+              <button class="trend-btn" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+              <button class="trend-btn" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+              <button class="trend-btn" data-trend="poly" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">多項式</button>
+            </div>
+            <canvas id="buoyancyGraphCanvas" height="220"></canvas>
+            <div id="fitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+          </div>
+
+          <!-- 💭 模型選擇與論證 -->
+          <div style="background:var(--bg);border-radius:6px;padding:12px 14px;">
+            <div style="font-weight:700;font-size:12px;margin-bottom:8px;color:var(--text-secondary);">💭 模型選擇與論證：</div>
+            <div style="display:grid;gap:7px;font-size:12px;color:var(--text-secondary);">
+              <div class="q-item">Q1：選<strong>線性</strong>趨勢線。截距代表「密度 = 0 時的入水比例」——物理上這個值應該是多少？你的截距合理嗎？</div>
+              <div class="q-item">Q2：斜率大約是多少？想想看：如果斜率 ≈ 1.0，這代表什麼物理意義？（提示：密度 0.6 → 入水 60%？）</div>
+              <div class="q-item">Q3：試試<strong>多項式</strong>趨勢線——R² 可能更高，但物理上「密度和入水比例是二次方關係」講得通嗎？R² 高就代表模型好嗎？</div>
+              <div class="q-item">Q4：鐵塊會沉，但鐵船能浮——這跟你的模型一致嗎？用「主張—理由—證據」論證密度和入水比例的關係。</div>
+            </div>
+
+            <div class="think-block record" style="margin-top:12px;">
+              <div class="think-prompt">✏️ 用「主張—理由—證據」論證密度和浮沉的關係</div>
+              <textarea class="think-input" data-key="buoyancy-lv1-model" placeholder="例如：主張：入水比例 = 物體密度 ÷ 水的密度。&#10;理由：線性趨勢線的斜率 ≈ 1.0，截距接近 0。&#10;證據：密度 0.6 的物體入水 60%、密度 0.9 的入水 90%⋯⋯" style="min-height:80px;"></textarea>
+              <div class="think-status"></div>
+            </div>
+
+            <!-- 鐵船選擇題 -->
+            <div class="think-block choice" data-answer="b">
+              <div class="think-prompt">🚢 鐵船的平均密度是 0.30 g/cm³，雖然鐵本身密度 7.87——為什麼？</div>
+              <div class="think-options">
+                <button class="think-opt" data-val="a">A. 船用的不是真的鐵</button>
+                <button class="think-opt" data-val="b">B. 船裡有大量空氣（內部中空），拉低了平均密度</button>
+                <button class="think-opt" data-val="c">C. 無法判斷，需要知道形狀</button>
+              </div>
+              <div class="think-feedback" style="display:none;">
+                完全正確！這是船能浮的秘密：形狀夠大、空間夠大，讓（鐵+空氣）的平均密度 < 1.0。你的數據模型預測：平均密度 0.30 的船，入水比例約 30%，剩下 70% 露出水面。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：延伸與反思 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">對照預測，思考延伸問題，為 Lv2 做準備。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回預測題，和你的實驗結果比較——差多少？差在哪裡？</p>
+
+      <!-- Interactive: Prediction reflection -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你對哪個預測最有把握？P1、P2 還是 P3？為什麼？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>P1 考的是直覺（重 vs 輕），容易被「重的會沉」誤導。P2 其實是概念題（材料密度 vs 平均密度），初期最難。P3 是計算題，用了密度比推導。越難的題目越值得掌握——它代表你理解的深度。</p>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:6px;">潛水艇如何控制浮和沉？它改變的是質量還是體積？</div>
+      <div class="q-item" style="margin-bottom:6px;">死海的密度約 1.24 g/cm³，人體密度約 1.05 g/cm³——為什麼人在死海可以浮起來？</div>
+      <div class="q-item" style="margin-bottom:16px;">熱氣球浮在空中和船浮在水面，原理一樣嗎？</div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">用「如果改變___，___會怎樣？」的句型：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「水溫（10°C vs 40°C）會影響同一物體受到的浮力嗎？差多少？」← 有操縱變因、可量化。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="buoyancy-lv1-my-question" rows="3" placeholder="例：水溫從 20°C 升到 80°C，同一個物體的浮力會改變嗎？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/buoyancy.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          浮力 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生用給定數據驗證「浮力 = 排開水的重量」</li>
+              <li>建立「密度」與「浮沉」之間的定量關係</li>
+              <li>引導學生用數字論證，而非直覺回答「重的東西會沉」</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              本活動通過計算密度來建立浮沉預測。鋁船折疊環節特別重要，直接挑戰學生的「材料密度」vs「平均密度」概念。建議全班折幾艘試試最多能載多少砝碼，引導實際 vs 理論值的落差。
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">你的密度計算表和「鐵船論證」是好素材。展現你如何用數據推翻直覺（「重的會沉」→「密度決定浮沉」）。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ 反思錨點：你<em>之前</em>的預測 vs 實際結果差在哪？（2-3 句就好）
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 原來前人也發現過——阿基米德原理</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">你從數據中發現：密度決定浮沉，而且入水比例等於物體密度和水的密度之比。兩千多年前的阿基米德也發現了同樣的事，後人整理成公式：</p>
+          <div style="text-align:center;padding:14px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text-primary);background:white;border-radius:6px;margin:10px 0;">
+            $F_{\text{浮力}} = \rho_{\text{水}} \times V_{\text{排開}} \times g$
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            浮力等於排開液體的重量。物體浮起時，浮力 = 重力，所以 $\rho_\text{物} \times V = \rho_\text{水} \times V_\text{浸沒}$，入水比例就是 $\rho_\text{物}/\rho_\text{水}$——跟你從數據推出的結論一樣。鐵船之所以浮，是因為「平均密度」（含空氣）遠小於水。
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小美想研究「船壁高度對載重的影響」。她的計畫：用同一張珍珠板做 3cm 和 5cm 兩種船壁的船，各放砝碼到沉為止，比較誰載比較重。<strong>有什麼問題？</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              只有 2 個水準（不夠看趨勢）、沒有重複（每種只做 1 次）、船壁高度改變時底面積可能也變了（沒控制）、沒說明怎麼放砝碼。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/buoyancy.html">浮力 Lv2 規劃研究 →</a>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+<script>
+// ─── 浮力實驗參數 ───
+const RHO_WATER = 1.00;  // g/cm³
+const NOISE_RATIO = 0.02; // ±2% 測量誤差
+
+// 物體定義
+const OBJECTS = {
+  wood: { name: '木塊', rho: 0.60, volume: 100, mass: 60, color: '#92400e' },
+  ice: { name: '冰塊', rho: 0.92, volume: 80, mass: 73.6, color: '#bfdbfe' },
+  aluminum: { name: '鋁塊', rho: 2.70, volume: 30, mass: 81, color: '#9ca3af' },
+  iron: { name: '鐵塊', rho: 7.87, volume: 15, mass: 118.05, color: '#4b5563' },
+  styrofoam: { name: '保麗龍', rho: 0.03, volume: 200, mass: 6, color: '#fef08a' },
+  ship: { name: '鐵船', rho: 0.30, volume: 500, mass: 150, color: '#4b5563' }
+};
+
+// 物體記錄
+const recorded = {};
+let currentObj = null;
+let currentSubmergedRatio = null;
+
+// UI 元素
+const canvas = document.getElementById('buoyancyCanvas');
+const ctx = canvas.getContext('2d');
+const graphCanvas = document.getElementById('buoyancyGraphCanvas');
+const gCtx = graphCanvas.getContext('2d');
+const resultDisplay = document.getElementById('resultDisplay');
+const recordBtn = document.getElementById('recordBuoyancyBtn');
+const tableBody = document.getElementById('buoyancyTableBody');
+
+// ─── 物體下落和浮沉動畫 ───
+let animId = null;
+let animStartTime = null;
+let animProgress = 0; // 0到1
+let isSettled = false;
+let displaySubmergedRatio = 0;
+
+function animateObject(timestamp) {
+  if (!animStartTime) animStartTime = timestamp;
+  const elapsed = timestamp - animStartTime;
+  const duration = 800; // ms
+
+  animProgress = Math.min(elapsed / duration, 1);
+
+  // 物體計算目標浸沒比例（加入噪聲）
+  const targetRatio = currentObj.rho / RHO_WATER;
+  const noiseAmount = targetRatio * NOISE_RATIO * (Math.random() - 0.5) * 2;
+  currentSubmergedRatio = Math.max(0, Math.min(1, targetRatio + noiseAmount));
+
+  // 動畫進度：從上方下落到平衡位置
+  if (animProgress < 0.7) {
+    // 下落階段
+    displaySubmergedRatio = animProgress / 0.7 * currentSubmergedRatio;
+  } else {
+    // 阻尼抖動（收斂到目標）
+    const bounce = Math.cos((animProgress - 0.7) / 0.3 * Math.PI) * 0.15;
+    displaySubmergedRatio = currentSubmergedRatio * (1 + bounce);
+  }
+
+  drawWaterTank(displaySubmergedRatio);
+
+  if (animProgress >= 1) {
+    displaySubmergedRatio = currentSubmergedRatio;
+    isSettled = true;
+    drawWaterTank(displaySubmergedRatio);
+    recordBtn.disabled = false;
+    animId = null;
+    resultDisplay.textContent = currentObj.rho >= RHO_WATER
+      ? `沉沒`
+      : `漂浮（${Math.round(currentSubmergedRatio * 100)}% 在水下）`;
+    return;
+  }
+
+  animId = requestAnimationFrame(animateObject);
+}
+
+function startObjectAnimation() {
+  if (animId) cancelAnimationFrame(animId);
+  animStartTime = null;
+  animProgress = 0;
+  isSettled = false;
+  recordBtn.disabled = true;
+  resultDisplay.textContent = '物體下落中…';
+  animId = requestAnimationFrame(animateObject);
+}
+
+// ─── 繪製水槽 ───
+function drawWaterTank(submergedRatio) {
+  const W = canvas.width;
+  const H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // 水槽邊界
+  const tankX = 20, tankY = 30, tankW = 180, tankH = 240;
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(tankX, tankY, tankW, tankH);
+
+  // 水（底部）
+  const waterLevel = tankY + tankH * (1 - 0.4); // 水佔 60% 高度
+  ctx.fillStyle = '#3b82f6';
+  ctx.fillRect(tankX, waterLevel, tankW, tankY + tankH - waterLevel);
+  ctx.globalAlpha = 0.15;
+  ctx.fillRect(tankX, waterLevel - 10, tankW, 10);
+  ctx.globalAlpha = 1;
+
+  // 水面線
+  ctx.strokeStyle = '#0ea5e9';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 2]);
+  ctx.beginPath();
+  ctx.moveTo(tankX, waterLevel);
+  ctx.lineTo(tankX + tankW, waterLevel);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 物體繪製
+  if (currentObj) {
+    const objY = waterLevel - (submergedRatio * 60); // 根據浸沒比例定位
+    const objW = 40, objH = 50;
+    const objX = tankX + tankW / 2 - objW / 2;
+
+    // 物體主體
+    ctx.fillStyle = currentObj.color;
+    ctx.fillRect(objX, objY, objW, objH);
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(objX, objY, objW, objH);
+
+    // 物體標籤
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(currentObj.name.substring(0, 2), objX + objW/2, objY + objH/2);
+
+    // 浸沒深度標示線
+    if (submergedRatio > 0.05) {
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(objX - 10, objY + submergedRatio * objH);
+      ctx.lineTo(tankX - 5, objY + submergedRatio * objH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // 尺規（左邊）
+  const rulerX = tankX - 15;
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(rulerX, tankY);
+  ctx.lineTo(rulerX, tankY + tankH);
+  ctx.stroke();
+  for (let i = 0; i <= 10; i++) {
+    const ry = tankY + i * tankH / 10;
+    ctx.beginPath();
+    ctx.moveTo(rulerX - (i % 2 === 0 ? 4 : 2), ry);
+    ctx.lineTo(rulerX, ry);
+    ctx.stroke();
+  }
+
+  // 水面標籤
+  ctx.fillStyle = '#0ea5e9';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('水面', tankX - 20, waterLevel + 3);
+}
+
+// 初始繪製
+function drawEmpty() {
+  const W = canvas.width, H = canvas.height;
+  const tankX = 20, tankY = 30, tankW = 180, tankH = 240;
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(tankX, tankY, tankW, tankH);
+
+  const waterLevel = tankY + tankH * 0.6;
+  ctx.fillStyle = '#3b82f6';
+  ctx.fillRect(tankX, waterLevel, tankW, tankY + tankH - waterLevel);
+  ctx.globalAlpha = 0.15;
+  ctx.fillRect(tankX, waterLevel - 10, tankW, 10);
+  ctx.globalAlpha = 1;
+
+  ctx.strokeStyle = '#0ea5e9';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 2]);
+  ctx.beginPath();
+  ctx.moveTo(tankX, waterLevel);
+  ctx.lineTo(tankX + tankW, waterLevel);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+drawEmpty();
+
+// ─── 物體按鈕 ───
+document.querySelectorAll('.object-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const objKey = btn.dataset.obj;
+    currentObj = OBJECTS[objKey];
+    currentSubmergedRatio = null;
+
+    // 標記按鈕
+    document.querySelectorAll('.object-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    startObjectAnimation();
+  });
+});
+
+// ─── 記錄按鈕 ───
+recordBtn.addEventListener('click', () => {
+  if (!currentObj || currentSubmergedRatio === null) return;
+
+  const key = Object.keys(OBJECTS).find(k => OBJECTS[k] === currentObj);
+  if (!recorded[key]) recorded[key] = [];
+  recorded[key].push(currentSubmergedRatio);
+
+  // 標記為已記錄
+  document.querySelector(`.object-btn[data-obj="${key}"]`).classList.add('done');
+
+  updateTable();
+  updateGraph();
+  recordBtn.disabled = true;
+
+  // 存全域
+  window.labData = recorded;
+});
+
+// ─── 重置按鈕 ───
+document.getElementById('resetBuoyancyBtn').addEventListener('click', () => {
+  Object.keys(recorded).forEach(k => delete recorded[k]);
+  currentObj = null;
+  currentSubmergedRatio = null;
+  document.querySelectorAll('.object-btn').forEach(b => {
+    b.classList.remove('active', 'done');
+  });
+  recordBtn.disabled = true;
+  resultDisplay.textContent = '選擇物體開始';
+  tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>';
+  document.getElementById('fitInfo').style.display = 'none';
+  drawEmpty();
+  gCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+  drawGraphEmpty();
+  if (animId) cancelAnimationFrame(animId);
+});
+
+// ─── 更新表格 ───
+function updateTable() {
+  const keys = Object.keys(OBJECTS).filter(k => recorded[k] && recorded[k].length > 0);
+  if (keys.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>';
+    return;
+  }
+
+  tableBody.innerHTML = keys.map(k => {
+    const obj = OBJECTS[k];
+    const ratio = recorded[k][0];
+    const ratioPct = Math.round(ratio * 100);
+    const floatSink = obj.rho >= RHO_WATER ? '沉沒' : `漂浮(${ratioPct}%)`;
+    return `<tr>
+      <td><strong>${obj.name}</strong></td>
+      <td>${obj.mass.toFixed(0)}</td>
+      <td>${obj.volume}</td>
+      <td style="color:var(--phase1);font-weight:700;">${obj.rho.toFixed(2)}</td>
+      <td>${floatSink}</td>
+      <td>${ratioPct}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── 繪製圖表 ───
+function drawGraphEmpty() {
+  const W = graphCanvas.width, H = graphCanvas.height;
+  gCtx.clearRect(0, 0, W, H);
+  const pad = {l:50, r:16, t:16, b:40};
+  gCtx.strokeStyle = '#e2e8f0';
+  gCtx.strokeRect(pad.l, pad.t, W-pad.l-pad.r, H-pad.t-pad.b);
+  gCtx.fillStyle = '#cbd5e1';
+  gCtx.font = '12px sans-serif';
+  gCtx.textAlign = 'center';
+  gCtx.fillText('等待數據…', W/2, H/2);
+}
+drawGraphEmpty();
+
+// ─── 趨勢線引擎 ───
+let trendType = 'none';
+
+document.getElementById('trendControls').addEventListener('click', e => {
+  const btn = e.target.closest('.trend-btn');
+  if (!btn) return;
+  trendType = btn.dataset.trend;
+  document.querySelectorAll('#trendControls .trend-btn').forEach(b => {
+    const active = b === btn;
+    b.style.background = active ? '#059669' : 'var(--bg)';
+    b.style.color = active ? 'white' : 'inherit';
+  });
+  updateGraph();
+});
+
+function computeFit(x, y, type) {
+  const n = x.length;
+  const meanY = y.reduce((a,b)=>a+b,0)/n;
+  const SS_tot = y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+  if (type === 'linear') {
+    const sx=x.reduce((a,b)=>a+b,0), sy=y.reduce((a,b)=>a+b,0);
+    const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0), sx2=x.reduce((s,xi)=>s+xi*xi,0);
+    const a=(n*sxy-sx*sy)/(n*sx2-sx*sx), b=(sy-a*sx)/n;
+    const pred=xi=>a*xi+b;
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return{type,a,b,R2,pred,
+      info:`方程式：入水比例 = ${a.toFixed(3)}·ρ ${b>=0?'+':'−'} ${Math.abs(b).toFixed(3)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(4)}${Math.abs(b)>0.05?' ⚠️':' ✓'}<br>斜率 = ${a.toFixed(3)}`};
+  }
+  if (type === 'power') {
+    const posIdx = x.map((v,i)=>i).filter(i=>x[i]>0&&y[i]>0);
+    if (posIdx.length < 2) return null;
+    const lx=posIdx.map(i=>Math.log(x[i])), ly=posIdx.map(i=>Math.log(y[i]));
+    const m=posIdx.length;
+    const slx=lx.reduce((a,b)=>a+b,0), sly=ly.reduce((a,b)=>a+b,0);
+    const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0), slx2=lx.reduce((s,v)=>s+v*v,0);
+    const nn=(m*slxy-slx*sly)/(m*slx2-slx*slx);
+    const a=Math.exp((sly-nn*slx)/m);
+    const pred=xi=>a*Math.pow(xi,nn);
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return{type,a,n:nn,R2,pred,
+      info:`方程式：入水比例 = ${a.toFixed(3)}·ρ^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-1)<0.15?' (≈1，接近線性)':''}`};
+  }
+  if (type === 'poly') {
+    const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
+    const syp=p=>x.reduce((s,xi,i)=>s+Math.pow(xi,p)*y[i],0);
+    const A=[[n,sp(1),sp(2),syp(0)],[sp(1),sp(2),sp(3),syp(1)],[sp(2),sp(3),sp(4),syp(2)]];
+    for(let col=0;col<3;col++){let mr=col;for(let r=col+1;r<3;r++)if(Math.abs(A[r][col])>Math.abs(A[mr][col]))mr=r;[A[col],A[mr]]=[A[mr],A[col]];for(let r=col+1;r<3;r++){const f=A[r][col]/A[col][col];for(let j=col;j<=3;j++)A[r][j]-=f*A[col][j];}}
+    const c=[0,0,0];for(let i=2;i>=0;i--){c[i]=A[i][3];for(let j=i+1;j<3;j++)c[i]-=A[i][j]*c[j];c[i]/=A[i][i];}
+    const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return{type,c,R2,pred,
+      info:`方程式：入水比例 = ${c[2].toFixed(3)}ρ² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}ρ ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(3)}<br>R² = ${R2.toFixed(4)}`};
+  }
+  return null;
+}
+
+function updateGraph() {
+  const keys = Object.keys(OBJECTS).filter(k => recorded[k] && recorded[k].length > 0);
+
+  const parent = graphCanvas.parentElement;
+  const W = (parent ? parent.clientWidth : 0) || graphCanvas.width || 400;
+  graphCanvas.width = W;
+  const H = 220;
+  const pad = {l:50, r:16, t:16, b:40};
+  gCtx.clearRect(0, 0, W, H);
+
+  // 只取漂浮的物體（密度 < 1）做趨勢線分析
+  const allPts = keys.map(k => ({
+    rho: OBJECTS[k].rho,
+    ratio: recorded[k][0],
+    name: OBJECTS[k].name,
+    sinks: OBJECTS[k].rho >= RHO_WATER
+  }));
+
+  if (allPts.length < 1) { drawGraphEmpty(); return; }
+
+  // 坐標範圍——顯示所有物體
+  const rhoMax = Math.max(2.0, ...allPts.map(p=>p.rho)) * 1.1;
+  const ratioMax = 1.15;
+  function toX(v){return pad.l+(v/rhoMax)*(W-pad.l-pad.r);}
+  function toY(v){return H-pad.b-(v/ratioMax)*(H-pad.t-pad.b);}
+
+  // 格線
+  gCtx.strokeStyle='#f1f5f9'; gCtx.lineWidth=1;
+  for(let i=1;i<=4;i++){const gx=pad.l+i/4*(W-pad.l-pad.r),gy=H-pad.b-i/4*(H-pad.t-pad.b);gCtx.beginPath();gCtx.moveTo(gx,pad.t);gCtx.lineTo(gx,H-pad.b);gCtx.stroke();gCtx.beginPath();gCtx.moveTo(pad.l,gy);gCtx.lineTo(W-pad.r,gy);gCtx.stroke();}
+
+  // 臨界線（ρ = 1.0）
+  const critX = toX(1.0);
+  gCtx.strokeStyle='#fbbf24';gCtx.lineWidth=2;gCtx.setLineDash([4,3]);
+  gCtx.beginPath();gCtx.moveTo(critX,pad.t);gCtx.lineTo(critX,H-pad.b);gCtx.stroke();
+  gCtx.setLineDash([]);
+  gCtx.fillStyle='#fbbf24';gCtx.font='10px sans-serif';gCtx.textAlign='left';
+  gCtx.fillText('ρ=1.0',critX+3,pad.t+12);
+
+  // 軸
+  gCtx.strokeStyle='#94a3b8';gCtx.lineWidth=1.5;gCtx.beginPath();gCtx.moveTo(pad.l,pad.t);gCtx.lineTo(pad.l,H-pad.b);gCtx.lineTo(W-pad.r,H-pad.b);gCtx.stroke();
+
+  // 軸標籤
+  gCtx.fillStyle='#64748b';gCtx.font='11px sans-serif';gCtx.textAlign='center';
+  gCtx.fillText('密度 ρ (g/cm³)',W/2,H-4);
+  gCtx.save();gCtx.translate(12,H/2);gCtx.rotate(-Math.PI/2);gCtx.fillText('入水比例',0,0);gCtx.restore();
+
+  // 刻度
+  for(let i=0;i<=4;i++){const rhov=rhoMax*i/4,ratv=ratioMax*i/4;gCtx.fillStyle='#94a3b8';gCtx.font='10px sans-serif';gCtx.textAlign='center';gCtx.fillText(rhov.toFixed(1),toX(rhov),H-pad.b+13);gCtx.textAlign='right';gCtx.fillText((ratv*100).toFixed(0)+'%',pad.l-4,toY(ratv)+4);}
+
+  // 趨勢線（僅用漂浮物體數據）
+  const fitInfo = document.getElementById('fitInfo');
+  const floatPts = allPts.filter(p => !p.sinks);
+  if (trendType !== 'none' && floatPts.length >= 3) {
+    const xArr = floatPts.map(p=>p.rho), yArr = floatPts.map(p=>p.ratio);
+    const fit = computeFit(xArr, yArr, trendType);
+    if (fit) {
+      gCtx.strokeStyle='#059669';gCtx.lineWidth=2;gCtx.setLineDash([5,3]);gCtx.beginPath();
+      const steps=80;
+      for(let i=0;i<=steps;i++){const xv=rhoMax*i/steps;if(xv<=0&&trendType==='power')continue;const yv=fit.pred(xv);if(yv<0||yv>ratioMax*1.2)continue;const cx=toX(xv),cy=toY(yv);i===0||!gCtx.isPointInPath?gCtx.moveTo(cx,cy):void 0;gCtx.lineTo(cx,cy);}
+      gCtx.stroke();gCtx.setLineDash([]);
+      gCtx.fillStyle='#059669';gCtx.font='bold 10px sans-serif';gCtx.textAlign='left';
+      gCtx.fillText('R²='+fit.R2.toFixed(3),toX(rhoMax*0.6),toY(ratioMax*0.85));
+      fitInfo.style.display='block';fitInfo.innerHTML=fit.info;
+    }
+  } else { fitInfo.style.display='none'; }
+
+  // 100% 沉沒線
+  const y100 = toY(1.0);
+  gCtx.strokeStyle='#e2e8f0';gCtx.lineWidth=1;gCtx.setLineDash([2,2]);
+  gCtx.beginPath();gCtx.moveTo(pad.l,y100);gCtx.lineTo(W-pad.r,y100);gCtx.stroke();
+  gCtx.setLineDash([]);
+  gCtx.fillStyle='#cbd5e1';gCtx.font='9px sans-serif';gCtx.textAlign='right';
+  gCtx.fillText('100%',pad.l-4,y100-3);
+
+  // 資料點
+  allPts.forEach(p => {
+    gCtx.beginPath();
+    gCtx.arc(toX(p.rho), toY(p.ratio), 5, 0, Math.PI*2);
+    gCtx.fillStyle = p.sinks ? '#ef4444' : '#2563eb';
+    gCtx.fill();
+    gCtx.strokeStyle='white';gCtx.lineWidth=1.5;gCtx.stroke();
+    // 名稱標籤
+    gCtx.fillStyle='#475569';gCtx.font='9px sans-serif';gCtx.textAlign='center';
+    gCtx.fillText(p.name,toX(p.rho),toY(p.ratio)-9);
+  });
+
+  window.labData = recorded;
+}
+</script>
+</body>
+</html>

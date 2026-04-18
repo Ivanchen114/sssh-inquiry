@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ORID 反思框架 · 工具箱 · 探究與實作</title>
+  <meta name="description" content="ORID 焦點討論法反思框架，引導學生從客觀事實、感受反應、詮釋意義到行動決定的結構化反思。">
+  <meta property="og:title" content="ORID 反思框架 · 工具箱 · 探究與實作">
+  <meta property="og:description" content="ORID 焦點討論法反思框架，引導學生從客觀事實、感受反應、詮釋意義到行動決定的結構化反思。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/orid.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a>
+      <span>›</span>
+      <a href="index.html">工具箱</a>
+      <span>›</span>
+      <span>ORID 反思框架</span>
+    </div>
+    <h1>🔄 ORID 反思框架</h1>
+    <p class="subtitle">讓心得不只是「今天做了什麼」——用四個問題讓反思有深度</p>
+    <div class="meta-tags">
+      <span class="tag express">表達分享</span>
+      <span class="tag">貫穿全學期</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ORID 說明 -->
+    <div class="section-title">ORID 是什麼？</div>
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">ORID 是一種結構化對話和反思的方法，幫助你把「感覺上有收穫」轉換成「能說清楚的成長」。四個字母代表四個層次的問題，從表面到深度逐漸推進：</p>
+      <div style="display:grid;gap:12px;">
+
+        <div style="display:flex;gap:16px;align-items:stretch;">
+          <div style="background:var(--phase1);color:white;border-radius:8px;padding:12px 16px;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;min-width:52px;">O</div>
+          <div style="flex:1;border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:700;font-size:14px;color:var(--phase1);margin-bottom:4px;">Objective — 客觀事實層</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">你感知到什麼？你看了什麼、聽了什麼、做了什麼、量到了什麼？<br><strong>只描述事實，不加評論或解釋。</strong></div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;font-size:12px;color:var(--text-muted);">
+              問自己：「如果有人問我這節課發生了什麼，我會怎麼說？」
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:stretch;">
+          <div style="background:var(--phase2);color:white;border-radius:8px;padding:12px 16px;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;min-width:52px;">R</div>
+          <div style="flex:1;border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:4px;">Reflective — 感受與反應層</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">你有什麼感受？什麼讓你驚訝、困惑、興奮或沮喪？<br><strong>誠實表達情緒，不用假裝「都很好」。</strong></div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;font-size:12px;color:var(--text-muted);">
+              問自己：「這節課讓我覺得 ___ ，因為 ___」
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:stretch;">
+          <div style="background:var(--phase3);color:white;border-radius:8px;padding:12px 16px;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;min-width:52px;">I</div>
+          <div style="flex:1;border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:700;font-size:14px;color:var(--phase3);margin-bottom:4px;">Interpretive — 詮釋與意義層</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">這些事實和感受代表什麼含義？你學到了什麼？對你產生了什麼新的理解？<br><strong>把感受轉換成思考。</strong></div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;font-size:12px;color:var(--text-muted);">
+              問自己：「這件事讓我意識到 ___，我以前以為 ___，但現在覺得 ___」
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;align-items:stretch;">
+          <div style="background:var(--express);color:white;border-radius:8px;padding:12px 16px;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;min-width:52px;">D</div>
+          <div style="flex:1;border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+            <div style="font-weight:700;font-size:14px;color:var(--express);margin-bottom:4px;">Decisional — 決定與行動層</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">基於這次的理解，你下次會怎麼做？有什麼你想改變或嘗試的？<br><strong>把思考轉換成行動意圖。</strong></div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;font-size:12px;color:var(--text-muted);">
+              問自己：「下次我要 ___，因為我現在明白 ___」
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 完整範例 -->
+    <div class="section-title">完整範例：彈簧實驗後的 ORID</div>
+    <div style="display:grid;gap:8px;margin-bottom:28px;">
+      <div style="border-radius:8px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase1);color:white;padding:8px 16px;font-size:12px;font-weight:700;">O · 客觀</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">「我們做了彈簧伸長量 vs 砝碼質量的實驗，測了 5 組數據（50g 到 250g），畫成散佈圖後加趨勢線，得到斜率 0.82 cm/g，R² = 0.994。」</div>
+      </div>
+      <div style="border-radius:8px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase2);color:white;padding:8px 16px;font-size:12px;font-weight:700;">R · 感受</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">「我很驚訝 R² 這麼高（0.994），以為實驗會差很多。但也有點困惑，為什麼第三組的數據點偏離趨勢線比較遠。」</div>
+      </div>
+      <div style="border-radius:8px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--phase3);color:white;padding:8px 16px;font-size:12px;font-weight:700;">I · 詮釋</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">「第三組偏離可能是當時彈簧還沒完全靜止我就讀值了。這讓我理解到，一個步驟不嚴謹，就會讓整組數據的可信度下降——這就是為什麼要重複測量，而不是只測一次就算數。」</div>
+      </div>
+      <div style="border-radius:8px;overflow:hidden;border:1px solid var(--border);">
+        <div style="background:var(--express);color:white;padding:8px 16px;font-size:12px;font-weight:700;">D · 決定</div>
+        <div style="padding:12px 16px;background:var(--sidebar-bg);font-size:13px;color:var(--text-secondary);">「下次做實驗時，每次掛砝碼後我要等彈簧完全靜止再讀值，並且把讀值時間統一（等待 5 秒）。也想試試測 7 組而不是 5 組，看 R² 會不會更高。」</div>
+      </div>
+    </div>
+
+    <!-- 常見問題 -->
+    <div class="section-title">常見問題</div>
+    <div style="display:grid;gap:8px;margin-bottom:24px;">
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">Q：ORID 要寫多長？</div>
+        <p style="font-size:13px;color:var(--text-secondary);">每個層次 2–4 句話即可，全文大約 100–200 字。重質不重量。一個有深度的 I 和 D，比四段空話更有價值。</p>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">Q：每次都要寫全部四個嗎？</div>
+        <p style="font-size:13px;color:var(--text-secondary);">不一定。發表或討論時，有時只需要 R + I（感受後的體悟）。老師會在每個單元說明需要哪幾層。但一般心得寫作，建議四層都寫，訓練完整性。</p>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">Q：O 和 I 的差別是什麼？</div>
+        <p style="font-size:13px;color:var(--text-secondary);">O 是「發生了什麼」（事實），I 是「這代表什麼」（意義）。O：「我的 g 值是 9.2 m/s²」。I：「比標準值低 6%，可能是擺長測量不精確——因為我沒有量到球心。」</p>
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="index.html">← 工具箱首頁</a>
+      <a href="excel.html">Excel 數據分析 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

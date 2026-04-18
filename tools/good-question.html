@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>什麼是好的探究問題 · 探究與實作</title>
+  <meta name="description" content="什麼是好的探究問題？學習如何從觀察中提出可驗證的科學問題。">
+  <meta property="og:title" content="什麼是好的探究問題 · 探究與實作">
+  <meta property="og:description" content="什麼是好的探究問題？學習如何從觀察中提出可驗證的科學問題。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/good-question.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb"><a href="../index.html">首頁</a> › <a href="index.html">工具箱</a> › 好的探究問題</div>
+    <h1>❓ 什麼是好的探究問題</h1>
+    <p class="subtitle">從「好奇」到「可探究」——把直覺變成科學問題的方法</p>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ─── 為什麼問問題很重要 ─── -->
+    <div class="section-title">科學從問題開始</div>
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        科學家不是先知道答案再做實驗的。他們是先觀察到一個「咦，好奇怪」的現象，然後把好奇心轉化成一個<strong>可以用實驗回答的問題</strong>。這個轉化的過程，就是「發現問題」的核心能力。
+      </p>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.9;margin-top:8px;">
+        問題的品質，決定了整個研究的天花板——一個模糊的問題，做出來的實驗也會模糊。
+      </p>
+    </div>
+
+    <!-- ─── 問題的三個層次 ─── -->
+    <div class="section-title">問題的三個層次</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div class="card" style="border-top:3px solid #94a3b8;">
+        <div style="font-weight:700;font-size:13px;color:#64748b;margin-bottom:6px;">Level 1 · 描述型</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          「它是什麼？」「它長什麼樣？」<br><br>
+          <em>例：單擺的週期大約是多少秒？</em><br><br>
+          <span style="color:#94a3b8;">→ 查一查、量一量就能回答</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--phase2);">
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:6px;">Level 2 · 關聯型</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          「X 和 Y 有什麼關係？」<br><br>
+          <em>例：擺長和週期是什麼關係？</em><br><br>
+          <span style="color:var(--phase2);">→ 需要改變變因、收集數據才能回答</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:6px;">Level 3 · 因果/機制型</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          「為什麼？背後的機制是什麼？」<br><br>
+          <em>例：為什麼擺長加倍，週期不是加倍而是約 1.4 倍？</em><br><br>
+          <span style="color:var(--phase3);">→ 需要建立模型和理論來解釋</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#0c4a6e;">
+      💡 <strong>探究與實作主要處理 Level 2 和 Level 3 的問題。</strong>Level 1 當然也重要（你得先描述現象才能問為什麼），但如果你的問題停在 Level 1，你的實驗可能只是「量一個數字」而不是「發現一個規律」。
+    </div>
+
+    <!-- ─── 品質篩選框架 ─── -->
+    <div class="section-title">好問題的四個條件</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div class="card info-box basic">
+        <div style="font-size:18px;margin-bottom:8px;">📏</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">可量化</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">問題裡的變量能用數字表示嗎？「聲音大小」不夠精確，「分貝數」才可量化。</p>
+      </div>
+      <div class="card info-box basic">
+        <div style="font-size:18px;margin-bottom:8px;">🔧</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">可操作</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">用你手邊的器材和時間，做得到嗎？「黑洞的重力」很酷，但你沒有黑洞。</p>
+      </div>
+      <div class="card info-box basic">
+        <div style="font-size:18px;margin-bottom:8px;">🔍</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">非查書題</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">答案不能只靠搜尋引擎。「光速是多少」是查書題；「不同顏色的光在水中的折射角差多少」需要你做實驗。</p>
+      </div>
+      <div class="card info-box basic">
+        <div style="font-size:18px;margin-bottom:8px;">🧠</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">有變因</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">問題裡要有至少一個你能改變的變因（操縱變因）和一個你要觀察的結果（應變變因）。</p>
+      </div>
+    </div>
+
+    <!-- ─── 好問題 vs 壞問題 對照表 ─── -->
+    <div class="section-title">好問題 vs 需要改進的問題</div>
+    <div style="overflow-x:auto;margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:42%;">❌ 需要改進</th>
+            <th style="width:15%;">問題出在哪</th>
+            <th style="width:42%;">✅ 改成這樣</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>「單擺為什麼會擺動？」</td>
+            <td style="font-size:11px;color:var(--text-muted);">太廣泛 / 查書題</td>
+            <td>「擺線材質（棉線 vs 釣魚線）會影響擺動衰減速度嗎？」</td>
+          </tr>
+          <tr>
+            <td>「聲音好不好聽？」</td>
+            <td style="font-size:11px;color:var(--text-muted);">不可量化 / 主觀</td>
+            <td>「不同材質的杯子（紙杯、玻璃杯、鐵罐）敲擊後的頻率和衰減時間有什麼差異？」</td>
+          </tr>
+          <tr>
+            <td>「浮力是什麼？」</td>
+            <td style="font-size:11px;color:var(--text-muted);">描述型 / 查書題</td>
+            <td>「水溫（10°C vs 40°C）會影響同一物體受到的浮力嗎？差多少？」</td>
+          </tr>
+          <tr>
+            <td>「橡皮筋為什麼會斷？」</td>
+            <td style="font-size:11px;color:var(--text-muted);">沒有操縱變因</td>
+            <td>「橡皮筋被拉伸到不同倍率（1.5x, 2x, 2.5x, 3x）後，k 值會怎麼變化？」</td>
+          </tr>
+          <tr>
+            <td>「翻滾仔好好玩」</td>
+            <td style="font-size:11px;color:var(--text-muted);">根本不是問題</td>
+            <td>「黏土離軸心距離（1cm vs 5cm vs 9cm）如何影響翻滾仔在齒軌上的翻滾時間？」</td>
+          </tr>
+          <tr>
+            <td>「黑洞裡面的溫度是幾度？」</td>
+            <td style="font-size:11px;color:var(--text-muted);">不可操作</td>
+            <td>「同一杯水加入不同量的鹽（0g–50g），密度和浮力怎麼變化？」</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ─── 從觀察到問題的轉化技巧 ─── -->
+    <div class="section-title">從觀察變成問題的三步驟</div>
+    <div style="display:grid;gap:12px;margin-bottom:20px;">
+      <div class="card info-box phase1">
+        <div style="font-weight:700;font-size:13px;color:var(--phase1);margin-bottom:6px;">Step 1 · 描述你看到的</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          用具體的語言寫下觀察。不要解釋，只要描述。<br>
+          <span style="color:var(--text-muted);">例：「單擺擺了 30 秒後，幅度變小了大約一半。」</span>
+        </p>
+      </div>
+      <div class="card info-box phase2">
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:6px;">Step 2 · 問「如果改變___會怎樣？」</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          從觀察中找一個你想改變的條件。這就是你的操縱變因。<br>
+          <span style="color:var(--text-muted);">例：「如果改用更重的擺錘，衰減會更快還是更慢？」</span>
+        </p>
+      </div>
+      <div class="card info-box phase3">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:6px;">Step 3 · 用四條件檢查</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          可量化？可操作？非查書題？有變因？如果四個都打勾，恭喜——你有一個好的探究問題了。<br>
+          <span style="color:var(--text-muted);">例：「擺錘質量（50g, 100g, 200g, 400g）如何影響擺動衰減至初始振幅一半所需的時間？」</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- ─── 問題句型模板 ─── -->
+    <div class="section-title">實用句型</div>
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:grid;gap:8px;font-size:13px;">
+        <div class="q-item">
+          <strong style="color:var(--phase2);">關聯型：</strong>「___（操縱變因）如何影響___（應變變因）？」
+        </div>
+        <div class="q-item">
+          <strong style="color:var(--phase2);">比較型：</strong>「在___條件下，A 和 B 的___有什麼差異？」
+        </div>
+        <div class="q-item">
+          <strong style="color:var(--phase3);">機制型：</strong>「為什麼___時，___不是等比例變化？背後的物理原因是什麼？」
+        </div>
+        <div class="q-item">
+          <strong style="color:var(--phase3);">極限型：</strong>「___在什麼條件下會達到極限值？極限值由什麼決定？」
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 練習活動 ─── -->
+    <div class="section-title">練習：改造問題</div>
+    <div class="activity-block info-box phase3">
+      <div class="activity-header phase3">把以下問題改成「可探究的好問題」</div>
+      <div class="activity-body">
+        <div style="display:grid;gap:10px;">
+          <div class="q-item">
+            <strong>1.</strong>「彈簧為什麼有彈性？」<br>
+            <span style="color:var(--text-muted);font-size:12px;">提示：想想你能改變什麼——彈簧的材質？粗細？拉伸的次數？</span>
+          </div>
+          <div class="q-item">
+            <strong>2.</strong>「水有浮力」<br>
+            <span style="color:var(--text-muted);font-size:12px;">提示：這連問題都不是。從「如果改變___」開始。</span>
+          </div>
+          <div class="q-item">
+            <strong>3.</strong>「聲音可以震碎玻璃嗎？」<br>
+            <span style="color:var(--text-muted);font-size:12px;">提示：有趣，但你做得到嗎？能改成一個你在教室裡就能測的版本嗎？</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">教師使用建議</div>
+      <p style="font-size:12.5px;">此頁面建議在以下時機使用：(1) Lv2 結束、Lv3 開始前，作為「問題品質」的教學素材。(2) 學生在 Lv3 第一週提出問題後，用四條件框架做全班互評。(3) 學期初可先讓學生瀏覽，但真正內化要等到有數據經驗之後。好問題 vs 壞問題對照表可以直接投影討論。</p>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">你的「問題清單→篩選→最終問題」的過程，就是「發現問題」能力的最佳證據。記得保留你淘汰掉的問題和淘汰理由。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="index.html">← 工具箱</a>
+      <a href="orid.html">ORID 反思框架 →</a>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

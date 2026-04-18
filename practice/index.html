@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>練習場 · 探究與實作</title>
+  <meta name="description" content="探究與實作練習場，提供互動式科學練習題目與即時回饋。">
+  <meta property="og:title" content="練習場 · 探究與實作">
+  <meta property="og:description" content="探究與實作練習場，提供互動式科學練習題目與即時回饋。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/practice/index.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    /* 練習場專用：指標對照表 */
+    .indicator-map {
+      display: flex; flex-wrap: wrap; gap: 5px;
+      margin-top: 8px; margin-bottom: 2px;
+    }
+    .indicator-map .ind-chip {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 3px;
+    }
+    .ind-chip.discover  { background: #fef6ee; color: #b5621e; border: 1px solid #f0c8a0; }
+    .ind-chip.plan      { background: #edf9f3; color: #1e7a52; border: 1px solid #b3dcc8; }
+    .ind-chip.argue     { background: #eef2fe; color: #2952c4; border: 1px solid #bfcef8; }
+    .ind-chip.express   { background: #f5f0fe; color: #6d28d9; border: 1px solid #d4b8f8; }
+
+    /* 篩選器 */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 28px; padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .filter-btn {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 12px; font-weight: 600;
+      padding: 5px 14px; border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--sidebar-bg);
+      color: var(--text-secondary);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--text-muted); }
+    .filter-btn.active-all    { background: var(--text-primary); color: white; border-color: var(--text-primary); }
+    .filter-btn.active-phase3 { background: var(--phase3); color: white; border-color: var(--phase3); }
+    .filter-btn.active-phase2 { background: var(--phase2); color: white; border-color: var(--phase2); }
+    .filter-btn.active-phase1 { background: var(--phase1); color: white; border-color: var(--phase1); }
+    .filter-btn.active-express { background: var(--express); color: white; border-color: var(--express); }
+
+    .q-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; color: var(--text-muted);
+      margin-left: 6px;
+    }
+
+    /* 難度標籤 */
+    .diff-tag {
+      font-size: 10px; font-weight: 600;
+      padding: 1px 7px; border-radius: 3px;
+      margin-left: auto;
+    }
+    .diff-tag.basic   { background: #ecfdf5; color: #059669; }
+    .diff-tag.medium   { background: #fefce8; color: #ca8a04; }
+    .diff-tag.advanced { background: #fef2f2; color: #dc2626; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb"><a href="../index.html">首頁</a> › 練習場</div>
+    <h1>✏️ 練習場</h1>
+    <p class="subtitle">依探究能力分類，每題標註課綱學習內容指標——點選分類可篩選</p>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ═══ 篩選器 ═══ -->
+    <div class="filter-bar">
+      <button class="filter-btn active-all" data-filter="all">全部 <span class="q-count">18</span></button>
+      <button class="filter-btn" data-filter="phase3">發現問題 <span class="q-count">4</span></button>
+      <button class="filter-btn" data-filter="phase2">規劃研究 <span class="q-count">5</span></button>
+      <button class="filter-btn" data-filter="phase1">論證建模 <span class="q-count">6</span></button>
+      <button class="filter-btn" data-filter="express">表達分享 <span class="q-count">3</span></button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  發現問題  INa：觀察現象 → 蒐集資訊 → 形成問題 → 提出觀點  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="section-title">發現問題 <span class="tag phase3">INa</span></div>
+
+    <!-- Q1 -->
+    <div class="activity-block q-item" data-cat="phase3" style="margin-bottom:12px;">
+      <div class="activity-header phase3">
+        題目 1 · 把問題變得可以探究
+        <span class="diff-tag basic">基礎</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip discover">觀察現象</span>
+          <span class="ind-chip discover">形成或訂定問題</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">以下哪些問題「可以科學探究」，哪些不行或需要修改？</p>
+        <div style="display:grid;gap:6px;margin-bottom:14px;">
+          <div class="q-item" style="display:flex;gap:10px;background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;">
+            <span style="color:var(--text-muted);font-family:'DM Mono',monospace;flex-shrink:0;">①</span>
+            <span>為什麼橋會塌？</span>
+          </div>
+          <div class="q-item" style="display:flex;gap:10px;background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;">
+            <span style="color:var(--text-muted);font-family:'DM Mono',monospace;flex-shrink:0;">②</span>
+            <span>音量越大，吉他弦振動的振幅越大嗎？</span>
+          </div>
+          <div class="q-item" style="display:flex;gap:10px;background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;">
+            <span style="color:var(--text-muted);font-family:'DM Mono',monospace;flex-shrink:0;">③</span>
+            <span>AI 是否比人類更有智慧？</span>
+          </div>
+          <div class="q-item" style="display:flex;gap:10px;background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;">
+            <span style="color:var(--text-muted);font-family:'DM Mono',monospace;flex-shrink:0;">④</span>
+            <span>鋼鐵比竹子更適合蓋橋嗎？</span>
+          </div>
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）判斷四個問題哪些可探究，哪些不行，說明理由。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）把問題①改寫成一個可以用實驗探究的問題。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）②可探究（有明確操縱/應變變因）。①太廣泛需縮窄。③「智慧」無統一定義難以測量。④涉及價值判斷，需先定義「適合」的標準。<br>
+          （B）例：「在固定跨距下，橋面承重量與橋墩數量的關係為何？」</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="activity-block q-item" data-cat="phase3" style="margin-bottom:12px;">
+      <div class="activity-header phase3">
+        題目 2 · 從日常觀察提出假說
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip discover">觀察現象</span>
+          <span class="ind-chip discover">提出可驗證的觀點</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--border);">
+          你注意到：同一款手機，冬天在戶外時電量從 50% 迅速掉到 20%，回到室內一會兒又恢復到 45% 左右。
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）根據這個觀察，你能提出什麼「可檢驗的假說」？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）你的假說中，操縱變因、應變變因各是什麼？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）如果要初步驗證，你需要蒐集哪些資訊？請列出至少兩個可靠的資訊來源。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）假說範例：「鋰電池的放電電壓會隨環境溫度降低而下降，導致手機誤判剩餘電量。」<br>
+          （B）操縱變因：環境溫度。應變變因：電池顯示電量（或實測放電電壓）。<br>
+          （C）可靠來源：電池製造商的技術規格書（datasheet）、科學期刊或教科書中關於鋰電池特性的章節、實際以溫度計與多組手機在不同溫度下測試。需判斷來源的可靠性——社群媒體上的個人經驗不具系統性。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="activity-block q-item" data-cat="phase3" style="margin-bottom:24px;">
+      <div class="activity-header phase3">
+        題目 3 · 蒐集資訊與判斷可靠性
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip discover">蒐集資訊</span>
+          <span class="ind-chip discover">形成或訂定問題</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--border);">
+          你想研究「植物在不同顏色的光下是否會長得不一樣」。上網搜尋後找到三筆資料：<br><br>
+          <strong>資料甲：</strong>某農業期刊論文，指出紅光與藍光對萵苣生長速率有顯著差異（附數據與統計分析）。<br>
+          <strong>資料乙：</strong>某部落格文章，作者說「我家陽台的花在綠光下長最好」，附一張照片。<br>
+          <strong>資料丙：</strong>某科普網站文章，引用三篇研究說明葉綠素主要吸收紅光和藍光。
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）三筆資料的可靠性排序為何？說明你的判斷依據。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）資料乙的結論有什麼問題？（提示：與葉綠素吸收光譜對照思考）</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）綜合所蒐集的資訊，將原本的問題改寫成一個更精確、可操作的研究問題。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）甲 > 丙 > 乙。甲有同儕審查與統計數據；丙引用多篇研究但為二手轉述；乙為個人經驗、樣本量極小、無控制條件。<br>
+          （B）葉綠素主要吸收紅光和藍光，反射綠光；理論上綠光對光合作用效率最低，「綠光長最好」的結論可能是未控制其他變因（如日照量、土壤、品種不同）所致。<br>
+          （C）例：「在相同光照強度下，紅光（620–750 nm）、藍光（450–495 nm）與綠光（495–570 nm）對萵苣幼苗兩週內莖高生長量的影響是否有差異？」</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q13 (新增) -->
+    <div class="activity-block q-item" data-cat="phase3" style="margin-bottom:24px;">
+      <div class="activity-header phase3">
+        題目 13 · 從失敗經驗中提問
+        <span class="diff-tag advanced">挑戰</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip discover">觀察現象</span>
+          <span class="ind-chip discover">形成或訂定問題</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--border);">
+          你在紙飛機定點降落競賽中注意到：你的飛機總是偏左落地，即使你已經很努力對準正前方了。你檢查後發現左翼比右翼寬了大約 2mm。
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）這個觀察可以產生什麼可探究的研究問題？用「如果改變___，___會怎樣？」格式。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）你要怎麼量化「偏左」的程度？設計一個可測量的應變變因。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）操縱變因「左右翼寬度差」你會設幾個水準？列出來。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）「如果改變紙飛機左右翼的寬度差（0mm, 2mm, 4mm, 6mm, 8mm），落點的左右偏移距離會怎樣變化？」<br>
+          （B）在地面畫一條中線，量測落點到中線的垂直距離（正負號表示左/右），單位 cm。<br>
+          （C）至少 5 個水準：0mm（對稱）、2mm、4mm、6mm、8mm。0mm 是「對照組」。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  規劃研究  INb：尋找變因 → 擬定計畫 → 收集數據  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="section-title">規劃研究 <span class="tag phase2">INb</span></div>
+
+    <!-- Q4 -->
+    <div class="activity-block q-item" data-cat="phase2" style="margin-bottom:12px;">
+      <div class="activity-header phase2">
+        題目 4 · 找出變因設計的漏洞
+        <span class="diff-tag basic">基礎</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip plan">尋找變因或條件</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--border);">
+          小美想研究「水溫是否影響砂糖溶解速度」，她的設計：在 20°C 和 80°C 的水中加入砂糖，用手攪拌，記錄完全溶解所需時間。
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）哪些需要控制的變因可能沒有控制到？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）「用手攪拌」有什麼問題？如何改進？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）重新設計：列出操縱變因、控制變因、應變變因。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）砂糖用量、水量、容器大小、攪拌力道/速度、顆粒大小均未控制。<br>
+          （B）手攪拌無法控制速度和力道，不具重複性。改進：使用機械攪拌器設定固定轉速。<br>
+          （C）操縱：水溫。控制：水量100ml、砂糖量5g、同批顆粒、機械定速攪拌。應變：完全溶解時間。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="activity-block q-item" data-cat="phase2" style="margin-bottom:12px;">
+      <div class="activity-header phase2">
+        題目 5 · 擬定研究計畫
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip plan">擬定研究計畫</span>
+          <span class="ind-chip plan">收集資料數據</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--border);">
+          研究問題：「紙橋的承重量是否與紙張摺法有關？」<br>
+          可用器材：A4 影印紙 10 張、30 cm 直尺兩根（當橋墩）、砝碼組（10g–500g）、電子秤。
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）設計至少三種不同的摺法，並簡述其結構特徵。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）寫出完整的實驗步驟（含重複測量次數），說明如何系統性地收集數據。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）你會用什麼格式記錄數據？請設計一份數據記錄表。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）平鋪（無摺）、W 形摺（手風琴摺）、圓筒捲、三角柱摺。各有不同截面幾何，影響抗彎能力。<br>
+          （B）步驟：①固定兩尺間距 20cm 為橋墩 → ②每種摺法用同規格 A4 紙 → ③將紙橋架於兩尺上 → ④從中央依序放砝碼（每次加 10g）→ ⑤記錄橋面塌陷時的累計質量 → ⑥每種摺法重複 3 次取平均。<br>
+          （C）記錄表欄位：摺法名稱、試次（1/2/3）、崩塌時總載重(g)、平均載重(g)、備註（崩塌方式描述）。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="activity-block q-item" data-cat="phase2" style="margin-bottom:24px;">
+      <div class="activity-header phase2">
+        題目 6 · 預測結果與最佳化條件
+        <span class="diff-tag advanced">挑戰</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip plan">尋找變因或條件</span>
+          <span class="ind-chip plan">擬定研究計畫</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--border);">
+          你的研究團隊想找出「讓自製保溫杯保溫效果最好的條件組合」。可以改變的因素有：杯壁材料（保麗龍 / 瓦楞紙 / 鋁箔）、杯蓋有無、外層是否包覆毛巾。
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）如果每個因素都要兩兩組合測試，總共需要幾組實驗？列出所有組合。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）在資源有限（只能做 6 組）的前提下，你會如何取捨？說明策略。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）你預測哪種組合保溫效果最好？寫出你的理由（用到的物理原理）。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）3 材料 × 2 蓋 × 2 毛巾 = 12 組。<br>
+          （B）策略一：先固定蓋＋毛巾，只比三材料，再用最佳材料測蓋和毛巾效果（逐步篩選法，共 3+2+2=7→6 組）。策略二：選理論上最可能的組合做正交設計。<br>
+          （C）鋁箔（反射紅外線熱輻射）＋有蓋（減少蒸發與對流散熱）＋包毛巾（減少傳導與對流）。三種散熱機制都被抑制，理論上效果最佳。物理原理：熱傳導、對流、輻射。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q14 (新增) -->
+    <div class="activity-block q-item" data-cat="phase2" style="margin-bottom:12px;">
+      <div class="activity-header phase2">
+        題目 14 · 變因快速辨識（速刷 5 題）
+        <span class="diff-tag basic">基礎</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip plan">尋找變因或條件</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">對以下每個研究問題，快速寫出操縱變因、應變變因、至少 2 個控制變因：</p>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;border-left:3px solid var(--phase2);">
+            ① 水溫如何影響泡騰錠的溶解時間？
+          </div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;border-left:3px solid var(--phase2);">
+            ② 斜面角度如何影響小車滑到底端的速度？
+          </div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;border-left:3px solid var(--phase2);">
+            ③ 迴紋針數量如何影響紙飛機的飛行距離？
+          </div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;border-left:3px solid var(--phase2);">
+            ④ 鹽水濃度如何影響冰點（結冰溫度）？
+          </div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;border-left:3px solid var(--phase2);">
+            ⑤ 彈簧振子的質量如何影響振動週期？
+          </div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>① 操縱：水溫；應變：溶解時間；控制：水量、泡騰錠品牌/大小、不攪拌<br>
+          ② 操縱：斜面角度；應變：底端速度；控制：小車質量、斜面長度/材質、釋放方式<br>
+          ③ 操縱：迴紋針數量；應變：飛行距離；控制：飛機摺法、投擲角度/力道、場地<br>
+          ④ 操縱：鹽水濃度；應變：冰點溫度；控制：水量、鹽的種類、容器<br>
+          ⑤ 操縱：懸掛質量；應變：振動週期；控制：彈簧種類、振幅、計時方式</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q15 (新增) -->
+    <div class="activity-block q-item" data-cat="phase2" style="margin-bottom:24px;">
+      <div class="activity-header phase2">
+        題目 15 · 數據品質診斷
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip plan">收集資料數據</span>
+          <span class="ind-chip argue">分析資料並呈現證據</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">以下是三組同學的實驗數據（研究彈簧伸長量 vs 掛載質量）。判斷每組數據的品質問題：</p>
+        <div style="overflow-x:auto;margin-bottom:14px;">
+          <table style="font-size:12px;">
+            <thead><tr><th></th><th>質量(g)</th><th>試1(cm)</th><th>試2(cm)</th><th>試3(cm)</th><th>平均</th><th>標準差</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="3" style="font-weight:700;color:var(--phase1);">A 組</td><td>100</td><td>4.0</td><td>4.1</td><td>3.9</td><td>4.0</td><td>0.1</td></tr>
+              <tr><td>200</td><td>8.1</td><td>8.0</td><td>7.9</td><td>8.0</td><td>0.1</td></tr>
+              <tr><td>300</td><td>12.0</td><td>12.1</td><td>11.9</td><td>12.0</td><td>0.1</td></tr>
+              <tr><td colspan="7" style="height:8px;"></td></tr>
+              <tr><td rowspan="3" style="font-weight:700;color:#dc2626;">B 組</td><td>100</td><td>3.5</td><td>5.2</td><td>4.1</td><td>4.3</td><td>0.9</td></tr>
+              <tr><td>200</td><td>7.0</td><td>9.5</td><td>8.2</td><td>8.2</td><td>1.3</td></tr>
+              <tr><td>300</td><td>10.8</td><td>13.1</td><td>12.0</td><td>12.0</td><td>1.2</td></tr>
+              <tr><td colspan="7" style="height:8px;"></td></tr>
+              <tr><td rowspan="3" style="font-weight:700;color:#ca8a04;">C 組</td><td>100</td><td>4.0</td><td>4.0</td><td>4.0</td><td>4.0</td><td>0.0</td></tr>
+              <tr><td>200</td><td>8.0</td><td>8.0</td><td>8.0</td><td>8.0</td><td>0.0</td></tr>
+              <tr><td>300</td><td>12.0</td><td>12.0</td><td>12.0</td><td>12.0</td><td>0.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）A 組的數據品質如何？你怎麼判斷的？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）B 組的標準差很大——這代表什麼？可能的原因是什麼？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）C 組的三次結果完全一樣，這反而是問題——為什麼？</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）A 組品質好。標準差小且一致（0.1cm），各水準之間趨勢清楚（線性遞增），說明控制良好。<br>
+          （B）B 組標準差大（0.9–1.3cm），代表重複性差。可能原因：彈簧未完全靜止就讀數、尺沒有固定好、每次掛載方式不同。需要改善操作流程。<br>
+          （C）C 組的數據「太完美」——真實測量不可能三次結果完全相同。很可能是：①只量了一次就抄三遍 ②四捨五入過頭 ③數據造假。標準差=0 在物理實驗中幾乎不可能。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  論證建模  INc · INd：分析數據 → 解釋推理 → 結論 → 模型  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="section-title">論證建模 <span class="tag phase1">INc · INd</span></div>
+
+    <!-- Q7 -->
+    <div class="activity-block q-item" data-cat="phase1" style="margin-bottom:12px;">
+      <div class="activity-header phase1">
+        題目 7 · 找出數據中的問題
+        <span class="diff-tag basic">基礎</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip argue">分析資料並呈現證據</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">小明進行單擺實驗，測量 10 次週期（單位：秒）：</p>
+        <div style="background:var(--bg);border-radius:4px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:12px;margin-bottom:14px;color:var(--text-primary);">1.98, 2.01, 1.99, 2.03, 1.97, 2.00, <strong style="color:#dc2626;">5.52</strong>, 1.98, 2.02, 2.00</div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）這組數據有什麼問題？你如何判斷？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）直接計算平均數，對結果有什麼影響？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）你會建議小明如何處理這個異常值？說明理由。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）第7筆 5.52 秒明顯偏離（其餘約 1.97–2.03），差距超過 3 個標準差，是明顯的異常值（outlier）。物理上也不合理，不可能突然變成其他值的 2.7 倍。<br>
+          （B）直接納入計算，平均數從約 2.00 偏移至 2.35，嚴重失真。<br>
+          （C）先記錄並探究原因（計時錯誤、漏拍或筆誤），確認為測量失誤後排除，並在報告中說明處理方式。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="activity-block q-item" data-cat="phase1" style="margin-bottom:12px;">
+      <div class="activity-header phase1">
+        題目 8 · 評估他人的論證
+        <span class="diff-tag basic">基礎</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip argue">解釋和推理</span>
+          <span class="ind-chip argue">提出結論或解決方案</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--border);">
+          小華說：「我的實驗證明，彈簧越長彈力常數越小。因為我用了三條長度不同的彈簧，測到的彈力常數分別是 5、3、2 N/m，長度越長數值越小。」
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）找出小華的「主張」、「理由」和「證據」。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）這個論證有什麼漏洞？（三條彈簧的其他條件一樣嗎？）</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）如果你要讓這個結論更有說服力，你會如何重新設計實驗？</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）主張：彈簧越長彈力常數越小。理由：測量了三條不同長度的彈簧。證據：5、3、2 N/m 的數值。<br>
+          （B）三條彈簧除了長度，材質、線徑、圈數可能也不同——沒有控制其他變因，無法確定是「長度」造成差異。<br>
+          （C）使用同一條彈簧截成不同長度；或使用線徑、材質、圈數均相同、只有長度不同的彈簧組。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="activity-block q-item" data-cat="phase1" style="margin-bottom:12px;">
+      <div class="activity-header phase1">
+        題目 9 · 從圖表推理趨勢
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip argue">分析資料並呈現證據</span>
+          <span class="ind-chip argue">解釋和推理</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">某組同學研究「不同質量的小車從斜面滑下的末速度」，得到以下數據：</p>
+        <table style="margin-bottom:14px;">
+          <thead>
+            <tr><th>小車質量 (g)</th><th>試次 1 末速 (m/s)</th><th>試次 2 末速 (m/s)</th><th>試次 3 末速 (m/s)</th><th>平均末速 (m/s)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>100</td><td>1.42</td><td>1.38</td><td>1.40</td><td>1.40</td></tr>
+            <tr><td>200</td><td>1.41</td><td>1.43</td><td>1.39</td><td>1.41</td></tr>
+            <tr><td>300</td><td>1.39</td><td>1.42</td><td>1.41</td><td>1.41</td></tr>
+            <tr><td>500</td><td>1.40</td><td>1.38</td><td>1.41</td><td>1.40</td></tr>
+          </tbody>
+        </table>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）從數據中你能看出什麼趨勢？小車質量與末速度的關係為何？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）這個結果是否符合你的物理知識？試用能量守恆的概念解釋。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）如果有同學說「質量越大速度應該越快」，你如何用數據反駁？</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）平均末速皆約 1.40 m/s，質量改變但末速幾乎不變——質量與末速度無明顯關係。<br>
+          （B）符合。能量守恆：mgh = ½mv²，兩邊約去 m，得 v = √(2gh)。末速度只取決於高度，與質量無關（忽略摩擦情況下）。<br>
+          （C）四組質量從 100g 到 500g 變化 5 倍，但平均末速僅在 1.40±0.01 波動，差異在測量誤差範圍內。數據不支持「質量越大速度越快」的主張。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="activity-block q-item" data-cat="phase1" style="margin-bottom:24px;">
+      <div class="activity-header phase1">
+        題目 10 · 建立簡單模型
+        <span class="diff-tag advanced">挑戰</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip argue">建立模型</span>
+          <span class="ind-chip argue">提出結論或解決方案</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">某組同學測量一杯 80°C 熱水在室溫（25°C）下的降溫過程，每 5 分鐘記錄一次水溫：</p>
+        <table style="margin-bottom:14px;">
+          <thead>
+            <tr><th>時間 (min)</th><th>0</th><th>5</th><th>10</th><th>15</th><th>20</th><th>25</th><th>30</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>水溫 (°C)</td><td>80.0</td><td>68.5</td><td>59.2</td><td>51.8</td><td>45.9</td><td>41.2</td><td>37.5</td></tr>
+          </tbody>
+        </table>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）描述水溫下降的趨勢——是等速下降還是有其他規律？用數據佐證。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）試建立一個簡單模型：水溫最終會趨近什麼值？為什麼不會降到 0°C？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）說明這個模型的侷限性——真實情況下有哪些因素沒有被你的模型考慮到？</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）非等速下降。前 5 分鐘降 11.5°C，後 5 分鐘（25→30）僅降 3.7°C。溫差越大降溫越快，越接近室溫降溫越慢——呈指數衰減趨勢。<br>
+          （B）模型：水溫最終趨近室溫 25°C（熱平衡）。可描述為 T(t) = 25 + 55 × e^(−kt)，其中 k 為冷卻速率常數。不會降到 0°C 是因為當水溫等於室溫時淨熱流為零。<br>
+          （C）侷限：假設室溫恆定、忽略蒸發散熱、假設水均勻降溫（無對流梯度）、忽略杯子本身吸放熱。真實情況下蒸發在高溫時貢獻顯著，且杯子材質也會影響散熱速率。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q16 (新增) -->
+    <div class="activity-block q-item" data-cat="phase1" style="margin-bottom:12px;">
+      <div class="activity-header phase1">
+        題目 16 · 寫一個完整的 CER 論證
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip argue">解釋和推理</span>
+          <span class="ind-chip argue">提出結論或解決方案</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">以下是一組同學在浮力實驗中的數據。請用 CER（主張—證據—理由）格式寫出完整論證：</p>
+        <table style="margin-bottom:14px;font-size:12px;">
+          <thead>
+            <tr><th>鋁塊體積 (cm³)</th><th>空氣中重量 (N)</th><th>水中秤讀數 (N)</th><th>浮力 (N)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>10</td><td>0.27</td><td>0.17</td><td>0.10</td></tr>
+            <tr><td>20</td><td>0.54</td><td>0.34</td><td>0.20</td></tr>
+            <tr><td>30</td><td>0.81</td><td>0.51</td><td>0.30</td></tr>
+            <tr><td>40</td><td>1.08</td><td>0.69</td><td>0.39</td></tr>
+          </tbody>
+        </table>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）寫出你的<strong>主張</strong>（Claim）——關於浮力和體積的關係。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）列出你的<strong>證據</strong>（Evidence）——用具體數字。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）寫出你的<strong>理由</strong>（Reasoning）——為什麼數據支持你的主張？用物理原理解釋。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（D）這個論證有什麼<strong>限制</strong>？數據中 40cm³ 那筆是否完全符合趨勢？</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）主張：浮力與物體在水中的體積成正比。<br>
+          （B）證據：10cm³ 浮力 0.10N，20cm³ 浮力 0.20N，30cm³ 浮力 0.30N——每增加 10cm³ 體積，浮力增加約 0.10N。但 40cm³ 的浮力為 0.39N，略小於預期的 0.40N。<br>
+          （C）理由：根據阿基米德原理，浮力=ρ水×g×V。水的密度和 g 為常數，所以浮力和排水體積 V 成正比。理論斜率為 1000×9.8÷1000000 = 0.0098 N/cm³ ≈ 0.01 N/cm³，與實測吻合。<br>
+          （D）限制：40cm³ 偏低 0.01N，可能是秤的讀數誤差或鋁塊沒完全浸入。只有 4 個數據點，趨勢的可靠性有限。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q17 (新增) -->
+    <div class="activity-block q-item" data-cat="phase1" style="margin-bottom:24px;">
+      <div class="activity-header phase1">
+        題目 17 · 兩組數據的科學比較
+        <span class="diff-tag advanced">挑戰</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip argue">分析資料並呈現證據</span>
+          <span class="ind-chip argue">解釋和推理</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">兩組同學測量同一個單擺的週期（擺長 50cm），結果如下：</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+          <div style="background:var(--bg);border-radius:6px;padding:12px 14px;">
+            <div style="font-weight:700;color:var(--phase1);font-size:13px;margin-bottom:6px;">甲組（端點計時）</div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;">1.38, 1.42, 1.35, 1.46, 1.39</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">平均 = 1.40s，標準差 = 0.042s</div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px 14px;">
+            <div style="font-weight:700;color:var(--phase2);font-size:13px;margin-bottom:6px;">乙組（中間計時）</div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;">1.41, 1.42, 1.40, 1.42, 1.41</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">平均 = 1.41s，標準差 = 0.008s</div>
+          </div>
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）兩組的平均值幾乎一樣（差 0.01s），那為什麼還要比較？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）用不確定度的概念，計算 u_A = s/√n，寫出兩組的結果區間。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）你能用數據論證「中間計時比端點計時更精確」嗎？</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）平均值接近只代表兩者量到差不多的值，但精確度（離散程度）完全不同。科學比較要看「區間是否重疊」而非只看平均值。<br>
+          （B）甲組 u_A = 0.042/√5 = 0.019s → T = 1.40 ± 0.02s（即 1.38–1.42s）。乙組 u_A = 0.008/√5 = 0.004s → T = 1.41 ± 0.004s（即 1.406–1.414s）。<br>
+          （C）乙組的不確定度比甲組小約 5 倍（0.004 vs 0.019），代表中間計時的重複性遠優於端點計時。物理原因：擺錘在中間通過時速度最快，位置變化率大，人眼較容易捕捉確切通過的瞬間。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  表達與分享  INe：表達溝通 → 合作討論 → 評價省思  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="section-title">表達與分享 <span class="tag express">INe</span></div>
+
+    <!-- Q11 -->
+    <div class="activity-block q-item" data-cat="express" style="margin-bottom:12px;">
+      <div class="activity-header" style="background:var(--express);">
+        題目 11 · 評估同學的報告
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip express">合作與討論</span>
+          <span class="ind-chip express">評價與省思</span>
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:12px 0 14px;border-left:3px solid var(--express);">
+          以下是某組同學的探究報告摘要：<br><br>
+          「<strong>研究問題：</strong>哪種飲料最健康？<br>
+          <strong>方法：</strong>我們買了可樂、柳橙汁和牛奶，三個人各喝一種，一週後比較誰的體重變化最大。<br>
+          <strong>結果：</strong>喝可樂的人胖了 0.3 kg，喝柳橙汁的沒變，喝牛奶的瘦了 0.2 kg。<br>
+          <strong>結論：</strong>牛奶最健康，可樂最不健康。」
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）從「觀察定題」、「規劃實作」、「論證建模」三個面向，各指出至少一個問題。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）如果你是這組的同學，你會提出什麼具體的改善建議？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）反思：這份報告的結論能否推廣？探究成果的「限制性」是什麼？</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）觀察定題：「最健康」定義模糊，無法測量。規劃實作：每種飲料只有一人喝（樣本量=1）、無控制飲食和運動等變因、一週太短。論證建模：僅以體重變化推論「健康」，邏輯跳躍——體重不等於健康。<br>
+          （B）縮小問題為可測量的指標（如「含糖量對血糖的影響」）；增加樣本量；控制受試者飲食和活動量；延長實驗週期或改用體外實驗。<br>
+          （C）不能推廣。限制：樣本量極小（n=1）、未控制干擾變因、「健康」指標單一且不夠科學、結論的因果推論不成立。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="activity-block q-item" data-cat="express" style="margin-bottom:24px;">
+      <div class="activity-header" style="background:var(--express);">
+        題目 12 · 用科學語言呈現成果
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip express">表達與溝通</span>
+          <span class="ind-chip express">評價與省思</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">以下是某組的實驗原始紀錄（研究橡皮筋拉伸長度與回彈高度的關係）：</p>
+        <div style="background:var(--bg);border-radius:4px;padding:12px 14px;font-size:13px;color:var(--text-secondary);margin-bottom:14px;border-left:3px solid var(--express);font-style:italic;">
+          「我們拉 5 公分彈到 12，拉 10 公分彈到 25 左右，拉 15 公分大概到 35 吧，最後拉 20 公分結果彈超高到 40 幾。橡皮筋拉越多彈越高這很合理啊。」
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）這段紀錄有哪些不符合「科學報告」的寫法？列出至少三點。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）將上述資料改寫成一段具科學性的結果描述（含單位、數據表、趨勢分析）。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）這個探究結果可以延伸出什麼新問題？（反思探究的應用性與改進空間）</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）①缺少單位（「彈到 12」是 12 什麼？）②數據不精確（「大概」「左右」「40幾」）③語氣口語化非科學寫作④缺少重複測量⑤未說明測量方法。<br>
+          （B）範例：「將橡皮筋分別拉伸 5.0、10.0、15.0、20.0 cm 後釋放，以直尺測量彈射物的最高回彈高度。三次測量的平均結果如下表：[拉伸長度(cm) | 平均回彈高度(cm)：5.0|12.0、10.0|25.2、15.0|35.1、20.0|43.5]。數據顯示回彈高度隨拉伸長度增加而增加，且增幅逐漸趨緩，可能呈非線性關係。」<br>
+          （C）延伸問題：回彈高度與拉伸長度是否為正比關係？不同材質或粗細的橡皮筋結果是否相同？拉伸超過彈性限度後會發生什麼？這些都可以作為後續探究方向。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q18 (新增) -->
+    <div class="activity-block q-item" data-cat="express" style="margin-bottom:24px;">
+      <div class="activity-header" style="background:var(--express);">
+        題目 18 · 反思自己的探究歷程
+        <span class="diff-tag medium">進階</span>
+      </div>
+      <div class="activity-body">
+        <div class="indicator-map">
+          <span class="ind-chip express">評價與省思</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin:12px 0;">你剛完成一個為期 4 週的獨立探究，現在要寫 200 字的反思。以下是兩個版本：</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:12px 14px;font-size:12px;color:#991b1b;">
+            <strong>版本 A：</strong>「這次的探究讓我學到了很多。我學會了怎麼做實驗、怎麼分析數據，也學到團隊合作的重要性。雖然過程很辛苦，但我覺得很有收穫。如果下次再做，我一定會做得更好。」
+          </div>
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:12px 14px;font-size:12px;color:#166534;">
+            <strong>版本 B：</strong>「我原本以為配重越重的紙飛機飛越遠，但實測發現 2 個迴紋針時距離最遠（7.2m），加到 4 個反而只飛 4.8m。我猜是因為重量超過升力的補償範圍。另一個意外是：我的力道控制比我以為的差很多（標準差 1.3m），下次我會改用橡皮筋彈射器。」
+          </div>
+        </div>
+        <div style="display:grid;gap:6px;">
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（A）版本 A 和版本 B 的最大差別是什麼？</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（B）版本 A 可以怎麼改進？把它改寫成具體的版本。</div>
+          <div class="q-item" style="background:var(--bg);padding:9px 13px;border-radius:4px;font-size:13px;font-weight:600;">（C）好反思的公式是什麼？試著歸納出 3 個要素。</div>
+        </div>
+        <div class="teacher-only" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #fde68a;">
+          <div class="teacher-label">參考解答</div>
+          <p>（A）版本 A 全是空話（「學到很多」「很有收穫」），沒有具體內容。版本 B 有具體數據、有意外發現、有改進方案。<br>
+          （B）改寫：加入具體數據（「什麼結果讓你意外？」）、具體的困難（「哪個步驟最難？」）、具體的改進（「下次你會怎麼做不同？」）。<br>
+          （C）好反思的三要素：①預期 vs 實際的落差（具體數字）②對落差的解釋（為什麼？）③下次的改進方案（做什麼不同？）。</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- .page-body -->
+</div><!-- #main-content -->
+
+<script src="../assets/js/main.js"></script>
+<script>
+/* ── 練習場篩選功能 ── */
+(function(){
+  const btns = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.q-item');
+  const sections = document.querySelectorAll('.section-title');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+
+      /* 更新按鈕狀態 */
+      btns.forEach(b => {
+        b.className = 'filter-btn';
+      });
+      if (f === 'all') btn.classList.add('active-all');
+      else btn.classList.add('active-' + f);
+
+      /* 篩選題目 */
+      items.forEach(it => {
+        it.style.display = (f === 'all' || it.dataset.cat === f) ? '' : 'none';
+      });
+
+      /* 篩選區段標題 */
+      sections.forEach(sec => {
+        const tag = sec.querySelector('.tag');
+        if (!tag) return;
+        if (f === 'all') { sec.style.display = ''; return; }
+        const map = {
+          phase3: 'phase3',
+          phase2: 'phase2',
+          phase1: 'phase1',
+          express: 'express'
+        };
+        const match = tag.classList.contains(map[f]);
+        sec.style.display = match ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,865 @@
+// ═══════════════════════════════════════════════════
+//  Sidebar 資料結構
+// ═══════════════════════════════════════════════════
+const NAV_DATA = [
+  {
+    label: '課程',
+    items: [
+      { name: '🧭 網站操作說明', path: 'tools/guide.html' },
+      { name: '課程總覽', path: 'index.html' },
+    ]
+  },
+  {
+    label: '測量工具',
+    items: [
+      { name: '課程說明 × 疫苗選擇', path: 'units/phase1/vaccine.html' },
+      { name: '有效數字與不確定度', path: 'units/phase1/uncertainty.html' },
+    ]
+  },
+  {
+    sublabel: '主題 · 單擺',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模', path: 'units/phase1/pendulum.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究', path: 'units/phase2/pendulum-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：10 秒競賽', path: 'units/phase3/pendulum-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · 彈簧',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：虎克定律', path: 'units/phase1/spring-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/spring.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：橡皮筋磅秤', path: 'units/phase3/spring-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · 浮力',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：阿基米德', path: 'units/phase1/buoyancy-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：鐵達尼號', path: 'units/phase2/buoyancy.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：智造微船', path: 'units/phase3/buoyancy-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · 聲音',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：頻率與波形', path: 'units/phase1/sound-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：聲音變因', path: 'units/phase2/sound-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：水瓶琴競賽', path: 'units/phase3/sound-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · 翻滾仔',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：滾動數據', path: 'units/phase1/roller-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/roller-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：競速競賽', path: 'units/phase3/roller-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · 橡皮筋動力罐',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：能量轉換', path: 'units/phase1/rubber-band-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/rubber-band-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：精準回滾', path: 'units/phase3/rubber-band-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · DNA 繞射',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：繞射數據', path: 'units/phase1/diffraction-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：光學實驗', path: 'units/phase2/diffraction-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：用光看結構', path: 'units/phase3/diffraction-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · 冰屋',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：鹽冰降溫', path: 'units/phase1/icehouse-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：保冷方案', path: 'units/phase2/icehouse-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：保冷箱競賽', path: 'units/phase3/icehouse-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '主題 · 紙飛機',
+    phase: 1,
+    items: [
+      { name: 'Lv1 論證建模：拋體運動', path: 'units/phase1/airplane-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/airplane-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 發現問題：定點降落', path: 'units/phase3/airplane-lv3.html', week: 'Lv3' },
+    ]
+  },
+  {
+    sublabel: '研究工具',
+    phase: 2,
+    items: [
+      { name: '論證建模工具', path: 'units/phase2/argument-model.html' },
+      { name: '研究規劃表', path: 'units/phase2/research-plan.html' },
+      { name: '問題發現單', path: 'units/phase3/question-discover.html' },
+      { name: '冪級數與線性化', path: 'units/phase2/power-law.html' },
+      { name: '報告撰寫規範', path: 'units/phase2/report.html' },
+      { name: '期末成果發表', path: 'units/phase3/final.html' },
+    ]
+  },
+  {
+    label: '資源',
+    items: [
+      { name: '工具箱', path: 'tools/index.html' },
+      { name: '　表達與分享', path: 'tools/presentation.html' },
+      { name: '　ORID 反思框架', path: 'tools/orid.html' },
+      { name: '　Excel 數據分析', path: 'tools/excel.html' },
+      { name: '　數據分析工坊', path: 'tools/data-workshop.html' },
+      { name: '　學習歷程指引', path: 'tools/portfolio.html' },
+      { name: '　自主探究指引', path: 'tools/independent-research.html' },
+      { name: '　什麼是好的探究問題', path: 'tools/good-question.html' },
+      { name: '　課綱能力對應', path: 'tools/curriculum-map.html' },
+      { name: '練習場', path: 'practice/index.html' },
+    ]
+  }
+];
+
+const PHASE_COLORS = { 1: '#2952c4', 2: '#1e7a52', 3: '#b5621e' };
+
+// ═══════════════════════════════════════════════════
+//  模組展開狀態記憶（localStorage）
+// ═══════════════════════════════════════════════════
+const MODULE_STATE_KEY = 'sssh_nav_modules';
+
+function _readModuleStates() {
+  try { return JSON.parse(localStorage.getItem(MODULE_STATE_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function getModuleState(name) {
+  const states = _readModuleStates();
+  return name in states ? states[name] : null;
+}
+
+function setModuleState(name, isOpen) {
+  const states = _readModuleStates();
+  states[name] = isOpen;
+  localStorage.setItem(MODULE_STATE_KEY, JSON.stringify(states));
+}
+
+// ═══════════════════════════════════════════════════
+//  路徑工具
+// ═══════════════════════════════════════════════════
+function resolvePath(rootRelPath) {
+  const root = window.SITE_ROOT || '.';
+  return root + '/' + rootRelPath;
+}
+
+function isActivePath(rootRelPath) {
+  const resolved = resolvePath(rootRelPath);
+  const current  = window.location.pathname;
+  // 比對檔名結尾
+  return current.endsWith(rootRelPath) ||
+         current.endsWith(rootRelPath.replace('index.html', '')) ||
+         (rootRelPath === 'index.html' && (current.endsWith('/') || current.endsWith('/index.html')));
+}
+
+// ═══════════════════════════════════════════════════
+//  Sidebar 產生
+// ═══════════════════════════════════════════════════
+function buildSidebar() {
+  const sidebar = document.createElement('aside');
+  sidebar.id = 'sidebar';
+
+  // Brand
+  const logoPath = resolvePath('image/songshan-logo.svg');
+  sidebar.innerHTML = `
+    <div id="sidebar-brand">
+      <div class="brand-row">
+        <img src="${logoPath}" alt="松山高中校徽" class="brand-logo" />
+        <div>
+          <span class="site-title">探究與實作</span>
+          <span class="site-sub">松山高中 SSSH · 108 課綱</span>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav"></nav>
+    <div id="sidebar-footer">
+      <button id="teacher-toggle">👤 教師模式：關閉</button>
+    </div>
+  `;
+
+  const nav = sidebar.querySelector('#sidebar-nav');
+
+  NAV_DATA.forEach(section => {
+    // Section label
+    if (section.label) {
+      const lbl = document.createElement('div');
+      lbl.className = 'nav-label';
+      lbl.textContent = section.label;
+      nav.appendChild(lbl);
+    }
+
+    // 判斷此區塊是否為可收合的「主題模組」（有 sublabel 且 items 含 week 標籤）
+    const isCollapsibleModule = section.sublabel && section.items.some(i => i.week);
+    const moduleKey = section.sublabel || null; // 作為 localStorage key
+
+    // Sublabel with phase dot
+    let toggleEl = null;
+    if (section.sublabel) {
+      const sub = document.createElement('div');
+      sub.className = 'nav-sublabel';
+      const color = PHASE_COLORS[section.phase] || '#ababc4';
+
+      if (isCollapsibleModule) {
+        sub.classList.add('nav-module-toggle');
+        sub.innerHTML = `<span class="dot" style="background:${color}"></span>${section.sublabel}<span class="module-arrow">›</span>`;
+        sub.style.cursor = 'pointer';
+        sub.style.userSelect = 'none';
+        toggleEl = sub;
+      } else {
+        sub.innerHTML = `<span class="dot" style="background:${color}"></span>${section.sublabel}`;
+      }
+      nav.appendChild(sub);
+    }
+
+    // 如果是可收合模組，包一層容器
+    let itemContainer = nav;
+
+    if (isCollapsibleModule) {
+      const hasActivePage = section.items.some(i => isActivePath(i.path));
+      // 優先看 localStorage 記憶，若無記錄則以「當前頁面是否在此模組」為預設
+      const saved = getModuleState(moduleKey);
+      const shouldOpen = saved !== null ? saved : hasActivePage;
+
+      itemContainer = document.createElement('div');
+      itemContainer.className = 'nav-module-items' + (shouldOpen ? ' open' : '');
+      nav.appendChild(itemContainer);
+    }
+
+    // Items
+    section.items.forEach(item => {
+      const a = document.createElement('a');
+      a.className = 'nav-item' + (isActivePath(item.path) ? ' active' : '');
+      a.href = resolvePath(item.path);
+
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+
+      const name = document.createElement('span');
+      name.textContent = item.name;
+      name.style.flex = '1';
+      name.style.overflow = 'hidden';
+      name.style.textOverflow = 'ellipsis';
+
+      a.appendChild(dot);
+      a.appendChild(name);
+
+      if (item.week) {
+        const tag = document.createElement('span');
+        tag.className = 'week-tag';
+        tag.textContent = item.week;
+        a.appendChild(tag);
+      }
+
+      itemContainer.appendChild(a);
+    });
+
+    // 綁定收合行為 + 記憶狀態
+    if (isCollapsibleModule && toggleEl) {
+      if (itemContainer.classList.contains('open')) toggleEl.classList.add('open');
+      toggleEl.addEventListener('click', () => {
+        const isOpen = itemContainer.classList.toggle('open');
+        toggleEl.classList.toggle('open', isOpen);
+        setModuleState(moduleKey, isOpen);
+      });
+    }
+  });
+
+  return sidebar;
+}
+
+// ═══════════════════════════════════════════════════
+//  教師模式
+// ═══════════════════════════════════════════════════
+const TEACHER_KEY = 'sssh_inquiry_teacher';
+
+function initTeacherMode() {
+  const btn = document.getElementById('teacher-toggle');
+  if (!btn) return;
+
+  const isOn = () => localStorage.getItem(TEACHER_KEY) === '1';
+
+  function apply(on) {
+    document.querySelectorAll('.teacher-only').forEach(el => {
+      el.style.display = on ? '' : 'none';
+    });
+    btn.textContent = on ? '🎓 教師模式：開啟' : '👤 教師模式：關閉';
+    btn.classList.toggle('on', on);
+  }
+
+  apply(isOn());
+  btn.addEventListener('click', () => {
+    const next = !isOn();
+    localStorage.setItem(TEACHER_KEY, next ? '1' : '0');
+    apply(next);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  手機 Sidebar 開關
+// ═══════════════════════════════════════════════════
+function initMobileMenu() {
+  const btn      = document.getElementById('menu-btn');
+  const sidebar  = document.getElementById('sidebar');
+  const overlay  = document.getElementById('sidebar-overlay');
+  if (!btn || !sidebar) return;
+
+  function close() {
+    sidebar.classList.remove('open');
+    if (overlay) overlay.style.display = 'none';
+  }
+  btn.addEventListener('click', () => {
+    const isOpen = sidebar.classList.toggle('open');
+    if (overlay) overlay.style.display = isOpen ? 'block' : 'none';
+  });
+  if (overlay) overlay.addEventListener('click', close);
+}
+
+// ═══════════════════════════════════════════════════
+//  閱讀進度條
+// ═══════════════════════════════════════════════════
+function initReadingBar() {
+  const bar = document.getElementById('reading-bar');
+  if (!bar) return;
+  const update = () => {
+    const total = document.body.scrollHeight - window.innerHeight;
+    bar.style.width = total > 0 ? (window.scrollY / total * 100) + '%' : '0%';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+}
+
+// ═══════════════════════════════════════════════════
+//  KaTeX 自動載入與渲染
+// ═══════════════════════════════════════════════════
+function loadKaTeX(callback) {
+  // CSS
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css';
+  document.head.appendChild(css);
+
+  // JS
+  const js = document.createElement('script');
+  js.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js';
+  js.onload = () => {
+    // auto-render
+    const ar = document.createElement('script');
+    ar.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js';
+    ar.onload = callback;
+    document.head.appendChild(ar);
+  };
+  document.head.appendChild(js);
+}
+
+function renderMath() {
+  if (typeof renderMathInElement !== 'function') return;
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false },
+      { left: '\\(', right: '\\)', display: false },
+      { left: '\\[', right: '\\]', display: true },
+    ],
+    throwOnError: false,
+    trust: true,
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  初始化
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // 注入 Sidebar
+  const mount = document.getElementById('sidebar-mount');
+  if (mount) {
+    const sb = buildSidebar();
+    document.body.insertBefore(sb, document.body.firstChild);
+    mount.remove();
+  }
+
+  initTeacherMode();
+  initMobileMenu();
+  initReadingBar();
+  initCollapsibles();
+
+  // 載入 KaTeX 並渲染數學公式
+  loadKaTeX(() => renderMath());
+
+  // 頁面自帶 step/think 引擎時跳過（如 mobile-first 頁面）
+  if (!window.__CUSTOM_STEP_ENGINE) {
+    initStepEngine();
+    initStepKeyboard();
+    initThinkReveal();
+    initThinkRecord();
+    initThinkChoice();
+  }
+
+  // 匯出學習記錄
+  initExportFab();
+});
+
+// ═══════════════════════════════════════════════════
+//  互動摺疊元件
+// ═══════════════════════════════════════════════════
+function initCollapsibles() {
+  document.querySelectorAll('.collapsible-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const parent = header.closest('.collapsible');
+      parent.classList.toggle('open');
+    });
+    // touch 支援
+    header.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      header.click();
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  分步驟引擎 — 一屏一任務
+// ═══════════════════════════════════════════════════
+function initStepEngine() {
+  const panels = document.querySelectorAll('.step-panel');
+  if (panels.length === 0) return;
+
+  const tabs = document.querySelectorAll('.step-tab');
+  let current = 0;
+
+  function goTo(index) {
+    if (index < 0 || index >= panels.length) return;
+    // 切換面板
+    panels.forEach((p, i) => {
+      p.classList.toggle('active', i === index);
+    });
+    // 切換 tab
+    tabs.forEach((t, i) => {
+      t.classList.toggle('active', i === index);
+    });
+    // 更新所有步驟底部的圓點和按鈕
+    document.querySelectorAll('.step-footer').forEach(footer => {
+      const dots = footer.querySelectorAll('.step-dot');
+      dots.forEach((d, i) => {
+        d.className = 'step-dot';
+        if (i < index) d.classList.add('done');
+        if (i === index) d.classList.add('current');
+      });
+      const prevBtn = footer.querySelector('[data-step="prev"]');
+      const nextBtn = footer.querySelector('[data-step="next"]');
+      if (prevBtn) prevBtn.disabled = index === 0;
+      if (nextBtn) nextBtn.disabled = index === panels.length - 1;
+    });
+    current = index;
+    // 捲到頁面頂部（步驟區）
+    const nav = document.querySelector('.step-nav');
+    if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Tab 點擊
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => goTo(i));
+  });
+
+  // Prev/Next 按鈕
+  document.querySelectorAll('[data-step="prev"]').forEach(btn => {
+    btn.addEventListener('click', () => goTo(current - 1));
+  });
+  document.querySelectorAll('[data-step="next"]').forEach(btn => {
+    btn.addEventListener('click', () => goTo(current + 1));
+  });
+
+  // 課後資源摺疊
+  document.querySelectorAll('.post-class-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      toggle.closest('.post-class').classList.toggle('open');
+    });
+  });
+
+  // 初始化
+  goTo(0);
+}
+
+// ═══════════════════════════════════════════════════
+//  鍵盤快捷鍵（老師用：左右鍵切步驟）
+// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  互動思考元件 — Layer 1: 想一想 → 展開提示
+// ═══════════════════════════════════════════════════
+function initThinkReveal() {
+  document.querySelectorAll('.think-block.reveal .think-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const block = btn.closest('.think-block');
+      block.classList.toggle('open');
+      btn.textContent = block.classList.contains('open')
+        ? '已展開提示'
+        : '想好了？點擊看提示 →';
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  互動思考元件 — Layer 2: 自我記錄 (localStorage)
+// ═══════════════════════════════════════════════════
+const THINK_STORAGE_KEY = 'sssh_think_records';
+
+function _readThinkRecords() {
+  try { return JSON.parse(localStorage.getItem(THINK_STORAGE_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function _saveThinkRecord(key, value) {
+  const records = _readThinkRecords();
+  records[key] = value;
+  localStorage.setItem(THINK_STORAGE_KEY, JSON.stringify(records));
+}
+
+function initThinkRecord() {
+  const inputs = document.querySelectorAll('.think-input');
+  if (inputs.length === 0) return;
+
+  const records = _readThinkRecords();
+  let saveTimer = null;
+
+  inputs.forEach(input => {
+    const key = input.dataset.key;
+    if (!key) return;
+
+    // 還原已存的內容
+    if (records[key]) {
+      input.value = records[key];
+      const status = input.parentElement.querySelector('.think-status');
+      if (status) { status.textContent = '↑ 上次的記錄已載入'; status.className = 'think-status saved'; }
+    }
+
+    // 自動儲存（打字後 800ms）
+    input.addEventListener('input', () => {
+      const status = input.parentElement.querySelector('.think-status');
+      if (status) { status.textContent = '輸入中…'; status.className = 'think-status'; }
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        _saveThinkRecord(key, input.value);
+        if (status) { status.textContent = '✓ 已自動儲存'; status.className = 'think-status saved'; }
+      }, 800);
+    });
+
+    // 失焦時立即存
+    input.addEventListener('blur', () => {
+      if (input.value) {
+        _saveThinkRecord(key, input.value);
+        const status = input.parentElement.querySelector('.think-status');
+        if (status) { status.textContent = '✓ 已自動儲存'; status.className = 'think-status saved'; }
+      }
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  互動思考元件 — Layer 3: 選擇題 → 即時回饋
+// ═══════════════════════════════════════════════════
+function initThinkChoice() {
+  document.querySelectorAll('.think-block.choice').forEach(block => {
+    const answer = block.dataset.answer;
+    const options = block.querySelectorAll('.think-opt');
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (block.classList.contains('answered')) return; // 已作答
+
+        block.classList.add('answered');
+        const chosen = opt.dataset.val;
+
+        options.forEach(o => {
+          o.disabled = true;
+          if (o.dataset.val === answer) {
+            o.classList.add('correct');
+          } else if (o === opt && chosen !== answer) {
+            o.classList.add('wrong');
+          }
+        });
+      });
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  匯出學習記錄（Floating Action Button）
+// ═══════════════════════════════════════════════════
+function initExportFab() {
+  const inputs = document.querySelectorAll('.think-input');
+  if (inputs.length === 0) return;
+
+  // 外層群組
+  const group = document.createElement('div');
+  group.className = 'export-fab-group';
+
+  // 複製按鈕（主要動作）
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'export-fab export-fab-copy';
+  copyBtn.innerHTML = '<span class="export-icon">📋</span><span class="export-label">複製學習記錄</span><span class="export-count">0</span>';
+
+  // 下載按鈕（次要）
+  const dlBtn = document.createElement('button');
+  dlBtn.className = 'export-fab export-fab-download';
+  dlBtn.innerHTML = '<span class="export-icon">📥</span><span class="export-label">下載 .md 檔</span>';
+
+  group.appendChild(copyBtn);
+  group.appendChild(dlBtn);
+  document.body.appendChild(group);
+
+  // Toast 提示
+  const toast = document.createElement('div');
+  toast.className = 'export-toast';
+  document.body.appendChild(toast);
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  const countEl = copyBtn.querySelector('.export-count');
+
+  function updateCount() {
+    const records = _readThinkRecords();
+    let filled = 0;
+    inputs.forEach(input => {
+      const key = input.dataset.key;
+      if (key && records[key] && records[key].trim()) filled++;
+    });
+    countEl.textContent = filled + '/' + inputs.length;
+  }
+  updateCount();
+
+  inputs.forEach(input => {
+    input.addEventListener('input', () => setTimeout(updateCount, 900));
+  });
+
+  // 複製到剪貼簿
+  copyBtn.addEventListener('click', () => {
+    const md = buildExportMarkdown();
+    if (!md) return;
+    navigator.clipboard.writeText(md).then(() => {
+      showToast('✓ 已複製到剪貼簿！可以直接貼上');
+    }).catch(() => {
+      // fallback：舊瀏覽器
+      const ta = document.createElement('textarea');
+      ta.value = md;
+      ta.style.cssText = 'position:fixed;left:-9999px;';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('✓ 已複製到剪貼簿！');
+    });
+  });
+
+  // 下載 .md 檔
+  dlBtn.addEventListener('click', () => exportThinkRecords());
+}
+
+// ═══════════════════════════════════════════════════
+//  格式化實驗數據 → Markdown
+// ═══════════════════════════════════════════════════
+function _formatLabData(data) {
+  // ── 單擺實驗 ──
+  if (data.type === 'pendulum') {
+    let s = '### 單擺 T² vs L 實驗\n\n';
+    s += '| 擺長 L (m) | T₁ (s) | T₂ (s) | T₃ (s) | T̄ (s) | T² (s²) |\n';
+    s += '|---|---|---|---|---|---|\n';
+    const lengthKeys = Object.keys(data.records).sort((a, b) => parseFloat(a) - parseFloat(b));
+    lengthKeys.forEach(Lkey => {
+      const L = parseFloat(Lkey);
+      const trials = data.records[Lkey];
+      if (!trials || trials.length === 0) return;
+      const avg = trials.reduce((a, b) => a + b, 0) / trials.length;
+      const t2 = avg * avg;
+      const cells = [L.toFixed(2),
+        ...trials.map(t => t.toFixed(3)),
+        ...Array(3 - trials.length).fill('—'),
+        avg.toFixed(3), t2.toFixed(4)];
+      s += `| ${cells.join(' | ')} |\n`;
+    });
+    s += '\n';
+    if (data.slopes && data.slopes.T2_vs_L) {
+      s += `- 擬合斜率（T² vs L，過原點）：${data.slopes.T2_vs_L.toFixed(4)} s²/m\n`;
+    }
+    if (data.g_calculated) {
+      s += `- 計算得 g = 4π²/斜率 = **${data.g_calculated.toFixed(2)} m/s²**\n`;
+    }
+    if (data.g_error_percent != null) {
+      s += `- 與標準值 9.81 m/s² 的誤差：${data.g_error_percent.toFixed(1)}%\n`;
+    }
+    s += '\n';
+    return s;
+  }
+
+  // ── 聲音實驗 ──
+  // recordedNotes = { C4: 262, D4: 294, ... }
+  const noteOrder = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+  const notesInData = noteOrder.filter(n => data[n] !== undefined);
+  if (notesInData.length > 0 && typeof data[notesInData[0]] === 'number') {
+    let s = '### 聲音頻率實驗\n\n';
+    s += '| 音符 | 頻率 (Hz) | 與前一音的頻率比 |\n';
+    s += '|---|---|---|\n';
+    notesInData.forEach((note, i) => {
+      const freq = data[note];
+      let ratio = '—';
+      if (i > 0) {
+        const prevFreq = data[notesInData[i - 1]];
+        ratio = (freq / prevFreq).toFixed(4);
+      }
+      s += `| ${note} | ${freq} | ${ratio} |\n`;
+    });
+    s += '\n';
+    if (notesInData.length >= 2) {
+      const ratios = [];
+      for (let i = 1; i < notesInData.length; i++) {
+        ratios.push(data[notesInData[i]] / data[notesInData[i - 1]]);
+      }
+      const avg = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+      s += `- 平均頻率比：${avg.toFixed(4)}（理論值 2^(1/12) ≈ 1.0595）\n\n`;
+    }
+    return s;
+  }
+
+  // ── 浮力實驗 ──
+  // recorded = { wood: [0.6], ice: [0.92], ... }
+  const BUOYANCY_NAMES = {
+    wood: '木塊', ice: '冰塊', aluminum: '鋁塊',
+    iron: '鐵塊', styrofoam: '保麗龍', ship: '鐵船'
+  };
+  const BUOYANCY_DENSITIES = {
+    wood: 0.60, ice: 0.92, aluminum: 2.70,
+    iron: 7.87, styrofoam: 0.03, ship: 0.30
+  };
+  const buoyancyKeys = Object.keys(data).filter(k => Array.isArray(data[k]));
+  if (buoyancyKeys.length > 0 && BUOYANCY_NAMES[buoyancyKeys[0]]) {
+    let s = '### 浮力實驗\n\n';
+    s += '| 物體 | 密度 (g/cm³) | 沉入比例 | 浮／沉 |\n';
+    s += '|---|---|---|---|\n';
+    buoyancyKeys.forEach(key => {
+      const name = BUOYANCY_NAMES[key] || key;
+      const density = BUOYANCY_DENSITIES[key] || '?';
+      const ratio = data[key][0];
+      const status = ratio >= 1 ? '沉' : '浮';
+      s += `| ${name} | ${density} | ${(ratio * 100).toFixed(0)}% | ${status} |\n`;
+    });
+    s += '\n- 結論：密度 < 1 的物體浮在水面，密度 > 1 的物體沉入水底\n\n';
+    return s;
+  }
+
+  // ── 通用格式（其他 labData）──
+  let s = '### 實驗數據\n\n';
+  s += '```json\n' + JSON.stringify(data, null, 2) + '\n```\n\n';
+  return s;
+}
+
+function buildExportMarkdown() {
+  const title = document.querySelector('.page-header h1');
+  const pageName = title ? title.textContent.trim() : document.title;
+  const records = _readThinkRecords();
+  const now = new Date();
+  const dateStr = now.getFullYear() + '-' +
+    String(now.getMonth()+1).padStart(2,'0') + '-' +
+    String(now.getDate()).padStart(2,'0') + ' ' +
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0');
+
+  let md = `# ${pageName}\n`;
+  md += `> 匯出時間：${dateStr}\n\n`;
+
+  const blocks = document.querySelectorAll('.think-block');
+  let sectionNum = 0;
+
+  blocks.forEach(block => {
+    const prompt = block.querySelector('.think-prompt');
+    if (!prompt) return;
+    const promptText = prompt.textContent.trim();
+
+    if (block.classList.contains('record')) {
+      const input = block.querySelector('.think-input');
+      const key = input ? input.dataset.key : null;
+      const value = key && records[key] ? records[key].trim() : '';
+      if (value) {
+        sectionNum++;
+        md += `## ${sectionNum}. ${promptText}\n\n`;
+        md += `${value}\n\n`;
+      }
+    } else if (block.classList.contains('choice')) {
+      const selected = block.querySelector('.think-opt.correct, .think-opt.wrong.selected, .think-opt.selected');
+      if (selected) {
+        sectionNum++;
+        md += `## ${sectionNum}. ${promptText}\n\n`;
+        const isCorrect = selected.classList.contains('correct');
+        md += `我的選擇：${selected.textContent.trim()}${isCorrect ? ' ✓' : ' ✗'}\n\n`;
+        const feedback = block.querySelector('.think-feedback');
+        if (feedback) {
+          md += `> ${feedback.textContent.trim()}\n\n`;
+        }
+      }
+    }
+  });
+
+  let hasLabData = false;
+  if (window.labData && typeof window.labData === 'object' && Object.keys(window.labData).length > 0) {
+    hasLabData = true;
+    md += `## 實驗數據\n\n`;
+    md += _formatLabData(window.labData);
+  }
+
+  if (sectionNum === 0 && !hasLabData) {
+    alert('還沒有填寫任何記錄喔！先在頁面上的輸入框寫下你的想法。');
+    return null;
+  }
+
+  md += `---\n*松山高中 探究與實作 · 學習記錄*\n`;
+  return md;
+}
+
+function exportThinkRecords() {
+  const md = buildExportMarkdown();
+  if (!md) return;
+
+  const title = document.querySelector('.page-header h1');
+  const pageName = title ? title.textContent.trim() : document.title;
+  const now = new Date();
+  const safeTitle = pageName.replace(/[^\u4e00-\u9fff\w\s·]/g, '').trim().replace(/\s+/g, '_');
+
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `學習記錄_${safeTitle}_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function initStepKeyboard() {
+  const panels = document.querySelectorAll('.step-panel');
+  if (panels.length === 0) return;
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight') {
+      const next = document.querySelector('[data-step="next"]:not(:disabled)');
+      if (next) next.click();
+    }
+    if (e.key === 'ArrowLeft') {
+      const prev = document.querySelector('[data-step="prev"]:not(:disabled)');
+      if (prev) prev.click();
+    }
+  });
+}

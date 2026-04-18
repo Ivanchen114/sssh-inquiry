@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冰屋 Lv3 · 發現問題 · 探究與實作</title>
+  <meta name="description" content="冰屋 Lv3 發現問題：保冷箱競賽，設計最佳保冷方案。">
+  <meta property="og:title" content="冰屋 Lv3 · 發現問題 · 探究與實作">
+  <meta property="og:description" content="冰屋 Lv3 發現問題：保冷箱競賽，設計最佳保冷方案。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/icehouse-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·冰屋</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>🧊 冰屋模組 · Lv3 發現問題</h1>
+    <p class="subtitle">保冷箱設計競賽——整合熱學知識，設計最強保冷系統，再從工程挑戰中提出新問題。</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">競賽 · 工程設計 · 自主探究</span>
+    </div>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
+    <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
+    <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
+    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 1: 挑戰規則                          -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel active">
+      <div style="background:#faf5ff;border-left:4px solid var(--phase3);border-radius:6px;padding:14px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:8px;">🎯 學習目標</div>
+        <ul style="font-size:12px;color:var(--text-secondary);padding-left:18px;line-height:1.8;">
+          <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：多層隔熱層的邊際效應是否遞減？）</li>
+          <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：隔熱層厚度（1cm vs 2cm vs 3cm vs 4cm 珍珠板）如何影響 30 分鐘後的溫升？）</li>
+          <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「鋁箔紙包在內層 vs 外層 vs 不包，對保冷效能的影響有多大？」vs「保冷箱怎麼做最好？」）</li>
+          <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+        </ul>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🏆 挑戰規則</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">📦 材料限制</div>
+            <ul style="font-size:12px;padding-left:14px;line-height:1.8;">
+              <li>瓦楞紙 ×2 張</li>
+              <li>冰棒棍 ×10 支</li>
+              <li>PP 板 ×1 片</li>
+              <li>珍珠板 ×1 片</li>
+              <li>氣泡布 30cm×30cm</li>
+              <li>EVA 泡棉 ×1 片</li>
+              <li>鋁箔紙 30cm×30cm</li>
+              <li>吸管 ×5 支</li>
+              <li>海報紙 ×1 張</li>
+              <li>食鹽 50g</li>
+              <li>冰塊 200g</li>
+            </ul>
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">🥤 挑戰目標</div>
+            <p style="font-size:12px;line-height:1.8;">
+              設計一個保冷箱，放入 330ml 冷藏飲料（初溫約 5°C）。<br><br>
+              <strong>靜置 30 分鐘</strong>後量飲料溫度。<br><br>
+              <strong>溫度最低的組獲勝。</strong>
+            </p>
+          </div>
+        </div>
+        <div style="background:var(--bg);padding:10px 12px;border-radius:6px;margin-bottom:12px;font-size:13px;color:var(--text-secondary);">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">🎯 評分標準</div>
+          <ul style="font-size:12px;padding-left:14px;line-height:1.8;">
+            <li><strong>60%</strong> 保冷效能（30 分鐘後的溫度越低越好）</li>
+            <li><strong>20%</strong> 工程設計（結構完整性、防漏、穩定性）</li>
+            <li><strong>10%</strong> 成本效率（材料使用量越少越好）</li>
+            <li><strong>10%</strong> 創意（設計的創新程度）</li>
+          </ul>
+        </div>
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;">
+          ⚠️ <strong>重要</strong>：所有飲料初溫必須一致（約 5°C），測量時間和環境一樣。
+        </div>
+      </div>
+
+      <div class="collapsible think-first" style="margin-top:14px;margin-bottom:20px;">
+        <div class="collapsible-header">💡 保冷策略提示：先自己想，再點開看<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:2;">
+            <div style="font-weight:700;margin-bottom:10px;">熱學三大法則：</div>
+            <p><strong>① 減少傳導：</strong>用珍珠板、氣泡布、EVA 泡棉做隔熱層。（空氣是好的隔熱材料！）</p>
+            <p><strong>② 減少對流：</strong>密封！減少空氣流通。用 PP 板或瓦楞紙做蓋子。</p>
+            <p><strong>③ 減少輻射：</strong>鋁箔紙反射紅外線。包在容器內側效果最好。</p>
+            <p><strong>④ 鹽冰降溫：</strong>用 Lv1 學到的最佳冰鹽比（例如 50g 冰：30g 鹽），讓起始溫度更低。冰塊可以放在保冷箱周圍或底部。</p>
+            <div style="background:var(--bg);border-radius:6px;padding:10px;margin-top:10px;font-size:12px;">
+              <strong>思考：</strong>三層隔熱層 vs 一層厚隔熱層，哪個效果好？為什麼？
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-action" style="background:#ede9fe;border-left:4px solid #9333ea;border-radius:6px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:#6b21a8;">
+        <strong>本步驟任務：</strong>閱讀挑戰規則、準備材料，規劃你的保冷箱設計。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 2: 製作與測試                        -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="activity-block">
+        <div class="activity-header phase3">節 1 · 設計 + 製作（50 分鐘）</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:8px;margin-bottom:12px;">
+            <div class="q-item phase3" style="font-weight:600;">第一步（10 分鐘）：草圖和設計說明</div>
+            <div class="q-item phase3" style="font-weight:600;">第二步（35 分鐘）：製作保冷箱。記錄你使用的材料、隔熱策略和製作過程。</div>
+            <div class="q-item phase3" style="font-weight:600;">第三步（5 分鐘）：檢查是否防漏、結構穩定、能放入 330ml 飲料</div>
+          </div>
+          <div class="info-box green">
+            💡 <strong>設計重點：</strong>你選擇了哪一種「減熱」策略？為什麼？有沒有結合 Lv1 的鹽冰知識？
+          </div>
+        </div>
+      </div>
+
+      <div class="activity-block">
+        <div class="activity-header phase3">節 2 · 靜置 + 測量 + 評比（50 分鐘）</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:8px;margin-bottom:12px;">
+            <div class="q-item phase3" style="font-weight:600;">1. 放入 330ml 冷飲（初溫記錄）+ 準備鹽冰（記錄準備方式）</div>
+            <div class="q-item phase3" style="font-weight:600;">2. 靜置 30 分鐘（期間不可打開、不可移動箱子）</div>
+            <div class="q-item phase3" style="font-weight:600;">3. 量飲料溫度（記錄時間、溫度、容器外觀）</div>
+            <div class="q-item phase3" style="font-weight:600;">4. 所有組計算「溫升」（30 分鐘後溫度 - 初溫），評比獲勝者</div>
+          </div>
+          <div style="overflow-x:auto;margin-bottom:12px;">
+            <table>
+              <thead><tr><th>組別</th><th>設計特色</th><th>初溫(°C)</th><th>30分後(°C)</th><th>溫升(°C)</th><th>排名</th></tr></thead>
+              <tbody>
+                <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+                <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+                <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+                <tr><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="info-box orange">
+            📢 <strong>現場評比：</strong>各組介紹設計、講解為什麼選這些策略、分享製作過程的挑戰。
+          </div>
+        </div>
+      </div>
+
+      <div class="step-action" style="background:#ede9fe;border-left:4px solid #9333ea;border-radius:6px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:#6b21a8;">
+        <strong>本步驟任務：</strong>設計、製作你的保冷箱，並完成測試與評比。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 3: 從競賽到問題                      -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+        競賽結束後，你一定有很多觀察。「為什麼贏家用了那個材料？」「我那層隔熱層好像沒有用？」「如果改變隔熱層厚度會怎樣？」——這些好奇心都可以變成新的科學問題。
+      </p>
+
+      <div class="activity-block">
+        <div class="activity-header phase3">節 3–4 · 反思 + 提出問題（100 分鐘）</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:12px;">
+            <div>
+              <div style="font-weight:700;margin-bottom:10px;font-size:13px;">📝 Step 1：記錄觀察</div>
+              <div class="q-item phase3">
+                <p style="margin-bottom:8px;"><strong>我注意到的事：</strong></p>
+                <p style="margin-bottom:8px;">• 贏家組用了___，我用了___。差別在哪？</p>
+                <p style="margin-bottom:8px;">• 我的___層隔熱層好像沒有想像中有效。為什麼？</p>
+                <p>• 我的保冷箱有___的問題（防漏、隔熱、成本等），下次怎麼改？</p>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-weight:700;margin-bottom:10px;font-size:13px;">🔄 Step 2：轉化為問題</div>
+              <div class="q-item phase3" style="line-height:1.8;">
+                <p style="margin-bottom:10px;">用「如果改變___，___會怎樣？」或「___對___有多大的影響？」的句型，寫出可以用實驗回答的問題：</p>
+                <p style="margin-bottom:8px;"><strong>例 1：</strong>「隔熱層厚度（1cm vs 2cm vs 3cm vs 4cm 珍珠板）如何影響 30 分鐘後的溫升？」</p>
+                <p style="margin-bottom:8px;"><strong>例 2：</strong>「鋁箔紙包在內層 vs 外層 vs 不包，對保冷箱 30 分鐘溫升的影響有多大？」</p>
+                <p><strong>例 3：</strong>「隔熱層數（1 層 vs 2 層 vs 3 層）對保冷效能的邊際效應是什麼？」</p>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-weight:700;margin-bottom:10px;font-size:13px;">✨ Step 3：篩選問題品質</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible think-first" style="margin-top:14px;margin-bottom:20px;">
+        <div class="collapsible-header">🎯 好問題 vs 需改進的問題：先看例子，再評估你的<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.9;">
+            <div class="info-box" style="border-left: 4px solid #dc2626; margin-bottom:12px;">
+              <div style="font-weight:700;color:#dc2626;margin-bottom:6px;">❌ 不夠具體</div>
+              <p>「保冷箱怎麼做最好？」</p>
+              <p style="font-size:11px;color:#7f1d1d;margin-top:4px;">→ 「最好」太籠統。有無數變因可能。</p>
+            </div>
+            <div class="info-box" style="border-left: 4px solid #059669; margin-bottom:12px;">
+              <div style="font-weight:700;color:#059669;margin-bottom:6px;">✅ 夠具體</div>
+              <p>「隔熱層厚度（1cm vs 2cm vs 3cm vs 4cm 珍珠板）如何影響 30 分鐘後的溫升？」</p>
+              <p style="font-size:11px;color:#065f46;margin-top:4px;">→ 有明確的操縱變因、應變變因、測量單位、時間限制。</p>
+            </div>
+
+            <div class="info-box" style="border-left: 4px solid #dc2626; margin-bottom:12px;">
+              <div style="font-weight:700;color:#dc2626;margin-bottom:6px;">❌ 沒有量化</div>
+              <p>「鋁箔紙有用嗎？」</p>
+              <p style="font-size:11px;color:#7f1d1d;margin-top:4px;">→ 「有用」是主觀的。有多有用？差多少度？</p>
+            </div>
+            <div class="info-box" style="border-left: 4px solid #059669; margin-bottom:12px;">
+              <div style="font-weight:700;color:#059669;margin-bottom:6px;">✅ 有量化</div>
+              <p>「鋁箔紙包在內層 vs 外層 vs 不包，對保冷箱 30 分鐘溫升的影響有多大（度數差異）？」</p>
+              <p style="font-size:11px;color:#065f46;margin-top:4px;">→ 明確要測量溫升的差異，可以用數字比較。</p>
+            </div>
+
+            <div style="background:var(--bg);border-radius:6px;padding:12px;">
+              <div style="font-weight:700;color:#0284c7;margin-bottom:6px;">💡 檢查清單</div>
+              <ul style="font-size:11px;padding-left:14px;line-height:1.8;color:#075985;">
+                <li>有明確的操縱變因嗎？（改變什麼？）</li>
+                <li>有明確的應變變因嗎？（量什麼？怎麼量？）</li>
+                <li>可以在實驗室/教室裡做嗎？時間夠嗎？</li>
+                <li>用「如果___，___會___？」的句型問，聽起來合理嗎？</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 1: 邊際效應觀察 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：多層隔熱層一定比單層更好嗎？加第四層隔熱層會比加第三層有效嗎？為什麼？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p><strong>邊際效應思考：</strong>第一層隔熱層效果最明顯（從無到有）。第二層、第三層的效果可能遞減，因為大部分熱已經被阻擋了。這就是「邊際效應遞減」——很多工程設計都有這個現象。這正是值得深入探究的問題！</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 問題與觀察記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你最想探究的一個問題及其理由（來自競賽觀察）</div>
+        <textarea class="think-input" data-key="icehouse-lv3-q1" placeholder="例如：我想探究「隔熱層厚度的邊際效應」，因為看到有組只用 1 層厚珍珠板就和別人的 3 層一樣好…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 變因與預測 -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 「隔熱層厚度對溫升的影響」中，你預期什麼樣的趨勢？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 厚度越大效果越好，但邊際效應遞減（曲線，不是直線）</button>
+          <button class="think-opt" data-val="b">B. 厚度越大效果越好，而且效果完全線性</button>
+          <button class="think-opt" data-val="c">C. 加到某個厚度後就不重要了</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          A 是最科學的預期——實務上隔熱效果通常是「邊際效應遞減」的曲線。B 太理想化（直線），C 也有可能但太籠統。A 最能指導後續實驗設計。</div>
+      </div>
+
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:16px 20px;margin-bottom:20px;">
+        <div style="font-weight:700;font-size:14px;color:#7f1d1d;margin-bottom:10px;">📋 你提出的問題清單（寫 3–5 個）</div>
+        <p style="font-size:12px;color:#991b1b;margin-bottom:12px;">從「觀察 → 問題」的過程中，寫下所有想要探究的問題：</p>
+        <p style="font-size:11px;color:#7f1d1d;font-style:italic;">用上面的「好問題檢查清單」評估每一個。✓ 是好問題 | 需改進</p>
+      </div>
+
+      <div class="step-action" style="background:#ede9fe;border-left:4px solid #9333ea;border-radius:6px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:#6b21a8;">
+        <strong>本步驟任務：</strong>反思競賽結果，把觀察轉化為可探究的科學問題。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 4: 後續探究                          -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="card" style="border-left:4px solid var(--phase3);margin-bottom:20px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;color:var(--phase3);">🎓 後續探究方向</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+          你提出的好問題，其實就是「自主探究」的起點。如果有興趣，可以：
+        </p>
+        <ul style="font-size:12px;color:var(--text-secondary);line-height:2;padding-left:16px;">
+          <li><strong>選一個問題深度探究：</strong>設計正式實驗、收集數據、分析結果</li>
+          <li><strong>做迷你競賽：</strong>固定其他變因，只改變你選的操縱變因</li>
+          <li><strong>應用在真實情境：</strong>設計露營保冷方案、食品運送保冷方案等</li>
+          <li><strong>探索進階課題：</strong>熱質傳遞模型、絕熱材料的性能指標等</li>
+        </ul>
+      </div>
+
+      <div class="step-action" style="background:#ede9fe;border-left:4px solid #9333ea;border-radius:6px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:#6b21a8;">
+        <strong>本步驟任務：</strong>選定問題，規劃並執行後續探究。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  POST-CLASS SECTION                        -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 協作、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body">
+        <!-- 問題發現單 -->
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">💡</span>
+          <div>
+            <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+            <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+          </div>
+        </div>
+
+        <!-- AI 協作 -->
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📐 規劃階段</div>
+              把你的任務限制告訴 AI（材料、規則、目標），請它幫你發想設計方案。記得截圖保存對話——展示你怎麼提問比 AI 給了什麼答案更重要。
+            </div>
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📝 反思階段</div>
+              活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+            </div>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ 規劃時 AI 是設計夥伴；反思時 AI 是文字編輯。兩個階段都是你在主導。</p>
+        </div>
+
+        <!-- 學習歷程提示 -->
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">你的保冷箱設計圖、設計說明、競賽結果，加上「觀察 → 問題轉化」的過程，展現了完整的「從工程到科學探究」的歷程。最重要的是你提出的好問題——它們展示了你已經開始用科學家的眼光看問題。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+            <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「第一次船壁做 3cm 太矮改成 5cm」才有說服力。</span>
+          </div>
+        </div>
+
+        <!-- 教學目標（教師視角） -->
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>透過保冷箱設計競賽，讓學生整合熱傳導、對流、輻射和鹽冰降溫的知識</li>
+              <li>從工程設計的限制和失敗中，自然產生「為什麼」和「如果改變」的科學問題</li>
+              <li>培養學生分辨「好問題」和「不夠具體的問題」的能力</li>
+              <li>鼓勵學生從「被動學習」向「自主探究」轉變</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 教師備註 -->
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              Lv3 的核心不在「誰的箱子最冷」，而在「競賽過程中自然產生的好問題」。學生看到贏家的設計，會自己問「為什麼用珍珠板不用氣泡布？」「多加一層隔熱層值得嗎？」這些都是好問題。<br><br>
+              教師的角色是引導學生把「觀察和驚訝」轉化為「可以用實驗回答的科學問題」。第二階段的「好問題 vs 不夠具體」比較非常重要——花點時間在這裡，學生會明白什麼是「真正的科學問題」。<br><br>
+              如果時間允許，可以讓各組選一個問題在課後深度探究，這就自然銜接到下一階段的「自主研究專題」。
+            </p>
+          </div>
+        </div>
+
+        <div class="unit-nav">
+          <a href="../phase2/icehouse-lv2.html">← 冰屋 Lv2</a>
+          <a href="../../index.html">回到課程總覽 →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

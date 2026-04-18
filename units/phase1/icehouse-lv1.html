@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冰屋 Lv1 · 論證建模 · 探究與實作</title>
+  <meta name="description" content="冰屋 Lv1 論證建模：鹽冰降溫實驗，探究鹽的種類與濃度對降溫效果的影響。">
+  <meta property="og:title" content="冰屋 Lv1 · 論證建模 · 探究與實作">
+  <meta property="og:description" content="冰屋 Lv1 論證建模：鹽冰降溫實驗，探究鹽的種類與濃度對降溫效果的影響。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/icehouse-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>冰屋</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>🧊 冰屋 · Lv1 論證建模</h1>
+    <p class="subtitle">從鹽冰降溫數據認識吸熱反應與溫度變化，建立「冰鹽比例 vs 最低溫度」的定量模型。</p>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從數據中辨識趨勢與規律（例如：從加鹽量 vs 最低溫圖判斷飽和現象）</li>
+      <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：用溶解度解釋降溫的非線性）</li>
+      <li>能用「主張—證據—推理」的架構進行科學論證</li>
+      <li>能評估模型的適用範圍與限制</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>預測</button>
+    <button class="step-tab"><span class="step-num">2</span>認識概念</button>
+    <button class="step-tab"><span class="step-num">3</span>數據分析</button>
+    <button class="step-tab"><span class="step-num">4</span>延伸與反思</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>冰塊加了食鹽之後，溫度會比 0°C 更低嗎？為什麼？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>加越多鹽，溫度就越低嗎？還是到某個程度就不再降了？
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>用粗鹽和細鹽，降溫速度會一樣嗎？
+      </div>
+
+      <p style="font-size:12px;color:var(--text-muted);margin-top:14px;font-style:italic;">把預測寫下來。活動結束後回來對照。</p>
+
+      <!-- Layer 3: 吸熱反應預測題 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 暖身題：鹽溶解在水中時，水溫會怎樣變化？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 溫度上升（放熱）</button>
+          <button class="think-opt" data-val="b">B. 溫度下降（吸熱）</button>
+          <button class="think-opt" data-val="c">C. 溫度不變</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          食鹽溶解是<strong>吸熱反應</strong>——要從周圍吸收能量才能打散鹽的晶體結構。冰塊加鹽就是利用這個原理，鹽吸收冰水混合物的熱，導致溫度進一步下降，最低可達 -21°C！
+        </div>
+      </div>
+
+      <!-- Layer 2: 預測記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測（P1、P2、P3）寫下來</div>
+        <textarea class="think-input" data-key="icehouse-lv1-predict" placeholder="P1: 加鹽後溫度會…&#10;P2: 越多鹽…&#10;P3: 粗鹽vs細鹽…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：認識概念 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">認識三種熱傳遞方式和鹽冰降溫的原理。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="background:var(--bg);border-top:3px solid var(--phase1);border-radius:6px;padding:12px;">
+          <div style="font-weight:700;color:var(--phase1);margin-bottom:8px;">傳導（Conduction）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            熱從高溫物體直接傳到接觸的低溫物體。<br><br>
+            <strong>金屬</strong>傳導快、<strong>空氣</strong>傳導慢。
+          </p>
+        </div>
+        <div style="background:var(--bg);border-top:3px solid var(--phase2);border-radius:6px;padding:12px;">
+          <div style="font-weight:700;color:var(--phase2);margin-bottom:8px;">對流（Convection）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            流體因溫度差產生循環流動，帶走熱量。<br><br>
+            <strong>密封容器</strong>可減少對流。
+          </p>
+        </div>
+        <div style="background:var(--bg);border-top:3px solid var(--phase3);border-radius:6px;padding:12px;">
+          <div style="font-weight:700;color:var(--phase3);margin-bottom:8px;">輻射（Radiation）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            所有物體都會放出紅外線輻射。<br><br>
+            <strong>鋁箔反射輻射</strong>，是保溫好幫手。
+          </p>
+        </div>
+      </div>
+
+      <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:6px;padding:16px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;color:#0369a1;">❄️ 鹽冰降溫法原理</div>
+        <p style="font-size:13px;color:#0c4a6e;line-height:1.8;">
+          在碎冰中加入食鹽，鹽溶解時吸收周圍水的熱量（<strong>吸熱反應</strong>），讓冰水混合物溫度降到 0°C 以下。實驗條件適當時，最低可達 <strong>-21°C</strong>。<br><br>
+          這就是為什麼冬天路面撒鹽可以防結冰——鹽溶解吸熱，冰無法凝固；同時，鹽改變了冰的熔點，讓冰可以在 0°C 以下繼續融化。
+        </p>
+      </div>
+
+      <div style="margin-top:16px;">
+        <a href="icehouse-lab.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
+          ⚙️ <span><strong style="color:var(--text-primary);">虛擬實驗室</strong>：調整鹽冰比例和環境溫度，觀察即時降溫曲線</span> <span style="margin-left:auto;">→</span>
+        </a>
+      </div>
+
+      <!-- Layer 1: 熱傳遞與熔點的概念想一想 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼鹽加在冰上，冰會融化；但融化需要吸熱——這兩件事怎麼同時發生？</div>
+        <button class="think-toggle">想好了？點擊看解釋 →</button>
+        <div class="think-hidden">
+          <p><strong>關鍵是「熔點改變」：</strong> 純冰的熔點是 0°C。但加了鹽，冰的熔點<em>下降</em>到約 -2°C。所以即使在 -2°C，鹽冰混合物也能融化。同時，融化這個過程又吸熱，溫度繼續下降。這就是為什麼冬天路面撒鹽不只防結冰，還會讓溫度更低。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：數據分析 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">分析「加鹽量 vs 最低溫度」的數據，找出規律和飽和現象。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">實驗方法：冰塊 200g 固定不變，改變加鹽量，每 2 分鐘測一次溫度，記錄最低溫。</p>
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table style="font-size:12px;">
+          <thead><tr><th>加鹽量(g)</th><th>0分(°C)</th><th>2分(°C)</th><th>4分(°C)</th><th>6分(°C)</th><th>8分(°C)</th><th>最低溫(°C)</th></tr></thead>
+          <tbody>
+            <tr><td>0 (純冰)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>10</td><td>0</td><td>-2.1</td><td>-3.8</td><td>-4.5</td><td>-4.8</td><td>-5.0</td></tr>
+            <tr><td>30</td><td>0</td><td>-5.3</td><td>-8.6</td><td>-10.2</td><td>-11.0</td><td>-11.5</td></tr>
+            <tr><td>50</td><td>0</td><td>-7.8</td><td>-12.1</td><td>-14.8</td><td>-16.2</td><td>-17.0</td></tr>
+            <tr><td>80</td><td>0</td><td>-8.5</td><td>-13.5</td><td>-16.0</td><td>-18.3</td><td>-19.5</td></tr>
+            <tr><td>120</td><td>0</td><td>-8.8</td><td>-13.8</td><td>-16.3</td><td>-18.5</td><td>-19.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 散佈圖 + 趨勢線 -->
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+          <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">📈 加鹽量 vs 最低溫度</span>
+          <div id="trendControls" style="display:flex;align-items:center;gap:5px;margin-left:auto;font-size:11px;color:var(--text-secondary);">
+            趨勢線：
+            <button class="trend-btn active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+            <button class="trend-btn" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+            <button class="trend-btn" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+            <button class="trend-btn" data-trend="poly" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">多項式</button>
+          </div>
+        </div>
+        <canvas id="iceGraphCanvas" width="400" height="220" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;background:#fafbfc;"></canvas>
+        <div id="fitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+      </div>
+
+      <div style="display:grid;gap:8px;margin-bottom:14px;">
+        <div class="q-item"><strong>Q1：</strong>選<strong>線性</strong>趨勢線。截距代表「不加鹽（0g）時的最低溫」——物理上純冰水溫度應該是多少？你的截距合理嗎？</div>
+        <div class="q-item"><strong>Q2：</strong>觀察斜率：每多加 10g 鹽，溫度會下降多少？但 80g→120g 時還維持這個比例嗎？線性模型在哪裡開始「不合理」？</div>
+        <div class="q-item"><strong>Q3：</strong>試試<strong>多項式</strong>——R² 可能更高，但物理上「加到 200g 鹽溫度繼續無限下降」合理嗎？真實世界有什麼限制？</div>
+        <div class="q-item"><strong>Q4：</strong>如果目標是「最快降到 -10°C」，你會選多少鹽？如果目標是「最低溫度」呢？用數據論證你的選擇。</div>
+      </div>
+
+      <!-- Layer 2: 降溫速度 vs 最終溫度 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 看表格：哪個鹽量讓溫度在前 2 分鐘掉最快（降溫速度最高）？哪個最終溫度最低？這兩個不一定是同一個鹽量，為什麼？</div>
+        <textarea class="think-input" data-key="icehouse-lv1-rate" placeholder="例如：50g鹽前2分降…°C最快，但120g鹽最終溫度最低…因為…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 飽和現象與溶解度 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="thinking-prompt">🎯 為什麼 80g 到 120g 鹽，最低溫只從 -19.5°C 降到 -19.8°C，增加這麼少？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 80g 已經足夠，加再多也沒用</button>
+          <button class="think-opt" data-val="b">B. 鹽的溶解度有上限，超過飽和濃度就溶解不了</button>
+          <button class="think-opt" data-val="c">C. 溫度太低，鹽結晶了</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          對！鹽的溶解度有上限——超過這個上限，多餘的鹽溶不進去，就無法繼續降低熔點。至於上限到底是多少 g，你能從數據中推算出來嗎？（提示：觀察從哪一組開始，溫度幾乎不再下降。）
+        </div>
+      </div>
+
+      <div class="collapsible think-first">
+        <div class="collapsible-header">🧠 Q2 提示：先自己想，再點開<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            <p><strong>鹽的溶解度有上限。</strong>觀察你的數據：從哪一組開始，溫度幾乎不再下降？</p>
+            <p>那個轉折點就暗示了「飽和濃度」大約在多少 g。超過飽和，多餘的鹽溶不進去，自然無法繼續降低熔點。</p>
+            <p>試著從數據推算飽和點，而不是背數字——這就是探究的精神。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible teacher-toggle">
+        <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            鹽冰降溫是熱學最直觀的實驗——學生看到溫度計「掉下去」，自然想問為什麼。數據中的飽和現象（Q2）很重要，它引發「投入 vs 回報」的思考，並自然導出「溶解度」的概念。<br><br>
+            建議在課堂上實地演示一次，讓學生感受到 -15°C 的冰冷。測溫度時，強調每次要充分攪拌，避免局部溫度不均導致讀數偏差。
+          </p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：延伸與反思 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">回頭對照預測，思考延伸問題，寫出你自己的探究題。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">先翻回 P1–P3 的預測，和你的數據分析比較——差多少？差在哪裡？</p>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 12px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:8px;">冰淇淋製作也用鹽冰法——為什麼不直接用冰箱？</div>
+      <div class="q-item" style="margin-bottom:8px;">為什麼冬天路面撒鹽可以防結冰？這和降溫是同一個原理嗎？</div>
+      <div class="q-item" style="margin-bottom:16px;">如果用酒精代替鹽，混合冰塊後溫度也會下降嗎？</div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">用「如果改變___，___會怎樣？」的句型：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「冰塊大小（碎冰 vs 冰塊 vs 冰棒）如何影響鹽冰混合物的最低溫度和維持時間？」← 有操縱變因、可量化、做得到。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="icehouse-lv1-my-question" rows="3" placeholder="例：鹽的顆粒大小會影響降溫速度嗎？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- Layer 1: 預測對照 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：回頭看第 1 步的預測（P1–P3）。哪些被實驗驗證了？哪些出乎意料？</div>
+        <button class="think-toggle">想好了？點擊看反思方向 →</button>
+        <div class="think-hidden">
+          <p>許多學生預測「越多鹽越冷」是無限的，但數據顯示飽和現象。還有人沒想到「降溫速度」和「最終溫度」不一定相關。這正是科學的有趣之處——現實比預期複雜，但規律一旦看清，就能預測和控制。下一步（Lv2）就是找出「最優化」：怎樣加鹽既快又冷。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 自己的探究問題 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你自己想探究的一個問題（必須包含可改變的變因）</div>
+        <textarea class="think-input" data-key="icehouse-lv1-q" placeholder="例如：不同鹽類（食鹽/硝酸銨等）對最低溫的影響？或冰塊大小的影響？"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/icehouse-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          冰屋 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生從「鹽冰降溫」數據認識吸熱反應與溫度變化的關係</li>
+              <li>建立「冰鹽比例 vs 最低溫度」的定量模型，並辨識飽和現象</li>
+              <li>練習從數據中找趨勢、提出假說、用物理原理解釋觀察結果</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">你的「加鹽量 vs 最低溫度」圖表和飽和現象的解釋，展示了從數據中建立模型的能力。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ 反思錨點：你<em>之前</em>的預測 vs 實際結果差在哪？（2-3 句就好）
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小婷想研究「冰塊加鹽量對最低溫度的影響」。她的計畫：在 3 杯碎冰裡分別加 10g、20g、30g 的鹽，5 分鐘後量溫度，比較哪杯最冷。<strong>有什麼問題？</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              只量一次終點溫度（沒有看降溫過程）、冰塊量沒控制（3 杯的冰量一樣嗎？）、攪拌方式沒控制、5 分鐘不一定是最低溫的時間點。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/icehouse-lv2.html">冰屋 Lv2 規劃研究 →</a>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+<script>
+// ─── 冰屋：散佈圖 + 趨勢線引擎 ───
+(function(){
+  // 注意：Y 值是負數（溫度），但趨勢線計算用絕對值更直觀
+  // 繪圖時 Y 軸反轉（溫度越低在越下面）
+  const DATA = [{x:0,y:0},{x:10,y:-5.0},{x:30,y:-11.5},{x:50,y:-17.0},{x:80,y:-19.5},{x:120,y:-19.8}];
+
+  const canvas = document.getElementById('iceGraphCanvas');
+  const ctx = canvas.getContext('2d');
+  let trendType = 'none';
+
+  document.getElementById('trendControls').addEventListener('click', e=>{
+    const btn = e.target.closest('.trend-btn');
+    if(!btn) return;
+    trendType = btn.dataset.trend;
+    document.querySelectorAll('#trendControls .trend-btn').forEach(b=>{
+      b.style.background = b===btn?'#059669':'var(--bg)';
+      b.style.color = b===btn?'white':'inherit';
+    });
+    drawGraph();
+  });
+
+  function computeFit(x,y,type){
+    const n=x.length;
+    const meanY=y.reduce((a,b)=>a+b,0)/n;
+    const SS_tot=y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+    if(type==='linear'){
+      const sx=x.reduce((a,b)=>a+b,0),sy=y.reduce((a,b)=>a+b,0);
+      const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0),sx2=x.reduce((s,xi)=>s+xi*xi,0);
+      const a=(n*sxy-sx*sy)/(n*sx2-sx*sx),b=(sy-a*sx)/n;
+      const pred=xi=>a*xi+b;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：溫度 = ${a.toFixed(3)}·鹽量 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(1)} °C${Math.abs(b)>2?' ⚠️':' ✓'}<br>斜率 = ${a.toFixed(3)} °C/g`};
+    }
+    if(type==='power'){
+      // 冪次需要正值，跳過 x=0 的點，對 |y| 做 log-log
+      const posIdx=x.map((_,i)=>i).filter(i=>x[i]>0&&y[i]<0);
+      if(posIdx.length<2)return null;
+      const px=posIdx.map(i=>x[i]),py=posIdx.map(i=>Math.abs(y[i]));
+      const m=px.length;
+      const lx=px.map(Math.log),ly=py.map(Math.log);
+      const slx=lx.reduce((a,b)=>a+b,0),sly=ly.reduce((a,b)=>a+b,0);
+      const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0),slx2=lx.reduce((s,v)=>s+v*v,0);
+      const nn=(m*slxy-slx*sly)/(m*slx2-slx*slx);
+      const a=Math.exp((sly-nn*slx)/m);
+      const pred=xi=>xi>0?-a*Math.pow(xi,nn):0;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：溫度 = −${a.toFixed(3)}·鹽量^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${nn<1?' (n<1，增速遞減)':''}`};
+    }
+    if(type==='poly'){
+      const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
+      const syp=p=>x.reduce((s,xi,i)=>s+Math.pow(xi,p)*y[i],0);
+      const A=[[n,sp(1),sp(2),syp(0)],[sp(1),sp(2),sp(3),syp(1)],[sp(2),sp(3),sp(4),syp(2)]];
+      for(let col=0;col<3;col++){let mr=col;for(let r=col+1;r<3;r++)if(Math.abs(A[r][col])>Math.abs(A[mr][col]))mr=r;[A[col],A[mr]]=[A[mr],A[col]];for(let r=col+1;r<3;r++){const f=A[r][col]/A[col][col];for(let j=col;j<=3;j++)A[r][j]-=f*A[col][j];}}
+      const c=[0,0,0];for(let i=2;i>=0;i--){c[i]=A[i][3];for(let j=i+1;j<3;j++)c[i]-=A[i][j]*c[j];c[i]/=A[i][i];}
+      const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：溫度 = ${c[2].toFixed(5)}·鹽量² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·鹽量 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(1)}<br>R² = ${R2.toFixed(4)}`};
+    }
+    return null;
+  }
+
+  function drawGraph(){
+    const parent=canvas.parentElement;
+    const W=(parent?parent.clientWidth-24:0)||400;
+    canvas.width=W;canvas.height=220;
+    const H=220,pad={l:50,r:20,t:18,b:40};
+    ctx.clearRect(0,0,W,H);
+
+    const xMax=140,yMin=-25,yMax=2;
+    function toX(v){return pad.l+(v/xMax)*(W-pad.l-pad.r);}
+    function toY(v){return pad.t+((yMax-v)/(yMax-yMin))*(H-pad.t-pad.b);}
+
+    // 格線
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let i=1;i<=4;i++){const gx=pad.l+i/4*(W-pad.l-pad.r),gy=pad.t+i/5*(H-pad.t-pad.b);ctx.beginPath();ctx.moveTo(gx,pad.t);ctx.lineTo(gx,H-pad.b);ctx.stroke();ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(W-pad.r,gy);ctx.stroke();}
+    // 0°C 參考線
+    const y0=toY(0);
+    ctx.strokeStyle='#fbbf24';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(pad.l,y0);ctx.lineTo(W-pad.r,y0);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#fbbf24';ctx.font='10px sans-serif';ctx.textAlign='left';ctx.fillText('0°C',W-pad.r+2,y0+3);
+    // 軸
+    ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();
+    // 軸標籤
+    ctx.fillStyle='#64748b';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('加鹽量 (g)',W/2,H-4);
+    ctx.save();ctx.translate(12,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('最低溫度 (°C)',0,0);ctx.restore();
+    // 刻度
+    for(let i=0;i<=4;i++){const xv=xMax*i/4;ctx.fillStyle='#94a3b8';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(xv.toFixed(0),toX(xv),H-pad.b+13);}
+    for(let t=0;t>=-25;t-=5){ctx.fillStyle='#94a3b8';ctx.font='10px sans-serif';ctx.textAlign='right';ctx.fillText(t,pad.l-4,toY(t)+4);}
+
+    // 趨勢線
+    const fitInfo=document.getElementById('fitInfo');
+    const xArr=DATA.map(d=>d.x),yArr=DATA.map(d=>d.y);
+    if(trendType!=='none'){
+      const fit=computeFit(xArr,yArr,trendType);
+      if(fit){
+        ctx.strokeStyle='#059669';ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.beginPath();
+        let started=false;
+        for(let i=0;i<=80;i++){const xv=xMax*i/80;if(xv<=0&&trendType==='power')continue;const yv=fit.pred(xv);const cx=toX(xv),cy=toY(yv);if(cy<pad.t||cy>H-pad.b)continue;if(!started){ctx.moveTo(cx,cy);started=true;}else ctx.lineTo(cx,cy);}
+        ctx.stroke();ctx.setLineDash([]);
+        ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
+        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.6),toY(yMin*0.15));
+        fitInfo.style.display='block';fitInfo.innerHTML=fit.info;
+      }
+    } else {fitInfo.style.display='none';}
+
+    // 數據點
+    DATA.forEach(p=>{ctx.beginPath();ctx.arc(toX(p.x),toY(p.y),5,0,Math.PI*2);ctx.fillStyle='#2563eb';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=1.5;ctx.stroke();});
+  }
+  drawGraph();
+})();
+</script>
+</body>
+</html>

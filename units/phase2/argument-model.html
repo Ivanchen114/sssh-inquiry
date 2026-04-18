@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>論證建模工具 · 探究與實作</title>
+  <meta name="description" content="論證建模工具：CER 架構（主張-證據-推理）的互動式論證練習。">
+  <meta property="og:title" content="論證建模工具 · 探究與實作">
+  <meta property="og:description" content="論證建模工具：CER 架構（主張-證據-推理）的互動式論證練習。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/argument-model.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    /* 流程步驟 */
+    .arg-flow {
+      display: grid;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .arg-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      padding-bottom: 20px;
+    }
+    .arg-step:last-child { padding-bottom: 0; }
+    .step-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .step-line {
+      flex: 1;
+      width: 2px;
+      background: var(--border);
+      margin-top: 6px;
+    }
+    .arg-step:last-child .step-line { display: none; }
+    .step-content { padding-top: 4px; }
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 10px;
+    }
+
+    /* 填寫區 */
+    .fill-area {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .fill-label {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .fill-blank {
+      display: block;
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px dashed var(--border);
+      background: transparent;
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 4px;
+    }
+    .fill-blank:focus { border-bottom-color: var(--phase1); }
+    .fill-blank::placeholder { color: var(--text-muted); font-style: italic; }
+    textarea.fill-blank {
+      resize: vertical;
+      min-height: 48px;
+      border: 1.5px dashed var(--border);
+      border-radius: 4px;
+      padding: 8px;
+    }
+    textarea.fill-blank:focus { border-color: var(--phase1); }
+
+    /* CER 三欄 */
+    .cer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 600px) { .cer-grid { grid-template-columns: 1fr; } }
+    .cer-card {
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 12px;
+    }
+    .cer-card .cer-type {
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    /* 模型檢驗表 */
+    .check-table { overflow-x: auto; margin-top: 8px; }
+    .check-table table { font-size: 12px; min-width: 420px; }
+    .check-table th { background: var(--bg); font-weight: 700; text-align: center; }
+    .check-table td { text-align: center; }
+    .check-table td.editable {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* NG vs Good */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 550px) { .compare-row { grid-template-columns: 1fr; } }
+    .compare-box {
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .compare-box.ng { background: #fff1f2; border: 1px solid #fecdd3; color: #9f1239; }
+    .compare-box.good { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .compare-label {
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    /* 匯出按鈕 */
+    .export-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1.5px solid var(--phase1);
+      background: rgba(41, 82, 196, 0.08);
+      color: var(--phase1);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .export-btn:hover {
+      background: rgba(41, 82, 196, 0.15);
+      box-shadow: 0 2px 8px rgba(41, 82, 196, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span>研究工具</span>
+      <span>›</span>
+      <span style="color:var(--phase1)">論證建模工具</span>
+    </div>
+    <h1>🔍 論證建模工具</h1>
+    <p class="subtitle">數據不會自己說話——你得替它說。五步把原始數據變成有根據的科學論證。</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">通用工具</span>
+      <span class="tag">INc/INd 論證能力</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="collapsible teacher-toggle">
+      <div class="collapsible-header">📌 教師備註<span class="toggle-icon">▶</span></div>
+      <div class="collapsible-body">
+        <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+          這張表是所有 Lv1 模組共用的論證鷹架，在學生<strong>已經有數據之後</strong>使用。建議第一次用彈簧（虎克定律）示範：數據→圖→正比模型→CER 論證。<br><br>
+          <strong>常見卡點</strong>：學生最容易在 Step 2（建模）直接跳到結論，忽略「我的模型是什麼形式？線性？反比？」。要引導他們先描述圖形趨勢，再嘗試寫出數學關係。<br><br>
+          <strong>與 Lv2 規劃表的關係</strong>：Lv2 規劃表是「做之前填」，這張是「做完之後填」。學生在 Lv1 練熟論證邏輯之後，到了 Lv2 自己設計實驗時，就知道「我收集的數據最後要走完這五步」，這會反過來幫助他們規劃更好的實驗。<br><br>
+          <strong>注意</strong>：Lv1 不使用 AI 輔助。這張工具表的目的是讓學生自己練習從數據到論證的完整思考，不應該讓 AI 代勞。
+        </p>
+      </div>
+    </div>
+
+    <!-- ═══ 五步流程 ═══ -->
+    <div class="section-title" style="color:var(--phase1);">五步論證建模流程</div>
+
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#1e3a8a;line-height:1.7;">
+      <strong>什麼時候用這張表？</strong> 當你做完實驗、手上已經有一堆數據，但不知道「所以呢？」的時候。這五步幫你從原始數據走到一個有根據的科學結論。
+    </div>
+
+    <div class="arg-flow">
+
+      <!-- Step 1: 觀察數據 -->
+      <div class="arg-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase1);">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">觀察：數據裡有什麼？</div>
+          <div class="step-desc">先別急著下結論。把數據畫成圖（散佈圖），用眼睛看：是上升？下降？先升後降？有沒有離群點？</div>
+          <div class="fill-area">
+            <div class="fill-label">我觀察到的趨勢</div>
+            <textarea class="fill-blank" id="obs-trend" placeholder="例如：隨著砝碼質量增加，彈簧伸長量也增加，而且看起來是等距增加的（直線）。但最後一組（500g）伸長量突然變很大，可能超過彈簧的彈性範圍了。"></textarea>
+            <div class="fill-label" style="margin-top:8px;">有沒有異常值或意外的地方？</div>
+            <input type="text" class="fill-blank" id="obs-anomaly" placeholder="例如：第三次測 200g 的值（4.8cm）跟其他兩次（4.2, 4.3cm）差很多，可能是讀數錯誤。">
+          </div>
+          <div class="compare-row" style="margin-top:10px;">
+            <div class="compare-box ng">
+              <div class="compare-label">❌ 弱觀察</div>
+              「數據有上升趨勢。」→ 太模糊，任何人看圖都能說這句
+            </div>
+            <div class="compare-box good">
+              <div class="compare-label">✅ 強觀察</div>
+              「質量每增加 50g，伸長量大約增加 1cm，呈線性關係。但 500g 時偏離了這個規律。」→ 有具體數字、有異常發現
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: 建立模型 -->
+      <div class="arg-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase1);">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">建模：能用什麼數學關係描述？</div>
+          <div class="step-desc">根據你看到的趨勢，試著寫出一個數學模型。不需要很複雜——「y 正比於 x」就是一個模型。</div>
+          <div class="fill-area">
+            <div class="fill-label">我的模型（數學關係）</div>
+            <input type="text" class="fill-blank" id="model-eq" placeholder="例如：F = k × x（力與伸長量成正比）">
+            <div class="fill-label" style="margin-top:8px;">模型的物理意義</div>
+            <textarea class="fill-blank" id="model-meaning" placeholder="例如：k 是彈力常數，代表這條彈簧的「硬度」。k 越大，同樣的力讓彈簧伸長越少。我從圖表斜率讀到 k ≈ 0.5 N/cm。"></textarea>
+          </div>
+
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;margin-top:10px;">
+            💡 <strong>常見模型類型</strong>：<br>
+            正比（y = kx）→ 散佈圖是直線過原點<br>
+            線性（y = ax + b）→ 直線不過原點<br>
+            反比（y = k/x）→ 曲線，x 越大 y 越小<br>
+            平方（y = kx²）→ 曲線，加速上升<br>
+            根號（y = k√x）→ 曲線，減速上升<br>
+            <span style="font-size:11px;">→ 不確定是哪種？試試 <a href="power-law.html" style="color:#9a3412;font-weight:600;">log-log 圖</a>，斜率會告訴你</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: 檢驗模型 -->
+      <div class="arg-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase1);">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">檢驗：模型預測 vs 實際數據</div>
+          <div class="step-desc">好的模型不只是「看起來像」，還要能<strong>預測</strong>。用你的模型算出每個水準的預測值，跟實際測量值比較。</div>
+
+          <div class="fill-area">
+            <div class="fill-label">模型檢驗表</div>
+            <div class="check-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>操縱變因</th>
+                    <th>實際測量值</th>
+                    <th>模型預測值</th>
+                    <th>誤差（%）</th>
+                    <th>備註</th>
+                  </tr>
+                </thead>
+                <tbody id="check-tbody">
+                  <tr>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="水準 1"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder=""></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="水準 2"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder=""></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="水準 3"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder=""></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="水準 4"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder=""></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="水準 5"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder="—"></td>
+                    <td><input type="text" class="fill-blank" style="text-align:center;border-bottom:none;margin:0;padding:2px;" placeholder=""></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">誤差 = |實際 − 預測| / 實際 × 100%。如果大部分誤差 < 10%，模型算不錯。如果某個點誤差特別大，在備註寫下可能原因。</div>
+
+            <div style="background:#fefce8;border:1px solid #fde68a;border-radius:6px;padding:10px 14px;font-size:12px;color:#854d0e;margin-top:10px;">
+              📊 <strong>數據品質自檢</strong>——在寫論證之前，先確認你的數據站得住腳：
+              <div style="display:grid;gap:4px;margin-top:6px;font-size:11px;">
+                <label style="display:flex;align-items:baseline;gap:6px;"><input type="checkbox"> 每個水準至少重複 3 次</label>
+                <label style="display:flex;align-items:baseline;gap:6px;"><input type="checkbox"> 同水準的重複數據彼此接近（標準差不超過平均的 15%）</label>
+                <label style="display:flex;align-items:baseline;gap:6px;"><input type="checkbox"> 沒有明顯的「離群值」——如果有，我能解釋為什麼（操作失誤？讀數錯誤？）</label>
+                <label style="display:flex;align-items:baseline;gap:6px;"><input type="checkbox"> 水準之間有足夠間距，能看出趨勢（不是全部擠在一起）</label>
+              </div>
+              <div style="font-size:10px;color:#a16207;margin-top:6px;font-style:italic;">沒有全勾也沒關係——知道自己的數據哪裡弱，比假裝完美重要得多。把弱點寫進 Step 5 的限制。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: CER 論證 -->
+      <div class="arg-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase1);">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">論證：主張—證據—推理</div>
+          <div class="step-desc">科學論證不是「我覺得」，而是「數據告訴我」。用 CER 框架把你的發現寫成有說服力的論證。</div>
+
+          <div class="cer-grid">
+            <div class="cer-card" style="background:#dbeafe;border:1px solid #93c5fd;">
+              <div class="cer-type" style="color:#1e40af;">C · 主張 Claim</div>
+              <div style="font-size:11px;color:#3b82f6;margin-bottom:6px;">你發現了什麼？一句話說清楚。</div>
+              <textarea class="fill-blank" id="cer-c" style="font-size:12px;min-height:60px;" placeholder="例如：彈簧伸長量與施加的力成正比關係（虎克定律），彈力常數 k = 0.49 ± 0.03 N/cm。"></textarea>
+            </div>
+            <div class="cer-card" style="background:#d1fae5;border:1px solid #86efac;">
+              <div class="cer-type" style="color:#065f46;">E · 證據 Evidence</div>
+              <div style="font-size:11px;color:#16a34a;margin-bottom:6px;">哪些具體數據支持你的主張？</div>
+              <textarea class="fill-blank" id="cer-e" style="font-size:12px;min-height:60px;" placeholder="例如：散佈圖呈線性，R² = 0.997。50g~400g 範圍內，模型預測誤差均 < 5%。趨勢線斜率 = 0.49 N/cm。"></textarea>
+            </div>
+            <div class="cer-card" style="background:#fef3c7;border:1px solid #fcd34d;">
+              <div class="cer-type" style="color:#92400e;">R · 推理 Reasoning</div>
+              <div style="font-size:11px;color:#b45309;margin-bottom:6px;">為什麼這些證據支持你的主張？背後的邏輯是什麼？</div>
+              <textarea class="fill-blank" id="cer-r" style="font-size:12px;min-height:60px;" placeholder="例如：如果 F = kx 成立，散佈圖應該是直線且過原點，斜率就是 k。我的數據符合這個預測。R² 接近 1 代表線性關係很強。"></textarea>
+            </div>
+          </div>
+
+          <div class="compare-row">
+            <div class="compare-box ng">
+              <div class="compare-label">❌ 弱論證</div>
+              「實驗結果驗證了虎克定律。」<br>→ 沒有引用具體數據，沒有說明推理過程
+            </div>
+            <div class="compare-box good">
+              <div class="compare-label">✅ 強論證</div>
+              「在 50g–400g 範圍內，F-x 散佈圖呈線性（R²=0.997），斜率 k=0.49 N/cm，與虎克定律 F=kx 預測一致。但 500g 時偏離直線，可能已超過彈性極限。」<br>→ 有數據、有模型、有範圍、有限制
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: 限制與延伸 -->
+      <div class="arg-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase1);">5</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">限制：模型在哪裡會失效？</div>
+          <div class="step-desc">沒有模型是完美的。誠實說出你的模型在什麼範圍有效、在哪裡開始偏掉，這比宣稱「實驗完美驗證理論」更有科學素養。</div>
+
+          <div class="fill-area">
+            <div class="fill-label">模型適用範圍</div>
+            <input type="text" class="fill-blank" id="lim-range" placeholder="例如：本模型在 F = 0.5N ~ 4N 範圍內有效（誤差 < 5%）">
+            <div class="fill-label" style="margin-top:8px;">超出範圍時發生什麼？</div>
+            <textarea class="fill-blank" id="lim-beyond" placeholder="例如：超過 4N（約 400g）時，伸長量比預測值大，可能是彈簧開始塑性變形。如果繼續加重，模型會低估實際伸長量。"></textarea>
+            <div class="fill-label" style="margin-top:8px;">如果能再做一次，你會改什麼？</div>
+            <textarea class="fill-blank" id="lim-improve" placeholder="例如：(1) 增加 50g 間隔的測量點，更精確定位偏離發生的位置 (2) 用 Excel 做 log-log 圖確認是否從線性變成冪次關係 (3) 多測幾條不同 k 值的彈簧做比較"></textarea>
+
+            <div class="fill-label" style="margin-top:12px;">🔬 變因思考練習（為 Lv2 暖身）</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">回頭想想你做的實驗，試著拆出三種角色：</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+              <div style="background:#d1fae5;border-radius:4px;padding:8px;font-size:11px;">
+                <strong style="color:#065f46;">你刻意改變了什麼？</strong><br>
+                <input type="text" class="fill-blank" style="font-size:11px;border-bottom:1px dashed #86efac;margin:2px 0;" placeholder="例如：砝碼質量">
+              </div>
+              <div style="background:#dbeafe;border-radius:4px;padding:8px;font-size:11px;">
+                <strong style="color:#1e40af;">你測量了什麼結果？</strong><br>
+                <input type="text" class="fill-blank" style="font-size:11px;border-bottom:1px dashed #93c5fd;margin:2px 0;" placeholder="例如：彈簧伸長量">
+              </div>
+              <div style="background:#fef3c7;border-radius:4px;padding:8px;font-size:11px;">
+                <strong style="color:#92400e;">你保持不變的有？</strong><br>
+                <input type="text" class="fill-blank" style="font-size:11px;border-bottom:1px dashed #fcd34d;margin:2px 0;" placeholder="例如：同一條彈簧">
+              </div>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin-top:4px;">這三個角色在 Lv2 有正式名稱：操縱變因、應變變因、控制變因。先有感覺就好。</div>
+          </div>
+
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:10px 14px;font-size:12px;color:#1e40af;margin-top:10px;">
+            🔄 <strong>論證→問題循環</strong>：你在這一步發現的「模型失效」和「想改進的地方」，正好可以變成 Lv2 規劃研究的起點。「為什麼超過 400g 就偏掉了？」就是一個值得探究的新問題。
+            <br><span style="font-size:11px;">→ 準備繼續探究？用 <a href="research-plan.html" style="color:#1e40af;font-weight:600;">研究規劃表</a> 把它變成實驗計畫</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end arg-flow -->
+
+    <!-- 完整論證範例 -->
+    <div class="section-title" style="color:var(--phase1);">完整範例：彈簧虎克定律</div>
+    <div class="card" style="margin-bottom:20px;border-left:3px solid var(--phase1);">
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        <strong style="color:var(--text-primary);">觀察：</strong>散佈圖中，力（N）與伸長量（cm）呈現上升趨勢，前 8 個點幾乎在同一直線上，第 9 點（500g）明顯偏高。<br><br>
+        <strong style="color:var(--text-primary);">模型：</strong>F = kx，其中 k 為彈力常數。從趨勢線斜率得 k = 0.49 N/cm（R² = 0.997）。<br><br>
+        <strong style="color:var(--text-primary);">檢驗：</strong>50g–400g 範圍內，預測值與實際值誤差均 < 5%。500g 時誤差達 18%。<br><br>
+        <strong style="color:var(--text-primary);">論證：</strong>在 F < 4N 的範圍內，彈簧伸長量與施力成正比，符合虎克定律。彈力常數 k = 0.49 ± 0.03 N/cm。但超過 4N 後伸長量加速增大，表示彈簧可能進入塑性變形區。<br><br>
+        <strong style="color:var(--text-primary);">限制：</strong>本結論僅適用於 F = 0.5–4N 範圍。若要探究彈性極限的精確位置，需在 3.5–5N 之間加密測量點。
+      </div>
+    </div>
+
+    <!-- 匯出 -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <button class="export-btn" onclick="exportArg()">📄 匯出論證報告（純文字）</button>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">複製到剪貼簿，可貼到報告或學習歷程</div>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">這張論證表展示的是你「怎麼從數據走到結論」的思考過程。特別值得保留的是 Step 5（限制）——它證明你有能力誠實面對自己模型的不足，這在學習歷程中非常加分。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="research-plan.html">← 研究規劃表</a>
+      <a href="power-law.html">冪級數與線性化 →</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+  function exportArg() {
+    const get = id => (document.getElementById(id)?.value || '').trim();
+
+    const lines = [
+      '═══ 論證建模報告 ═══',
+      '',
+      '【觀察趨勢】',
+      get('obs-trend'),
+      '',
+      '【異常值】' + get('obs-anomaly'),
+      '',
+      '【模型】' + get('model-eq'),
+      '【物理意義】',
+      get('model-meaning'),
+      '',
+      '【論證 — 主張 C】',
+      get('cer-c'),
+      '',
+      '【論證 — 證據 E】',
+      get('cer-e'),
+      '',
+      '【論證 — 推理 R】',
+      get('cer-r'),
+      '',
+      '【適用範圍】' + get('lim-range'),
+      '【超出範圍】',
+      get('lim-beyond'),
+      '',
+      '【改進方向】',
+      get('lim-improve'),
+    ];
+
+    const text = lines.join('\n');
+
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.export-btn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✅ 已複製到剪貼簿！';
+      btn.style.borderColor = '#16a34a';
+      btn.style.color = '#16a34a';
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }, 2000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alert('已複製到剪貼簿！');
+    });
+  }
+</script>
+</body>
+</html>

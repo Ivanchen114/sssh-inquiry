@@ -1,0 +1,2677 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>🕰️ 單擺 Lv1 · 數據發現重力加速度 · 探究與實作</title>
+<meta name="description" content="單擺 Lv1 論證建模：透過虛擬實驗測量不同擺長的週期，利用 T² vs L 線性回歸計算重力加速度。">
+<meta property="og:title" content="單擺 Lv1 · 數據發現重力加速度 · 探究與實作">
+<meta property="og:description" content="單擺 Lv1 論證建模：透過虛擬實驗測量不同擺長的週期，利用 T² vs L 線性回歸計算重力加速度。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/pendulum.html">
+<meta property="og:site_name" content="松山高中 探究與實作">
+<meta property="og:locale" content="zh_TW">
+<link rel="stylesheet" href="../../assets/css/style.css" />
+<script>window.SITE_ROOT='../..'; window.__CUSTOM_STEP_ENGINE=true;</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   單擺 Lv1 — 手機優先重新設計
+   ============================================================ */
+
+:root {
+  --bg:           #f5f4f0;
+  --paper:        #ffffff;
+  --paper-warm:   #fafaf6;
+  --border:       #e0ded8;
+  --border-light: #eeece6;
+  --ink:          #1c1c2e;
+  --ink-mid:      #4a4a6a;
+  --ink-soft:     #6b6b88;
+  --ink-mute:     #9797b0;
+  --phase1:       #2952c4;
+  --phase1-soft:  #eef1fb;
+  --phase1-weak:  #f4f6fc;
+  --phase2:       #1e7a52;
+  --phase2-soft:  #ecf7f0;
+  --phase3:       #b5621e;
+  --accent-g:     #16a34a;
+  --accent-r:     #dc2626;
+  --gold:         #c9a84c;
+  --radius:       10px;
+  --radius-sm:    6px;
+  --shadow-soft:  0 1px 2px rgba(20,20,40,0.04), 0 4px 12px rgba(20,20,40,0.04);
+  --shadow-lift:  0 4px 16px rgba(20,20,40,0.08), 0 1px 3px rgba(20,20,40,0.06);
+
+  --h-topbar: 52px;
+  --h-stepbar: 58px;
+  --h-stickybtn: 72px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { overflow-x: hidden; }
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: 'Noto Serif TC', serif; line-height: 1.3; font-weight: 700; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+img, svg { display: block; max-width: 100%; }
+textarea, input { font-family: inherit; font-size: 16px; }  /* 16px 防 iOS zoom */
+.mono { font-family: 'DM Mono', monospace; }
+.serif { font-family: 'Noto Serif TC', serif; }
+
+/* ============================================================
+   頂部 App Bar （手機）
+   ============================================================ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  height: var(--h-topbar);
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+}
+.topbar .brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbar .brand-logo {
+  width: 30px; height: 30px; border-radius: 6px; flex-shrink: 0;
+  background: var(--ink);
+  display: grid; place-items: center;
+  color: #fff;
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+.topbar .brand-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.08em;
+}
+.topbar .icon-btn {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  color: var(--ink-mid);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.topbar .icon-btn:active { background: var(--bg); }
+
+/* ============================================================
+   Page Hero
+   ============================================================ */
+.hero {
+  background: var(--paper);
+  border-bottom: 1px solid var(--border-light);
+  padding: 18px 18px 22px;
+}
+.hero .crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hero .crumb .chip-phase {
+  color: var(--phase1);
+  background: var(--phase1-soft);
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.12em;
+}
+.hero h1 {
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.hero .sub {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+.hero .meta-row {
+  margin-top: 14px;
+  display: flex;
+  gap: 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  border-top: 1px solid var(--border-light);
+  padding-top: 12px;
+}
+.hero .meta-row b { color: var(--ink-mid); font-weight: 500; }
+
+/* ============================================================
+   目標條
+   ============================================================ */
+.goal {
+  background: var(--phase1-weak);
+  border-left: 3px solid var(--phase1);
+  padding: 14px 16px;
+  margin: 0;
+}
+.goal .gtitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--phase1);
+  margin-bottom: 8px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+}
+.goal ul {
+  font-size: 13px;
+  color: var(--ink-mid);
+  padding-left: 18px;
+  line-height: 1.8;
+}
+.goal ul li { margin-bottom: 2px; }
+
+/* ============================================================
+   Step 系統
+   ============================================================ */
+.stepbar {
+  position: sticky;
+  top: var(--h-topbar);
+  z-index: 70;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  /* variants 會改 display */
+}
+
+/* —— Variant A : 頂部進度條（極簡）—————————————————— */
+.stepbar.variant-A {
+  padding: 10px 16px 12px;
+}
+.stepbar.variant-A .sbA-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.stepbar.variant-A .sbA-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+.stepbar.variant-A .sbA-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stepbar.variant-A .sbA-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-mid);
+  flex-shrink: 0;
+}
+.stepbar.variant-A .sbA-count b { color: var(--ink); font-weight: 600; }
+.stepbar.variant-A .sbA-bar {
+  height: 4px;
+  background: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.stepbar.variant-A .sbA-fill {
+  height: 100%;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: width .45s cubic-bezier(.2,.7,.2,1);
+}
+.stepbar.variant-A .sbA-open {
+  display: flex; align-items: center; gap: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* —— Variant B : 大標題 + 圓點（關鍵人事時）———————————— */
+.stepbar.variant-B {
+  padding: 12px 16px 14px;
+}
+.stepbar.variant-B .sbB-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.stepbar.variant-B .sbB-badge {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: grid; place-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.stepbar.variant-B .sbB-name {
+  flex: 1; min-width: 0;
+}
+.stepbar.variant-B .sbB-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+.stepbar.variant-B .sbB-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+  line-height: 1.25;
+}
+.stepbar.variant-B .sbB-dots {
+  display: flex; gap: 6px; padding-top: 2px;
+}
+.stepbar.variant-B .sbB-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--border);
+  transition: all .25s;
+  border: 2px solid transparent;
+}
+.stepbar.variant-B .sbB-dot.done {
+  background: var(--phase2);
+}
+.stepbar.variant-B .sbB-dot.done::after {
+  /* (hidden checkmark via inner glyph) */
+}
+.stepbar.variant-B .sbB-dot.current {
+  background: var(--paper);
+  border-color: var(--ink);
+  width: 12px; height: 12px;
+}
+
+/* —— Variant C : 底部固定 tab bar ———————————————————— */
+.stepbar.variant-C {
+  /* top stays hidden when variant-C active — use a slim kicker */
+  padding: 10px 16px;
+}
+.stepbar.variant-C .sbC-kicker {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.stepbar.variant-C .sbC-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+  margin-top: 4px;
+}
+
+.tabbar {
+  display: none;
+  position: fixed;
+  left: 0; right: 0;
+  bottom: 0;
+  z-index: 90;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--border);
+  padding: 6px 4px calc(6px + var(--safe-bottom));
+}
+body.variant-C .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+body.variant-C main { padding-bottom: calc(80px + var(--safe-bottom)); }
+.tabbar-item {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 8px 4px 6px;
+  gap: 3px;
+  border-radius: 10px;
+  color: var(--ink-mute);
+  transition: all .18s;
+  min-width: 0;
+  position: relative;
+}
+.tabbar-item .tbi-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink-mute);
+  display: grid; place-items: center;
+  transition: all .2s;
+}
+.tabbar-item .tbi-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tabbar-item.done .tbi-num {
+  background: var(--phase2);
+  color: #fff;
+}
+.tabbar-item.active {
+  color: var(--ink);
+}
+.tabbar-item.active .tbi-num {
+  background: var(--ink);
+  color: #fff;
+}
+.tabbar-item.active::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px; height: 3px;
+  background: var(--ink);
+  border-radius: 2px;
+}
+
+/* —— Variant D : 滑動 segmented control ——————————————— */
+.stepbar.variant-D {
+  padding: 10px 12px 12px;
+}
+.stepbar.variant-D .sbD-seg {
+  display: flex;
+  gap: 0;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 3px;
+  position: relative;
+}
+.stepbar.variant-D .sbD-item {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-mute);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border-radius: 7px;
+  transition: all .2s;
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stepbar.variant-D .sbD-item .sbD-n {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  opacity: .7;
+}
+.stepbar.variant-D .sbD-item.done { color: var(--phase2); }
+.stepbar.variant-D .sbD-item.done .sbD-n::after { content: ' ✓'; }
+.stepbar.variant-D .sbD-item.active {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgba(20,20,40,0.08), 0 1px 0 rgba(0,0,0,0.04);
+}
+.stepbar.variant-D .sbD-hint {
+  margin-top: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* —— Variant E : 「劇場」浮動進度 + 底部 CTA ——————————— */
+.stepbar.variant-E {
+  padding: 14px 18px 16px;
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-warm) 100%);
+}
+.stepbar.variant-E .sbE-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.stepbar.variant-E .sbE-seg {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+.stepbar.variant-E .sbE-seg.done { background: var(--phase2); }
+.stepbar.variant-E .sbE-seg.current {
+  background: var(--border-light);
+}
+.stepbar.variant-E .sbE-seg.current::after {
+  content: '';
+  position: absolute; inset: 0;
+  width: 50%;
+  background: var(--ink);
+  border-radius: 2px;
+  animation: sbE-pulse 1.6s ease-in-out infinite;
+}
+@keyframes sbE-pulse {
+  0%,100% { transform: translateX(-10%); opacity: .5; }
+  50%     { transform: translateX(100%); opacity: 1; }
+}
+.stepbar.variant-E .sbE-head {
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.stepbar.variant-E .sbE-n {
+  font-family: 'DM Mono', monospace;
+  font-size: 40px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-feature-settings: 'tnum';
+}
+.stepbar.variant-E .sbE-body {
+  flex: 1; min-width: 0;
+}
+.stepbar.variant-E .sbE-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+.stepbar.variant-E .sbE-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+/* 底部浮動 CTA（浮動下一步）—— 用於 variant-E */
+.floating-cta {
+  display: none;
+  position: fixed;
+  right: 14px; bottom: calc(14px + var(--safe-bottom));
+  z-index: 85;
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 18px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 999px;
+  box-shadow: 0 6px 22px rgba(20,20,40,0.25), 0 1px 3px rgba(20,20,40,0.18);
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform .18s, background .15s;
+}
+.floating-cta:active { transform: scale(0.97); }
+.floating-cta .fc-next { font-family: 'Noto Serif TC', serif; }
+.floating-cta .fc-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #fff;
+  opacity: .6;
+}
+body:not(.variant-E) .floating-cta { display: none !important; }
+body.variant-E .floating-cta { display: flex; }
+body.variant-E main { padding-bottom: calc(84px + var(--safe-bottom)); }
+
+/* 顯示控制 —— 只顯示目前 variant */
+.stepbar { display: none; }
+body.variant-A .stepbar.variant-A { display: block; }
+body.variant-B .stepbar.variant-B { display: block; }
+body.variant-C .stepbar.variant-C { display: block; }
+body.variant-D .stepbar.variant-D { display: block; }
+body.variant-E .stepbar.variant-E { display: block; }
+
+/* ============================================================
+   Step 全覽面板 (drawer from top)
+   ============================================================ */
+.overview-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,20,40,0.35);
+  z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s;
+  backdrop-filter: blur(2px);
+}
+.overview-overlay.open { opacity: 1; pointer-events: auto; }
+.overview-panel {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 101;
+  background: var(--paper);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  transform: translateY(-100%);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1);
+  padding: 16px 18px 22px;
+  box-shadow: 0 10px 40px rgba(20,20,40,0.18);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.overview-panel.open { transform: translateY(0); }
+.overview-panel .ov-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.overview-panel .ov-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.overview-panel .ov-close {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--bg);
+  font-size: 12px;
+  color: var(--ink-mid);
+}
+.overview-panel .ov-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.overview-panel .ov-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  text-align: left;
+  width: 100%;
+  transition: all .15s;
+}
+.overview-panel .ov-item:active { background: var(--bg); }
+.overview-panel .ov-item.done { background: var(--phase2-soft); border-color: #c7e5d3; }
+.overview-panel .ov-item.current { border-color: var(--ink); background: var(--paper); box-shadow: var(--shadow-soft); }
+.overview-panel .ov-n {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink-mid);
+  display: grid; place-items: center;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.overview-panel .ov-item.done .ov-n { background: var(--phase2); color: #fff; }
+.overview-panel .ov-item.current .ov-n { background: var(--ink); color: #fff; }
+.overview-panel .ov-label {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.overview-panel .ov-desc {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.overview-panel .ov-check {
+  margin-left: auto;
+  color: var(--phase2);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.overview-panel .ov-item:not(.done) .ov-check { display: none; }
+
+/* ============================================================
+   主內容
+   ============================================================ */
+main {
+  padding: 20px 16px 40px;
+  max-width: 780px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Step panel */
+.step-panel {
+  display: none;
+  animation: stepFadeIn .35s cubic-bezier(.2,.7,.2,1);
+  overflow-x: hidden;
+  max-width: 100%;
+}
+.step-panel.active { display: block; }
+@keyframes stepFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.step-action {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.55;
+  margin-bottom: 14px;
+  padding-left: 12px;
+  border-left: 3px solid var(--ink);
+}
+
+/* 一般文字卡、提示卡 */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+.card.flat { background: var(--paper-warm); }
+.card h3 {
+  font-size: 15px; font-weight: 700;
+  color: var(--ink); margin-bottom: 8px;
+}
+.info-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 3px solid #d97706;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #78350f;
+  margin-bottom: 14px;
+  line-height: 1.7;
+}
+.info-box strong { color: #78350f; }
+
+.q-item {
+  font-size: 14px;
+  color: var(--ink-mid);
+  padding: 10px 14px;
+  background: var(--paper);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+.q-item strong { color: var(--ink); }
+
+/* ============================================================
+   Think blocks — record / choice / reveal
+   ============================================================ */
+.think-block {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.think-prompt {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+.think-input {
+  width: 100%;
+  min-height: 92px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--paper-warm);
+  resize: vertical;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink);
+  transition: border-color .15s, background .15s;
+}
+.think-input:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: var(--paper);
+}
+.think-status {
+  font-size: 11px;
+  color: var(--ink-mute);
+  margin-top: 6px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+  min-height: 14px;
+}
+.think-status.saved { color: var(--phase2); }
+
+.think-options {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.think-opt {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  font-size: 14px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  transition: all .15s;
+  min-height: 48px;
+}
+.think-opt:active { background: var(--bg); }
+.think-opt.selected-wrong {
+  border-color: var(--accent-r);
+  background: #fef2f2;
+  color: var(--accent-r);
+}
+.think-opt.selected-right {
+  border-color: var(--phase2);
+  background: var(--phase2-soft);
+  color: var(--phase2);
+  font-weight: 600;
+}
+.think-feedback {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--phase2-soft);
+  border: 1px solid #c7e5d3;
+  font-size: 13px;
+  color: #14532d;
+  line-height: 1.7;
+}
+
+.think-toggle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--phase1);
+  padding: 10px 14px;
+  background: var(--phase1-soft);
+  border-radius: var(--radius-sm);
+  width: 100%;
+  text-align: left;
+}
+.think-hidden {
+  display: none;
+  padding: 12px 14px;
+  background: var(--paper-warm);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--ink-mid);
+  margin-top: 10px;
+  line-height: 1.75;
+}
+.think-block.open .think-hidden { display: block; }
+.think-block.open .think-toggle { background: var(--phase2-soft); color: var(--phase2); }
+
+/* ============================================================
+   論證三卡（Claim / Reason / Evidence）
+   ============================================================ */
+.argue-grid {
+  display: grid; gap: 8px;
+}
+.argue-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.argue-card .argue-head {
+  padding: 8px 14px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+}
+.argue-card.claim .argue-head    { background: var(--phase1); }
+.argue-card.reason .argue-head   { background: var(--phase2); }
+.argue-card.evidence .argue-head { background: var(--phase3); }
+.argue-card .argue-body {
+  padding: 10px 14px;
+  background: var(--paper);
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* ============================================================
+   Collapsible
+   ============================================================ */
+.collapsible {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.collapsible-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+  user-select: none;
+}
+.collapsible-head .col-icon {
+  transition: transform .25s;
+  color: var(--ink-mute);
+  font-size: 12px;
+}
+.collapsible.open .collapsible-head .col-icon { transform: rotate(90deg); }
+.collapsible-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+  padding: 0 16px;
+}
+.collapsible.open .collapsible-body {
+  max-height: 3000px;
+  padding: 2px 16px 16px;
+}
+
+/* ============================================================
+   Lab (pendulum + data) — mobile stacked, desktop side-by-side
+   ============================================================ */
+.lab {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+  max-width: 100%;
+  overflow: hidden;
+}
+@media (min-width: 860px) {
+  .lab { grid-template-columns: 280px 1fr; }
+}
+
+.lab-panel {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 擺長選擇 — 手機水平捲動 chip */
+.length-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  margin: 0 -14px;
+  padding-left: 14px; padding-right: 14px;
+}
+.length-row::-webkit-scrollbar { display: none; }
+.length-btn {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-mid);
+  transition: all .12s;
+  scroll-snap-align: start;
+  min-height: 40px;
+  white-space: nowrap;
+}
+.length-btn:active { background: var(--bg); }
+.length-btn.active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+.length-btn.done {
+  border-color: var(--phase2);
+  background: var(--phase2-soft);
+  color: var(--phase2);
+}
+.length-btn.done::after { content: ' ✓'; }
+
+/* 桌機大螢幕：變直列 */
+@media (min-width: 860px) {
+  .length-row {
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .length-btn { width: 100%; text-align: left; border-radius: var(--radius-sm); }
+}
+
+/* 擺體動畫區 */
+.pendulum-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-height: 320px;
+  display: flex; justify-content: center; align-items: stretch;
+  background: linear-gradient(180deg, #fafafa 0%, #f1f2f5 100%);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+#pendulumCanvas {
+  width: 100%;
+  height: 100%;
+  max-width: 240px;
+}
+
+/* 碼錶 */
+.stopwatch {
+  text-align: center;
+}
+.sw-display {
+  font-family: 'DM Mono', monospace;
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum';
+}
+.sw-count {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-mute);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+  min-height: 14px;
+}
+.sw-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent-g);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 8px;
+  min-height: 48px;
+  transition: background .15s, transform .1s;
+}
+.sw-btn:active { transform: scale(0.98); }
+.sw-btn:disabled {
+  background: var(--ink-mute);
+  cursor: not-allowed;
+  opacity: .6;
+}
+.sw-btn.running { background: var(--accent-r); }
+
+.measure-result {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--phase2-soft);
+  border: 1px solid #c7e5d3;
+  font-size: 13px;
+  color: #14532d;
+  line-height: 1.6;
+}
+.measure-result .big {
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.record-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--phase1);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 700;
+  min-height: 48px;
+  transition: opacity .15s, transform .1s;
+}
+.record-btn:active { transform: scale(0.98); }
+.record-btn:disabled { background: var(--ink-mute); opacity: .5; cursor: not-allowed; }
+.reset-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.trial-count {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-mute);
+  text-align: center;
+  min-height: 14px;
+  letter-spacing: 0.08em;
+}
+
+.step-sublabel {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+/* 資料表格 */
+.data-section { display: flex; flex-direction: column; gap: 14px; }
+.data-section h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  -webkit-overflow-scrolling: touch;
+}
+table#dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 420px;
+}
+table#dataTable th {
+  background: var(--ink);
+  color: #fff;
+  padding: 8px 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  position: sticky; top: 0;
+}
+table#dataTable td {
+  padding: 8px 10px;
+  text-align: center;
+  border-top: 1px solid var(--border-light);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+}
+table#dataTable tr:nth-child(even) td { background: var(--paper-warm); }
+
+/* 圖表 */
+.graph-head {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.graph-head h4 { flex: 1; }
+.graph-toggles {
+  display: flex; gap: 4px;
+  background: var(--bg);
+  padding: 3px;
+  border-radius: 8px;
+}
+.graph-toggle {
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-mute);
+  min-height: 32px;
+}
+.graph-toggle.active {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(20,20,40,0.08);
+}
+.trend-controls {
+  display: flex; align-items: center; gap: 4px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-mute);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.trend-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 11px;
+  color: var(--ink-mid);
+  min-height: 32px;
+  font-family: inherit;
+}
+.trend-btn.active {
+  border-color: var(--phase2);
+  background: var(--phase2);
+  color: #fff;
+  font-weight: 600;
+}
+#graphCanvas {
+  width: 100%;
+  height: 220px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+}
+#fitInfo {
+  padding: 10px 12px;
+  background: var(--phase2-soft);
+  border: 1px solid #c7e5d3;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  color: #14532d;
+  line-height: 1.7;
+  margin-top: 6px;
+}
+
+/* ============================================================
+   Step footer : navigation buttons
+   ============================================================ */
+.step-footer {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-light);
+}
+.step-footer .sf-spacer { flex: 1; }
+.step-btn {
+  flex: 1;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--paper);
+  color: var(--ink-mid);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+  transition: all .15s, transform .1s;
+}
+.step-btn:active { transform: scale(0.98); }
+.step-btn.primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+  flex: 1.4;
+}
+.step-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* 完成徽章 */
+.complete-badge {
+  background: linear-gradient(135deg, #fff7e0 0%, #fff9ed 100%);
+  border: 1px solid #f4d88a;
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin: 20px 0;
+  text-align: center;
+  display: none;
+}
+.complete-badge.show { display: block; animation: stepFadeIn .4s; }
+.complete-badge .cb-icon {
+  font-size: 30px;
+  margin-bottom: 6px;
+}
+.complete-badge .cb-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.complete-badge .cb-sub {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* Unit Nav */
+.unit-nav {
+  display: flex; gap: 10px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-light);
+}
+.unit-nav a {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  font-size: 13px;
+  color: var(--ink-mid);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.unit-nav a:first-child { text-align: left; }
+.unit-nav a:last-child { text-align: right; }
+.unit-nav a .un-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+.unit-nav a .un-name {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ============================================================
+   Toast
+   ============================================================ */
+#toast {
+  position: fixed;
+  left: 50%; bottom: calc(30px + var(--safe-bottom));
+  transform: translate(-50%, 20px);
+  z-index: 200;
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(20,20,40,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s cubic-bezier(.2,.7,.2,1);
+  display: flex; align-items: center; gap: 8px;
+}
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+#toast .tc { color: #86efac; font-weight: 700; }
+body.variant-C #toast { bottom: calc(92px + var(--safe-bottom)); }
+body.variant-E #toast { bottom: calc(92px + var(--safe-bottom)); }
+
+/* ============================================================
+   Tweaks panel
+   ============================================================ */
+#tweaks-panel {
+  display: none;
+  position: fixed;
+  right: 14px;
+  bottom: calc(14px + var(--safe-bottom));
+  z-index: 150;
+  width: 260px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(20,20,40,0.18);
+  padding: 14px 16px 16px;
+  font-size: 13px;
+}
+body.tweaks-on #tweaks-panel { display: block; }
+body.variant-E.tweaks-on #tweaks-panel { bottom: calc(80px + var(--safe-bottom)); }
+body.variant-C.tweaks-on #tweaks-panel { bottom: calc(80px + var(--safe-bottom)); }
+#tweaks-panel .tp-title {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+#tweaks-panel .tp-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.14em;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+#tweaks-panel .tp-label {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-mute);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+#tweaks-panel .tp-radio {
+  display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px;
+}
+#tweaks-panel .tp-radio label {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--paper);
+  font-size: 12.5px;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all .12s;
+}
+#tweaks-panel .tp-radio label:has(input:checked) {
+  border-color: var(--ink);
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 600;
+}
+#tweaks-panel .tp-radio input { accent-color: var(--ink); }
+#tweaks-panel .tp-check {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--ink-mid);
+}
+#tweaks-panel .tp-hint {
+  font-size: 11px;
+  color: var(--ink-mute);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   Desktop-only adjustments
+   ============================================================ */
+@media (min-width: 860px) {
+  :root { --h-topbar: 58px; }
+  /* 桌機有 sidebar，隱藏 mobile topbar，stepbar 頂到最上 */
+  .topbar { display: none; }
+  .stepbar { top: 0; }
+  .hero { padding: 42px 36px 34px; }
+  .hero h1 { font-size: 32px; }
+  .hero .sub { font-size: 15px; }
+  .stepbar.variant-A,
+  .stepbar.variant-B,
+  .stepbar.variant-D,
+  .stepbar.variant-E { padding-left: 36px; padding-right: 36px; }
+  main { padding: 28px 36px 60px; }
+  .step-action { font-size: 17px; }
+  /* 桌機上 variant-C 的底部 tabbar 變成頂部 segmented */
+  body.variant-C .tabbar {
+    position: sticky;
+    bottom: auto;
+    top: var(--h-topbar);
+    border-top: none;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 28px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  body.variant-C main { padding-bottom: 60px; }
+}
+</style>
+</head>
+<body class="variant-E">
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+
+<!-- ═══ Top Bar ═══ -->
+<header class="topbar">
+  <div class="brand-logo">松</div>
+  <div class="brand">
+    <div>
+      探究與實作
+      <div class="brand-meta">W01 · PENDULUM LV1</div>
+    </div>
+  </div>
+  <button class="icon-btn" id="openOverviewBtn" aria-label="開啟步驟總覽">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24">
+      <line x1="4" y1="6" x2="20" y2="6"></line>
+      <line x1="4" y1="12" x2="20" y2="12"></line>
+      <line x1="4" y1="18" x2="14" y2="18"></line>
+    </svg>
+  </button>
+</header>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero">
+  <div class="crumb">
+    <span>首頁</span>
+    <span>›</span>
+    <span>單擺</span>
+    <span class="chip-phase">LV1 · 論證建模</span>
+  </div>
+  <h1>🕰️ 單擺 · 用數據發現重力加速度</h1>
+  <p class="sub">從量測到模型的完整探究迴圈——振幅、擺長、週期，哪個才是主角？</p>
+  <div class="meta-row">
+    <span><b>4</b> 節課</span>
+    <span><b>4</b> 步驟</span>
+    <span>W01 · PHASE 1</span>
+  </div>
+</section>
+
+<!-- ═══ 學習目標 ═══ -->
+<aside class="goal">
+  <div class="gtitle">🎯 學習目標</div>
+  <ul>
+    <li>從數據中辨識趨勢與規律（T² vs L 線性）</li>
+    <li>用數學模型描述觀察到的關係</li>
+    <li>用「主張—證據—推理」架構論證</li>
+    <li>評估模型的適用範圍與限制</li>
+  </ul>
+</aside>
+
+<!-- ═══ Step Bars — 5 個變體 (只有 active variant 顯示) ═══ -->
+
+<!-- Variant A : 頂部進度條 -->
+<nav class="stepbar variant-A" data-variant="A">
+  <div class="sbA-top">
+    <span class="sbA-label">Step</span>
+    <span class="sbA-title" data-slot="title">預測</span>
+    <span class="sbA-count"><b data-slot="cur">1</b> / <span data-slot="total">4</span></span>
+  </div>
+  <div class="sbA-bar"><div class="sbA-fill" data-slot="fill" style="width: 25%"></div></div>
+</nav>
+
+<!-- Variant B : 大圓號碼 + 圓點 -->
+<nav class="stepbar variant-B" data-variant="B">
+  <div class="sbB-row">
+    <div class="sbB-badge" data-slot="num">1</div>
+    <div class="sbB-name">
+      <div class="sbB-kicker"><span data-slot="kicker">Step 1 / 4</span></div>
+      <div class="sbB-title" data-slot="title">預測</div>
+    </div>
+  </div>
+  <div class="sbB-dots" data-slot="dots">
+    <span class="sbB-dot current"></span>
+    <span class="sbB-dot"></span>
+    <span class="sbB-dot"></span>
+    <span class="sbB-dot"></span>
+  </div>
+</nav>
+
+<!-- Variant C : 底部 tabbar + 頂部小標題 -->
+<nav class="stepbar variant-C" data-variant="C">
+  <div class="sbC-kicker">
+    <span data-slot="kicker">Step 1 / 4</span>
+    <span>PENDULUM LV1</span>
+  </div>
+  <div class="sbC-title" data-slot="title">預測</div>
+</nav>
+
+<!-- Variant D : Segmented control -->
+<nav class="stepbar variant-D" data-variant="D">
+  <div class="sbD-seg" data-slot="seg">
+    <button class="sbD-item active" data-index="0"><span class="sbD-n">01</span><span>預測</span></button>
+    <button class="sbD-item"        data-index="1"><span class="sbD-n">02</span><span>認識</span></button>
+    <button class="sbD-item"        data-index="2"><span class="sbD-n">03</span><span>分析</span></button>
+    <button class="sbD-item"        data-index="3"><span class="sbD-n">04</span><span>反思</span></button>
+  </div>
+  <div class="sbD-hint">左右滑動也可切換 · Tap 跳轉</div>
+</nav>
+
+<!-- Variant E : 大數字 + 進度段 + 浮動 CTA -->
+<nav class="stepbar variant-E" data-variant="E">
+  <div class="sbE-line" data-slot="segs">
+    <div class="sbE-seg current"></div>
+    <div class="sbE-seg"></div>
+    <div class="sbE-seg"></div>
+    <div class="sbE-seg"></div>
+  </div>
+  <div class="sbE-head">
+    <div class="sbE-n" data-slot="num">01</div>
+    <div class="sbE-body">
+      <div class="sbE-kicker">Step · <span data-slot="kicker">1 of 4</span></div>
+      <div class="sbE-title" data-slot="title">預測</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ Bottom tab bar (for Variant C) ═══ -->
+<nav class="tabbar" id="tabbar">
+  <button class="tabbar-item active" data-index="0">
+    <span class="tbi-num">1</span>
+    <span class="tbi-label">預測</span>
+  </button>
+  <button class="tabbar-item" data-index="1">
+    <span class="tbi-num">2</span>
+    <span class="tbi-label">認識</span>
+  </button>
+  <button class="tabbar-item" data-index="2">
+    <span class="tbi-num">3</span>
+    <span class="tbi-label">分析</span>
+  </button>
+  <button class="tabbar-item" data-index="3">
+    <span class="tbi-num">4</span>
+    <span class="tbi-label">反思</span>
+  </button>
+</nav>
+
+<!-- ═══ 主內容 ═══ -->
+<main id="mainContent">
+
+  <!-- Step 1 -->
+  <section class="step-panel active" data-step="0">
+    <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
+
+    <div class="q-item"><strong>P1：</strong>一個單擺擺得比較高（大振幅），它的週期會比較長、比較短、還是一樣？</div>
+    <div class="q-item"><strong>P2：</strong>擺錘從彈珠換成鉛球（質量 ×50），週期會怎麼變？</div>
+    <div class="q-item"><strong>P3：</strong>繩子越長，擺動越___（快/慢）？你的日常經驗是什麼？</div>
+
+    <div class="think-block">
+      <div class="think-prompt">✏️ 寫下你的三個預測（一句話一個即可）</div>
+      <textarea class="think-input" data-key="pendulum-lv1-predict" placeholder="例如：P1 預計一樣快，因為…&#10;P2 預計質量不影響…&#10;P3 預計越…"></textarea>
+      <div class="think-status" data-for="pendulum-lv1-predict">自動儲存於本機</div>
+    </div>
+
+    <p style="font-size:13px;color:var(--ink-mute);font-style:italic;margin-top:6px;">4 節課結束後回來對照——你的直覺對了幾題？</p>
+  </section>
+
+  <!-- Step 2 -->
+  <section class="step-panel" data-step="1">
+    <div class="step-action">認識單擺的物理原理和量測方法。</div>
+
+    <div class="card">
+      <h3>簡諧運動（SHM）的直覺</h3>
+      <p style="color:var(--ink-soft);font-size:14px;line-height:1.8;">物體完成一次完整來回的時間稱為 <strong style="color:var(--ink)">週期 T</strong>（秒）。實用技巧：計時 10 個週期再除以 10，精度比只計 1 次高 10 倍。</p>
+    </div>
+
+    <div class="info-box">
+      💡 <strong>歷史小故事</strong>：傳說伽利略在比薩大教堂觀察吊燈擺動，發現「不管擺動幅度大或小，來回一次的時間都差不多」。週期到底跟什麼因素有關？等一下用數據找答案。
+    </div>
+
+    <div class="think-block" data-kind="choice" data-answer="b">
+      <div class="think-prompt">🎯 關鍵概念：週期 T 是指什麼時間？</div>
+      <div class="think-options">
+        <button class="think-opt" data-val="a">A. 從最高點到最低點的時間</button>
+        <button class="think-opt" data-val="b">B. 完成一次完整來回的時間</button>
+        <button class="think-opt" data-val="c">C. 10 個往返花的時間</button>
+      </div>
+      <div class="think-feedback" style="display:none;">
+        正確！週期 T 是一個完整循環——從某個位置出發，經過來回，回到同一位置的時間。
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 3 -->
+  <section class="step-panel" data-step="2">
+    <div class="step-action">透過數據，檢驗「振幅影響週期嗎？」並找出 T 與 L 的數學關係。</div>
+
+    <div class="step-sublabel">活動一 · 振幅影響週期嗎？</div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;">下表是同一條 60cm 單擺在不同初始角度下的週期數據：</p>
+    <div class="table-wrap" style="margin-bottom:12px;">
+      <table id="dataTable" style="min-width:360px;">
+        <thead>
+          <tr><th>條件</th><th>角度</th><th>T₁</th><th>T₂</th><th>T₃</th><th>平均</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>A</td><td>5°</td><td>1.55</td><td>1.56</td><td>1.54</td><td style="color:var(--ink-mute)">?</td></tr>
+          <tr><td>B</td><td>20°</td><td>1.57</td><td>1.59</td><td>1.56</td><td style="color:var(--ink-mute)">?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="q-item">Q1：計算兩組平均週期，差距幾秒？</div>
+    <div class="q-item">Q2：這個差距算「有意義」嗎？（提示：你的計時誤差是多少？）</div>
+    <div class="q-item">Q3：你能從這 6 個數字，「論證」振幅不影響週期嗎？試著用「主張—理由—證據」的架構寫一段話。</div>
+
+    <div class="think-block" data-kind="reveal">
+      <div class="think-prompt">🤔 想一想：計時 10 個週期 vs 1 個週期，哪個不確定度小？</div>
+      <button class="think-toggle">想好了？點擊看提示 →</button>
+      <div class="think-hidden">
+        計時 1 個週期時，反應時間誤差（約 ±0.1–0.2 秒）相對大。計時 10 次再除以 10，誤差分散到 10 個週期，相對不確定度變 1/10。這是為什麼科學上常「重複多次再平均」。
+      </div>
+    </div>
+
+    <div class="collapsible">
+      <div class="collapsible-head">🧠 論證框架：主張、理由、證據<span class="col-icon">▶</span></div>
+      <div class="collapsible-body">
+        <div class="argue-grid">
+          <div class="argue-card claim">
+            <div class="argue-head">Claim · 主張</div>
+            <div class="argue-body">「振幅大小對單擺週期幾乎沒有影響。」</div>
+          </div>
+          <div class="argue-card reason">
+            <div class="argue-head">Reasoning · 理由</div>
+            <div class="argue-body">兩組差距 ___ 秒，計時誤差約 ___ 秒，因此差距（有/沒有）意義……</div>
+          </div>
+          <div class="argue-card evidence">
+            <div class="argue-head">Evidence · 證據</div>
+            <div class="argue-body">A 平均 T = ___s；B 平均 T = ___s；差距 ___s……</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-sublabel" style="margin-top:20px;">活動二 · 擺長如何影響週期？</div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">用虛擬單擺測量 6 種擺長的週期，每種 3 次。先畫 T vs L，再試試不同趨勢線——哪條最合理？</p>
+
+    <!-- Lab -->
+    <div class="lab">
+      <div class="lab-panel">
+        <div>
+          <div class="step-sublabel" style="margin-bottom:6px;">① 選擇擺長</div>
+          <div class="length-row" id="lengthBtns">
+            <button class="length-btn" data-length="0.10">10 cm</button>
+            <button class="length-btn" data-length="0.20">20 cm</button>
+            <button class="length-btn" data-length="0.30">30 cm</button>
+            <button class="length-btn" data-length="0.40">40 cm</button>
+            <button class="length-btn" data-length="0.50">50 cm</button>
+            <button class="length-btn" data-length="0.60">60 cm</button>
+          </div>
+        </div>
+
+        <div class="pendulum-stage">
+          <canvas id="pendulumCanvas" width="200" height="280"></canvas>
+        </div>
+
+        <div class="stopwatch">
+          <div class="step-sublabel" style="margin-bottom:2px;">② 碼錶計時</div>
+          <div class="sw-display" id="stopwatchDisplay">0.00 s</div>
+          <div class="sw-count" id="swingCount">選擇擺長後，擺錘開始擺動</div>
+          <button class="sw-btn" id="stopwatchBtn" disabled>⏱ 開始計時</button>
+          <div class="measure-result" id="measureResult" style="display:none;margin-top:8px;"></div>
+        </div>
+
+        <div>
+          <div class="step-sublabel" style="margin-bottom:6px;">③ 記錄數據</div>
+          <button class="record-btn" id="recordBtn" disabled>📝 記錄此次測量</button>
+          <div class="trial-count" id="trialCount"></div>
+        </div>
+
+        <button class="reset-btn" id="resetBtn">🔄 重置全部數據</button>
+      </div>
+
+      <div class="lab-panel data-section">
+        <div>
+          <h4>📋 數據記錄表</h4>
+          <div class="table-wrap" style="margin-top:6px;">
+            <table id="dataTable2">
+              <thead>
+                <tr>
+                  <th>L (m)</th><th>T₁</th><th>T₂</th><th>T₃</th><th>平均 T̄</th><th>T̄²</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr><td colspan="6" style="color:var(--ink-mute);font-style:italic;padding:14px;">← 開始記錄後出現</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <div class="graph-head">
+            <h4 style="font-size:13px;font-weight:700;">📈 散佈圖</h4>
+            <div class="graph-toggles" id="graphToggles">
+              <button class="graph-toggle active" data-mode="T_vs_L">T vs L</button>
+              <button class="graph-toggle" data-mode="T2_vs_L">T² vs L</button>
+            </div>
+          </div>
+          <div class="trend-controls" id="trendControls">
+            <span>趨勢線</span>
+            <button class="trend-btn active" data-trend="none">無</button>
+            <button class="trend-btn" data-trend="linear">線性</button>
+            <button class="trend-btn" data-trend="power">冪次</button>
+            <button class="trend-btn" data-trend="poly">多項式</button>
+          </div>
+          <canvas id="graphCanvas" height="220"></canvas>
+          <div id="fitInfo" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card flat">
+      <div class="step-sublabel" style="margin-bottom:10px;">💭 模型選擇與論證</div>
+      <div class="q-item">Q1：「T vs L」圖選線性——截距是多少？L=0（沒擺繩）時 T 應該是多少？這個截距合理嗎？</div>
+      <div class="q-item">Q2：切換到「T² vs L」——截距接近 0 嗎？哪個模型物理上更合理？</div>
+      <div class="q-item">Q3：冪次或多項式 R² 可能更高——R² 高 = 模型好嗎？</div>
+      <div class="q-item">Q4：你的數據和同學的比較——T² vs L 斜率差多少？差異可能來自哪裡？（提示：g 值、計時方式、擺錘質心位置）</div>
+
+      <div class="think-block" style="margin-top:10px;margin-bottom:10px;">
+        <div class="think-prompt">✏️ 用「主張—理由—證據」論證你選的模型</div>
+        <textarea class="think-input" data-key="pendulum-lv1-model" style="min-height:110px;" placeholder="例如：我選 T² vs L 的線性模型。&#10;理由：截距接近 0，符合『沒有擺繩就沒有週期』的物理意義……"></textarea>
+        <div class="think-status" data-for="pendulum-lv1-model">自動儲存於本機</div>
+      </div>
+
+      <div class="think-block" data-kind="choice" data-answer="c" style="margin-bottom:0;">
+        <div class="think-prompt">🎯 哪個模型最能描述「擺長如何影響週期」？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. T vs L 多項式：R² 最高，擬合最好</button>
+          <button class="think-opt" data-val="b">B. T vs L 冪次：曲線通過原點，比線性合理</button>
+          <button class="think-opt" data-val="c">C. T² vs L 線性：通過原點的直線，物理意義最清楚</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          R² 高不代表模型好——多項式靠加項數就能把 R² 衝高，但物理上毫無意義。好模型要先通過「物理合理性」檢驗：T² vs L 線性模型截距接近 0，符合「L=0 → T=0」邊界條件。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 4 -->
+  <section class="step-panel" data-step="3">
+    <div class="step-action">回頭對照預測，思考誤差來源，找出一個你自己的研究問題。</div>
+
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;">先翻回 P1–P3 的預測——對了幾題？差在哪裡？</p>
+
+    <div class="think-block">
+      <div class="think-prompt">✏️ 回顧與反思：(1) 預測對了幾題？最意外的是哪題？(2) g 值誤差多少？可能原因？</div>
+      <textarea class="think-input" data-key="pendulum-lv1-reflection" style="min-height:110px;" placeholder="例如：&#10;P1、P2 對，但 P3 錯了——我以為越長越快，其實是越長週期越長。&#10;我算得 g = 9.6 m/s²，誤差約 2%，可能因為：(1) 碼錶反應時間 (2) 擺長量測不精確…"></textarea>
+      <div class="think-status" data-for="pendulum-lv1-reflection">自動儲存於本機</div>
+    </div>
+
+    <div class="step-sublabel" style="margin-top:18px;">延伸思考</div>
+    <div class="q-item">計時 1 個週期 vs 10 個週期再除以 10，哪個不確定度小？為什麼？</div>
+    <div class="q-item">T² vs L 的截距「應該」是 0，但實際上不是——可能原因？</div>
+    <div class="q-item">在月球上做同一實驗，g 變小，T² vs L 的斜率會變大還是變小？</div>
+
+    <div class="step-sublabel" style="margin-top:18px;">寫一個你自己的問題</div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:6px;">做完實驗，一定有什麼讓你意外。試著把它變成可以做實驗回答的問題：</p>
+    <div style="font-size:12px;color:var(--ink-mute);margin-bottom:10px;font-style:italic;">範例：「擺線材質（棉線 vs 釣魚線）會影響擺動衰減的速度嗎？」← 有操縱變因、有應變變因、教室裡做得到。</div>
+
+    <div class="think-block">
+      <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+      <textarea class="think-input" data-key="pendulum-lv1-my-question" style="min-height:80px;" placeholder="例：擺角從 5° 增加到 30°，週期會改變嗎？"></textarea>
+      <div class="think-status" data-for="pendulum-lv1-my-question">自動儲存於本機</div>
+    </div>
+
+    <div class="complete-badge" id="completeBadge">
+      <div class="cb-icon">🏆</div>
+      <div class="cb-title">CASE CLOSED · 單擺 Lv1 完成</div>
+      <div class="cb-sub">你剛完成一個完整的探究迴圈：量測 → 分析 → 建模 → 論證</div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class" style="margin-top:24px;">
+      <div class="post-class-toggle" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--paper-warm);border:1px solid var(--border-light);border-radius:8px;">
+        <h3 style="margin:0;font-size:14px;color:var(--ink-mid);">課後資源</h3>
+        <span class="col-icon" style="font-size:12px;">▶</span>
+      </div>
+      <div class="post-class-body" style="display:none;padding:0 4px;">
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--ink);font-size:13px;margin-bottom:8px;">原來前人也發現過——單擺公式</div>
+          <p style="font-size:13px;color:var(--ink-mid);line-height:1.8;margin-bottom:8px;">你從數據中發現 T² 和 L 成正比。17 世紀的物理學家也發現了同樣的事，並推導出公式：</p>
+          <div style="text-align:center;padding:12px;font-family:'DM Mono',monospace;font-size:15px;color:var(--ink);background:white;border-radius:6px;margin:8px 0;">
+            T = 2π√(L/g) → 兩邊平方 → T² = (4π²/g) × L
+          </div>
+          <p style="font-size:12px;color:var(--ink-mid);line-height:1.8;">
+            斜率 = 4π²/g，所以 g = 4π²/斜率 ≈ 39.48/斜率。試試看用你的斜率算出 g 值，跟標準值 9.81 m/s² 比較——這就是你從數據中「測量」了地球的重力加速度。
+          </p>
+        </div>
+
+        <div style="margin-top:12px;border:1px solid var(--border-light);border-radius:8px;overflow:hidden;">
+          <div class="collapsible-head" style="padding:10px 14px;font-size:12px;color:var(--ink-mute);cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+            📌 教學目標（教師視角）<span class="col-icon">▶</span>
+          </div>
+          <div class="collapsible-body-inner" style="display:none;padding:10px 14px;font-size:13px;color:var(--ink-mid);line-height:2;">
+            · 讓學生完成第一個完整探究迴圈：觀察→量測→分析→建模→論證<br>
+            · 透過「振幅不影響週期」建立第一個「論證」經驗<br>
+            · 用不確定度科學比較兩組數據，體會數字背後的意義<br>
+            · 從 T² vs L 線性化，建立第一個數學模型並推導物理量
+          </div>
+        </div>
+
+        <div style="margin-top:12px;border:1px solid var(--border-light);border-radius:8px;overflow:hidden;">
+          <div class="collapsible-head" style="padding:10px 14px;font-size:12px;color:var(--ink-mute);cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+            👩‍🏫 教師備註<span class="col-icon">▶</span>
+          </div>
+          <div class="collapsible-body-inner" style="display:none;padding:10px 14px;font-size:12.5px;color:var(--ink-mid);line-height:1.8;">
+            4 節課的節奏：<br>
+            節 1：SHM 概念 + 振幅活動（重點：建立「週期」直覺，首次論證）<br>
+            節 2：不確定度實驗（端點 vs 中間計時）<br>
+            節 3：T vs L 量測（6 種擺長各 3 次）→ Excel 輸入與計算<br>
+            節 4：T² vs L 畫圖 → 求 g → 各組 5 分鐘口頭發表
+          </div>
+        </div>
+
+        <div style="background:var(--paper-warm);border:1px solid var(--border-light);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--ink-mid);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--ink-mid);">你的不確定度計算、T² vs L 的 Excel 圖、以及 g 值計算過程，都是「從數據中發現物理規律」的好證據。</p>
+          <p style="font-size:12px;color:var(--ink-mute);margin-top:8px;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：你<em>之前</em>的預測 vs 實際結果差在哪？（有具體的「之前 vs 之後」對比，比寫一百句「我學到很多」更有說服力。）
+          </p>
+        </div>
+
+        <div style="background:var(--paper-warm);border:1px solid var(--border-light);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--ink-mid);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（為下一級暖身）</div>
+          <p style="font-size:13px;color:var(--ink-mid);line-height:1.8;margin-bottom:10px;">
+            以下是一份實驗計畫，<strong>但有好幾個問題</strong>。你能找到幾個？
+          </p>
+          <div style="background:white;border-radius:6px;padding:12px 16px;font-size:12px;color:var(--ink-mute);margin-bottom:10px;line-height:1.8;">
+            小明想研究「擺錘質量對週期的影響」。他的計畫：用同一條繩子（50cm），掛 50g、100g、150g 的擺錘各擺 1 次，用手機計時，記錄每次的週期。
+          </div>
+          <div class="collapsible-head" style="font-size:12px;color:var(--ink-mute);padding:6px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+            💡 參考答案<span class="col-icon" style="font-size:10px;">▶</span>
+          </div>
+          <div class="collapsible-body-inner" style="display:none;font-size:12px;color:var(--ink-mid);padding:8px 0 0 0;">
+            可能的問題：只量 1 次（沒有重複）、計時方式精度不夠、沒說明擺角要固定多少度、沒有控制擺角這個變因。
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav" style="display:flex;gap:10px;margin-top:20px;">
+      <a href="uncertainty.html" style="flex:1;display:block;padding:12px 16px;background:var(--paper-warm);border:1px solid var(--border-light);border-radius:8px;font-size:12px;color:var(--ink-mid);text-align:center;text-decoration:none;">
+        ← 測量基礎：不確定度
+      </a>
+      <a href="spring-lv1.html" style="flex:1;display:block;padding:12px 16px;background:var(--paper-warm);border:1px solid var(--border-light);border-radius:8px;font-size:12px;color:var(--ink-mid);text-align:center;text-decoration:none;">
+        下一站：彈簧 Lv1 →
+      </a>
+    </div>
+  </section>
+
+  <!-- Step footer -->
+  <div class="step-footer" id="stepFooter">
+    <button class="step-btn" data-nav="prev" disabled>
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      上一步
+    </button>
+    <button class="step-btn primary" data-nav="next">
+      下一步
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+
+</main>
+
+<!-- 浮動 CTA (variant-E) -->
+<button class="floating-cta" id="floatingCta">
+  <span class="fc-next">下一步</span>
+  <span class="fc-dot"></span>
+  <span class="mono" style="font-size:11px;opacity:.7;">02</span>
+  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+
+<!-- Step 總覽抽屜 -->
+<div class="overview-overlay" id="overviewOverlay"></div>
+<aside class="overview-panel" id="overviewPanel" role="dialog" aria-label="步驟總覽">
+  <div class="ov-head">
+    <div class="ov-title">Steps · 步驟總覽</div>
+    <button class="ov-close" id="closeOverview">關閉</button>
+  </div>
+  <div class="ov-list" id="ovList">
+    <button class="ov-item current" data-index="0">
+      <div class="ov-n">1</div>
+      <div>
+        <div class="ov-label">預測</div>
+        <div class="ov-desc">用直覺回答三題，之後對照</div>
+      </div>
+      <span class="ov-check">✓</span>
+    </button>
+    <button class="ov-item" data-index="1">
+      <div class="ov-n">2</div>
+      <div>
+        <div class="ov-label">認識裝置</div>
+        <div class="ov-desc">什麼是週期？怎麼算才準？</div>
+      </div>
+      <span class="ov-check">✓</span>
+    </button>
+    <button class="ov-item" data-index="2">
+      <div class="ov-n">3</div>
+      <div>
+        <div class="ov-label">數據分析</div>
+        <div class="ov-desc">虛擬實驗 + T² vs L 線性化</div>
+      </div>
+      <span class="ov-check">✓</span>
+    </button>
+    <button class="ov-item" data-index="3">
+      <div class="ov-n">4</div>
+      <div>
+        <div class="ov-label">延伸與反思</div>
+        <div class="ov-desc">誤差分析、寫下自己的問題</div>
+      </div>
+      <span class="ov-check">✓</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Toast -->
+<div id="toast"><span class="tc">✓</span> <span id="toastMsg">已儲存</span></div>
+
+<!-- Tweaks Panel -->
+<div id="tweaks-panel">
+  <div class="tp-title">Tweaks</div>
+  <div class="tp-kicker">Step 導航樣式 × 5</div>
+
+  <div class="tp-label">Navigation Style</div>
+  <div class="tp-radio" id="tpRadio">
+    <label><input type="radio" name="variant" value="A" checked> A · 頂部進度條（極簡）</label>
+    <label><input type="radio" name="variant" value="B"> B · 大標題 + 圓點</label>
+    <label><input type="radio" name="variant" value="C"> C · 底部 Tab Bar（App 感）</label>
+    <label><input type="radio" name="variant" value="D"> D · Segmented + 滑動切換</label>
+    <label><input type="radio" name="variant" value="E"> E · 大數字 + 浮動下一步</label>
+  </div>
+
+  <div class="tp-hint">右上角漢堡可開 Step 總覽。完成 step 後會有 toast 回饋。</div>
+</div>
+
+<!-- EDITMODE defaults -->
+<script>
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "variant": "E",
+  "swipeEnabled": true
+}/*EDITMODE-END*/;
+</script>
+
+<script>
+/* ============================================================
+   STATE + persistence
+   ============================================================ */
+const STEP_META = [
+  { title: '預測',      desc: '先用直覺回答三個預測題' },
+  { title: '認識裝置',  desc: '建立週期直覺與量測方法' },
+  { title: '數據分析',  desc: '振幅 + 擺長實驗與建模' },
+  { title: '延伸與反思',desc: '對照預測、寫下自己的問題' },
+];
+const TOTAL = STEP_META.length;
+const LS_STEP = 'pendulum-lv1-step';
+const LS_DONE = 'pendulum-lv1-done';
+const LS_RECORDS = 'pendulum-lv1-records';
+const LS_THINK = 'sssh_think_records';
+
+const state = {
+  current: +(localStorage.getItem(LS_STEP) || 0),
+  done: new Set(JSON.parse(localStorage.getItem(LS_DONE) || '[]')),
+  variant: localStorage.getItem('variant-pref') || TWEAK_DEFAULTS.variant || 'E',
+  swipe: JSON.parse(localStorage.getItem('swipe-pref') ?? String(TWEAK_DEFAULTS.swipeEnabled)),
+};
+if (state.current >= TOTAL || state.current < 0) state.current = 0;
+
+/* ============================================================
+   VARIANT switcher
+   ============================================================ */
+function applyVariant(v) {
+  document.body.classList.remove('variant-A','variant-B','variant-C','variant-D','variant-E');
+  document.body.classList.add('variant-' + v);
+  state.variant = v;
+  localStorage.setItem('variant-pref', v);
+  document.querySelectorAll('#tpRadio input[name="variant"]').forEach(r => r.checked = r.value === v);
+  renderStep(state.current, /*silent*/ true);
+}
+
+/* ============================================================
+   Render step bar slots
+   ============================================================ */
+function renderStep(idx, silent=false) {
+  // panels
+  document.querySelectorAll('.step-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === idx);
+  });
+
+  // variant A — progress bar
+  const A = document.querySelector('.stepbar.variant-A');
+  A.querySelector('[data-slot=title]').textContent = STEP_META[idx].title;
+  A.querySelector('[data-slot=cur]').textContent = idx + 1;
+  A.querySelector('[data-slot=total]').textContent = TOTAL;
+  A.querySelector('[data-slot=fill]').style.width = `${((idx + 1) / TOTAL) * 100}%`;
+
+  // variant B
+  const B = document.querySelector('.stepbar.variant-B');
+  B.querySelector('[data-slot=num]').textContent = idx + 1;
+  B.querySelector('[data-slot=kicker]').textContent = `Step ${idx + 1} / ${TOTAL}`;
+  B.querySelector('[data-slot=title]').textContent = STEP_META[idx].title;
+  const bdots = B.querySelectorAll('[data-slot=dots] .sbB-dot');
+  bdots.forEach((d, i) => {
+    d.classList.remove('done','current');
+    if (state.done.has(i)) d.classList.add('done');
+    if (i === idx) d.classList.add('current');
+  });
+
+  // variant C
+  const C = document.querySelector('.stepbar.variant-C');
+  C.querySelector('[data-slot=title]').textContent = STEP_META[idx].title;
+  C.querySelector('[data-slot=kicker]').textContent = `Step ${idx + 1} / ${TOTAL}`;
+
+  document.querySelectorAll('#tabbar .tabbar-item').forEach((t, i) => {
+    t.classList.remove('active','done');
+    if (state.done.has(i)) t.classList.add('done');
+    if (i === idx) t.classList.add('active');
+  });
+
+  // variant D
+  const D = document.querySelector('.stepbar.variant-D');
+  D.querySelectorAll('.sbD-item').forEach((t, i) => {
+    t.classList.remove('active','done');
+    if (state.done.has(i) && i !== idx) t.classList.add('done');
+    if (i === idx) t.classList.add('active');
+  });
+
+  // variant E
+  const E = document.querySelector('.stepbar.variant-E');
+  E.querySelector('[data-slot=num]').textContent = String(idx + 1).padStart(2, '0');
+  E.querySelector('[data-slot=kicker]').textContent = `${idx + 1} of ${TOTAL}`;
+  E.querySelector('[data-slot=title]').textContent = STEP_META[idx].title;
+  E.querySelectorAll('.sbE-seg').forEach((s, i) => {
+    s.classList.remove('done','current');
+    if (i < idx) s.classList.add('done');
+    if (i === idx) s.classList.add('current');
+  });
+
+  // overview panel
+  document.querySelectorAll('#ovList .ov-item').forEach((it, i) => {
+    it.classList.remove('current','done');
+    if (state.done.has(i)) it.classList.add('done');
+    if (i === idx) it.classList.add('current');
+  });
+
+  // footer buttons
+  const prevBtn = document.querySelector('[data-nav=prev]');
+  const nextBtn = document.querySelector('[data-nav=next]');
+  prevBtn.disabled = idx === 0;
+  if (idx === TOTAL - 1) {
+    nextBtn.innerHTML = '🏆 完成';
+    nextBtn.classList.add('finish');
+  } else {
+    nextBtn.innerHTML = '下一步 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+    nextBtn.classList.remove('finish');
+  }
+
+  // floating CTA (variant E)
+  const fc = document.getElementById('floatingCta');
+  if (idx === TOTAL - 1) {
+    fc.innerHTML = `<span class="fc-next">完成</span> <span class="mono" style="font-size:12px;">🏆</span>`;
+  } else {
+    fc.innerHTML = `<span class="fc-next">下一步</span><span class="fc-dot"></span><span class="mono" style="font-size:11px;opacity:.7;">${String(idx + 2).padStart(2,'0')}</span><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+  }
+
+  // Complete badge
+  document.getElementById('completeBadge').classList.toggle('show',
+    idx === TOTAL - 1 && state.done.size >= TOTAL - 1);
+
+  // Save + scroll
+  localStorage.setItem(LS_STEP, idx);
+  state.current = idx;
+  if (!silent) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function goTo(idx) {
+  if (idx < 0 || idx >= TOTAL) return;
+  renderStep(idx);
+}
+function goNext() {
+  // mark current done (except the last — we mark it on 完成 click below)
+  if (state.current < TOTAL - 1) {
+    if (!state.done.has(state.current)) {
+      state.done.add(state.current);
+      localStorage.setItem(LS_DONE, JSON.stringify([...state.done]));
+      toast(`Step ${state.current + 1} 完成 · ${STEP_META[state.current].title}`);
+    }
+    goTo(state.current + 1);
+  } else {
+    // last step → mark done
+    if (!state.done.has(state.current)) {
+      state.done.add(state.current);
+      localStorage.setItem(LS_DONE, JSON.stringify([...state.done]));
+    }
+    toast('🏆 CASE CLOSED · 單擺 Lv1 完成', 2500);
+    renderStep(state.current);
+  }
+}
+function goPrev() {
+  if (state.current > 0) goTo(state.current - 1);
+}
+
+/* ============================================================
+   Wire up
+   ============================================================ */
+document.querySelector('[data-nav=next]').addEventListener('click', goNext);
+document.querySelector('[data-nav=prev]').addEventListener('click', goPrev);
+document.getElementById('floatingCta').addEventListener('click', goNext);
+
+// variant-B dots click
+document.querySelectorAll('.stepbar.variant-B .sbB-dot').forEach((d, i) => {
+  d.addEventListener('click', () => goTo(i));
+});
+// variant-C tabbar
+document.querySelectorAll('#tabbar .tabbar-item').forEach((t, i) => {
+  t.addEventListener('click', () => goTo(i));
+});
+// variant-D segmented
+document.querySelectorAll('.sbD-item').forEach((t, i) => {
+  t.addEventListener('click', () => goTo(i));
+});
+
+// Overview panel
+const ovOverlay = document.getElementById('overviewOverlay');
+const ovPanel = document.getElementById('overviewPanel');
+document.getElementById('openOverviewBtn').addEventListener('click', () => {
+  ovOverlay.classList.add('open');
+  ovPanel.classList.add('open');
+});
+document.getElementById('closeOverview').addEventListener('click', closeOverview);
+ovOverlay.addEventListener('click', closeOverview);
+function closeOverview() {
+  ovOverlay.classList.remove('open');
+  ovPanel.classList.remove('open');
+}
+document.querySelectorAll('#ovList .ov-item').forEach((t, i) => {
+  t.addEventListener('click', () => { goTo(i); closeOverview(); });
+});
+
+// Keyboard arrow nav (desktop)
+document.addEventListener('keydown', (e) => {
+  if (e.target.matches('textarea, input')) return;
+  if (e.key === 'ArrowLeft')  goPrev();
+  if (e.key === 'ArrowRight') goNext();
+});
+
+/* ============================================================
+   Toast
+   ============================================================ */
+let toastTimer = null;
+function toast(msg, dur=1800) {
+  const el = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  el.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+/* ============================================================
+   Tweaks integration (host-facing protocol)
+   ============================================================ */
+window.addEventListener('message', (e) => {
+  if (!e.data) return;
+  if (e.data.type === '__activate_edit_mode') {
+    document.body.classList.add('tweaks-on');
+  } else if (e.data.type === '__deactivate_edit_mode') {
+    document.body.classList.remove('tweaks-on');
+  }
+});
+document.querySelectorAll('#tpRadio input[name=variant]').forEach(r => {
+  r.addEventListener('change', () => {
+    applyVariant(r.value);
+    try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { variant: r.value } }, '*'); } catch(_){}
+  });
+});
+// Announce availability
+requestAnimationFrame(() => {
+  try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch(_){}
+});
+
+/* ============================================================
+   Think blocks (record / choice / reveal)
+   ============================================================ */
+function readThink() { try { return JSON.parse(localStorage.getItem(LS_THINK)) || {}; } catch { return {}; } }
+function saveThink(k, v) { const r = readThink(); r[k] = v; localStorage.setItem(LS_THINK, JSON.stringify(r)); }
+
+const records_think = readThink();
+document.querySelectorAll('.think-input').forEach(el => {
+  const k = el.dataset.key;
+  if (records_think[k]) el.value = records_think[k];
+  let t = null;
+  el.addEventListener('input', () => {
+    const statusEl = document.querySelector(`.think-status[data-for="${k}"]`);
+    if (statusEl) { statusEl.textContent = '儲存中…'; statusEl.classList.remove('saved'); }
+    if (t) clearTimeout(t);
+    t = setTimeout(() => {
+      saveThink(k, el.value);
+      if (statusEl) { statusEl.textContent = '✓ 已儲存於本機'; statusEl.classList.add('saved'); }
+    }, 500);
+  });
+});
+document.querySelectorAll('.think-block[data-kind=choice]').forEach(block => {
+  const answer = block.dataset.answer;
+  const fb = block.querySelector('.think-feedback');
+  block.querySelectorAll('.think-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.dataset.val;
+      block.querySelectorAll('.think-opt').forEach(b => b.classList.remove('selected-right','selected-wrong'));
+      if (val === answer) {
+        btn.classList.add('selected-right');
+        fb.style.display = 'block';
+      } else {
+        btn.classList.add('selected-wrong');
+        fb.style.display = 'none';
+      }
+    });
+  });
+});
+document.querySelectorAll('.think-block[data-kind=reveal]').forEach(block => {
+  const tog = block.querySelector('.think-toggle');
+  tog.addEventListener('click', () => {
+    block.classList.toggle('open');
+    tog.textContent = block.classList.contains('open') ? '✓ 已展開提示' : '想好了？點擊看提示 →';
+  });
+});
+// Collapsibles
+document.querySelectorAll('.collapsible-head').forEach(h => {
+  h.addEventListener('click', () => h.closest('.collapsible').classList.toggle('open'));
+});
+
+/* ============================================================
+   Pendulum simulator  (ported & trimmed)
+   ============================================================ */
+const G_TRUE = 9.81;
+const records = {};
+let currentLength = null, currentT = null, measuredT = null;
+
+const pendulumCanvas = document.getElementById('pendulumCanvas');
+const pCtx = pendulumCanvas.getContext('2d');
+const graphCanvas = document.getElementById('graphCanvas');
+const gCtx = graphCanvas.getContext('2d');
+const tableBody = document.getElementById('tableBody');
+const recordBtn = document.getElementById('recordBtn');
+const trialCount = document.getElementById('trialCount');
+const stopwatchDisplay = document.getElementById('stopwatchDisplay');
+const swingCountEl = document.getElementById('swingCount');
+const stopwatchBtn = document.getElementById('stopwatchBtn');
+const measureResult = document.getElementById('measureResult');
+
+let animId = null, animStartTime = null;
+const THETA_0 = 0.22;
+let displayTheta = 0, prevTheta = 0;
+let swTimerOn = false, swStartMs = 0, swSwings = 0, swHalfCross = 0;
+
+function fitCanvas(canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width  = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { w: rect.width, h: rect.height };
+}
+
+function getOmega(lengthM) { return Math.sqrt(G_TRUE / lengthM); }
+
+function drawPendulumFrame(theta, lengthM) {
+  const { w, h } = fitCanvas(pendulumCanvas);
+  pCtx.clearRect(0, 0, w, h);
+  const pivotX = w / 2;
+  const pivotY = h * 0.08;
+  pCtx.fillStyle = '#94a3b8';
+  pCtx.fillRect(w * 0.15, pivotY - 6, w * 0.7, 6);
+  pCtx.beginPath(); pCtx.arc(pivotX, pivotY, 5, 0, Math.PI * 2); pCtx.fill();
+  const maxPx = h * 0.75;
+  const stringPx = Math.min(lengthM * (h * 1.1), maxPx);
+  const bobX = pivotX + stringPx * Math.sin(theta);
+  const bobY = pivotY + stringPx * Math.cos(theta);
+  pCtx.strokeStyle = '#475569'; pCtx.lineWidth = 1.4;
+  pCtx.beginPath(); pCtx.moveTo(pivotX, pivotY); pCtx.lineTo(bobX, bobY); pCtx.stroke();
+  pCtx.fillStyle = '#2952c4'; pCtx.strokeStyle = '#1e3aa0';
+  pCtx.lineWidth = 1.2;
+  pCtx.beginPath(); pCtx.arc(bobX, bobY, Math.min(10, w*0.05), 0, Math.PI * 2);
+  pCtx.fill(); pCtx.stroke();
+  if (Math.abs(theta) > 0.01) {
+    pCtx.fillStyle = '#16a34a';
+    pCtx.font = '500 11px "DM Mono", monospace';
+    pCtx.textAlign = 'center';
+    pCtx.fillText(`θ = ${(theta*180/Math.PI).toFixed(1)}°`, bobX, bobY - 14);
+  }
+}
+
+function animatePendulum(timestamp, lengthM) {
+  if (!animStartTime) animStartTime = timestamp;
+  const t = (timestamp - animStartTime) / 1000;
+  const omega = getOmega(lengthM);
+  prevTheta = displayTheta;
+  displayTheta = THETA_0 * Math.cos(omega * t);
+  if (swTimerOn && prevTheta * displayTheta < 0) {
+    swHalfCross++;
+    if (swHalfCross % 2 === 0) {
+      swSwings = swHalfCross / 2;
+      swingCountEl.textContent = `已擺動 ${swSwings} 次`;
+    }
+  }
+  if (swTimerOn) {
+    const elapsed = (performance.now() - swStartMs) / 1000;
+    stopwatchDisplay.textContent = elapsed.toFixed(2) + ' s';
+  }
+  drawPendulumFrame(displayTheta, lengthM);
+  animId = requestAnimationFrame(ts => animatePendulum(ts, lengthM));
+}
+
+function startSwing(lengthM) {
+  if (animId) cancelAnimationFrame(animId);
+  animStartTime = null;
+  displayTheta = 0; prevTheta = 0;
+  animId = requestAnimationFrame(ts => animatePendulum(ts, lengthM));
+}
+
+function drawEmpty() {
+  if (animId) { cancelAnimationFrame(animId); animId = null; }
+  const { w, h } = fitCanvas(pendulumCanvas);
+  pCtx.clearRect(0, 0, w, h);
+  const pivotX = w / 2; const pivotY = h * 0.08;
+  pCtx.fillStyle = '#94a3b8'; pCtx.fillRect(w * 0.15, pivotY - 6, w * 0.7, 6);
+  pCtx.beginPath(); pCtx.arc(pivotX, pivotY, 5, 0, Math.PI * 2); pCtx.fill();
+  pCtx.strokeStyle = '#94a3b8'; pCtx.lineWidth = 1.4;
+  pCtx.beginPath(); pCtx.moveTo(pivotX, pivotY); pCtx.lineTo(pivotX, pivotY + h*0.5); pCtx.stroke();
+  pCtx.fillStyle = '#cbd5e1'; pCtx.strokeStyle = '#94a3b8';
+  pCtx.beginPath(); pCtx.arc(pivotX, pivotY + h*0.5, 8, 0, Math.PI * 2);
+  pCtx.fill(); pCtx.stroke();
+  pCtx.fillStyle = '#94a3b8'; pCtx.font = '500 11px "DM Mono", monospace';
+  pCtx.textAlign = 'center';
+  pCtx.fillText('選擇擺長後開始', pivotX, pivotY + h*0.5 + 40);
+}
+drawEmpty();
+
+document.querySelectorAll('.length-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const length = parseFloat(btn.dataset.length);
+    currentLength = length; currentT = null; measuredT = null;
+    swTimerOn = false; swSwings = 0; swHalfCross = 0;
+    stopwatchDisplay.textContent = '0.00 s';
+    swingCountEl.textContent = '擺錘擺動中 — 按下方開始計時';
+    stopwatchBtn.disabled = false;
+    stopwatchBtn.textContent = '⏱ 開始計時';
+    stopwatchBtn.classList.remove('running');
+    measureResult.style.display = 'none';
+    recordBtn.disabled = true;
+    document.querySelectorAll('.length-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const trials = (records[length] || []).length;
+    trialCount.textContent = trials > 0 ? `此擺長已記錄 ${trials}/3 次` : '';
+    startSwing(length);
+  });
+});
+
+stopwatchBtn.addEventListener('click', () => {
+  if (!currentLength) return;
+  if (!swTimerOn) {
+    swTimerOn = true; swSwings = 0; swHalfCross = 0;
+    swStartMs = performance.now();
+    stopwatchBtn.textContent = '⏹ 停止計時';
+    stopwatchBtn.classList.add('running');
+    swingCountEl.textContent = '計時中… 數到 10 次擺動再停';
+    measureResult.style.display = 'none';
+    recordBtn.disabled = true;
+  } else {
+    swTimerOn = false;
+    const elapsed = (performance.now() - swStartMs) / 1000;
+    if (swSwings < 1) {
+      swingCountEl.textContent = '擺動次數不夠！至少等 1 次完整擺動再停';
+      stopwatchBtn.textContent = '⏱ 重新計時';
+      stopwatchBtn.classList.remove('running');
+      return;
+    }
+    measuredT = +(elapsed / swSwings).toFixed(3);
+    currentT = +measuredT.toFixed(2);
+    stopwatchDisplay.textContent = elapsed.toFixed(2) + ' s';
+    swingCountEl.textContent = `共 ${swSwings} 次擺動`;
+    measureResult.innerHTML =
+      `${elapsed.toFixed(2)} s ÷ ${swSwings} 次 = <span class="big">T = ${currentT.toFixed(2)} s</span>`;
+    measureResult.style.display = 'block';
+    const trials = (records[currentLength] || []).length;
+    recordBtn.disabled = (trials >= 3);
+    stopwatchBtn.textContent = '⏱ 重新計時';
+    stopwatchBtn.classList.remove('running');
+  }
+});
+
+recordBtn.addEventListener('click', () => {
+  if (currentLength === null || currentT === null) return;
+  if (!records[currentLength]) records[currentLength] = [];
+  if (records[currentLength].length >= 3) return;
+  records[currentLength].push(currentT);
+  const trials = records[currentLength].length;
+  trialCount.textContent = `此擺長已記錄 ${trials}/3 次`;
+  if (trials >= 3) {
+    recordBtn.disabled = true;
+    const btn = document.querySelector(`.length-btn[data-length="${currentLength.toFixed(2)}"]`);
+    if (btn) btn.classList.add('done');
+    toast(`${(currentLength*100).toFixed(0)}cm 已完成 3 次記錄`);
+  }
+  updateTable(); updateGraph();
+  measuredT = null; currentT = null;
+  stopwatchDisplay.textContent = '0.00 s';
+  swingCountEl.textContent = '按碼錶開始下一次測量';
+  measureResult.style.display = 'none';
+  recordBtn.disabled = true;
+  stopwatchBtn.textContent = '⏱ 開始計時';
+  stopwatchBtn.classList.remove('running');
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  Object.keys(records).forEach(k => delete records[k]);
+  currentLength = null; currentT = null;
+  document.querySelectorAll('.length-btn').forEach(b => b.classList.remove('active','done'));
+  recordBtn.disabled = true;
+  stopwatchDisplay.textContent = '0.00 s';
+  swingCountEl.textContent = '選擇擺長後，擺錘開始擺動';
+  measureResult.style.display = 'none';
+  stopwatchBtn.disabled = true;
+  stopwatchBtn.textContent = '⏱ 開始計時';
+  stopwatchBtn.classList.remove('running');
+  trialCount.textContent = '';
+  tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--ink-mute);font-style:italic;padding:14px;">← 開始記錄後出現</td></tr>';
+  document.getElementById('fitInfo').style.display = 'none';
+  drawEmpty();
+  drawGraphEmpty();
+});
+
+function updateTable() {
+  const lengths = [0.10, 0.20, 0.30, 0.40, 0.50, 0.60].filter(L => records[L] && records[L].length > 0);
+  if (lengths.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--ink-mute);font-style:italic;padding:14px;">← 開始記錄後出現</td></tr>';
+    return;
+  }
+  tableBody.innerHTML = lengths.map(L => {
+    const Ts = records[L];
+    const cells = [0,1,2].map(i => Ts[i] !== undefined ? `<td>${Ts[i].toFixed(2)}</td>` : '<td style="color:var(--ink-mute)">—</td>');
+    const avg = Ts.length === 3 ? `<td style="color:var(--phase1);font-weight:700;">${(Ts.reduce((a,b)=>a+b,0)/3).toFixed(2)}</td>` : '<td style="color:var(--ink-mute)">—</td>';
+    const Tsq = Ts.length === 3 ? `<td style="color:var(--phase2);font-weight:700;">${Math.pow(Ts.reduce((a,b)=>a+b,0)/3,2).toFixed(3)}</td>` : '<td style="color:var(--ink-mute)">—</td>';
+    return `<tr><td><strong>${L.toFixed(2)}</strong></td>${cells.join('')}${avg}${Tsq}</tr>`;
+  }).join('');
+}
+
+/* —— Graph —— */
+let graphMode = 'T_vs_L', trendType = 'none';
+document.getElementById('graphToggles').addEventListener('click', e => {
+  const btn = e.target.closest('.graph-toggle'); if (!btn) return;
+  graphMode = btn.dataset.mode;
+  document.querySelectorAll('.graph-toggle').forEach(b => b.classList.toggle('active', b === btn));
+  updateGraph();
+});
+document.getElementById('trendControls').addEventListener('click', e => {
+  const btn = e.target.closest('.trend-btn'); if (!btn) return;
+  trendType = btn.dataset.trend;
+  document.querySelectorAll('.trend-btn').forEach(b => b.classList.toggle('active', b === btn));
+  updateGraph();
+});
+
+function computeFit(x, y, type) {
+  const n = x.length;
+  const meanY = y.reduce((a,b)=>a+b,0)/n;
+  const SS_tot = y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+  if (type === 'linear') {
+    const sx=x.reduce((a,b)=>a+b,0), sy=y.reduce((a,b)=>a+b,0);
+    const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0), sx2=x.reduce((s,xi)=>s+xi*xi,0);
+    const a=(n*sxy-sx*sy)/(n*sx2-sx*sx), b=(sy-a*sx)/n;
+    const pred=xi=>a*xi+b;
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return { pred, info: `T${graphMode==='T2_vs_L'?'²':''} = ${a.toFixed(3)}·L ${b>=0?'+':'−'} ${Math.abs(b).toFixed(3)}<br>R² = ${R2.toFixed(4)} · 截距 = ${b.toFixed(4)}${Math.abs(b)>0.02?' ⚠':' ✓'}`, R2 };
+  }
+  if (type === 'power') {
+    const lx=x.map(Math.log), ly=y.map(Math.log);
+    const slx=lx.reduce((a,b)=>a+b,0), sly=ly.reduce((a,b)=>a+b,0);
+    const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0), slx2=lx.reduce((s,v)=>s+v*v,0);
+    const nn=(n*slxy-slx*sly)/(n*slx2-slx*slx);
+    const a=Math.exp((sly-nn*slx)/n);
+    const pred=xi=>a*Math.pow(xi,nn);
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return { pred, info: `T${graphMode==='T2_vs_L'?'²':''} = ${a.toFixed(3)}·L^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)} · 指數 n = ${nn.toFixed(3)}`, R2 };
+  }
+  if (type === 'poly') {
+    const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
+    const syp=p=>x.reduce((s,xi,i)=>s+Math.pow(xi,p)*y[i],0);
+    const A=[[n,sp(1),sp(2),syp(0)],[sp(1),sp(2),sp(3),syp(1)],[sp(2),sp(3),sp(4),syp(2)]];
+    for (let col=0;col<3;col++) {
+      let mr=col;
+      for (let r=col+1;r<3;r++) if (Math.abs(A[r][col])>Math.abs(A[mr][col])) mr=r;
+      [A[col],A[mr]]=[A[mr],A[col]];
+      for (let r=col+1;r<3;r++) {
+        const f=A[r][col]/A[col][col];
+        for (let j=col;j<=3;j++) A[r][j]-=f*A[col][j];
+      }
+    }
+    const c=[0,0,0];
+    for (let i=2;i>=0;i--) { c[i]=A[i][3]; for (let j=i+1;j<3;j++) c[i]-=A[i][j]*c[j]; c[i]/=A[i][i]; }
+    const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    const yv=graphMode==='T2_vs_L'?'T²':'T';
+    return { pred, info: `${yv} = ${c[2].toFixed(2)}L² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(2)}L ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(3)}<br>R² = ${R2.toFixed(4)}`, R2 };
+  }
+  return null;
+}
+
+function drawGraphEmpty() {
+  const {w, h} = fitCanvas(graphCanvas);
+  gCtx.clearRect(0,0,w,h);
+  const pad = { l: 44, r: 18, t: 16, b: 34 };
+  gCtx.strokeStyle = '#e5e7eb';
+  gCtx.strokeRect(pad.l, pad.t, w - pad.l - pad.r, h - pad.t - pad.b);
+  gCtx.fillStyle = '#cbd5e1';
+  gCtx.font = '500 12px "DM Mono", monospace';
+  gCtx.textAlign = 'center';
+  gCtx.fillText('等待數據…', w/2, h/2);
+}
+drawGraphEmpty();
+
+function updateGraph() {
+  const lengths = [0.10, 0.20, 0.30, 0.40, 0.50, 0.60].filter(L => records[L] && records[L].length === 3);
+  const {w, h} = fitCanvas(graphCanvas);
+  const pad = { l: 44, r: 18, t: 16, b: 34 };
+  gCtx.clearRect(0,0,w,h);
+
+  const pts = lengths.map(L => {
+    const T = records[L].reduce((a,b)=>a+b,0)/3;
+    return { L, T, T_sq: T*T };
+  });
+  if (pts.length < 2) { drawGraphEmpty(); return; }
+
+  const xArr = pts.map(p => p.L);
+  const yArr = graphMode === 'T_vs_L' ? pts.map(p => p.T) : pts.map(p => p.T_sq);
+  const yLabel = graphMode === 'T_vs_L' ? 'T (s)' : 'T² (s²)';
+  const xMax = Math.max(...xArr) * 1.15, yMax = Math.max(...yArr) * 1.15;
+
+  const toX = v => pad.l + (v/xMax) * (w - pad.l - pad.r);
+  const toY = v => h - pad.b - (v/yMax) * (h - pad.t - pad.b);
+
+  // grid
+  gCtx.strokeStyle = '#f1f5f9'; gCtx.lineWidth = 1;
+  for (let i=1;i<=4;i++) {
+    const gx = pad.l + (i/4)*(w-pad.l-pad.r);
+    const gy = h - pad.b - (i/4)*(h-pad.t-pad.b);
+    gCtx.beginPath(); gCtx.moveTo(gx, pad.t); gCtx.lineTo(gx, h-pad.b); gCtx.stroke();
+    gCtx.beginPath(); gCtx.moveTo(pad.l, gy); gCtx.lineTo(w-pad.r, gy); gCtx.stroke();
+  }
+  gCtx.strokeStyle = '#94a3b8'; gCtx.lineWidth = 1.5;
+  gCtx.beginPath(); gCtx.moveTo(pad.l, pad.t); gCtx.lineTo(pad.l, h-pad.b); gCtx.lineTo(w-pad.r, h-pad.b); gCtx.stroke();
+
+  gCtx.fillStyle = '#64748b'; gCtx.font = '11px "DM Mono", monospace';
+  gCtx.textAlign = 'center'; gCtx.fillText('擺長 L (m)', w/2, h - 6);
+  gCtx.save(); gCtx.translate(12, h/2); gCtx.rotate(-Math.PI/2); gCtx.fillText(yLabel, 0, 0); gCtx.restore();
+  for (let i=0;i<=4;i++) {
+    const xv = xMax*i/4, yv = yMax*i/4;
+    gCtx.fillStyle='#94a3b8'; gCtx.font='10px "DM Mono", monospace';
+    gCtx.textAlign='center'; gCtx.fillText(xv.toFixed(2), toX(xv), h-pad.b+13);
+    gCtx.textAlign='right'; gCtx.fillText(yv.toFixed(2), pad.l-4, toY(yv)+4);
+  }
+
+  const fitInfo = document.getElementById('fitInfo');
+  if (trendType !== 'none' && pts.length >= 3) {
+    const fit = computeFit(xArr, yArr, trendType);
+    if (fit) {
+      gCtx.strokeStyle = '#16a34a'; gCtx.lineWidth = 2; gCtx.setLineDash([5,3]);
+      gCtx.beginPath();
+      const steps = 60;
+      for (let i=0;i<=steps;i++) {
+        const xv = (xMax*i)/steps, yv = fit.pred(xv);
+        if (yv < 0) continue;
+        const cx = toX(xv), cy = toY(yv);
+        i===0 ? gCtx.moveTo(cx,cy) : gCtx.lineTo(cx,cy);
+      }
+      gCtx.stroke(); gCtx.setLineDash([]);
+      gCtx.fillStyle='#16a34a'; gCtx.font='bold 10px "DM Mono", monospace';
+      gCtx.textAlign='left'; gCtx.fillText(`R²=${fit.R2.toFixed(3)}`, toX(xMax*0.55), toY(yMax*0.85));
+      fitInfo.style.display='block'; fitInfo.innerHTML=fit.info;
+    }
+  } else {
+    fitInfo.style.display='none';
+  }
+
+  pts.forEach(p => {
+    const yv = graphMode === 'T_vs_L' ? p.T : p.T_sq;
+    gCtx.beginPath(); gCtx.arc(toX(p.L), toY(yv), 5, 0, Math.PI*2);
+    gCtx.fillStyle = '#2952c4'; gCtx.fill();
+    gCtx.strokeStyle = '#fff'; gCtx.lineWidth = 1.5; gCtx.stroke();
+  });
+}
+
+window.addEventListener('resize', () => {
+  if (!animId) drawEmpty();
+  updateGraph();
+});
+
+/* ============================================================
+   Init
+   ============================================================ */
+applyVariant(state.variant);
+renderStep(state.current, true);
+
+// 課後資源摺疊
+document.querySelectorAll('.post-class-toggle').forEach(toggle => {
+  toggle.addEventListener('click', () => {
+    const body = toggle.nextElementSibling;
+    const icon = toggle.querySelector('.col-icon');
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    if (icon) icon.textContent = open ? '▶' : '▼';
+  });
+});
+
+// 課後資源內的小摺疊
+document.querySelectorAll('.post-class .collapsible-head').forEach(head => {
+  head.addEventListener('click', () => {
+    const body = head.nextElementSibling;
+    const icon = head.querySelector('.col-icon');
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    if (icon) icon.textContent = open ? '▶' : '▼';
+  });
+});
+</script>
+
+</div><!-- /#main-content -->
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

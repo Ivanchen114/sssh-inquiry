@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>翻滾仔 Lv1 · 滾動數據分析 · 探究與實作</title>
+  <meta name="description" content="翻滾仔 Lv1 論證建模：齒軌翻滾裝置的滾動數據分析，探究影響滾動速度的變因。">
+  <meta property="og:title" content="翻滾仔 Lv1 · 滾動數據分析 · 探究與實作">
+  <meta property="og:description" content="翻滾仔 Lv1 論證建模：齒軌翻滾裝置的滾動數據分析，探究影響滾動速度的變因。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/roller-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>翻滾仔</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>🎡 翻滾仔 · Lv1 論證建模</h1>
+    <p class="subtitle">黏土位置如何影響翻滾速度？用數據發現非線性關係。</p>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從數據中辨識趨勢與規律（例如：從距離 vs 翻滾時間圖判斷非線性關係）</li>
+      <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：從數據中發現翻滾時間與距離的非線性關係）</li>
+      <li>能用「主張—證據—推理」的架構進行科學論證</li>
+      <li>能評估模型的適用範圍與限制</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>預測</button>
+    <button class="step-tab"><span class="step-num">2</span>認識裝置</button>
+    <button class="step-tab"><span class="step-num">3</span>數據分析</button>
+    <button class="step-tab"><span class="step-num">4</span>延伸與反思</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>黏土黏在離軸心很遠的地方（手臂末端），翻滾會變快還是變慢？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>「黏土離軸心距離 vs 翻滾時間」的圖，你猜是什麼形狀？直線？曲線？<br>
+        <span style="font-size:12px;color:var(--text-secondary);">在紙上畫一條預測線。</span>
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>如果完全不加黏土，翻滾仔還能翻嗎？為什麼？
+      </div>
+
+      <!-- Layer 2: 預測記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測寫下來（特別是 P2 的圖形猜測），活動結束後回來對照。</div>
+        <textarea class="think-input" data-key="roller-lv1-predict" placeholder="P1：黏土離遠一點會…&#10;P2：我猜圖形是…因為…&#10;P3：不加黏土的話…" style="min-height:80px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Interactive: Moment of inertia prediction -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 黏土黏在遠離軸心的位置，翻滾會怎樣？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 更快（黏土甩出去的力量更大）</button>
+          <button class="think-opt" data-val="b">B. 更慢（質量離軸心越遠越難轉）</button>
+          <button class="think-opt" data-val="c">C. 速度不變（黏土質量沒變）</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          沒錯，越慢！你可以想像花式溜冰選手：張開手臂轉得慢、收緊手臂轉得快。黏土離軸心越遠，質量「散佈」越開，要轉動它就越費力。但到底是怎麼「費力」——慢多少？是等比例還是更多？等下用數據來看。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：認識裝置 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">認識翻滾仔的構造和核心物理原理。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">翻滾仔 = 齒軌翻滾裝置</div>
+          竹籤做<strong>軸心</strong>，兩端伸出<strong>轉動手臂</strong>，手臂末端黏上<strong>黏土</strong>。放在鋸齒紙軌道斜面上，靠重力逐格翻滾。
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">能量轉換鏈：</div>
+          <div style="color:var(--text-secondary);line-height:2;">
+            重力位能 → 轉動動能<br>
+            黏土離軸越遠 → 越難轉 → 越慢<br>
+            齒軌接觸 → 摩擦損耗
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box yellow">
+        💡 <strong>今天的任務</strong>：黏土離軸心的距離如何影響翻滾時間？是等比例變慢，還是「加速」變慢？畫出散佈圖看看。
+      </div>
+
+      <div style="margin-top:16px;">
+        <a href="roller-lab.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
+          ⚙️ <span><strong style="color:var(--text-primary);">虛擬實驗室</strong>：調整坡度與軌道長度，觀察末速</span> <span style="margin-left:auto;">→</span>
+        </a>
+      </div>
+
+      <!-- Interactive: Moment of inertia formula -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：距離加倍，翻滾時間也只是加倍嗎？還是會更多？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>想像用力推一扇門：推門邊（遠離鉸鏈）很容易轉，推靠近鉸鏈很難轉。距離的影響很大——可能比「等比例」還要強。到底是怎樣的關係？等下看數據就知道了。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：數據分析（核心任務）═══ -->
+    <div class="step-panel">
+      <div class="step-action">分析數據表，找出「黏土距離 vs 翻滾時間」的規律。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">固定黏土 10g，改變離軸心距離，測量翻滾時間：</p>
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table>
+          <thead><tr><th>離軸心 (cm)</th><th>①秒</th><th>②秒</th><th>③秒</th><th>平均</th><th>備註</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>2.3</td><td>2.1</td><td>2.4</td><td style="color:var(--text-muted);">?</td><td style="font-size:11px;color:var(--text-muted);">近軸心</td></tr>
+            <tr><td>3</td><td>3.8</td><td>3.5</td><td>3.9</td><td style="color:var(--text-muted);">?</td><td></td></tr>
+            <tr><td>5</td><td>5.6</td><td>5.3</td><td>5.8</td><td style="color:var(--text-muted);">?</td><td></td></tr>
+            <tr><td>7</td><td>8.1</td><td>7.7</td><td>8.4</td><td style="color:var(--text-muted);">?</td><td></td></tr>
+            <tr><td>9</td><td>11.2</td><td>10.8</td><td>11.6</td><td style="color:var(--text-muted);">?</td><td></td></tr>
+            <tr><td>11</td><td>14.5</td><td>3.1</td><td>14.8</td><td style="color:var(--text-muted);">?</td><td style="font-size:11px;color:#ef4444;">② 異常？</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 散佈圖 + 趨勢線 -->
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+          <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">📈 離軸心距離 vs 翻滾時間</span>
+          <div id="trendControls" style="display:flex;align-items:center;gap:5px;margin-left:auto;font-size:11px;color:var(--text-secondary);">
+            趨勢線：
+            <button class="trend-btn active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+            <button class="trend-btn" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+            <button class="trend-btn" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+            <button class="trend-btn" data-trend="poly" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">多項式</button>
+          </div>
+        </div>
+        <canvas id="rollerGraphCanvas" width="400" height="220" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;background:#fafbfc;"></canvas>
+        <div id="fitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+      </div>
+
+      <div style="display:grid;gap:6px;margin-bottom:14px;">
+        <div class="q-item"><strong>Q1：</strong>計算平均時間（最後一排的②合理嗎？怎麼處理？）。選<strong>線性</strong>趨勢線——截距代表「距離 = 0 時的翻滾時間」，物理上合理嗎？</div>
+        <div class="q-item"><strong>Q2：</strong>觀察數據形狀——距離加倍，時間增加超過一倍。試試<strong>冪次</strong>趨勢線，指數 n 大約是多少？n > 1 代表什麼物理意義？</div>
+        <div class="q-item"><strong>Q3：</strong>試試<strong>多項式</strong>——R² 可能最高，但物理上為什麼「距離和時間是二次方關係」？你能想到一個合理的物理解釋嗎？</div>
+        <div class="q-item"><strong>Q4：</strong>溜冰選手張開手臂轉得慢、收起手臂轉得快。這跟你的數據規律一致嗎？用「主張—理由—證據」論證你的趨勢線選擇。</div>
+      </div>
+
+      <!-- Interactive: Outlier handling -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 距離 11 cm 的第②次測量是 3.1 秒，其他兩次是 14.5 和 14.8——應該怎麼處理？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 直接刪掉，算另外兩次的平均</button>
+          <button class="think-opt" data-val="b">B. 保留記錄，標註「異常」，報告裡說明</button>
+          <button class="think-opt" data-val="c">C. 看起來錯誤明顯，直接用 14.6 當最終答案</c>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          科學誠實最重要！直接刪掉是欺騙。保留並標註異常最誠實——說明「有一筆離群值，可能原因是…」。報告審查者能看出你認真檢驗了數據，也能看出你的實驗控制程度。
+        </div>
+      </div>
+
+      <!-- Interactive: Non-linear relationship reasoning -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你的「距離 vs 時間」散佈圖是直線還是曲線？你認為是什麼原因造成這個形狀？</div>
+        <textarea class="think-input" data-key="roller-lv1-analysis" placeholder="例如：圖呈向上彎曲的曲線，不是直線。我猜是因為黏土離軸心越遠，要翻過去的「阻力」越大…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- 做完分析的討論 -->
+      <div class="collapsible think-first" style="margin:0;">
+        <div class="collapsible-header">🔓 做完分析再打開：為什麼不是直線？<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+            <p>你發現「距離 vs 時間」不是直線，而是向上彎曲的曲線。為什麼？</p>
+            <p>核心概念是<strong>「質量離軸心越遠，越難轉動」</strong>——花式溜冰選手張開手臂轉得慢、收緊手臂轉得快，就是這個道理。而且這個效應不是等比例的：距離加倍，「難轉動」的程度增加不只一倍。</p>
+            <p>但翻滾仔不像單擺那樣有一個乾淨的公式。真實的翻滾牽涉到齒軌摩擦、黏土形狀、手臂彈性等多個變因，所以數據不會完美符合任何簡單方程式。<br>
+            <strong>這正是探究的意義</strong>：不是每個現象都能用一個公式包裝——認出「這很複雜」本身就是重要的科學判斷。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：延伸與反思 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">回頭對照預測，然後想一個你自己的問題。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回 P2 的預測圖，和你的散佈圖比較——差多少？差在哪裡？</p>
+
+      <!-- Interactive: Prediction vs reality reflection -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你 P2 預測的圖是直線還是曲線？實際結果呢？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>許多人直覺會猜直線（「距離越遠，等比例變慢」）。但實際結果是向上彎曲的曲線——距離加倍，時間增加不只一倍。人的直覺往往是線性的，但物理世界常常充滿非線性——這是做實驗才能發現的。</p>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:6px;">黏土質量加倍（10g→20g），位置不變——時間會怎麼變？</div>
+      <div class="q-item" style="margin-bottom:6px;">斜面角度變陡——翻滾會變快還是變慢？為什麼？</div>
+      <div class="q-item" style="margin-bottom:16px;">花式溜冰選手收緊手臂轉得更快——對應翻滾仔的哪個變因？</div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">用「如果改變___，___會怎樣？」的句型：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「手臂長度（5cm vs 10cm vs 15cm）如何影響翻完一輪的時間？」← 有操縱變因、可量化。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="roller-lv1-my-question" rows="3" placeholder="例：齒軌間距會影響翻滾仔的滾動速度嗎？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/roller-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          翻滾仔 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生透過給定數據認識「質量分佈 → 轉動慣量 → 翻滾速度」的因果鏈</li>
+              <li>建立「黏土離軸心距離 vs 翻滾時間」的定量模型</li>
+              <li>練習辨識趨勢、異常值，用能量觀點解釋</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              翻滾時間大致與 $r^2$ 成正比（非線性）。最後一排故意加入異常值（3.1 秒），訓練辨識和處理。可能原因：翻滾仔卡住彈飛、黏土脫落、計時錯誤。建議搭配實物展示。
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">你的散佈圖和「距離²與時間」的分析推論，是「從數據中發現物理規律」的好證據。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ 反思錨點：你<em>之前</em>的預測 vs 實際結果差在哪？（2-3 句就好）
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小玲想研究「斜面角度對翻滾仔速度的影響」。她的計畫：架 15° 和 30° 兩個角度，讓翻滾仔滾下來，碼錶計時比較。<strong>有什麼問題？</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              只有 2 個水準、只量 1 次沒有重複、沒控制釋放方式、碼錶反應時間誤差大。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/roller-lv2.html">翻滾仔 Lv2 規劃研究 →</a>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+<script>
+// ─── 翻滾仔：散佈圖 + 趨勢線引擎 ───
+(function(){
+  // 11cm 的②(3.1)是離群值，用剩餘兩次平均
+  const DATA = [
+    {x:1, y:(2.3+2.1+2.4)/3},
+    {x:3, y:(3.8+3.5+3.9)/3},
+    {x:5, y:(5.6+5.3+5.8)/3},
+    {x:7, y:(8.1+7.7+8.4)/3},
+    {x:9, y:(11.2+10.8+11.6)/3},
+    {x:11, y:(14.5+14.8)/2}  // 離群值排除
+  ];
+
+  const canvas = document.getElementById('rollerGraphCanvas');
+  const ctx = canvas.getContext('2d');
+  let trendType = 'none';
+
+  document.getElementById('trendControls').addEventListener('click', e=>{
+    const btn = e.target.closest('.trend-btn');
+    if(!btn) return;
+    trendType = btn.dataset.trend;
+    document.querySelectorAll('#trendControls .trend-btn').forEach(b=>{
+      b.style.background = b===btn?'#059669':'var(--bg)';
+      b.style.color = b===btn?'white':'inherit';
+    });
+    drawGraph();
+  });
+
+  function computeFit(x,y,type){
+    const n=x.length;
+    const meanY=y.reduce((a,b)=>a+b,0)/n;
+    const SS_tot=y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+    if(type==='linear'){
+      const sx=x.reduce((a,b)=>a+b,0),sy=y.reduce((a,b)=>a+b,0);
+      const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0),sx2=x.reduce((s,xi)=>s+xi*xi,0);
+      const a=(n*sxy-sx*sy)/(n*sx2-sx*sx),b=(sy-a*sx)/n;
+      const pred=xi=>a*xi+b;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：時間 = ${a.toFixed(3)}·距離 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(2)} 秒<br>斜率 = ${a.toFixed(3)} 秒/cm`};
+    }
+    if(type==='power'){
+      const lx=x.map(Math.log),ly=y.map(Math.log);
+      const slx=lx.reduce((a,b)=>a+b,0),sly=ly.reduce((a,b)=>a+b,0);
+      const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0),slx2=lx.reduce((s,v)=>s+v*v,0);
+      const nn=(n*slxy-slx*sly)/(n*slx2-slx*slx);
+      const a=Math.exp((sly-nn*slx)/n);
+      const pred=xi=>a*Math.pow(xi,nn);
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：時間 = ${a.toFixed(3)}·距離^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-2)<0.3?' (≈2，接近平方關係)':nn>1?' (n>1，超線性增長)':''}`};
+    }
+    if(type==='poly'){
+      const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
+      const syp=p=>x.reduce((s,xi,i)=>s+Math.pow(xi,p)*y[i],0);
+      const A=[[n,sp(1),sp(2),syp(0)],[sp(1),sp(2),sp(3),syp(1)],[sp(2),sp(3),sp(4),syp(2)]];
+      for(let col=0;col<3;col++){let mr=col;for(let r=col+1;r<3;r++)if(Math.abs(A[r][col])>Math.abs(A[mr][col]))mr=r;[A[col],A[mr]]=[A[mr],A[col]];for(let r=col+1;r<3;r++){const f=A[r][col]/A[col][col];for(let j=col;j<=3;j++)A[r][j]-=f*A[col][j];}}
+      const c=[0,0,0];for(let i=2;i>=0;i--){c[i]=A[i][3];for(let j=i+1;j<3;j++)c[i]-=A[i][j]*c[j];c[i]/=A[i][i];}
+      const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：時間 = ${c[2].toFixed(4)}·距離² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·距離 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(2)}<br>R² = ${R2.toFixed(4)}`};
+    }
+    return null;
+  }
+
+  function drawGraph(){
+    const parent=canvas.parentElement;
+    const W=(parent?parent.clientWidth-24:0)||400;
+    canvas.width=W;canvas.height=220;
+    const H=220,pad={l:50,r:20,t:18,b:40};
+    ctx.clearRect(0,0,W,H);
+
+    const xArr=DATA.map(d=>d.x),yArr=DATA.map(d=>d.y);
+    const xMax=13,yMax=17;
+    function toX(v){return pad.l+(v/xMax)*(W-pad.l-pad.r);}
+    function toY(v){return H-pad.b-(v/yMax)*(H-pad.t-pad.b);}
+
+    // 格線
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let i=1;i<=4;i++){const gx=pad.l+i/4*(W-pad.l-pad.r),gy=H-pad.b-i/4*(H-pad.t-pad.b);ctx.beginPath();ctx.moveTo(gx,pad.t);ctx.lineTo(gx,H-pad.b);ctx.stroke();ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(W-pad.r,gy);ctx.stroke();}
+    // 軸
+    ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();
+    ctx.fillStyle='#64748b';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('離軸心距離 (cm)',W/2,H-4);
+    ctx.save();ctx.translate(12,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('翻滾時間 (秒)',0,0);ctx.restore();
+    for(let i=0;i<=4;i++){const xv=xMax*i/4,yv=yMax*i/4;ctx.fillStyle='#94a3b8';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(xv.toFixed(0),toX(xv),H-pad.b+13);ctx.textAlign='right';ctx.fillText(yv.toFixed(1),pad.l-4,toY(yv)+4);}
+
+    // 趨勢線
+    const fitInfo=document.getElementById('fitInfo');
+    if(trendType!=='none'){
+      const fit=computeFit(xArr,yArr,trendType);
+      if(fit){
+        ctx.strokeStyle='#059669';ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.beginPath();
+        for(let i=0;i<=60;i++){const xv=xMax*i/60;if(xv<=0&&trendType==='power')continue;const yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?ctx.moveTo(cx,cy):ctx.lineTo(cx,cy);}
+        ctx.stroke();ctx.setLineDash([]);
+        ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
+        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.55),toY(yMax*0.85));
+        fitInfo.style.display='block';fitInfo.innerHTML=fit.info;
+      }
+    } else {fitInfo.style.display='none';}
+
+    // 數據點
+    DATA.forEach(p=>{ctx.beginPath();ctx.arc(toX(p.x),toY(p.y),5,0,Math.PI*2);ctx.fillStyle='#2563eb';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=1.5;ctx.stroke();});
+  }
+  drawGraph();
+})();
+</script>
+</body>
+</html>

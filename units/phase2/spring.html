@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>彈簧變因設計 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="彈簧 Lv2 規劃研究：設計變因控制實驗，探究影響彈性係數的因素。">
+  <meta property="og:title" content="彈簧變因設計 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="彈簧 Lv2 規劃研究：設計變因控制實驗，探究影響彈性係數的因素。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/spring.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span>主題模組</span>
+      <span>›</span>
+      <span style="color:var(--phase2)">彈簧</span>
+      <span>›</span>
+      <span>Lv2 規劃研究</span>
+    </div>
+    <h1>🌀 彈簧模組 · Lv2 規劃研究</h1>
+    <p class="subtitle">從「什麼可以改變？」到「我要測哪個變因？」</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">控制變因入門</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從現象或理論出發，提出可驗證的研究問題（例如：彈簧長度如何影響彈力常數 k？）</li>
+      <li>能設計含操縱變因、控制變因與應變變因的實驗計畫，並說明每個設計選擇的原因</li>
+      <li>能有系統地蒐集數據，並判斷數據的可靠性（重複測量至少 3 次，檢查線性關係）</li>
+      <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>核心概念</button>
+    <button class="step-tab"><span class="step-num">2</span>設計實驗</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與數據</button>
+    <button class="step-tab"><span class="step-num">4</span>分析與發表</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- STEP 1: 核心概念 -->
+    <div class="step-panel active">
+      <div class="step-action">
+        <div class="section-title">核心概念：三種變因</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">在任何實驗中，你要決定三件事：<strong>你改變什麼？你固定什麼？你觀察什麼？</strong></p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+          <div class="card" style="border-top:3px solid var(--phase1);">
+            <div style="font-weight:700;font-size:13px;color:var(--phase1);margin-bottom:6px;">操縱變因</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">你<strong>主動改變</strong>的那個因素。<br><br>例：改變掛在彈簧上的砝碼質量（100g, 200g, 300g）</div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--phase2);">
+            <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:6px;">控制變因</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">你<strong>維持不變</strong>的所有其他因素。<br><br>例：彈簧種類、懸掛高度、室溫</div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--phase3);">
+            <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:6px;">應變變因</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">你<strong>觀察並記錄</strong>的結果。<br><br>例：彈簧伸長的長度（cm）</div>
+          </div>
+        </div>
+
+        <div class="section-title">情境引入：橡皮筋能秤重嗎？</div>
+        <div class="card" style="margin-bottom:16px;">
+          <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;margin-bottom:12px;">老師拿出一條橡皮筋和幾個砝碼。問題：「這條橡皮筋能當成秤嗎？我要怎麼設計實驗，讓它能測出一個未知物體的質量？」</p>
+          <p style="color:var(--text-secondary);font-size:13px;line-height:1.8;font-weight:700;margin-bottom:8px;">「影響橡皮筋伸長量」的可能因素，你能想到哪些？</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="background:white;border-radius:4px;padding:8px 12px;font-size:12px;">掛的重量（質量）</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;font-size:12px;">橡皮筋的長度（原長）</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;font-size:12px;">橡皮筋的粗細</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;font-size:12px;">橡皮筋的材質</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;font-size:12px;">溫度</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;font-size:12px;">你能想到的其他因素…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: 設計實驗 -->
+    <div class="step-panel">
+      <div class="step-action">
+        <div class="section-title">設計實驗：選擇研究問題</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">各組從以下研究問題中選一個，設計實驗計畫：</p>
+
+        <div style="display:grid;gap:10px;margin-bottom:20px;">
+          <div style="border-left:3px solid var(--phase2);padding:10px 16px;background:var(--bg);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px;">問題 A：彈簧的伸長量和掛的重量有什麼關係？</div>
+            <div style="font-size:12px;color:var(--text-muted);">操縱變因：砝碼質量　應變變因：伸長量</div>
+          </div>
+          <div style="border-left:3px solid var(--phase2);padding:10px 16px;background:var(--bg);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px;">問題 B：彈簧原長如何影響相同重量下的伸長量？</div>
+            <div style="font-size:12px;color:var(--text-muted);">操縱變因：彈簧原長（用不同圈數）　應變變因：伸長量</div>
+          </div>
+          <div style="border-left:3px solid var(--phase2);padding:10px 16px;background:var(--bg);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px;">問題 C：兩條橡皮筋串聯 vs 並聯，哪個伸長更多？</div>
+            <div style="font-size:12px;color:var(--text-muted);">操縱變因：串/並聯方式　應變變因：伸長量</div>
+          </div>
+        </div>
+
+        <!-- Layer 3: 虎克定律概念題 -->
+        <div class="think-block choice" data-answer="b">
+          <div class="think-prompt">🎯 暖身題：虎克定律 F = kx 中，如果你想研究「彈簧常數 k 是否隨著彈簧原長改變」，應該怎麼實驗？</div>
+          <div class="think-options">
+            <button class="think-opt" data-val="a">A. 改變砝碼質量，看伸長量，然後用同一條彈簧的不同部分比較 k 值</button>
+            <button class="think-opt" data-val="b">B. 用不同原長的彈簧（例如 10、20、30 圈），掛相同砝碼，分別算出各自的 k 值，比較</button>
+            <button class="think-opt" data-val="c">C. 把彈簧剪成短片段，比較剪前後的伸長量</button>
+            <button class="think-opt" data-val="d">D. 用不同粗細的彈簧，都掛 100g，看哪個伸長最多</button>
+          </div>
+          <div class="think-feedback" style="display:none;">
+            B 是對的。操縱變因必須是「原長的差異」（例如圈數），應變變因是「計算出的 k 值」。A 和 C 混淆了「同一條彈簧的部分」和「不同原長的彈簧」；D 改變了材質，不只改變原長。
+          </div>
+        </div>
+
+        <!-- Layer 2: 選題記錄 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 你打算選哪個研究問題？簡單說明你的選擇理由。</div>
+          <textarea class="think-input" data-key="spring-lv2-q1" placeholder="例如：選問題 B，因為我想驗證彈簧原長是否真的影響 k 值，實驗在教室裡容易做…"></textarea>
+          <div class="think-status"></div>
+        </div>
+
+        <div class="section-title">實驗計畫表</div>
+        <div style="background:var(--bg);border-radius:6px;padding:14px;font-size:13px;">
+          <div style="display:grid;gap:8px;color:var(--text-secondary);">
+            <div><strong>1. 研究問題</strong>（從上方選一個，或自訂）：___________</div>
+            <div><strong>2. 操縱變因</strong>：___________　　<strong>水準</strong>：___________</div>
+            <div><strong>3. 控制變因</strong>（列出至少 3 個）：___________</div>
+            <div><strong>4. 應變變因</strong>（如何測量）：___________</div>
+            <div><strong>5. 預測</strong>：我認為結果會是___________，因為___________</div>
+          </div>
+        </div>
+
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-top:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:12px;margin-bottom:6px;">📋 填寫研究規劃表</div>
+          <div style="font-size:12px;color:#1e3a8a;line-height:1.7;">
+            用六步流程把你的想法變成可執行的實驗計畫 → <a href="research-plan.html" style="color:#1e40af;font-weight:600;">開始填寫</a>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;">
+          <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;">
+            <div style="font-weight:700;color:#92400e;font-size:12px;margin-bottom:6px;">⚡ 先跑一次再改</div>
+            <div style="font-size:11px;color:#78350f;line-height:1.7;">
+              計畫寫完別急著做完整實驗。花 10 分鐘用最粗糙的方式先試一次（只測 2 個水準、不用重複），確認流程跑得通、數據量得到。發現問題回來改計畫。
+            </div>
+          </div>
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;">
+            <div style="font-weight:700;color:#1e40af;font-size:12px;margin-bottom:6px;">🤝 小組分工提示</div>
+            <div style="font-size:11px;color:#1e3a8a;line-height:1.7;">
+              分三個角色：<strong>操作員</strong>（動手做）、<strong>記錄員</strong>（記數據）、<strong>品管員</strong>（檢查控制變因）。每次換水準時輪換。
+            </div>
+          </div>
+        </div>
+
+        <!-- Layer 1: 控制變因想一想 -->
+        <div class="think-block reveal">
+          <div class="think-prompt">🤔 想一想：如果你選「彈簧原長」作為操縱變因，有哪些變因是「無論如何都要控制」的？列出至少 3 個。</div>
+          <button class="think-toggle">想好了？點擊看提示 →</button>
+          <div class="think-hidden">
+            <p>必控變因：<strong>砝碼質量</strong>（必須相同，才能比較 k 值）、<strong>掛砝碼的方式</strong>（中央還是邊緣？）、<strong>計時工具</strong>（用直尺量伸長量，要同一把尺）、<strong>溫度</strong>（會影響彈簧硬度）、<strong>砝碼掛掛的時間</strong>（等它穩定再量）。這些都控制不好，結果就沒意義。</p>
+          </div>
+        </div>
+
+        <!-- Layer 2: 互評記錄 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 同儕互評後，對方指出你的計畫有什麼最大的漏洞？你怎麼改？</div>
+          <textarea class="think-input" data-key="spring-lv2-peer" placeholder="例如：同學說我沒寫『砝碼怎麼掛』，我決定加上『砝碼用S鉤掛在彈簧中央』這句…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 執行與數據 -->
+    <div class="step-panel">
+      <div class="step-action">
+        <div class="section-title">執行實驗並記錄數據</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">依照計畫進行實驗，將數據整理至下方格式：</p>
+
+        <div style="overflow-x:auto;margin-bottom:16px;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="background:var(--bg);">
+                <th style="padding:10px;text-align:left;border:1px solid var(--border);font-weight:700;">操縱變因（數值）</th>
+                <th style="padding:10px;text-align:center;border:1px solid var(--border);font-weight:700;">測量 1</th>
+                <th style="padding:10px;text-align:center;border:1px solid var(--border);font-weight:700;">測量 2</th>
+                <th style="padding:10px;text-align:center;border:1px solid var(--border);font-weight:700;">測量 3</th>
+                <th style="padding:10px;text-align:center;border:1px solid var(--border);font-weight:700;">平均值</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px;border:1px solid var(--border);">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td></tr>
+              <tr><td style="padding:10px;border:1px solid var(--border);">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td></tr>
+              <tr><td style="padding:10px;border:1px solid var(--border);">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td></tr>
+              <tr><td style="padding:10px;border:1px solid var(--border);">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td><td style="padding:10px;border:1px solid var(--border);text-align:center;">___</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-title">控制問題檢查</div>
+        <div style="display:grid;gap:8px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q1：你的控制變因都有確實控制嗎？哪個最難控制？</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-primary);">Q2：你的結果和預測一致嗎？如果不一致，可能的原因是什麼？</div>
+        </div>
+
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 18px;margin-top:16px;">
+          <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:8px;">📈 數據會說話——但你要會聽</div>
+          <div style="font-size:12px;color:#14532d;line-height:1.8;">
+            收完數據別急著寫結論，先問自己三個問題：<br>
+            <strong>① 趨勢</strong>：散佈圖的點大致往哪走？上升？下降？先升後降？沒有趨勢？<br>
+            <strong>② 離散</strong>：點是緊貼趨勢線，還是散得很開？散開代表不確定度大，結論要保守。<br>
+            <strong>③ 意外</strong>：有沒有哪個點特別「跳出來」？它可能是操作失誤，也可能是最有趣的發現。<br>
+            <span style="font-size:11px;color:#15803d;">能回答這三題，你就有資格寫結論了。不確定怎麼畫圖？→ <a href="../../tools/excel.html" style="color:#166534;font-weight:600;">Excel 工具箱</a></span>
+          </div>
+        </div>
+
+        <!-- Layer 1: 數據異常處理 -->
+        <div class="think-block reveal">
+          <div class="think-prompt">🤔 想一想：你做到第三個砝碼時，三次測量的伸長量分別是 3.2、3.1、5.8 cm。5.8 那次差很多。你怎麼判斷它是「真的異常」還是「真的有影響」？</div>
+          <button class="think-toggle">想好了？點擊看提示 →</button>
+          <div class="think-hidden">
+            <p>先<strong>不要急著刪</strong>。回想一下那一次的過程：砝碼有沒有滑下來？計時有沒有失誤？彈簧有沒有靠到東西？如果能找到明確的「操作失誤」，就可以標記為失效數據，重做一次。如果找不到原因，保留它、在報告中記載「有一筆異常值」——這比偷偷刪掉更誠實。</p>
+          </div>
+        </div>
+
+        <!-- Layer 2: 執行筆記 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 執行實驗時遇到什麼最大的困難？你怎麼克服的？</div>
+          <textarea class="think-input" data-key="spring-lv2-difficulty" placeholder="例如：最難的是控制砝碼掛的位置，因為手會抖。我的解決法是先用膠帶標記好位置，砝碼從標記處放下去…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 分析與發表 -->
+    <div class="step-panel">
+      <div class="step-action">
+        <div class="section-title">數據分析與結論</div>
+
+        <div class="section-title">從數據到結論——連結 Lv1 的分析工具</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;font-size:12px;">
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;color:var(--phase1);margin-bottom:4px;">比較不同條件的 k 值</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">
+              Lv1 你用 F vs x 的斜率算出 k。<br>
+              現在改變了你的操縱變因後，k 值變了嗎？<br>
+              用<strong>不確定度範圍</strong>判斷差異是否顯著。
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">畫「操縱變因 vs k」圖</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">
+              例：彈簧長度 vs k，或彈簧粗細 vs k。<br>
+              這個關係是線性嗎？可以線性化嗎？<br>
+              試試 <a href="power-law.html" style="color:var(--phase2);">冪級數分析</a>。
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">延伸思考</div>
+        <div class="card" style="margin-bottom:20px;">
+          <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+            <li>虎克定律 $F = kx$ 中的 $k$ 是「彈力常數」。你的實驗中，$k$ 等於什麼？它的單位是什麼？</li>
+            <li>彈簧被拉超過彈性限度後，F vs x 還是線性的嗎？如何設計實驗驗證這件事？</li>
+            <li>橡皮筋和金屬彈簧的 F-x 關係一樣嗎？你能設計實驗比較嗎？</li>
+          </ol>
+        </div>
+
+        <div class="section-title">同儕互評</div>
+        <div class="card" style="border-top:3px solid var(--express);margin-bottom:20px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🗣️ 交換計畫，互相檢查</div>
+          <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">拿到另一組的實驗計畫後，回答以下問題：</p>
+          <div style="display:grid;gap:8px;font-size:12px;">
+            <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+              <strong style="color:var(--text-primary);">① 可重現性：</strong>如果我照你的步驟做，能得到一樣的結果嗎？彈簧怎麼固定？砝碼怎麼掛？
+            </div>
+            <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+              <strong style="color:var(--text-primary);">② 控制變因：</strong>掛砝碼的方式、等待穩定的時間、讀尺的角度——有控制嗎？
+            </div>
+            <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+              <strong style="color:var(--text-primary);">③ 數據品質：</strong>水準夠多嗎？重複次數夠嗎？能看出趨勢嗎？
+            </div>
+            <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+              <strong style="color:var(--text-primary);">④ 一個建議：</strong>如果你能改一個地方讓實驗更好，你會改什麼？
+            </div>
+            <div style="background:var(--bg);border-radius:4px;padding:8px 12px;font-size:13px;color:var(--text-secondary);">⑤ <strong>研究問題：</strong>這組的研究問題夠明確嗎？「彈簧常數會不會改變」比「彈簧有什麼特性」好在哪裡？</div>
+          </div>
+        </div>
+
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 檢核站</div>
+          <p style="font-size:13px;color:#1e3a8a;line-height:1.8;margin-bottom:10px;">完成你的實驗計畫後，把計畫交給 AI（ChatGPT、Perplexity 等），請它幫你找漏洞：</p>
+          <div style="display:grid;gap:6px;font-size:12px;color:#1e3a8a;">
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「我的控制變因有沒有遺漏？」</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「這個實驗設計有什麼潛在問題？」</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「你覺得我的數據量夠嗎？需要幾組重複？」</div>
+          </div>
+          <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px;color:#1e3a8a;">
+            <strong>💬 複製貼上範本：</strong>「我正在設計一個實驗，研究問題是＿＿。操縱變因是＿＿（水準：＿＿），應變變因是＿＿，控制變因有＿＿。請幫我檢查：(1) 控制變因有沒有遺漏 (2) 實驗步驟有沒有潛在問題 (3) 數據量夠不夠」<br>
+            <span style="font-size:10px;color:#60a5fa;">給 AI 越多上下文，它的回饋越有用。空白處填入你自己的內容再送出。</span>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是代筆人。它指出問題，你決定要不要改、怎麼改。</p>
+        </div>
+
+        <!-- Layer 3: 數據分析判斷題 -->
+        <div class="think-block choice" data-answer="c">
+          <div class="think-prompt">🎯 你的結果：100g 時伸長 2.0±0.1 cm，200g 時伸長 4.1±0.2 cm，300g 時伸長 6.0±0.3 cm。請問：</div>
+          <div class="think-options">
+            <button class="think-opt" data-val="a">A. 因為 6.0 > 2.0，所以質量確實影響伸長量</button>
+            <button class="think-opt" data-val="b">B. 3 個數據太少，無法判斷</button>
+            <button class="think-opt" data-val="c">C. 結果大致呈線性，支持虎克定律 F = kx，質量確實影響伸長量</button>
+          </div>
+          <div class="think-feedback" style="display:none;">
+            C 最好。你要看「趨勢是否一致」（不確定度範圍有沒有重疊），不只看數字大小。100→200 增加 2 倍，伸長也增加約 2 倍；200→300 增加 1.5 倍，伸長也增加約 1.46 倍。這支持線性關係。A 太直覺；B 過於保守——3 個數據配合不確定度分析其實夠了。
+          </div>
+        </div>
+
+        <!-- Layer 2: 結論草稿 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 用 1-2 句話寫下你的結論。要提到「變因的名稱」和「關係」。</div>
+          <textarea class="think-input" data-key="spring-lv2-conclusion" placeholder="例如：我的數據顯示，掛在彈簧上的砝碼質量和伸長量呈線性關係，支持虎克定律 F = kx…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Post-Class Section -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span style="font-weight:700;font-size:13px;">📚 課後資源與反思</span>
+        <span style="font-size:12px;margin-left:8px;">▼</span>
+      </button>
+      <div class="post-class-body" style="display:none;">
+
+        <div class="section-title">學習目標與課程指標</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🎯 學習目標</div>
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>能從現象或理論出發，提出可驗證的研究問題（例如：彈簧長度如何影響彈力常數 k？）</li>
+            <li>能設計含操縱變因、控制變因與應變變因的實驗計畫，並說明每個設計選擇的原因</li>
+            <li>能有系統地蒐集數據，並判斷數據的可靠性（重複測量至少 3 次，檢查線性關係）</li>
+            <li>能用圖表呈現結果，並以數據為基礎進行分析與發表（驗證虎克定律 F = kx）</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">👩‍🏫 課綱對應指標</div>
+          <div class="ind-tags">
+            <span class="ind-tag r">R1 設計實驗</span>
+            <span class="ind-tag r">R2 控制變因</span>
+            <span class="ind-tag r">R3 操作蒐集</span>
+          </div>
+          <p style="margin-top:8px;font-size:12.5px;color:var(--text-secondary);line-height:1.8;">這是規劃研究站的第一個模組，重點在於讓學生「自己做決定」，而非照著步驟走。設計的好壞在數據出來後立刻可以看到，有立即的學習回饋。</p>
+        </div>
+
+        <div class="section-title">教學指引與討論問題</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📌 教學目標（教師視角）</div>
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>建立「一次只改變一個變因」的實驗設計思維</li>
+            <li>讓學生第一次自主決定實驗的操縱、控制和應變變因</li>
+            <li>從橡皮筋的直觀感受過渡到嚴謹的彈簧實驗</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">👩‍🏫 討論引導問題</div>
+          <ul style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;padding-left:18px;">
+            <li>「你怎麼確定彈簧沒有被永久拉伸（超過彈性限度）？如何在實驗設計中預防？」</li>
+            <li>「問題 A 的結果如果是線性的，代表什麼定律？（虎克定律：F = kx）」</li>
+            <li>「如果問題 C 的結果，串聯伸長 = 並聯伸長的 4 倍，你能用什麼概念解釋？」</li>
+          </ul>
+          <div style="font-weight:700;margin-top:12px;color:var(--text-primary);font-size:13px;">常見問題</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">學生設計實驗時常忘記「測量幾個水準」的問題——2 個水準不夠看出趨勢，建議至少 4–5 個。老師可以先讓各組設計完再互相審查，找出漏洞。</p>
+        </div>
+
+        <div class="section-title">課堂節奏</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;margin-bottom:10px;color:var(--text-primary);font-size:13px;">⏱ 課堂節奏（W5–W6 共 4 節）</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">W5 第一節：橡皮筋快速實驗，建立彈力直覺。<br>
+          W5 第二節：三種變因分類，各組設計彈簧實驗方案。<br>
+          W6 第一節：進行實驗、收集數據。<br>
+          W6 第二節：數據分析，各組分享設計邏輯與得到的教訓。</p>
+        </div>
+
+        <div class="section-title">學習歷程與反思</div>
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;margin-bottom:10px;">本單元最好的素材：你的實驗計畫表、預測 vs 結果比較、同儕互評回饋，以及你根據回饋做了什麼調整。這展現了「規劃研究」和「溝通」能力的成長。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你原本的實驗計畫和實際做的有什麼不同？改了什麼？為什麼改？<br>
+            <span style="font-size:11px;color:#8b5cf6;">「計畫 vs 實際」的落差本身就是最好的反思素材——改得好代表你在成長。</span>
+          </div>
+        </div>
+
+        <!-- 前後導覽 -->
+        <div class="unit-nav">
+          <a href="../phase1/spring-lv1.html">← 彈簧 Lv1：虎克定律</a>
+          <a href="../phase3/spring-lv3.html">彈簧 Lv3 發現問題 →</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

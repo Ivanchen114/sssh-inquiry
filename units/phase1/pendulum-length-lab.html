@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>單擺擺長與週期 · 虛擬實驗室</title>
+  <meta name="description" content="單擺擺長與週期關係的專項虛擬實驗，系統化測量不同擺長的週期。">
+  <meta property="og:title" content="單擺擺長與週期 · 虛擬實驗室">
+  <meta property="og:description" content="單擺擺長與週期關係的專項虛擬實驗，系統化測量不同擺長的週期。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/pendulum-length-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <style>
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-panel: #111827;
+      --bg-surface: #1e293b;
+      --border-dim: #334155;
+      --text-primary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-bright: #f8fafc;
+      --phosphor: #22d3ee;
+      --amber: #fbbf24;
+      --neon-green: #4ade80;
+      --neon-red: #f87171;
+      --accent: #6366f1;
+    }
+
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family:'Segoe UI',system-ui,sans-serif;
+      background:var(--bg-dark);
+      color:var(--text-primary);
+      padding:16px;
+    }
+
+    /* Header */
+    .header { text-align:center; margin-bottom:16px; }
+    .header h1 { font-size:20px; font-weight:700; color:var(--text-bright); }
+    .header p  { font-size:12px; color:var(--text-muted); margin-top:4px; }
+
+    /* Layout: 3 columns */
+    .lab-grid {
+      display:grid;
+      grid-template-columns:260px 1fr 1fr;
+      gap:14px;
+      max-width:1100px;
+      margin:0 auto 16px;
+    }
+
+    .panel {
+      background:var(--bg-panel);
+      border-radius:12px;
+      border:1px solid var(--border-dim);
+      padding:16px;
+    }
+    .panel-title {
+      font-weight:700;
+      font-size:13px;
+      color:var(--phosphor);
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    /* ── Pendulum canvas ── */
+    #pendulum-canvas {
+      display:block;
+      width:100%;
+      max-width:228px;
+      height:auto;
+      border-radius:8px;
+      background:#0f172a;
+      border:1px solid var(--border-dim);
+    }
+
+    .length-selector {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:6px;
+      margin:10px 0;
+    }
+    .len-btn {
+      padding:7px 4px;
+      border-radius:6px;
+      border:2px solid var(--border-dim);
+      background:var(--bg-surface);
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all .15s;
+      text-align:center;
+      color:var(--text-muted);
+    }
+    .len-btn:hover {
+      border-color:var(--phosphor);
+      color:var(--phosphor);
+      text-shadow:0 0 4px rgba(34,211,238,0.4);
+    }
+    .len-btn.active {
+      background:var(--accent);
+      border-color:var(--accent);
+      color:var(--text-bright);
+      box-shadow:0 0 8px rgba(99,102,241,0.5);
+    }
+    .len-btn.complete {
+      background:transparent;
+      border-color:var(--neon-green);
+      color:var(--neon-green);
+      box-shadow:0 0 6px rgba(74,222,128,0.3);
+    }
+
+    .elapsed {
+      font-family:'Courier New',monospace;
+      font-size:36px;
+      font-weight:800;
+      text-align:center;
+      letter-spacing:3px;
+      margin:8px 0;
+      color:var(--amber);
+      text-shadow:0 0 8px rgba(251,191,36,0.4);
+    }
+    @media (max-width:600px) {
+      .elapsed { font-size:28px; letter-spacing:2px; }
+    }
+
+    .tap-row {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      align-items:center;
+      margin:6px 0;
+    }
+    .tap-btn {
+      padding:10px;
+      background:transparent;
+      border:2px solid var(--neon-green);
+      border-radius:8px;
+      font-size:13px;
+      font-weight:700;
+      color:var(--neon-green);
+      cursor:pointer;
+      text-align:center;
+      transition:all .15s;
+      box-shadow:0 0 6px rgba(74,222,128,0.2);
+    }
+    .tap-btn:hover:not(.off) {
+      box-shadow:0 0 12px rgba(74,222,128,0.5);
+      border-color:var(--text-bright);
+      color:var(--text-bright);
+    }
+    .tap-btn.off {
+      opacity:.25;
+      cursor:not-allowed;
+      border-color:var(--border-dim);
+      color:var(--text-muted);
+    }
+    .tap-count {
+      font-size:28px;
+      font-weight:800;
+      text-align:center;
+      font-variant-numeric:tabular-nums;
+      color:var(--phosphor);
+      font-family:'Courier New',monospace;
+    }
+    @media (max-width:600px) {
+      .tap-count { font-size:24px; }
+    }
+
+    .action-btn {
+      width:100%;
+      padding:11px;
+      border-radius:8px;
+      border:none;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all .15s;
+      font-family:'Segoe UI',system-ui,sans-serif;
+    }
+    .action-btn.ready  {
+      background:var(--accent);
+      color:white;
+      box-shadow:0 0 12px rgba(99,102,241,0.4);
+    }
+    .action-btn.ready:hover {
+      box-shadow:0 0 16px rgba(99,102,241,0.6);
+    }
+    .action-btn.timing {
+      background:var(--neon-red);
+      color:white;
+      box-shadow:0 0 12px rgba(248,113,113,0.4);
+    }
+    .action-btn.timing:hover {
+      box-shadow:0 0 16px rgba(248,113,113,0.6);
+    }
+    .action-btn.off    {
+      background:var(--border-dim);
+      color:var(--text-muted);
+      cursor:not-allowed;
+    }
+    .action-btn.done   {
+      background:transparent;
+      border:1px solid var(--neon-green);
+      color:var(--neon-green);
+      cursor:not-allowed;
+      font-size:12px;
+      box-shadow:0 0 6px rgba(74,222,128,0.3);
+    }
+
+    .status-msg {
+      background:rgba(34,211,238,0.08);
+      border:1px solid var(--phosphor);
+      border-radius:6px;
+      padding:8px 12px;
+      font-size:12px;
+      color:var(--phosphor);
+      text-align:center;
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      line-height:1.5;
+      margin:8px 0;
+    }
+
+    /* ── Data table panel ── */
+    .data-panel { overflow-x:auto; }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+    }
+    th, td {
+      padding:7px 8px;
+      border:1px solid var(--border-dim);
+      text-align:center;
+      vertical-align:middle;
+    }
+    th {
+      background:transparent;
+      font-weight:600;
+      font-size:11.5px;
+      color:var(--phosphor);
+      border-color:var(--border-dim);
+    }
+    td.l-label {
+      font-weight:700;
+      color:var(--amber);
+      background:rgba(251,191,36,0.05);
+      font-family:'Courier New',monospace;
+    }
+    td.t-input {
+      font-family:'Courier New',monospace;
+      font-weight:700;
+      color:var(--text-primary);
+    }
+    td.avg-cell {
+      font-family:'Courier New',monospace;
+      font-weight:700;
+      color:var(--accent);
+      background:rgba(99,102,241,0.05);
+    }
+    td.t2-cell  {
+      font-family:'Courier New',monospace;
+      font-weight:700;
+      color:var(--neon-green);
+      background:rgba(74,222,128,0.05);
+    }
+    tr.row-done  { }
+    tr.row-active td {
+      background:rgba(34,211,238,0.08) !important;
+    }
+
+    .table-note {
+      font-size:11px;
+      color:var(--text-muted);
+      margin-top:8px;
+      background:transparent;
+      border-radius:4px;
+      padding:6px 10px;
+      border:1px solid var(--border-dim);
+    }
+
+    /* ── Graph panel ── */
+    .graph-tabs {
+      display:flex;
+      gap:6px;
+      margin-bottom:10px;
+    }
+    .graph-tab {
+      padding:5px 12px;
+      border-radius:6px;
+      border:1px solid var(--border-dim);
+      background:var(--bg-surface);
+      font-size:12px;
+      font-weight:600;
+      cursor:pointer;
+      color:var(--text-muted);
+      transition:all .15s;
+    }
+    .graph-tab:hover {
+      border-color:var(--phosphor);
+      color:var(--phosphor);
+    }
+    .graph-tab.active {
+      background:var(--accent);
+      border-color:var(--accent);
+      color:white;
+      box-shadow:0 0 8px rgba(99,102,241,0.4);
+    }
+
+    #graph-canvas {
+      display:block;
+      width:100%;
+      max-width:380px;
+      height:auto;
+      border-radius:8px;
+      background:#0f172a;
+      border:1px solid var(--border-dim);
+    }
+
+    .graph-insight {
+      margin-top:10px;
+      font-size:12px;
+      color:var(--text-muted);
+      background:transparent;
+      border-radius:6px;
+      padding:8px 12px;
+      display:none;
+      border:1px solid var(--border-dim);
+    }
+    .graph-insight.show { display:block; }
+    .insight-g {
+      font-family:'Courier New',monospace;
+      font-size:14px;
+      font-weight:700;
+      color:var(--amber);
+      margin-top:4px;
+      text-shadow:0 0 4px rgba(251,191,36,0.3);
+    }
+
+    .reset-btn {
+      width:100%;
+      padding:7px;
+      border-radius:6px;
+      border:1px solid var(--border-dim);
+      background:transparent;
+      font-size:12px;
+      color:var(--text-muted);
+      cursor:pointer;
+      margin-top:8px;
+      transition:all .15s;
+    }
+    .reset-btn:hover {
+      border-color:var(--phosphor);
+      color:var(--phosphor);
+      text-shadow:0 0 4px rgba(34,211,238,0.3);
+    }
+
+    @media (max-width:768px) {
+      .lab-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width:600px) {
+      .lab-grid { grid-template-columns:1fr; gap:12px; max-width:100%; }
+      body { padding:12px 8px; }
+      .header h1 { font-size:18px; }
+      .length-selector { grid-template-columns:repeat(2,1fr); }
+      .panel { padding:12px; }
+      .panel-title { font-size:12px; margin-bottom:10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🕰️ 單擺擺長與週期關係</h1>
+  <p>改變擺長 L，測量週期 T，探索兩者之間的數學關係</p>
+</div>
+
+<div class="lab-grid">
+
+  <!-- ══════ 左：單擺 + 計時 ══════ -->
+  <div class="panel">
+    <div class="panel-title">① 選擺長 · 計時</div>
+
+    <canvas id="pendulum-canvas" width="228" height="220"></canvas>
+
+    <!-- Length selector -->
+    <div style="font-size:12px;color:var(--text-muted);margin:10px 0 6px;">選擇擺長（cm）：</div>
+    <div class="length-selector" id="len-selector">
+      <button class="len-btn" onclick="setLength(10)">10</button>
+      <button class="len-btn" onclick="setLength(20)">20</button>
+      <button class="len-btn" onclick="setLength(30)">30</button>
+      <button class="len-btn" onclick="setLength(40)">40</button>
+      <button class="len-btn" onclick="setLength(50)">50</button>
+      <button class="len-btn" onclick="setLength(60)">60</button>
+    </div>
+
+    <!-- Timer -->
+    <div class="elapsed" id="elapsed">0.00</div>
+
+    <!-- Tap counter -->
+    <div class="tap-row">
+      <button class="tap-btn off" id="tap-btn" onclick="handleTap()">＋ 擺動</button>
+      <div class="tap-count" id="tap-count">0<span style="font-size:14px;color:var(--text-muted);font-weight:400;"> /10</span></div>
+    </div>
+
+    <!-- Status -->
+    <div class="status-msg" id="status-msg">先選擇擺長，再開始計時</div>
+
+    <!-- Action button -->
+    <button class="action-btn off" id="action-btn" onclick="handleBtn()">選擇擺長後開始</button>
+
+    <button class="reset-btn" onclick="resetAll()">↺ 重置所有數據</button>
+  </div>
+
+  <!-- ══════ 中：數據表格 ══════ -->
+  <div class="panel data-panel">
+    <div class="panel-title">② 記錄數據</div>
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>L (cm)</th>
+          <th>T₁ (s)</th>
+          <th>T₂ (s)</th>
+          <th>T₃ (s)</th>
+          <th>T̄ (s)</th>
+          <th>T̄² (s²)</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- generated by JS -->
+      </tbody>
+    </table>
+    <div class="table-note">
+      每個擺長測量 3 次，系統自動計算平均值 T̄ 與 T̄²。<br>
+      完成至少 4 組後，右側圖形會顯示規律。
+    </div>
+  </div>
+
+  <!-- ══════ 右：圖形 ══════ -->
+  <div class="panel">
+    <div class="panel-title">③ 圖形分析</div>
+    <div class="graph-tabs">
+      <button class="graph-tab active" id="tab-t2l" onclick="switchGraph('t2l')">T² vs L</button>
+      <button class="graph-tab"        id="tab-tl"  onclick="switchGraph('tl')">T vs L</button>
+    </div>
+    <canvas id="graph-canvas" width="380" height="300"></canvas>
+    <div class="graph-insight" id="graph-insight">
+      <div id="insight-text"></div>
+      <div class="insight-g" id="insight-g"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════
+//  PHYSICS
+// ══════════════════════════════
+const G_REAL = 9.80;
+const LENGTHS = [10, 20, 30, 40, 50, 60]; // cm
+const N_MEAS  = 3;
+
+function theoryT(L_cm) {
+  return 2 * Math.PI * Math.sqrt(L_cm / 100 / G_REAL);
+}
+
+// Data store: { 10: [T1, T2, T3], 20: [...], ... }
+const DATA = {};
+LENGTHS.forEach(L => { DATA[L] = []; });
+
+// ══════════════════════════════
+//  STATE
+// ══════════════════════════════
+let currentL    = null;
+let timingState = 'idle';   // idle | waiting-start | timing
+let animStart   = null;
+let t_wall_start= null;
+let tapCount    = 0;
+let timerIv     = null;
+let graphMode   = 't2l';    // 't2l' | 'tl'
+
+// ══════════════════════════════
+//  CANVAS — PENDULUM
+// ══════════════════════════════
+const pc  = document.getElementById('pendulum-canvas');
+const pctx= pc.getContext('2d');
+const PW  = pc.width, PH = pc.height;
+const PPX = PW / 2, PPY = 18;
+
+function getLPx(L_cm) {
+  // Map 10–60 cm to 60–180 px
+  return 60 + (L_cm - 10) / 50 * 120;
+}
+function getOmega(L_cm) {
+  return 2 * Math.PI / theoryT(L_cm);
+}
+
+function drawPendulum(t_s) {
+  pctx.clearRect(0, 0, PW, PH);
+  if (!currentL) {
+    pctx.font = '13px system-ui';
+    pctx.fillStyle = '#94a3b8';
+    pctx.textAlign = 'center';
+    pctx.fillText('← 請先選擇擺長', PW/2, PH/2);
+    return;
+  }
+  const L_px   = getLPx(currentL);
+  const omega  = getOmega(currentL);
+  const thMax  = 18 * Math.PI / 180;
+  const th     = thMax * Math.cos(omega * t_s);
+  const bx     = PPX + L_px * Math.sin(th);
+  const by     = PPY + L_px * Math.cos(th);
+
+  // Motion arc
+  const a1 = Math.PI/2 - thMax, a2 = Math.PI/2 + thMax;
+  pctx.beginPath(); pctx.arc(PPX, PPY, L_px, a1, a2);
+  pctx.strokeStyle = 'rgba(34,211,238,0.15)'; pctx.lineWidth = 1.5; pctx.stroke();
+
+  // Center line
+  pctx.beginPath();
+  pctx.moveTo(PPX, PPY); pctx.lineTo(PPX, PPY + L_px + 16);
+  pctx.strokeStyle = 'rgba(34,211,238,0.1)'; pctx.lineWidth=1;
+  pctx.setLineDash([4,4]); pctx.stroke(); pctx.setLineDash([]);
+
+  // Length label
+  pctx.font = '11px system-ui'; pctx.fillStyle = '#94a3b8'; pctx.textAlign = 'left';
+  pctx.fillText(`L = ${currentL} cm`, PPX + 6, PPY + L_px/2);
+
+  // Rope
+  pctx.beginPath(); pctx.moveTo(PPX, PPY); pctx.lineTo(bx, by);
+  pctx.strokeStyle = '#475569'; pctx.lineWidth = 2; pctx.stroke();
+
+  // Pivot
+  pctx.beginPath(); pctx.arc(PPX, PPY, 5, 0, Math.PI*2);
+  pctx.fillStyle = '#64748b'; pctx.fill();
+  pctx.beginPath(); pctx.arc(PPX, PPY, 5, 0, Math.PI*2);
+  pctx.strokeStyle = '#22d3ee'; pctx.lineWidth = 1; pctx.stroke();
+
+  // Bob shadow
+  pctx.beginPath(); pctx.arc(bx+2, by+2, 12, 0, Math.PI*2);
+  pctx.fillStyle = 'rgba(0,0,0,0.4)'; pctx.fill();
+
+  // Bob (metallic)
+  pctx.beginPath(); pctx.arc(bx, by, 12, 0, Math.PI*2);
+  pctx.fillStyle = '#475569'; pctx.fill();
+  pctx.beginPath(); pctx.arc(bx, by, 12, 0, Math.PI*2);
+  pctx.strokeStyle = '#22d3ee'; pctx.lineWidth = 1.5; pctx.stroke();
+
+  // Bob highlight
+  pctx.beginPath(); pctx.arc(bx-3, by-4, 3, 0, Math.PI*2);
+  pctx.fillStyle = 'rgba(34,211,238,0.5)'; pctx.fill();
+
+  // "停！" hint near endpoints
+  const nearEP = Math.abs(Math.abs(th) - thMax) < thMax * 0.12;
+  if (nearEP && timingState === 'timing') {
+    pctx.font = 'bold 13px system-ui'; pctx.fillStyle = '#f87171'; pctx.textAlign = 'center';
+    pctx.fillText('▼ 停！', PPX, PH - 5);
+  }
+}
+
+function loop(ts) {
+  if (!animStart) animStart = ts;
+  const t_s = (ts - animStart) / 1000;
+  drawPendulum(t_s);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// ══════════════════════════════
+//  LENGTH SELECTION
+// ══════════════════════════════
+function setLength(L) {
+  if (timingState === 'timing') return;
+  currentL    = L;
+  tapCount    = 0;
+  timingState = DATA[L].length >= N_MEAS ? 'done' : 'waiting-start';
+  document.getElementById('elapsed').textContent = '0.00';
+  document.getElementById('tap-count').innerHTML = '0<span style="font-size:14px;color:var(--text-muted);font-weight:400;"> /10</span>';
+  refreshLenBtns();
+  refreshUI();
+}
+
+function refreshLenBtns() {
+  LENGTHS.forEach(L => {
+    const btn = document.querySelector(`.len-btn[onclick="setLength(${L})"]`);
+    if (!btn) return;
+    const done = DATA[L].length >= N_MEAS;
+    btn.className = 'len-btn' + (L === currentL ? ' active' : done ? ' complete' : '');
+  });
+}
+
+// ══════════════════════════════
+//  CANVAS RESIZE LOGIC
+// ══════════════════════════════
+function resizeCanvases() {
+  // Pendulum canvas
+  const pcContainer = pc.parentElement;
+  const pcWidth = Math.min(pcContainer.clientWidth, 228);
+  if (pc.width !== pcWidth) {
+    const aspectRatio = 220 / 228;
+    pc.width = pcWidth;
+    pc.height = pcWidth * aspectRatio;
+    drawPendulum(0);
+  }
+  // Graph canvas
+  const gcContainer = gc.parentElement;
+  const gcWidth = Math.min(gcContainer.clientWidth, 380);
+  if (gc.width !== gcWidth) {
+    const aspectRatio = 300 / 380;
+    gc.width = gcWidth;
+    gc.height = gcWidth * aspectRatio;
+    drawGraph();
+  }
+}
+window.addEventListener('resize', resizeCanvases);
+resizeCanvases();
+
+// ══════════════════════════════
+//  TIMING BUTTON
+// ══════════════════════════════
+function handleBtn() {
+  if (!currentL) return;
+  const now = performance.now();
+
+  if (timingState === 'waiting-start') {
+    t_wall_start = now;
+    tapCount     = 0;
+    document.getElementById('tap-count').innerHTML = '0<span style="font-size:14px;color:var(--text-muted);font-weight:400;"> /10</span>';
+    timingState  = 'timing';
+    timerIv = setInterval(() => {
+      const el = (performance.now() - t_wall_start) / 1000;
+      document.getElementById('elapsed').textContent = el.toFixed(2);
+    }, 50);
+    refreshUI();
+
+  } else if (timingState === 'timing') {
+    clearInterval(timerIv);
+    const total = (now - t_wall_start) / 1000;
+    const T     = total / 10;
+
+    const idx = DATA[currentL].length;
+    if (idx < N_MEAS) {
+      DATA[currentL].push(T);
+      updateTableRow(currentL);
+    }
+
+    document.getElementById('elapsed').textContent = total.toFixed(2);
+    timingState = DATA[currentL].length >= N_MEAS ? 'done' : 'waiting-start';
+    tapCount = 0;
+    document.getElementById('tap-count').innerHTML = '0<span style="font-size:14px;color:var(--text-muted);font-weight:400;"> /10</span>';
+
+    refreshLenBtns();
+    refreshUI();
+    drawGraph();
+  }
+}
+
+function handleTap(e) {
+  if (e) e.preventDefault();
+  if (timingState !== 'timing') return;
+  if (tapCount >= 10) return;
+  tapCount++;
+  const el = document.getElementById('tap-count');
+  if (tapCount >= 10) {
+    el.innerHTML = `10<span style="font-size:13px;color:var(--neon-green);font-weight:600;"> ✓</span>`;
+  } else {
+    el.innerHTML = `${tapCount}<span style="font-size:14px;color:var(--text-muted);font-weight:400;"> /10</span>`;
+  }
+}
+
+// ══════════════════════════════
+//  UI REFRESH
+// ══════════════════════════════
+function refreshUI() {
+  const btn = document.getElementById('action-btn');
+  const tap = document.getElementById('tap-btn');
+  const msg = document.getElementById('status-msg');
+
+  tap.className = 'tap-btn' + (timingState === 'timing' ? '' : ' off');
+
+  if (!currentL) {
+    btn.className = 'action-btn off';
+    btn.textContent = '選擇擺長後開始';
+    msg.textContent = '先選擇擺長，再開始計時';
+    return;
+  }
+
+  const done = DATA[currentL].length >= N_MEAS;
+  const nth  = DATA[currentL].length + 1;
+
+  if (done) {
+    btn.className = 'action-btn done';
+    btn.textContent = `✅ L=${currentL}cm 完成（${N_MEAS}次）`;
+    msg.innerHTML = '<span>此擺長已完成！請選擇另一個擺長繼續。</span>';
+  } else if (timingState === 'waiting-start') {
+    btn.className = 'action-btn ready';
+    btn.textContent = `▶ 第 ${nth} 次：按下開始計時`;
+    msg.innerHTML = `<span>L = ${currentL} cm，數 10 次完整擺動後按停。<br>可用「＋擺動」輔助計數。</span>`;
+  } else if (timingState === 'timing') {
+    btn.className = 'action-btn timing';
+    btn.textContent = `■ 數到 10 次後，按下停止`;
+    msg.innerHTML = `<span>計時中！數到 <strong>10 次</strong>後按下停止。</span>`;
+  }
+}
+
+// ══════════════════════════════
+//  TABLE
+// ══════════════════════════════
+function buildTable() {
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+  LENGTHS.forEach(L => {
+    const tr = document.createElement('tr');
+    tr.id = `row-${L}`;
+    let html = `<td class="l-label">${L}</td>`;
+    for (let i = 1; i <= N_MEAS; i++) {
+      html += `<td class="t-input" id="t-${L}-${i}">—</td>`;
+    }
+    html += `<td class="avg-cell" id="avg-${L}">—</td>`;
+    html += `<td class="t2-cell"  id="t2-${L}">—</td>`;
+    tr.innerHTML = html;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateTableRow(L) {
+  const vals = DATA[L];
+  for (let i = 0; i < vals.length; i++) {
+    document.getElementById(`t-${L}-${i+1}`).textContent = vals[i].toFixed(3);
+  }
+  if (vals.length >= N_MEAS) {
+    const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+    const t2  = avg * avg;
+    document.getElementById(`avg-${L}`).textContent = avg.toFixed(3);
+    document.getElementById(`t2-${L}`).textContent  = t2.toFixed(4);
+    document.getElementById(`row-${L}`).className   = 'row-done';
+  }
+  // Highlight active row
+  LENGTHS.forEach(lL => {
+    const r = document.getElementById(`row-${lL}`);
+    if (r) r.classList.toggle('row-active', lL === L && DATA[lL].length < N_MEAS);
+  });
+}
+
+// ══════════════════════════════
+//  GRAPH
+// ══════════════════════════════
+const gc   = document.getElementById('graph-canvas');
+const gctx = gc.getContext('2d');
+const GW   = gc.width, GH = gc.height;
+const PAD  = { t:30, r:20, b:50, l:56 };
+
+function switchGraph(mode) {
+  graphMode = mode;
+  document.getElementById('tab-t2l').className = 'graph-tab' + (mode==='t2l'?' active':'');
+  document.getElementById('tab-tl' ).className = 'graph-tab' + (mode==='tl' ?' active':'');
+  drawGraph();
+}
+
+function drawGraph() {
+  gctx.clearRect(0, 0, GW, GH);
+
+  // Collect completed data points
+  const pts = [];
+  LENGTHS.forEach(L => {
+    if (DATA[L].length >= N_MEAS) {
+      const avg = DATA[L].reduce((a,b)=>a+b,0) / DATA[L].length;
+      pts.push({ L, T: avg, T2: avg*avg });
+    }
+  });
+
+  const xLabel = 'L (cm)';
+  const yLabel = graphMode === 't2l' ? 'T² (s²)' : 'T (s)';
+  const yFn    = pt => graphMode === 't2l' ? pt.T2 : pt.T;
+
+  // Theory curve
+  const theoryPts = LENGTHS.map(L => ({
+    L,
+    y: graphMode === 't2l' ? theoryT(L)**2 : theoryT(L)
+  }));
+
+  const xMin = 0, xMax = 65;
+  const yVals = theoryPts.map(p=>p.y);
+  const yMin  = 0;
+  const yMax  = Math.max(...yVals) * 1.15;
+
+  function toGX(x) { return PAD.l + (x - xMin)/(xMax-xMin) * (GW - PAD.l - PAD.r); }
+  function toGY(y) { return PAD.t + (1 - (y-yMin)/(yMax-yMin)) * (GH - PAD.t - PAD.b); }
+
+  // Background
+  gctx.fillStyle = '#0f172a';
+  gctx.fillRect(0,0,GW,GH);
+
+  // Grid
+  gctx.strokeStyle = 'rgba(34,211,238,0.08)'; gctx.lineWidth = 1;
+  [10,20,30,40,50,60].forEach(x => {
+    gctx.beginPath(); gctx.moveTo(toGX(x),PAD.t); gctx.lineTo(toGX(x),GH-PAD.b); gctx.stroke();
+  });
+  const yTicks = 5;
+  for (let i=0; i<=yTicks; i++) {
+    const y = yMin + (yMax-yMin)*i/yTicks;
+    gctx.beginPath(); gctx.moveTo(PAD.l,toGY(y)); gctx.lineTo(GW-PAD.r,toGY(y)); gctx.stroke();
+  }
+
+  // Axes
+  gctx.strokeStyle = '#64748b'; gctx.lineWidth = 1.5;
+  gctx.beginPath(); gctx.moveTo(PAD.l,PAD.t); gctx.lineTo(PAD.l,GH-PAD.b); gctx.lineTo(GW-PAD.r,GH-PAD.b); gctx.stroke();
+
+  // Axis labels
+  gctx.font = '11px system-ui'; gctx.fillStyle = '#94a3b8'; gctx.textAlign = 'center';
+  [10,20,30,40,50,60].forEach(x => {
+    gctx.fillText(x, toGX(x), GH-PAD.b+14);
+  });
+  gctx.textAlign = 'center';
+  gctx.fillText(xLabel, PAD.l + (GW-PAD.l-PAD.r)/2, GH-4);
+
+  gctx.textAlign = 'right';
+  for (let i=0; i<=yTicks; i++) {
+    const y = yMin + (yMax-yMin)*i/yTicks;
+    gctx.fillText(y.toFixed(graphMode==='t2l'?2:2), PAD.l-6, toGY(y)+4);
+  }
+  gctx.save();
+  gctx.translate(13, PAD.t + (GH-PAD.t-PAD.b)/2);
+  gctx.rotate(-Math.PI/2); gctx.textAlign='center';
+  gctx.fillText(yLabel, 0, 0);
+  gctx.restore();
+
+  // Theory curve (dashed) - cyan
+  gctx.strokeStyle = 'rgba(34,211,238,0.6)'; gctx.lineWidth=1.5; gctx.setLineDash([5,4]);
+  gctx.beginPath();
+  theoryPts.forEach((p,i) => {
+    const gx=toGX(p.L), gy=toGY(p.y);
+    i===0 ? gctx.moveTo(gx,gy) : gctx.lineTo(gx,gy);
+  });
+  gctx.stroke(); gctx.setLineDash([]);
+
+  // Best-fit line for student data (T² vs L mode, ≥2 pts) - amber
+  if (graphMode==='t2l' && pts.length >= 2) {
+    // Linear regression T² = m*L + b
+    const n  = pts.length;
+    const sx = pts.reduce((s,p)=>s+p.L,0);
+    const sy = pts.reduce((s,p)=>s+p.T2,0);
+    const sx2= pts.reduce((s,p)=>s+p.L*p.L,0);
+    const sxy= pts.reduce((s,p)=>s+p.L*p.T2,0);
+    const m  = (n*sxy - sx*sy)/(n*sx2 - sx*sx);
+    const b  = (sy - m*sx)/n;
+
+    gctx.strokeStyle = '#fbbf24'; gctx.lineWidth=1.5; gctx.setLineDash([3,3]);
+    gctx.shadowColor = 'rgba(251,191,36,0.4)'; gctx.shadowBlur = 8;
+    gctx.beginPath();
+    gctx.moveTo(toGX(0), toGY(b));
+    gctx.lineTo(toGX(xMax), toGY(m*xMax+b));
+    gctx.stroke();
+    gctx.setLineDash([]);
+    gctx.shadowColor = 'transparent';
+
+    // Calculate g from slope: T² = (4π²/g)(L/100) → slope in s²/cm → *100 to get s²/m
+    const slope_m = m * 100; // convert cm→m denominator
+    const g_calc  = 4 * Math.PI * Math.PI / slope_m;
+
+    const insightEl = document.getElementById('graph-insight');
+    const textEl    = document.getElementById('insight-text');
+    const gEl       = document.getElementById('insight-g');
+    insightEl.className = 'graph-insight show';
+    textEl.innerHTML = `斜率 = ${m.toFixed(4)} s²/cm &nbsp;→&nbsp; 4π²/g = ${slope_m.toFixed(4)} s²/m`;
+    gEl.textContent  = `計算得 g ≈ ${g_calc.toFixed(2)} m/s²（理論值 9.80 m/s²）`;
+  } else {
+    document.getElementById('graph-insight').className = 'graph-insight';
+  }
+
+  // Student data points - cyan
+  pts.forEach(pt => {
+    const gx = toGX(pt.L);
+    const gy = toGY(yFn(pt));
+    // Error bar (u_A from 3 measurements)
+    const vals = DATA[pt.L];
+    const avg  = vals.reduce((a,b)=>a+b,0)/vals.length;
+    const s    = Math.sqrt(vals.reduce((s,v)=>s+(v-avg)**2,0)/(vals.length-1));
+    const uA   = s/Math.sqrt(vals.length);
+    const Ubnd = graphMode==='t2l' ? 2*avg*uA*2 : uA*2; // propagated to T or T²
+    const errPx= Ubnd/(yMax-yMin)*(GH-PAD.t-PAD.b);
+    if (errPx > 2) {
+      gctx.strokeStyle='rgba(34,211,238,0.4)'; gctx.lineWidth=1.5;
+      gctx.beginPath(); gctx.moveTo(gx,gy-errPx); gctx.lineTo(gx,gy+errPx); gctx.stroke();
+      gctx.beginPath(); gctx.moveTo(gx-4,gy-errPx); gctx.lineTo(gx+4,gy-errPx); gctx.stroke();
+      gctx.beginPath(); gctx.moveTo(gx-4,gy+errPx); gctx.lineTo(gx+4,gy+errPx); gctx.stroke();
+    }
+    // Point with glow
+    gctx.shadowColor = 'rgba(34,211,238,0.6)'; gctx.shadowBlur = 8;
+    gctx.beginPath(); gctx.arc(gx,gy,5,0,Math.PI*2);
+    gctx.fillStyle='#22d3ee'; gctx.fill();
+    gctx.shadowColor = 'transparent';
+    gctx.beginPath(); gctx.arc(gx,gy,5,0,Math.PI*2);
+    gctx.strokeStyle='#0f172a'; gctx.lineWidth=1.5; gctx.stroke();
+  });
+
+  // Legend
+  gctx.font='11px system-ui'; gctx.textAlign='left';
+  gctx.strokeStyle='rgba(34,211,238,0.6)'; gctx.setLineDash([5,4]); gctx.lineWidth=1.5;
+  gctx.beginPath(); gctx.moveTo(PAD.l+4,PAD.t+10); gctx.lineTo(PAD.l+22,PAD.t+10); gctx.stroke(); gctx.setLineDash([]);
+  gctx.fillStyle='#94a3b8'; gctx.fillText('理論值',PAD.l+26,PAD.t+14);
+  if (pts.length>=2 && graphMode==='t2l') {
+    gctx.strokeStyle='#fbbf24'; gctx.setLineDash([3,3]);
+    gctx.beginPath(); gctx.moveTo(PAD.l+4,PAD.t+24); gctx.lineTo(PAD.l+22,PAD.t+24); gctx.stroke(); gctx.setLineDash([]);
+    gctx.fillStyle='#94a3b8'; gctx.fillText('最佳擬合直線',PAD.l+26,PAD.t+28);
+  }
+  gctx.shadowColor = 'rgba(34,211,238,0.6)'; gctx.shadowBlur = 6;
+  gctx.beginPath(); gctx.arc(PAD.l+13,PAD.t+38,5,0,Math.PI*2);
+  gctx.fillStyle='#22d3ee'; gctx.fill();
+  gctx.shadowColor = 'transparent';
+  gctx.fillStyle='#94a3b8'; gctx.fillText('量測數據',PAD.l+26,PAD.t+42);
+
+  // Placeholder text
+  if (pts.length === 0) {
+    gctx.font='13px system-ui'; gctx.fillStyle='#94a3b8'; gctx.textAlign='center';
+    gctx.fillText('完成測量後，數據點會顯示在這裡', GW/2, GH/2);
+  }
+}
+
+// ══════════════════════════════
+//  RESET
+// ══════════════════════════════
+function resetAll() {
+  if (timingState==='timing') clearInterval(timerIv);
+  LENGTHS.forEach(L => { DATA[L]=[]; });
+  currentL=null; timingState='idle'; tapCount=0; t_wall_start=null;
+  document.getElementById('elapsed').textContent='0.00';
+  document.getElementById('tap-count').innerHTML='0<span style="font-size:14px;color:var(--text-muted);font-weight:400;"> /10</span>';
+  document.getElementById('graph-insight').className='graph-insight';
+  buildTable();
+  refreshLenBtns();
+  refreshUI();
+  drawGraph();
+}
+
+// ══════════════════════════════
+//  TOUCH EVENTS
+// ══════════════════════════════
+document.getElementById('tap-btn').addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  handleTap();
+}, { passive: false });
+document.getElementById('action-btn').addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  handleBtn();
+}, { passive: false });
+
+// ══════════════════════════════
+//  INIT
+// ══════════════════════════════
+buildTable();
+drawGraph();
+refreshUI();
+</script>
+</body>
+</html>

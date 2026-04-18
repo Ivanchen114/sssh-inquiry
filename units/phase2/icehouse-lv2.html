@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冰屋 Lv2 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="冰屋 Lv2 規劃研究：設計保冷方案的變因實驗。">
+  <meta property="og:title" content="冰屋 Lv2 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="冰屋 Lv2 規劃研究：設計保冷方案的變因實驗。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/icehouse-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·冰屋</span><span>›</span>
+      <span style="color:var(--phase2)">Lv2 規劃研究</span>
+    </div>
+    <h1>🧊 冰屋模組 · Lv2 規劃研究</h1>
+    <p class="subtitle">設計自己的保冷實驗，比較不同材料與隔熱層如何影響容器的保冷效能。</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">隔熱設計 · 實驗對照 · 數據分析</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從現象或理論出發，提出可驗證的研究問題（例如：容器材質如何影響保冷效能？）</li>
+      <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：控制飲料初溫、環境溫度、測量時間間隔）</li>
+      <li>能有系統地蒐集數據，並判斷數據的可靠性（每 2 分鐘記錄一次溫度，檢查測量的一致性）</li>
+      <li>能用圖表呈現結果，並以數據為基礎進行分析與發表（溫度-時間曲線、比較不同條件的保冷效果）</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>選題</button>
+    <button class="step-tab"><span class="step-num">2</span>設計實驗</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與數據</button>
+    <button class="step-tab"><span class="step-num">4</span>分析與發表</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- STEP 1: 選題 -->
+    <div class="step-panel active">
+      <div class="step-action">
+        <!-- 情境故事 -->
+        <div style="border-left:4px solid var(--phase2);background:#f0fdf4;border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:20px;">
+          <div style="font-weight:700;font-size:14px;color:#16a34a;margin-bottom:10px;">🎭 挑戰情境</div>
+          <p style="font-size:13px;color:#15803d;line-height:1.8;">
+            你在露營時帶了冷飲，但沒有冰箱。隊友建議用鹽和冰來降溫。Lv1 告訴你鹽冰法確實有效——但「加多少鹽最划算」只是冰山一角。<br><br>
+            如果你要設計一套「野外保冷方案」，還有很多問題要解決：<strong>用什麼鹽最好？</strong>容器用什麼材質？<strong>要不要加隔熱層？</strong>隔熱層用什麼材料？<strong>要不要蓋蓋子？</strong><br><br>
+            你來設計實驗找出答案。每一組選一個變因，看誰的保冷設計最聰明。
+          </p>
+        </div>
+
+        <div class="section-title" style="margin-top:24px;">可能的變因</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">以下列出了許多可能改變的因素。選 1 個或 2 個作為「操縱變因」，其他都保持不變（控制變因）。</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+          <div class="card" style="border-top:3px solid var(--phase2);">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:10px;font-size:14px;">保冷劑變因</div>
+            <ul style="font-size:12px;color:var(--text-secondary);line-height:1.8;padding-left:16px;">
+              <li><strong>鹽的種類：</strong>食鹽 / 海鹽 / 粗鹽 / 碘鹽</li>
+              <li><strong>冰鹽比例：</strong>純冰 / 50g:50g / 50g:100g / 50g:150g</li>
+              <li><strong>冰的形狀：</strong>碎冰 / 小冰塊 / 大冰塊</li>
+              <li><strong>初始溫度：</strong>室溫 / 冷藏 / 冰庫</li>
+            </ul>
+          </div>
+          <div class="card" style="border-top:3px solid var(--phase2);">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:10px;font-size:14px;">容器與隔熱變因</div>
+            <ul style="font-size:12px;color:var(--text-secondary);line-height:1.8;padding-left:16px;">
+              <li><strong>容器材質：</strong>塑膠杯 / 保麗龍杯 / 紙杯 / 玻璃杯</li>
+              <li><strong>隔熱層數：</strong>無 / 單層 / 雙層 / 三層</li>
+              <li><strong>隔熱材料：</strong>報紙 / 氣泡布 / 鋁箔 / 毛巾</li>
+              <li><strong>蓋子：</strong>無蓋 / 紙杯蓋 / 鋁箔封 / 毛巾蓋</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-box yellow" style="margin-bottom:16px;">
+          💡 <strong>選題提示：</strong>選一個你最感興趣的變因。不要貪心選太多——集中火力研究一個或兩個相關的變因，結果會更清楚。
+        </div>
+
+        <!-- Layer 2: 選題與預測 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 你選擇研究哪個變因？寫出理由和預測。</div>
+          <textarea class="think-input" data-key="icehouse-lv2-topic" placeholder="例如：我選隔熱層數，因為Lv1知道隔熱很重要。我預測層數越多，保冷效果越好，飲料冷卻越慢…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: 設計實驗 -->
+    <div class="step-panel">
+      <div class="step-action">
+
+        <div class="section-title" style="margin-top:24px;">節 1 · 選題 + 實驗計畫（50 分鐘）</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">從上面的變因清單中選一個（或兩個相關的）你最感興趣的，寫出完整的實驗計畫。</p>
+        <div style="background:var(--bg);border-radius:6px;padding:14px;font-size:12px;margin-bottom:16px;">
+          <div style="font-weight:700;margin-bottom:10px;">📝 實驗計畫表</div>
+          <div style="display:grid;gap:8px;color:var(--text-secondary);">
+            <div><strong>1. 研究問題：</strong>___________</div>
+            <div><strong>2. 操縱變因：</strong>___________ 　水準（4–5 個）：___________</div>
+            <div><strong>3. 控制變因（列出至少 3 個）：</strong>___________</div>
+            <div><strong>4. 應變變因（量什麼？單位？）：</strong>___________</div>
+            <div><strong>5. 每個水準重複：</strong>_____ 次</div>
+            <div><strong>6. 預測：</strong>我認為___________，因為___________</div>
+          </div>
+        </div>
+
+        <div class="info-box yellow" style="margin-bottom:16px;">
+          ⚠️ <strong>同儕檢查：</strong>交出計畫前，請另一組同學審查：「你的計畫，我能照著做出一樣的實驗嗎？」如果不行，代表步驟不夠清楚。
+        </div>
+
+        <div class="section-title">同儕互評檢查清單</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">拿到另一組的實驗計畫，回答以下問題：</p>
+        <div style="display:grid;gap:8px;margin-bottom:16px;">
+          <div class="q-item phase2"><strong>① 可重現性：</strong>如果我照你的步驟做，能得到一樣的結果嗎？保冷劑和容器的準備方式有寫清楚嗎？</div>
+          <div class="q-item phase2"><strong>② 控制變因：</strong>環境溫度、測量時間、飲料初溫、室內光線——有控制嗎？</div>
+          <div class="q-item phase2"><strong>③ 數據品質：</strong>水準夠多嗎？重複次數夠嗎？標準差合理嗎？</div>
+          <div class="q-item phase2"><strong>④ 一個建議：</strong>如果你能改一個地方讓實驗更好，你會改什麼？</div>
+        </div>
+
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#92400e;font-size:12px;margin-bottom:6px;">⚡ 先跑一次再改</div>
+          <div style="font-size:11px;color:#78350f;line-height:1.7;">
+            計畫寫完別急著做完整實驗。花 10 分鐘用最粗糙的方式先試一次（只測 2 個水準、不用重複），確認你的操作流程跑得通、數據量得到。發現問題回來改計畫，比做完才發現便宜一百倍。
+          </div>
+        </div>
+
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 檢核站</div>
+          <p style="font-size:13px;color:#1e3a8a;line-height:1.8;margin-bottom:10px;">完成你的實驗計畫後，把計畫交給 AI（ChatGPT、Perplexity 等），請它幫你找漏洞：</p>
+          <div style="display:grid;gap:6px;font-size:12px;color:#1e3a8a;margin-bottom:10px;">
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「我的控制變因有沒有遺漏？」</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「這個實驗設計有什麼潛在問題？」</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「你覺得我的數據量夠嗎？需要幾組重複？」</div>
+          </div>
+          <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:4px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:#1e3a8a;">
+            <strong>💬 複製貼上範本：</strong>「我正在設計一個實驗，研究問題是＿＿。操縱變因是＿＿（水準：＿＿），應變變因是＿＿，控制變因有＿＿。請幫我檢查：(1) 控制變因有沒有遺漏 (2) 實驗步驟有沒有潛在問題 (3) 數據量夠不夠」<br>
+            <span style="font-size:10px;color:#60a5fa;">給 AI 越多上下文，它的回饋越有用。空白處填入你自己的內容再送出。</span>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;font-style:italic;">⚠️ AI 是審稿人，不是代筆人。它指出問題，你決定要不要改、怎麼改。</p>
+        </div>
+
+        <!-- Layer 1: 控制變因挑戰 -->
+        <div class="think-block reveal">
+          <div class="think-prompt">🤔 想一想：保冷實驗中最難控制的變因是什麼？列出至少 2 個。</div>
+          <button class="think-toggle">想好了？點擊看提示 →</button>
+          <div class="think-hidden">
+            <p>保冷系統的難控因素：<strong>環境溫度</strong>（室溫波動影響散熱速率）→應該在同一時間、同一場所做；<strong>初始溫度</strong>（飲料一開始的溫度決定了冷卻曲線）→要精確量測、保證一致；<strong>測量時間間隔</strong>（每隔 2 分鐘要準時量，不能少量）→用手機計時器；<strong>容器位置</strong>（擺放位置影響受風散熱）→固定位置、避免陽光直射。每個都很重要。</p>
+          </div>
+        </div>
+
+        <!-- Layer 3: 冷卻曲線概念題 -->
+        <div class="think-block choice" data-answer="c">
+          <div class="think-prompt">🎯 一般來說，冷飲的冷卻曲線是什麼形狀？</div>
+          <div class="think-options">
+            <button class="think-opt" data-val="a">A. 直線（溫度勻速下降）</button>
+            <button class="think-opt" data-val="b">B. 向上的拋物線（開始快，後來越來越慢）</button>
+            <button class="think-opt" data-val="c">C. 向下的拋物線（開始快速冷卻，逐漸趨近環境溫度）</button>
+            <button class="think-opt" data-val="d">D. 無規律</button>
+          </div>
+          <div class="think-feedback" style="display:none;">
+            正確！這是牛頓冷卻定律：物體與環境溫差越大，散熱越快。冰水一開始溫差 ΔT 最大，散熱最快；隨著冷卻，ΔT 減小，散熱變慢，最終趨近環境溫度。如果你的實驗發現是直線，代表有特殊的隔熱設計讓冷卻速率保持穩定。
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1.5px solid var(--phase2);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">📋</span>
+          <div>
+            <div style="font-weight:700;font-size:13px;color:var(--phase2);">填寫研究規劃表</div>
+            <div style="font-size:12px;color:var(--text-secondary);">用六步流程把你的想法變成可執行的實驗計畫 → <a href="research-plan.html" style="color:var(--phase2);font-weight:600;">開始填寫</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 執行與數據 -->
+    <div class="step-panel">
+      <div class="step-action">
+
+        <div class="section-title" style="margin-top:24px;">節 2–3 · 實驗執行 + 數據收集（100 分鐘）</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">依照計畫執行，每個水準至少重複 3 次。每 2 分鐘記錄一次溫度。實驗後用 Excel 計算平均值並畫折線圖。</p>
+
+        <div style="overflow-x:auto;margin-bottom:16px;">
+          <table>
+            <thead><tr><th>操縱變因</th><th>0 分</th><th>2 分</th><th>4 分</th><th>6 分</th><th>8 分</th><th>10 分</th><th>最低溫</th></tr></thead>
+            <tbody>
+              <tr><td>條件 A</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+              <tr><td>條件 B</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+              <tr><td>條件 C</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+              <tr><td>條件 D</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td><td>___</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box green" style="margin-bottom:16px;">
+          💡 <strong>測量提示：</strong>測溫度時要充分攪拌（避免局部溫差），記錄時間要精確。建議用手機計時器。
+        </div>
+
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:12px;margin-bottom:6px;">🤝 小組分工提示</div>
+          <div style="font-size:11px;color:#1e3a8a;line-height:1.7;">
+            建議分三個角色：<strong>操作員</strong>（動手做）、<strong>記錄員</strong>（即時記數據）、<strong>品管員</strong>（檢查控制變因有沒有跑掉）。每次換水準時輪換。互評時先聽完對方說完，再給建議。
+          </div>
+        </div>
+
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:8px;">📈 數據會說話——但你要會聽</div>
+          <div style="font-size:12px;color:#14532d;line-height:1.8;">
+            收完數據別急著寫結論，先問自己三個問題：<br>
+            <strong>① 趨勢</strong>：散佈圖的點大致往哪走？上升？下降？先升後降？沒有趨勢？<br>
+            <strong>② 離散</strong>：點是緊貼趨勢線，還是散得很開？散開代表不確定度大，結論要保守。<br>
+            <strong>③ 意外</strong>：有沒有哪個點特別「跳出來」？它可能是操作失誤，也可能是最有趣的發現。<br>
+            <span style="font-size:11px;color:#15803d;">能回答這三題，你就有資格寫結論了。不確定怎麼畫圖？→ <a href="../../tools/excel.html" style="color:#166534;font-weight:600;">Excel 工具箱</a></span>
+          </div>
+        </div>
+
+        <!-- Layer 2: 執行反思 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 實驗執行時最大的困難是什麼？你怎麼解決的？</div>
+          <textarea class="think-input" data-key="icehouse-lv2-execution" placeholder="例如：最難的是每 2 分鐘準時量溫度，我們用手機計時器確保時間一致…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 分析與發表 -->
+    <div class="step-panel">
+      <div class="step-action">
+
+        <div class="section-title" style="margin-top:24px;">節 4 · 分析 + 各組發表（50 分鐘）</div>
+
+        <div style="background:var(--bg);border-radius:6px;padding:16px;margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:14px;">📊 數據分析指引</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-bottom:14px;">
+            <div style="background:white;border-radius:6px;padding:12px;border-left:3px solid var(--phase2);">
+              <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">📈 畫圖找趨勢</div>
+              <div style="color:var(--text-secondary);line-height:1.8;font-size:11px;">
+                用 Excel 畫折線圖（時間 vs 溫度，各條件一條線）和散佈圖（操縱變因 vs 最低溫度）。趨勢是線性、曲線、還是沒有明顯關係？跟 Lv1 的鹽冰降溫模型比較。
+              </div>
+            </div>
+            <div style="background:white;border-radius:6px;padding:12px;border-left:3px solid var(--phase2);">
+              <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">⚖️ 誤差與重現性</div>
+              <div style="color:var(--text-secondary);line-height:1.8;font-size:11px;">
+                保冷系統的數據通常分散度較大。為什麼？（環境溫度波動、容器散熱不均、測量時間誤差⋯）計算標準差來衡量結果的穩定性。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:8px;margin-bottom:16px;">
+          <div class="q-item phase2"><strong>Q1：</strong>畫「操縱變因 vs 最低溫度」和「操縱變因 vs 降溫速率」散佈圖。趨勢是線性、曲線、還是沒有明顯關係？</div>
+          <div class="q-item phase2"><strong>Q2：</strong>你的結果支持你的預測嗎？哪裡一致、哪裡不一致？可能的原因是什麼？</div>
+          <div class="q-item phase2"><strong>Q3：</strong>哪個控制變因最難控制？對結果的影響有多大？</div>
+        </div>
+
+        <!-- Layer 3: 降溫曲線比較 -->
+        <div class="think-block choice" data-answer="c">
+          <div class="think-prompt">🎯 你實驗了無隔熱容器 vs 雙層隔熱容器。哪個說法最合理？</div>
+          <div class="think-options">
+            <button class="think-opt" data-val="a">A. 無隔熱容器冷卻曲線斜率較緩（冷卻慢）</button>
+            <button class="think-opt" data-val="b">B. 兩者冷卻速率相同，只是最終溫度不同</button>
+            <button class="think-opt" data-val="c">C. 無隔熱容器冷卻曲線斜率較大（冷卻快），雙層容器冷卻較慢</button>
+            <button class="think-opt" data-val="d">D. 取決於環境溫度</button>
+          </div>
+          <div class="think-feedback" style="display:none;">
+            正確！隔熱差的容器散熱快，溫度快速下降；隔熱好的容器散熱慢，溫度緩慢下降。曲線陡峭度反映冷卻速率。D 項有一定道理（環境溫度確實影響），但最直接的答案是隔熱效能決定了冷卻速率。
+          </div>
+        </div>
+
+        <!-- Layer 2: 結論撰寫 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 用 2–3 句寫下你的實驗結論（變因、結果、與預測的比較）。</div>
+          <textarea class="think-input" data-key="icehouse-lv2-conclusion" placeholder="例如：隔熱層數越多，冷卻速率越慢，容器保持低溫的時間越長，完全符合我的預測…"></textarea>
+          <div class="think-status"></div>
+        </div>
+
+        <div class="info-box yellow" style="margin-bottom:16px;">
+          📢 <strong>各組發表：</strong>每組 3 分鐘講你選了什麼變因、結果怎樣、最大的發現是什麼。
+        </div>
+
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;margin-bottom:10px;">你的實驗計畫表、預測 vs 結果的比較分析、折線圖，加上同儕互評回饋，展現了完整的「規劃研究」歷程。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你原本的實驗計畫和實際做的有什麼不同？改了什麼？為什麼改？<br>
+            <span style="font-size:11px;color:#8b5cf6;">「計畫 vs 實際」的落差本身就是最好的反思素材——改得好代表你在成長。</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- POST-CLASS -->
+    <div class="post-class" style="margin-top:32px;">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 檢核、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body" style="display:none;">
+        <!-- 教師筆記 -->
+        <div style="background:#f5f3ff;border:1px solid #e9d5ff;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#6d28d9;font-size:13px;margin-bottom:10px;">📌 教學筆記（教師用）</div>
+          <ul style="font-size:12px;color:#6d28d9;padding-left:18px;line-height:1.8;margin:0;">
+            <li>引導學生整合 Lv1 的鹽冰降溫知識，設計有對照的保冷實驗</li>
+            <li>練習選定一個或兩個操縱變因（如容器材質、隔熱層數、隔熱材料），控制其他因素</li>
+            <li>培養記錄數據、繪製溫度-時間曲線、分析結果的技能</li>
+            <li>鼓勵學生從實驗中提出下一個問題（為 Lv3 競賽做準備）</li>
+          </ul>
+        </div>
+
+        <!-- Unit Navigation -->
+        <div class="unit-nav">
+          <a href="../phase1/icehouse-lv1.html">← 冰屋 Lv1</a>
+          <a href="../phase3/icehouse-lv3.html">冰屋 Lv3 發現問題 →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

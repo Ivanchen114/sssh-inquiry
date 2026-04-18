@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>單擺 Lv2 · 自主設計實驗 · 探究與實作</title>
+  <meta name="description" content="單擺 Lv2 規劃研究：自主設計實驗，學習控制變因與數據分析方法。">
+  <meta property="og:title" content="單擺 Lv2 · 自主設計實驗 · 探究與實作">
+  <meta property="og:description" content="單擺 Lv2 規劃研究：自主設計實驗，學習控制變因與數據分析方法。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/pendulum-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·單擺</span><span>›</span>
+      <span style="color:var(--phase2)">Lv2 規劃研究</span>
+    </div>
+    <h1>🕰️ 單擺模組 · Lv2 規劃研究</h1>
+    <p class="subtitle">Lv1 我們驗證了 T 和 L 的關係。現在——你來設計實驗。</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">2 節課</span>
+      <span class="tag">自主設計</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從現象或理論出發，提出可驗證的研究問題（例如：質量是否影響週期？）</li>
+      <li>能設計含操縱變因、控制變因與應變變因的實驗計畫，並說明每個控制的理由</li>
+      <li>能有系統地蒐集數據（每個水準至少 3 次），並用不確定度判斷結果差異的意義</li>
+      <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>選題</button>
+    <button class="step-tab"><span class="step-num">2</span>設計實驗</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與數據</button>
+    <button class="step-tab"><span class="step-num">4</span>分析與發表</button>
+  </nav>
+
+  <div class="page-body">
+    <!-- Step 1: 選題 -->
+    <div class="step-panel active">
+      <div class="step-action">從以下問題中選一個你最感興趣的，作為你的研究主題。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">$T = 2\pi\sqrt{L/g}$ 告訴我們：週期只和<strong>擺長 L</strong> 和<strong>重力 g</strong> 有關。但你確定嗎？以下哪些因素真的不影響？</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">擺錘質量影響週期嗎？</div>
+          <div style="font-size:12px;color:var(--text-muted);">理論說不影響——你能用數據證明？</div>
+        </div>
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">擺動角度影響週期嗎？</div>
+          <div style="font-size:12px;color:var(--text-muted);">Lv1 用 5° vs 20°。試 40°、60° 呢？</div>
+        </div>
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">繩子材質影響週期嗎？</div>
+          <div style="font-size:12px;color:var(--text-muted);">棉線 vs 釣魚線 vs 毛線</div>
+        </div>
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">擺錘形狀影響週期嗎？</div>
+          <div style="font-size:12px;color:var(--text-muted);">同質量：圓球 vs 扁片 vs 長條</div>
+        </div>
+      </div>
+
+      <!-- Layer 3: 概念選擇題 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 暖身題：根據 $T = 2\pi\sqrt{L/g}$，下列哪個變因「理論上不影響週期」？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 擺長（繩子長度）</button>
+          <button class="think-opt" data-val="b">B. 重力加速度（在不同星球上）</button>
+          <button class="think-opt" data-val="c">C. 擺錘質量</button>
+          <button class="think-opt" data-val="d">D. 以上皆會影響</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          公式裡沒有質量 m，所以理論預測質量不影響週期。但「理論說不影響」不代表「真的不影響」——這正是你可以用實驗驗證的好問題！
+        </div>
+      </div>
+
+      <!-- Layer 2: 選題記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你打算選哪個研究問題？為什麼？（一兩句就好）</div>
+        <textarea class="think-input" data-key="pendulum-lv2-q1" placeholder="例如：我想研究擺錘質量，因為公式說沒影響但我覺得不合理…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: 設計實驗 -->
+    <div class="step-panel">
+      <div class="step-action">設計你的實驗計畫，包含變因控制和理論預測。</div>
+
+      <div class="activity-block">
+        <div class="activity-header phase2">實驗計畫表</div>
+        <div class="activity-body">
+          <div style="background:var(--bg);border-radius:6px;padding:14px;margin-bottom:14px;">
+            <div style="font-weight:700;font-size:12px;margin-bottom:10px;">📝 請填寫以下各項</div>
+            <div style="display:grid;gap:8px;font-size:12px;color:var(--text-secondary);">
+              <div>1. 研究問題：「___________是否影響單擺週期？」</div>
+              <div>2. 理論預測：根據 $T = 2\pi\sqrt{L/g}$，我認為___________，因為___________</div>
+              <div>3. 操縱變因：___________　水準（至少 4 個）：___________</div>
+              <div>4. 控制變因：___________（列出至少 3 個，含控制方式）</div>
+              <div>5. 量測方式：計時 _____ 個週期，除以 _____，重複 _____ 次</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1.5px solid var(--phase2);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:22px;">📋</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);">填寫研究規劃表</div>
+          <div style="font-size:12px;color:var(--text-secondary);">用六步流程把你的想法變成可執行的實驗計畫 → <a href="research-plan.html" style="color:var(--phase2);font-weight:600;">開始填寫</a></div>
+        </div>
+      </div>
+
+      <div class="section-title">同儕互評</div>
+      <div class="card" style="border-top:3px solid var(--express);margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🗣️ 交換實驗計畫，互相檢查</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">拿到另一組的計畫書後，用以下問題給回饋（每題 1–2 句）：</p>
+        <div style="display:grid;gap:8px;font-size:12px;">
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">① 可重現性：</strong>如果我照著你的步驟做，能得到一樣的結果嗎？哪裡不夠清楚？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">② 控制變因：</strong>有沒有漏掉的控制變因？哪個最可能影響結果？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">③ 數據量：</strong>水準夠多嗎？重複次數夠嗎？能看出趨勢嗎？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">④ 一個建議：</strong>如果你能改一個地方，你會改什麼？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">⑤ 研究問題：</strong>這組的研究問題夠明確嗎？有操縱變因和應變變因嗎？你能用一句話說出他們在探究什麼嗎？</div>
+        </div>
+      </div>
+
+      <!-- Layer 1: 想一想（變因控制） -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：如果你選「擺錘質量」當操縱變因，你需要控制哪些變因？列出至少 3 個。</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>常見需控制的變因：<strong>擺長</strong>（每次量到質心位置）、<strong>起始角度</strong>（用量角器固定）、<strong>繩子材質</strong>（全部用同一種）、<strong>計時方式</strong>（同一人操作碼錶）、<strong>環境</strong>（無風處）。你還想到什麼？</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 同儕互評記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 同儕互評後，對方給你的最重要建議是什麼？你打算怎麼改？</div>
+        <textarea class="think-input" data-key="pendulum-lv2-peer" placeholder="例如：同學指出我沒控制繩子材質，我決定全部換成釣魚線…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#92400e;font-size:12px;margin-bottom:6px;">⚡ 先跑一次再改</div>
+        <div style="font-size:11px;color:#78350f;line-height:1.7;">
+          計畫寫完別急著做完整實驗。花 10 分鐘用最粗糙的方式先試一次（只測 2 個水準、不用重複），確認你的操作流程跑得通、數據量得到。發現問題回來改計畫，比做完才發現便宜一百倍。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 執行與數據 -->
+    <div class="step-panel">
+      <div class="step-action">開始實驗，記錄你的數據。</div>
+
+      <div class="section-title">執行實驗</div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:12px;margin-bottom:6px;">🤝 小組分工提示</div>
+        <div style="font-size:11px;color:#1e3a8a;line-height:1.7;">
+          建議分三個角色：<strong>操作員</strong>（動手做）、<strong>記錄員</strong>（即時記數據）、<strong>品管員</strong>（檢查控制變因有沒有跑掉）。每次換水準時輪換。互評時先聽完對方說完，再給建議。
+        </div>
+      </div>
+
+      <div class="section-title">數據分析指引</div>
+      <div class="card" style="border-top:3px solid var(--phase1);margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📊 你的數據夠好嗎？用 Lv1 學到的工具檢驗</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;color:var(--phase1);margin-bottom:4px;">不確定度檢驗</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">
+              每個水準至少量 3 次，算出 u<sub>A</sub> = s/√n。<br>
+              兩組數據的不確定度範圍有沒有重疊？<br>
+              <strong>有重疊 → 「沒有顯著差異」</strong>
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">圖表分析</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">
+              用 Excel 畫散佈圖（操縱變因 vs T）。<br>
+              加上誤差棒（± u<sub>c</sub>）。<br>
+              趨勢線是平的？斜的？<strong>用圖形論證</strong>。
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;">
+          💡 「沒影響」也是重要的結論——但你需要用不確定度說明「為什麼這個差異不算有意義」。
+        </div>
+      </div>
+
+      <!-- Layer 1: 數據異常怎麼辦 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你量了 5 次同一個水準，其中 1 次的數據跟其他 4 次差很多。你該怎麼辦？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p><strong>不要直接刪掉。</strong>先記錄下來，標註「異常」。想想可能原因：計時失誤？角度沒固定好？繩子滑了？如果找得到明確原因（操作錯誤），可以標記並重做。如果找不到原因，保留它——報告裡說明「有一筆離群值」比偷偷刪掉更誠實、更有科學素養。</p>
+        </div>
+      </div>
+
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:8px;">📈 數據會說話——但你要會聽</div>
+        <div style="font-size:12px;color:#14532d;line-height:1.8;">
+          收完數據別急著寫結論，先問自己三個問題：<br>
+          <strong>① 趨勢</strong>：散佈圖的點大致往哪走？上升？下降？先升後降？沒有趨勢？<br>
+          <strong>② 離散</strong>：點是緊貼趨勢線，還是散得很開？散開代表不確定度大，結論要保守。<br>
+          <strong>③ 意外</strong>：有沒有哪個點特別「跳出來」？它可能是操作失誤，也可能是最有趣的發現。<br>
+          <span style="font-size:11px;color:#15803d;">能回答這三題，你就有資格寫結論了。不確定怎麼畫圖？→ <a href="../../tools/excel.html" style="color:#166534;font-weight:600;">Excel 工具箱</a></span>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: 分析與發表 -->
+    <div class="step-panel">
+      <div class="step-action">分析你的數據，回答討論問題。</div>
+
+      <div class="activity-block">
+        <div class="activity-header phase2">討論與發表問題</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:8px;">
+            <div class="q-item phase2"><div style="font-size:13px;font-weight:600;">Q1：你的結果支持理論嗎？用不確定度範圍說明「沒影響」或「有影響」。</div></div>
+            <div class="q-item phase2"><div style="font-size:13px;font-weight:600;">Q2：如果角度大到 60°，理論公式還準嗎？你怎麼判斷？</div></div>
+            <div class="q-item phase2"><div style="font-size:13px;font-weight:600;">Q3：各組的結果合在一起，有沒有互相矛盾的？怎麼解釋？</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 3: 不確定度概念題 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 你測了「質量 50g」和「100g」的週期，結果分別是 1.42±0.03 秒和 1.44±0.04 秒。你的結論是？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 100g 的週期比較長，所以質量有影響</button>
+          <button class="think-opt" data-val="b">B. 兩者的不確定度範圍重疊，沒有顯著差異</button>
+          <button class="think-opt" data-val="c">C. 差了 0.02 秒，差距太小所以忽略</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          50g 的範圍是 1.39–1.45，100g 的範圍是 1.40–1.48。兩者大幅重疊，所以<strong>無法判定有顯著差異</strong>。注意：「差距小所以忽略」（C）不夠嚴謹——科學上要用不確定度範圍來判斷，不是靠直覺。
+        </div>
+      </div>
+
+      <!-- Layer 2: 結論草稿 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用一兩句話寫下你的實驗結論（待會發表要用）</div>
+        <textarea class="think-input" data-key="pendulum-lv2-conclusion" placeholder="例如：我的數據顯示，在 20g–200g 範圍內，質量的改變不會顯著影響週期…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 檢核站</div>
+        <p style="font-size:13px;color:#1e3a8a;line-height:1.8;margin-bottom:10px;">完成你的實驗計畫後，把計畫交給 AI（ChatGPT、Perplexity 等），請它幫你找漏洞：</p>
+        <div style="display:grid;gap:6px;font-size:12px;color:#1e3a8a;">
+          <div style="background:white;border-radius:4px;padding:8px 12px;">「我的控制變因有沒有遺漏？」</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">「這個實驗設計有什麼潛在問題？」</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">「你覺得我的數據量夠嗎？需要幾組重複？」</div>
+        </div>
+        <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px;color:#1e3a8a;">
+          <strong>💬 複製貼上範本：</strong>「我正在設計一個實驗，研究問題是＿＿。操縱變因是＿＿（水準：＿＿），應變變因是＿＿，控制變因有＿＿。請幫我檢查：(1) 控制變因有沒有遺漏 (2) 實驗步驟有沒有潛在問題 (3) 數據量夠不夠」<br>
+          <span style="font-size:10px;color:#60a5fa;">給 AI 越多上下文，它的回饋越有用。空白處填入你自己的內容再送出。</span>
+        </div>
+        <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是代筆人。它指出問題，你決定要不要改、怎麼改。</p>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Post-class section -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 檢核、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body">
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">「用數據驗證理論預測」和「理論的適用範圍」是本活動最有價值的反思。同儕互評表也是好素材——它展現你的科學溝通能力。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你原本的實驗計畫和實際做的有什麼不同？改了什麼？為什麼改？<br>
+            <span style="font-size:11px;color:#8b5cf6;">「計畫 vs 實際」的落差本身就是最好的反思素材——改得好代表你在成長。</span>
+          </div>
+        </div>
+
+        <div style="background:#f5f3ff;border-left:4px solid var(--express);border-radius:4px;padding:14px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:8px;">📌 教學目標（教師視角）</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:18px;line-height:2;margin-bottom:0;">
+            <li>讓學生從 T = 2π√(L/g) 出發，自己選一個變因設計驗證實驗</li>
+            <li>挑戰「公式說不影響的變因」——用數據確認理論預測</li>
+          </ul>
+        </div>
+
+        <div style="background:#f0f9ff;border-left:4px solid var(--phase2);border-radius:4px;padding:14px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--phase2);font-size:12px;margin-bottom:8px;">🎯 學習目標</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:18px;line-height:2;margin-bottom:0;">
+            <li>能從現象或理論出發，提出可驗證的研究問題（例如：質量是否影響週期？）</li>
+            <li>能設計含操縱變因、控制變因與應變變因的實驗計畫，並說明每個控制的理由</li>
+            <li>能有系統地蒐集數據（每個水準至少 3 次），並用不確定度判斷結果差異的意義</li>
+            <li>能用圖表呈現結果，並以數據為基礎進行分析與發表（支持或駁斥預測）</li>
+          </ul>
+        </div>
+
+        <div class="unit-nav">
+          <a href="../phase1/pendulum.html">← 單擺 Lv1</a>
+          <a href="../phase3/pendulum-lv3.html">單擺 Lv3 發現問題 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

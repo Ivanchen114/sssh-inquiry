@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>浮力 Lv3 · 智造微船 · 探究與實作</title>
+  <meta name="description" content="浮力 Lv3 發現問題：智造微船競賽，設計承載最大重量的微型船。">
+  <meta property="og:title" content="浮力 Lv3 · 智造微船 · 探究與實作">
+  <meta property="og:description" content="浮力 Lv3 發現問題：智造微船競賽，設計承載最大重量的微型船。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/buoyancy-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·浮力</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>⛵ 浮力模組 · Lv3 智造微船</h1>
+    <p class="subtitle">一張珍珠板、一卷膠帶、50 分鐘——你的船能撐住一罐飲料嗎？</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">50 分鐘</span>
+      <span class="tag">AI 輔助設計 + 競賽</span>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
+    <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
+    <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
+    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- Step 1: 挑戰規則 -->
+    <div class="step-panel active">
+      <div style="background:#f3f4f6;border-radius:8px;padding:16px 20px;margin-bottom:20px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px;">🎯 學習目標</div>
+        <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+          <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：水從何處滲入？船如何翻覆或沉沒？）</li>
+          <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：船壁高度（2cm vs 3cm vs 4cm）對最大承載重量的影響？接縫數量與滲水速率的關係？）</li>
+          <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「正方形 vs 長方形底面，哪種船型載重效率較高？」vs「浮力怎麼算？」是查書題）</li>
+          <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+        </ul>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:12px;">🏆 智造微船挑戰</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">📦 材料限制</div>
+            一張珍珠板作為船身（不可用其他材料）<br>
+            膠帶（雙面膠）僅供連接珍珠板之間
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">🎯 過關目標</div>
+            支撐一罐 375 ml 飲料持續 <strong>10 秒</strong><br>
+            達標 = 15 分，之後每加一顆麻將 +1 分
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">⏱️ 時間</div>
+            總共 50 分鐘
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">⚠️ 關鍵限制</div>
+            只有<strong>一次</strong>測試機會！
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">📊 計分方式（總分 90+）</div>
+        <div style="overflow-x:auto;">
+          <table style="font-size:12px;">
+            <thead>
+              <tr><th>項目</th><th>配分</th><th>評分重點</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;">1. 規劃</td>
+                <td>25 分</td>
+                <td>設計理念、AI 對話紀錄、靈感來源說明</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">2. 論證</td>
+                <td>25 分</td>
+                <td>測試過程描述、失敗原因分析、改進方案</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">3. 結果</td>
+                <td>15 分 + 加分</td>
+                <td>撐住飲料 10 秒 = 15 分；每加一顆麻將 +1 分</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">4. 反思</td>
+                <td>25 分</td>
+                <td>整體過程反思 + AI 潤飾後的報告品質</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="background:#e0f2fe;border:1px solid #bae6fd;border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#0369a1;">
+        <strong>step-action:</strong> 閱讀智造微船挑戰規則與計分方式。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: 製作與測試 -->
+    <div class="step-panel">
+      <div class="section-title" style="color:var(--phase3);">競賽流程（50 分鐘）</div>
+
+      <!-- 階段 1：規劃 -->
+      <div class="activity-block">
+        <div class="activity-header phase3">階段 1 · 規劃設計（~15 分鐘）</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:10px;font-size:13px;color:var(--text-secondary);">
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🤖 AI 輔助設計</strong>：打開 ChatGPT、Perplexity 或其他生成式 AI，向它描述你的任務限制（材料、尺寸、目標載重），請它幫你發想船型方案。
+            </div>
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>✏️ 畫設計圖</strong>：在紙上畫出你選定的方案，標注關鍵尺寸。
+            </div>
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🧮 估算載重</strong>：用浮力公式估算理論最大承載量。
+            </div>
+          </div>
+
+          <div class="collapsible think-first" style="margin-top:10px;">
+            <div class="collapsible-header">🧠 計算提示：先自己算，再點開看<span class="toggle-icon">▶</span></div>
+            <div class="collapsible-body">
+              <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                浮力 = ρ<sub>水</sub> × V<sub>排水</sub> × g<br>
+                理論最大載重 = 排水體積（cm³）× 1 g/cm³ − 船身重量<br><br>
+                例如：做成 15cm × 10cm × 3cm 的盒子<br>
+                → 排水體積 = 450 cm³ → 浮力 ≈ 450 gw<br>
+                → 一罐 375ml 飲料 ≈ 380g，所以需要讓排水體積 > 380 + 船重<br><br>
+                💡 關鍵：船壁越高排水體積越大，但也越不穩定。怎麼平衡？
+              </p>
+            </div>
+          </div>
+
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:10px 14px;font-size:12px;color:#1e40af;margin-top:10px;">
+            💡 <strong>重要</strong>：記得截圖保存你和 AI 的對話過程——這是「規劃」評分的依據。不只要結果，更要展示你怎麼提問、怎麼篩選方案。
+          </div>
+        </div>
+      </div>
+
+      <!-- 階段 2：製作 -->
+      <div class="activity-block" style="margin-top:12px;">
+        <div class="activity-header phase3">階段 2 · 動手製作（~15 分鐘）</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:10px;font-size:13px;color:var(--text-secondary);">
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🔪 裁切珍珠板</strong>：按設計圖裁切。膠帶只用在連接處，不可包覆整個船身。
+            </div>
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🔍 自我檢查</strong>：下水前最後確認——接縫密合嗎？重心在中央嗎？放飲料的位置穩嗎？
+            </div>
+          </div>
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;margin-top:10px;">
+            ⚠️ 只有一次測試機會——下水就不能回頭。製作階段多花點時間檢查，比急著下水值得。
+          </div>
+        </div>
+      </div>
+
+      <!-- 階段 3：測試 -->
+      <div class="activity-block" style="margin-top:12px;">
+        <div class="activity-header phase3">階段 3 · 唯一一次測試（~5 分鐘）</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:10px;font-size:13px;color:var(--text-secondary);">
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🚢 下水</strong>：將船放入水中，輕輕放上 375ml 飲料罐，開始計時 10 秒。
+            </div>
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🎯 達標後加碼</strong>：撐住 10 秒 = 過關（15 分）。接著每放一顆麻將加 1 分，直到船沉沒。
+            </div>
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>📸 記錄</strong>：全程拍照或錄影。特別記錄：水從哪裡進來？船是怎麼沉的？哪裡先塌？
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 階段 4：反思 -->
+      <div class="activity-block" style="margin-top:12px;">
+        <div class="activity-header phase3">階段 4 · 反思與報告（~15 分鐘）</div>
+        <div class="activity-body">
+          <div style="display:grid;gap:10px;font-size:13px;color:var(--text-secondary);">
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>📝 撰寫反思</strong>：對整個過程進行反思——設計哪裡好？哪裡可以改進？如果再做一次，你會怎麼改？
+            </div>
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🤖 AI 潤飾</strong>：把你的反思草稿交給 AI，請它幫忙潤飾文字。但核心內容（觀察、分析、結論）必須是你自己的。
+            </div>
+            <div style="background:var(--bg);padding:10px 14px;border-radius:6px;">
+              <strong>🎤 分享</strong>：各組上台報告（2–3 分鐘），分享設計理念、測試結果與反思。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#e0f2fe;border:1px solid #bae6fd;border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#0369a1;">
+        <strong>step-action:</strong> 規劃、製作、測試你的微船，並完成反思報告。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 從競賽到問題 -->
+    <div class="step-panel">
+      <div class="section-title" style="color:var(--phase3);">從競賽到科學問題</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">💭 你的船沉了（或差點沉）——為什麼？</div>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item phase3">
+            <strong>Step 1 · 記錄觀察</strong>：寫下 3 個你在測試中觀察到的現象（例如：「水從接縫滲入」「飲料罐放上去時船劇烈搖晃」「船壁被壓彎了」）
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 2 · 轉化為問題</strong>：用「如果改變___，___會怎樣？」提出至少 3 個問題
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 3 · 篩選品質</strong>：用四條件檢查，選出 1 個最想探究的問題。
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible think-first">
+        <div class="collapsible-header">🔍 好問題 vs 需要改進的問題（先自己想，再點開對照）<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="overflow-x:auto;">
+            <table style="font-size:12px;">
+              <thead><tr><th>❌ 需要改進</th><th>問題出在哪</th><th>✅ 好的探究問題</th></tr></thead>
+              <tbody>
+                <tr><td>「船為什麼沉了？」</td><td style="color:var(--text-muted);">太廣泛</td><td>「船壁高度（2cm vs 3cm vs 4cm）對最大承載重量的影響？」</td></tr>
+                <tr><td>「珍珠板怎麼切比較好？」</td><td style="color:var(--text-muted);">不可量化</td><td>「正方形 vs 長方形底面，哪種船型的載重效率較高？」</td></tr>
+                <tr><td>「AI 給的設計好不好？」</td><td style="color:var(--text-muted);">無法實驗</td><td>「接縫數量（2 條 vs 4 條 vs 6 條）與滲水速率的關係？」</td></tr>
+                <tr><td>「浮力怎麼算？」</td><td style="color:var(--text-muted);">查書題</td><td>「載重集中放 vs 分散放，哪種方式船能撐更久？」</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12px;color:#92400e;margin-top:10px;">→ <a href="../../tools/good-question.html" style="color:#92400e;font-weight:700;">工具箱：什麼是好的探究問題</a></p>
+        </div>
+      </div>
+
+      <!-- Layer 1: 失敗分析 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你的船沉或差點沉的主要原因是什麼？（選一個最可能的）</div>
+        <button class="think-toggle">想好了？點擊看分析 →</button>
+        <div class="think-hidden">
+          <p><strong>常見原因分類：</strong><br>① 排水體積不足（設計時估算錯誤）→ 可探究「設計階段用浮力公式是否準確」<br>② 接縫滲水（製作問題）→ 可探究「接縫處理與滲水速率的關係」<br>③ 穩定性差（船身翻覆或傾斜）→ 可探究「底面積與重心位置如何影響穩定性」<br>④ 載重位置不當 → 可探究「載重位置（靠近邊緣 vs 中央）如何影響傾覆時間」</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 問題記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你從失敗中最想探究的一個具體問題</div>
+        <textarea class="think-input" data-key="buoyancy-lv3-q1" placeholder="例如：我想探究「接縫數量如何影響滲水速率」，因為我的船主要從接縫漏水…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 變因識別 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 在你提出的問題中，「操縱變因」是什麼？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 船的重量</button>
+          <button class="think-opt" data-val="b">B. 你故意改變的因素（例如接縫數、壁高、載重位置）</button>
+          <button class="think-opt" data-val="c">C. 飲料罐的重量</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 對！操縱變因就是「你在實驗中故意改變」的因素。A 和 C 是固定的，不是變因。</div>
+      </div>
+
+      <div style="background:#e0f2fe;border:1px solid #bae6fd;border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#0369a1;">
+        <strong>step-action:</strong> 反思測試結果，把觀察轉化為可探究的科學問題。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: 後續探究 -->
+    <div class="step-panel">
+      <div class="collapsible teacher-toggle">
+        <div class="collapsible-header">👩‍🏫 教師備註：AI 使用引導<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            這堂課刻意讓學生使用生成式 AI，但重點不在「AI 幫你設計」，而在「你怎麼跟 AI 對話」。評分時請注意：<br><br>
+            <strong>規劃階段</strong>：看的是提問品質，而非 AI 回答品質。學生是否能把限制條件說清楚？是否會追問？是否能從多個方案中選擇並說明理由？<br><br>
+            <strong>反思階段</strong>：AI 潤飾是手段，不是目的。核心觀察（「水從哪裡進來」「船怎麼翻的」）必須來自學生自己。若反思內容空洞但文字華麗，應扣分。<br><br>
+            <strong>常見強問題方向</strong>：船壁高度 vs 穩定性（存在最佳值）、底面積 vs 吃水深度、接縫處理 vs 滲水速率、載重位置 vs 傾覆力矩。
+          </p>
+        </div>
+      </div>
+
+      <div style="background:#e0f2fe;border:1px solid #bae6fd;border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#0369a1;">
+        <strong>step-action:</strong> 深入探究你選定的問題。
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Post-class Section -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 協作、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body">
+        <!-- 問題發現單 -->
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">💡</span>
+          <div>
+            <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+            <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+          </div>
+        </div>
+
+        <!-- 學習歷程提示 -->
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">好素材：AI 對話截圖 → 設計圖 → 理論計算 → 製作過程照片 → 測試結果（影片更佳）→ 反思報告。展示「你怎麼用 AI 當工具」比「AI 給了什麼答案」更有價值。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+            <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「第一次船壁做 3cm 太矮改成 5cm」才有說服力。</span>
+          </div>
+        </div>
+
+        <!-- 教學目標（教師視角） -->
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生在有限材料與時間壓力下，結合 AI 工具進行設計思考</li>
+              <li>只有一次測試機會——迫使學生重視「規劃」而非「試錯」</li>
+              <li>體驗「理論計算 vs 實際工程」的落差，從失敗中提取科學問題</li>
+              <li>練習用 AI 輔助撰寫反思報告，但核心觀察與思考仍須自己產出</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="unit-nav">
+          <a href="../phase2/buoyancy.html">← 浮力 Lv2</a>
+          <a href="../../index.html">回到課程總覽 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

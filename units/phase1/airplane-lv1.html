@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>紙飛機 Lv1 · 拋體運動建模 · 探究與實作</title>
+  <meta name="description" content="紙飛機 Lv1 論證建模：拋體運動建模，比較不同飛行模型預測與實際軌跡的差異。">
+  <meta property="og:title" content="紙飛機 Lv1 · 拋體運動建模 · 探究與實作">
+  <meta property="og:description" content="紙飛機 Lv1 論證建模：拋體運動建模，比較不同飛行模型預測與實際軌跡的差異。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/airplane-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span>
+      <span>紙飛機</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>✈️ 紙飛機 · Lv1 論證建模</h1>
+    <p class="subtitle">角度決定命運——用數據發現最佳發射角度</p>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從數據中辨識趨勢與規律（例如：從角度 vs 距離圖判斷最佳角度位置）</li>
+      <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：從數據中發現最佳發射角度並解釋原因）</li>
+      <li>能用「主張—證據—推理」的架構進行科學論證</li>
+      <li>能評估模型的適用範圍與限制（例如：理論與有阻力現實的差異）</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>預測</button>
+    <button class="step-tab"><span class="step-num">2</span>認識拋體運動</button>
+    <button class="step-tab"><span class="step-num">3</span>模擬器實驗</button>
+    <button class="step-tab"><span class="step-num">4</span>三模型比較</button>
+    <button class="step-tab"><span class="step-num">5</span>延伸與反思</button>
+  </nav>
+  <div class="page-body">
+
+    <!-- ═══ Step 1：預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>用同樣的力量丟紙飛機，你覺得什麼角度丟最遠？0°（水平）、30°、45°、60°、還是 90°（正上方）？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>如果把紙飛機換成鐵球（沒有空氣阻力影響），最佳角度會改變嗎？
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>空氣阻力會讓最佳角度變大還是變小？為什麼？
+      </div>
+
+      <p style="font-size:12px;color:var(--text-muted);margin-top:14px;font-style:italic;">把預測寫下來。整個模組結束後回來對照——你的直覺對了幾題？</p>
+
+      <!-- Layer 1: 直覺預測（不預設答案） -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：0°、30°、45°、60°、90° 這五個角度，你猜哪個飛最遠？為什麼？</div>
+        <button class="think-toggle">想好了？點擊看一個提示 →</button>
+        <div class="think-hidden">
+          <p>角度太小→在空中的時間很短；角度太大→水平方向的速度很小。最佳角度在兩者之間——但具體是多少，「猜」不如「做實驗」。等下用模擬器來找答案。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 預測記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測（P1、P2、P3）寫下來</div>
+        <textarea class="think-input" data-key="airplane-lv1-predict" placeholder="P1: 最遠的角度是…&#10;P2: 無空氣阻力時…&#10;P3: 空氣阻力會…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：認識拋體運動 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">認識拋體運動的核心物理原理。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">為什麼角度很重要？</div>
+          <div style="font-weight:700;color:var(--phase1);margin-bottom:4px;">水平分量 $v_x$</div>
+          決定飛多「遠」。角度越小，$v_x$ 越大。<br>
+          $v_x = v_0 \cos \theta$<br>
+          <br>
+          <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">鉛直分量 $v_y$</div>
+          決定飛多「高」（在空中的時間）。角度越大，$v_y$ 越大。<br>
+          $v_y = v_0 \sin \theta$
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">今天的任務</div>
+          <div style="color:var(--text-secondary);line-height:1.8;">
+            用模擬器測試不同角度的飛行距離。<br>
+            先在「無阻力」模式找最佳角度，再開啟阻力看看答案會不會變。
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box yellow">
+        💡 <strong>關鍵問題</strong>：角度太小→飛不高、在空中時間短；角度太大→水平分速小。「最佳角度」到底是多少？無阻力和有阻力會一樣嗎？
+      </div>
+
+      <!-- Layer 1: 理論 vs 現實 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼高爾夫球、棒球、標槍等運動的最佳角度都不是 45°？</div>
+        <button class="think-toggle">想好了？點擊看解釋 →</button>
+        <div class="think-hidden">
+          <p><strong>因為有空氣阻力！</strong> 高角度意味著<strong>滯空時間長</strong>——阻力有更多時間「削弱」速度。低角度雖然水平分速度小，但阻力損失也小，淨結果反而能飛更遠。棒球投手約 30°、標槍 30–36°、高爾夫球 20–30°，都是實驗找到的「在有阻力條件下的最佳角度」。你的模擬器會讓你親眼看到這個差異。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：模擬器實驗（含 Canvas）═══ -->
+    <div class="step-panel">
+      <div class="step-action">用互動模擬器蒐集「角度 vs 飛行距離」的數據，比較無阻力和有阻力的差異。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先在「無阻力」模式下蒐集數據，再切換到「有阻力」模式，比較差異。固定初速 15 m/s，改變角度。</p>
+
+      <!-- ═══ 拋體運動互動模擬器 ═══ -->
+    <div id="projectile-sim" style="background:linear-gradient(135deg,#1e3a8a,#2952c4);border-radius:12px;padding:20px;margin-bottom:20px;color:white;">
+      <!-- 控制面板 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">發射角度 θ</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="sim-angle" min="5" max="85" value="45" step="5" style="flex:1;accent-color:#60a5fa;" oninput="document.getElementById('angle-val').textContent=this.value+'°'">
+            <span id="angle-val" style="font-family:'DM Mono',monospace;font-size:16px;min-width:40px;text-align:right;">45°</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">初速 v₀</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="sim-speed" min="5" max="25" value="15" step="1" style="flex:1;accent-color:#60a5fa;" oninput="document.getElementById('speed-val').textContent=this.value+' m/s'">
+            <span id="speed-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:60px;text-align:right;">15 m/s</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="sim-drag" style="accent-color:#f59e0b;">
+          開啟空氣阻力
+        </label>
+        <button onclick="launchProjectile()" style="background:#60a5fa;color:#1e3a8a;border:none;padding:8px 20px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;">🚀 發射</button>
+        <button onclick="clearTrajectories()" style="background:rgba(255,255,255,0.15);color:white;border:none;padding:8px 14px;border-radius:6px;font-size:12px;cursor:pointer;">清除軌跡</button>
+      </div>
+
+      <!-- Canvas 畫布 -->
+      <canvas id="sim-canvas" width="680" height="300" style="width:100%;background:#0f172a;border-radius:8px;margin-bottom:10px;"></canvas>
+
+      <!-- 即時結果 -->
+      <div id="sim-result" style="font-family:'DM Mono',monospace;font-size:13px;opacity:0.85;min-height:20px;"></div>
+
+      <!-- 數據記錄表 -->
+      <div style="margin-top:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄</div>
+        <div style="overflow-x:auto;">
+          <table id="sim-data-table" style="width:100%;font-size:12px;background:rgba(255,255,255,0.05);border-radius:6px;">
+            <thead><tr style="color:#93c5fd;">
+              <th style="padding:8px;">角度 θ</th><th style="padding:8px;">無阻力 R (m)</th><th style="padding:8px;">有阻力 R (m)</th><th style="padding:8px;">差異 (%)</th>
+            </tr></thead>
+            <tbody id="sim-data-body"></tbody>
+          </table>
+        </div>
+        <button onclick="exportSimData()" style="margin-top:8px;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;">📋 複製數據</button>
+      </div>
+    </div>
+
+    <script>
+    // ═══ 拋體運動模擬器邏輯 ═══
+    (function(){
+      const canvas = document.getElementById('sim-canvas');
+      const ctx = canvas.getContext('2d');
+      const g = 9.8;
+      const dragCoeff = 0.15; // 空氣阻力係數（簡化模型）
+      let trajectories = [];
+      let dataRows = {}; // {angle: {noDrag: R, drag: R}}
+
+      function drawGround(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        // 地面
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(40, canvas.height-30);
+        ctx.lineTo(canvas.width-10, canvas.height-30);
+        ctx.stroke();
+        // 刻度
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px monospace';
+        for(let d=0; d<=30; d+=5){
+          const x = 40 + (d/30)*(canvas.width-60);
+          ctx.fillText(d+'m', x-8, canvas.height-16);
+          ctx.beginPath();
+          ctx.moveTo(x, canvas.height-30);
+          ctx.lineTo(x, canvas.height-26);
+          ctx.stroke();
+        }
+        // 發射點
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.arc(40, canvas.height-30, 4, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      function simulate(angle, speed, drag){
+        const rad = angle * Math.PI / 180;
+        let vx = speed * Math.cos(rad);
+        let vy = speed * Math.sin(rad);
+        let x=0, y=0;
+        const dt = 0.005;
+        const points = [];
+        while(y >= 0 || points.length === 0){
+          points.push({x, y});
+          if(drag){
+            const v = Math.sqrt(vx*vx + vy*vy);
+            const ax = -dragCoeff * v * vx;
+            const ay = -g - dragCoeff * v * vy;
+            vx += ax * dt;
+            vy += ay * dt;
+          } else {
+            vy -= g * dt;
+          }
+          x += vx * dt;
+          y += vy * dt;
+          if(points.length > 20000) break; // 安全閥
+        }
+        return points;
+      }
+
+      function drawTrajectory(points, color, maxR){
+        const scaleX = (canvas.width-60) / 30; // 30m 滿版
+        const scaleY = (canvas.height-60) / 15;  // 15m 高
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        points.forEach((p,i) => {
+          const px = 40 + p.x * scaleX;
+          const py = (canvas.height-30) - p.y * scaleY;
+          if(i===0) ctx.moveTo(px,py);
+          else ctx.lineTo(px,py);
+        });
+        ctx.stroke();
+        // 落點標記
+        const last = points[points.length-1];
+        const lx = 40 + last.x * scaleX;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(lx, canvas.height-30, 3, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      window.launchProjectile = function(){
+        const angle = parseInt(document.getElementById('sim-angle').value);
+        const speed = parseInt(document.getElementById('sim-speed').value);
+        const drag = document.getElementById('sim-drag').checked;
+        const points = simulate(angle, speed, drag);
+        const R = points[points.length-1].x;
+        const color = drag ? '#f59e0b' : '#60a5fa';
+        const label = drag ? '有阻力' : '無阻力';
+
+        trajectories.push({points, color, label, angle, R});
+
+        // 更新數據
+        if(!dataRows[angle]) dataRows[angle] = {};
+        if(drag) dataRows[angle].drag = R;
+        else dataRows[angle].noDrag = R;
+
+        // 重繪
+        drawGround();
+        trajectories.forEach(t => drawTrajectory(t.points, t.color));
+
+        document.getElementById('sim-result').textContent =
+          `${label} | θ = ${angle}° | R = ${R.toFixed(2)} m`;
+
+        updateDataTable();
+      };
+
+      window.clearTrajectories = function(){
+        trajectories = [];
+        dataRows = {};
+        drawGround();
+        document.getElementById('sim-result').textContent = '';
+        document.getElementById('sim-data-body').innerHTML = '';
+      };
+
+      function updateDataTable(){
+        const tbody = document.getElementById('sim-data-body');
+        tbody.innerHTML = '';
+        const angles = Object.keys(dataRows).map(Number).sort((a,b)=>a-b);
+        angles.forEach(a => {
+          const d = dataRows[a];
+          const noDrag = d.noDrag != null ? d.noDrag.toFixed(2) : '—';
+          const drag = d.drag != null ? d.drag.toFixed(2) : '—';
+          let diff = '—';
+          if(d.noDrag != null && d.drag != null){
+            diff = (((d.noDrag - d.drag)/d.noDrag)*100).toFixed(1) + '%';
+          }
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td style="padding:6px 8px;text-align:center;">${a}°</td>
+            <td style="padding:6px 8px;text-align:center;color:#93c5fd;">${noDrag}</td>
+            <td style="padding:6px 8px;text-align:center;color:#fbbf24;">${drag}</td>
+            <td style="padding:6px 8px;text-align:center;">${diff}</td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      window.exportSimData = function(){
+        const angles = Object.keys(dataRows).map(Number).sort((a,b)=>a-b);
+        let txt = '角度\t無阻力R(m)\t有阻力R(m)\t差異(%)\n';
+        angles.forEach(a => {
+          const d = dataRows[a];
+          const noDrag = d.noDrag != null ? d.noDrag.toFixed(2) : '';
+          const drag = d.drag != null ? d.drag.toFixed(2) : '';
+          let diff = '';
+          if(d.noDrag != null && d.drag != null) diff = (((d.noDrag-d.drag)/d.noDrag)*100).toFixed(1)+'%';
+          txt += `${a}°\t${noDrag}\t${drag}\t${diff}\n`;
+        });
+        navigator.clipboard.writeText(txt).then(()=>{
+          const btn = event.target;
+          btn.textContent = '✅ 已複製！';
+          setTimeout(()=> btn.textContent = '📋 複製數據', 1500);
+        });
+      };
+
+      // 初始繪製
+      drawGround();
+
+      // ─── 角度 vs 射程 散佈圖 + 趨勢線 ───
+      const airCanvas = document.getElementById('airGraphCanvas');
+      const airCtx = airCanvas.getContext('2d');
+      let airGraphMode = 'noDrag';
+      let airTrend = 'none';
+
+      document.getElementById('airGraphMode').addEventListener('click',e=>{
+        const btn=e.target.closest('.graph-toggle');
+        if(!btn)return;
+        airGraphMode=btn.dataset.mode;
+        document.querySelectorAll('#airGraphMode .graph-toggle').forEach(b=>{
+          const active=b===btn;
+          b.style.background=active?'#2563eb':'var(--bg)';
+          b.style.color=active?'white':'inherit';
+        });
+        updateAirGraph();
+      });
+      document.getElementById('airTrendControls').addEventListener('click',e=>{
+        const btn=e.target.closest('.trend-btn.air');
+        if(!btn)return;
+        airTrend=btn.dataset.trend;
+        document.querySelectorAll('.trend-btn.air').forEach(b=>{
+          b.style.background=b===btn?'#059669':'var(--bg)';
+          b.style.color=b===btn?'white':'inherit';
+        });
+        updateAirGraph();
+      });
+
+      function airComputeFit(x,y,type){
+        const n=x.length;
+        const meanY=y.reduce((a,b)=>a+b,0)/n;
+        const SS_tot=y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+        if(type==='linear'){
+          const sx=x.reduce((a,b)=>a+b,0),sy=y.reduce((a,b)=>a+b,0);
+          const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0),sx2=x.reduce((s,xi)=>s+xi*xi,0);
+          const a=(n*sxy-sx*sy)/(n*sx2-sx*sx),b=(sy-a*sx)/n;
+          const pred=xi=>a*xi+b;
+          const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+          const R2=SS_tot>0?1-SS_res/SS_tot:0;
+          return{R2,pred,info:`方程式：R = ${a.toFixed(3)}·θ ${b>=0?'+':'−'} ${Math.abs(b).toFixed(2)}<br>R² = ${R2.toFixed(4)}`};
+        }
+        if(type==='power'){
+          const lx=x.map(Math.log),ly=y.map(Math.log);
+          const slx=lx.reduce((a,b)=>a+b,0),sly=ly.reduce((a,b)=>a+b,0);
+          const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0),slx2=lx.reduce((s,v)=>s+v*v,0);
+          const nn=(n*slxy-slx*sly)/(n*slx2-slx*slx);
+          const a=Math.exp((sly-nn*slx)/n);
+          const pred=xi=>a*Math.pow(xi,nn);
+          const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+          const R2=SS_tot>0?1-SS_res/SS_tot:0;
+          return{R2,pred,info:`方程式：R = ${a.toFixed(3)}·θ^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}`};
+        }
+        if(type==='poly'){
+          const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
+          const syp=p=>x.reduce((s,xi,i)=>s+Math.pow(xi,p)*y[i],0);
+          const A=[[n,sp(1),sp(2),syp(0)],[sp(1),sp(2),sp(3),syp(1)],[sp(2),sp(3),sp(4),syp(2)]];
+          for(let col=0;col<3;col++){let mr=col;for(let r=col+1;r<3;r++)if(Math.abs(A[r][col])>Math.abs(A[mr][col]))mr=r;[A[col],A[mr]]=[A[mr],A[col]];for(let r=col+1;r<3;r++){const f=A[r][col]/A[col][col];for(let j=col;j<=3;j++)A[r][j]-=f*A[col][j];}}
+          const c=[0,0,0];for(let i=2;i>=0;i--){c[i]=A[i][3];for(let j=i+1;j<3;j++)c[i]-=A[i][j]*c[j];c[i]/=A[i][i];}
+          const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
+          const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+          const R2=SS_tot>0?1-SS_res/SS_tot:0;
+          const peak=c[2]!==0?-c[1]/(2*c[2]):0;
+          return{R2,pred,info:`方程式：R = ${c[2].toFixed(4)}·θ² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·θ ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(2)}<br>R² = ${R2.toFixed(4)}${c[2]<0?'<br>頂點 ≈ '+peak.toFixed(1)+'°':''}`};
+        }
+        return null;
+      }
+
+      function updateAirGraph(){
+        const parent=airCanvas.parentElement;
+        const W=(parent?parent.clientWidth-24:0)||400;
+        airCanvas.width=W;airCanvas.height=220;
+        const H=220,pad={l:50,r:20,t:18,b:40};
+        airCtx.clearRect(0,0,W,H);
+
+        // 從 dataRows 讀取數據
+        const angles=Object.keys(dataRows).map(Number).sort((a,b)=>a-b);
+        const key=airGraphMode==='noDrag'?'noDrag':'drag';
+        const pts=angles.filter(a=>dataRows[a][key]!=null).map(a=>({x:a,y:dataRows[a][key]}));
+
+        const xMax=90,yMax=Math.max(25,...pts.map(p=>p.y))*1.15||25;
+        function toX(v){return pad.l+(v/xMax)*(W-pad.l-pad.r);}
+        function toY(v){return H-pad.b-(v/yMax)*(H-pad.t-pad.b);}
+
+        // 格線
+        airCtx.strokeStyle='#f1f5f9';airCtx.lineWidth=1;
+        for(let i=1;i<=4;i++){const gx=pad.l+i/4*(W-pad.l-pad.r),gy=H-pad.b-i/4*(H-pad.t-pad.b);airCtx.beginPath();airCtx.moveTo(gx,pad.t);airCtx.lineTo(gx,H-pad.b);airCtx.stroke();airCtx.beginPath();airCtx.moveTo(pad.l,gy);airCtx.lineTo(W-pad.r,gy);airCtx.stroke();}
+        airCtx.strokeStyle='#94a3b8';airCtx.lineWidth=1.5;airCtx.beginPath();airCtx.moveTo(pad.l,pad.t);airCtx.lineTo(pad.l,H-pad.b);airCtx.lineTo(W-pad.r,H-pad.b);airCtx.stroke();
+        airCtx.fillStyle='#64748b';airCtx.font='11px sans-serif';airCtx.textAlign='center';
+        airCtx.fillText('角度 θ (°)',W/2,H-4);
+        airCtx.save();airCtx.translate(12,H/2);airCtx.rotate(-Math.PI/2);airCtx.fillText('射程 R (m)',0,0);airCtx.restore();
+        for(let i=0;i<=4;i++){const xv=xMax*i/4,yv=yMax*i/4;airCtx.fillStyle='#94a3b8';airCtx.font='10px sans-serif';airCtx.textAlign='center';airCtx.fillText(xv.toFixed(0),toX(xv),H-pad.b+13);airCtx.textAlign='right';airCtx.fillText(yv.toFixed(1),pad.l-4,toY(yv)+4);}
+
+        if(pts.length<2){
+          airCtx.fillStyle='#cbd5e1';airCtx.font='12px sans-serif';airCtx.textAlign='center';
+          airCtx.fillText('蒐集數據後自動繪圖…',W/2,H/2);
+          document.getElementById('airFitInfo').style.display='none';
+          return;
+        }
+
+        // 趨勢線
+        const fi=document.getElementById('airFitInfo');
+        if(airTrend!=='none'&&pts.length>=3){
+          const xArr=pts.map(p=>p.x),yArr=pts.map(p=>p.y);
+          const fit=airComputeFit(xArr,yArr,airTrend);
+          if(fit){
+            airCtx.strokeStyle='#059669';airCtx.lineWidth=2;airCtx.setLineDash([5,3]);airCtx.beginPath();
+            for(let i=0;i<=80;i++){const xv=5+80*i/80;const yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?airCtx.moveTo(cx,cy):airCtx.lineTo(cx,cy);}
+            airCtx.stroke();airCtx.setLineDash([]);
+            airCtx.fillStyle='#059669';airCtx.font='bold 10px sans-serif';airCtx.textAlign='left';
+            airCtx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.6),toY(yMax*0.85));
+            fi.style.display='block';fi.innerHTML=fit.info;
+          }
+        } else {fi.style.display='none';}
+
+        // 數據點
+        const color=airGraphMode==='noDrag'?'#2563eb':'#f59e0b';
+        pts.forEach(p=>{airCtx.beginPath();airCtx.arc(toX(p.x),toY(p.y),5,0,Math.PI*2);airCtx.fillStyle=color;airCtx.fill();airCtx.strokeStyle='white';airCtx.lineWidth=1.5;airCtx.stroke();});
+      }
+
+      // Hook into existing updateDataTable to auto-update scatter plot
+      const origUpdateDataTable = updateDataTable;
+      updateDataTable = function(){
+        origUpdateDataTable();
+        updateAirGraph();
+      };
+      updateAirGraph();
+    })();
+    </script>
+
+    <!-- 散佈圖 + 趨勢線 -->
+    <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:16px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">📈 角度 θ vs 射程 R</span>
+        <div id="airGraphMode" style="display:flex;gap:4px;margin-left:8px;">
+          <button class="graph-toggle active" data-mode="noDrag" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:#2563eb;color:white;font-size:11px;cursor:pointer;">無阻力</button>
+          <button class="graph-toggle" data-mode="drag" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;">有阻力</button>
+        </div>
+        <div id="airTrendControls" style="display:flex;align-items:center;gap:5px;margin-left:auto;font-size:11px;color:var(--text-secondary);">
+          趨勢線：
+          <button class="trend-btn air active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+          <button class="trend-btn air" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+          <button class="trend-btn air" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+          <button class="trend-btn air" data-trend="poly" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">多項式</button>
+        </div>
+      </div>
+      <canvas id="airGraphCanvas" width="400" height="220" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;background:#fafbfc;"></canvas>
+      <div id="airFitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">蒐集至少 5 個角度的數據後，趨勢線效果最佳。</p>
+    </div>
+
+    <div style="display:grid;gap:8px;">
+      <div class="q-item"><strong>Q1：</strong>選<strong>多項式</strong>趨勢線。無阻力時，曲線頂點大約在幾度？物理上為什麼 θ 太大或太小都會讓射程變短？</div>
+      <div class="q-item"><strong>Q2：</strong>切換到「有阻力」模式——頂點角度變了嗎？物理上為什麼阻力會讓最佳角度往低角度偏移？</div>
+      <div class="q-item"><strong>Q3：</strong>試試<strong>線性</strong>趨勢線——R² 很低對吧？這種「先升後降」的關係，用線性模型能描述嗎？什麼模型最適合？</div>
+    </div>
+
+
+    <!-- Layer 2: 模擬數據分析 -->
+    <div class="think-block record">
+      <div class="think-prompt">✏️ 用模擬器蒐集 5 到 10 個不同角度的數據。找出「無阻力最遠角度」和「有阻力最遠角度」。差多少度？</div>
+      <textarea class="think-input" data-key="airplane-lv1-sim" placeholder="例如：無阻力45°時最遠，有阻力時…°最遠，差…度。可能是因為…"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <!-- Layer 3: 模型認識 -->
+    <div class="think-block choice" data-answer="b">
+      <div class="think-prompt">🎯 從你的模擬數據，有阻力的最佳角度大約是幾度？</div>
+      <div class="think-options">
+        <button class="think-opt" data-val="a">A. 45°（和無阻力一樣）</button>
+        <button class="think-opt" data-val="b">B. 30–40°（比無阻力低）</button>
+        <button class="think-opt" data-val="c">C. 50–60°（比無阻力高）</button>
+      </div>
+      <div class="think-feedback" style="display:none;">
+        你的數據應該會顯示：有阻力時最佳角度比無阻力時低。為什麼？因為高角度的滯空時間長，阻力有更多時間「削弱」速度。具體低多少，取決於阻力大小和初速——用你自己的數據說話。
+      </div>
+    </div>
+
+    <div class="step-footer">
+      <button class="step-btn" data-step="prev">← 上一步</button>
+      <div class="step-dots">
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot current"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+      </div>
+      <button class="step-btn primary" data-step="next">下一步 →</button>
+    </div>
+    </div>
+
+    <!-- ═══ Step 4：三模型比較 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">比較理論、模擬、實測三種模型，評估物理模型的適用範圍。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">在同一張圖上畫出三條線，比較理論、模擬、實測的結果：</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;font-size:12px;">
+        <div style="background:#dbeafe;border-radius:6px;padding:10px;text-align:center;">
+          <div style="font-weight:700;color:#1e40af;">理論（無阻力）</div>
+          模擬器中關閉阻力的數據
+        </div>
+        <div style="background:#fef3c7;border-radius:6px;padding:10px;text-align:center;">
+          <div style="font-weight:700;color:#92400e;">模擬（有阻力）</div>
+          第 3 步的模擬器數據
+        </div>
+        <div style="background:#dcfce7;border-radius:6px;padding:10px;text-align:center;">
+          <div style="font-weight:700;color:#166534;">實測（紙飛機）</div>
+          你的實驗數據
+        </div>
+      </div>
+
+      <div style="display:grid;gap:8px;margin-bottom:16px;">
+        <div class="q-item"><strong>Q1：</strong>三條線的最高點（最佳角度）分別在哪？</div>
+        <div class="q-item"><strong>Q2：</strong>理論線和實測線差距最大的角度是哪些？為什麼？</div>
+        <div class="q-item"><strong>Q3：</strong>「無阻力理論」這個模型夠好嗎？在什麼情境下夠用、什麼時候不夠用？</div>
+      </div>
+
+      <!-- Layer 2: 模型比較記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你對 Q1–Q3 的觀察（挑 1–2 題最有感的回答）</div>
+        <textarea class="think-input" data-key="airplane-lv1-model" placeholder="例如：Q1：理論最佳角度 45°，模擬大約 35°，實測大約…&#10;Q2：高角度差距最大，因為…" style="min-height:80px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- CER 論證 -->
+      <div style="margin-top:16px;display:grid;gap:8px;">
+        <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+          <div style="background:var(--phase1);color:white;padding:7px 14px;font-size:12px;font-weight:700;">主張（Claim）</div>
+          <div style="padding:10px 14px;background:var(--sidebar-bg);font-size:13px;color:var(--text-muted);font-style:italic;">「空氣阻力使紙飛機的最佳發射角度從無阻力時的 ___° 變為 ___°。」</div>
+        </div>
+        <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+          <div style="background:var(--phase2);color:white;padding:7px 14px;font-size:12px;font-weight:700;">理由（Reasoning）— 填入你的物理解釋</div>
+          <div style="padding:10px 14px;background:var(--sidebar-bg);font-size:13px;color:var(--text-muted);">因為高角度時滯空時間較___，空氣阻力累積效果更___，所以水平距離損失比低角度更___……</div>
+        </div>
+        <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+          <div style="background:var(--phase3);color:white;padding:7px 14px;font-size:12px;font-weight:700;">證據（Evidence）— 填入具體數字</div>
+          <div style="padding:10px 14px;background:var(--sidebar-bg);font-size:13px;color:var(--text-muted);">模擬器數據顯示，45° 的阻力損失為 ___m（___％），而 30° 只損失 ___m（___％）。實測數據中，最遠距離出現在 ___°……</div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 5：延伸與反思 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">回頭對照預測，反思理論與現實的差距，提出你的下一個問題。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回第 1 步的預測，和你的數據結果比較——差多少？差在哪裡？</p>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:16px 0 8px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:6px;">棒球投手的最佳出手角度大約是多少？為什麼不是 45°？</div>
+      <div class="q-item" style="margin-bottom:6px;">如果在月球上丟紙飛機（無空氣但重力只有 1/6），最佳角度會是幾度？</div>
+      <div class="q-item" style="margin-bottom:16px;">奧運標槍選手的最佳角度約 30°–36°，和你的紙飛機數據接近嗎？為什麼？</div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">用「如果改變___，___會怎樣？」的句型：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「不同摺法（箭型 vs 滑翔型）的紙飛機，最佳發射角度會不同嗎？」← 有操縱變因、有應變變因、教室裡做得到。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="airplane-lv1-my-question" rows="3" placeholder="例：紙飛機的機翼面積會影響滯空時間嗎？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- Layer 1: 預測對照 & CER 開端 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：回頭看第 1 步的預測（P1–P3）。現在你看到理論和模擬的差異了，怎麼解釋這個落差？</div>
+        <button class="think-toggle">想好了？點擊看反思方向 →</button>
+        <div class="think-hidden">
+          <p>如果 P1 你答 45°，但模擬顯示 45° 在無阻力才最遠——這很棒，代表你的直覺很科學！如果你答了其他角度，那更棒——因為你潛意識裡已經在考慮阻力。第 4 步要求你用「主張—理由—證據」架構，把這個認知寫下來。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 自己的探究問題 -->
+      <div class="think-block record">
+        <div class="thinking-prompt">✏️ 寫下你自己想探究的一個問題（必須包含可改變的變因）</div>
+        <textarea class="think-input" data-key="airplane-lv1-q" placeholder="例如：不同摺法的紙飛機，最佳角度會改變嗎？或初速不同時呢？"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/airplane-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          紙飛機 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生用身體經驗和模擬器觀察建立「角度影響飛行距離」的直覺</li>
+              <li>透過比較：真空中 45° 最遠 vs 有空氣阻力時最佳角度下降</li>
+              <li>用「主張—理由—數據」論證模型的適用範圍與限制</li>
+              <li>從 R vs θ 數據建立非線性關係，體會「理論 ≠ 現實」</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              學生直覺常選 45° 是最佳角度——這正好是無阻力的理論值。有阻力時最佳角度約 30°–38°，且圖形不再對稱。這個實驗的核心在於讓學生經歷「發現模型假設的限制」。
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">本模組的好素材：① 模擬器 R vs θ 數據截圖 ② 你蒐集的實測數據表 ③ 三條線比較圖 ④ 你的 CER 論證。配上一段 ORID 反思（100–150 字），說明「理論和現實的差距」教會你什麼。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ <strong>反思錨點</strong>：你在第 1 步<em>之前</em>預測的最佳角度是幾度？實際結果差多少？你覺得差在哪裡？（2-3 句）
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 原來前人也推導過——拋體射程公式</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">你從模擬器發現：無阻力時某個角度飛最遠。物理學家用牛頓力學推導出的射程公式可以解釋原因：</p>
+          <div style="text-align:center;padding:14px;font-family:'DM Mono',monospace;font-size:16px;color:var(--text-primary);background:white;border-radius:6px;margin:10px 0;">
+            $R = \frac{v_0^2 \sin(2\theta)}{g}$
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            $\sin(2\theta)$ 在 $\theta = 45°$ 時等於 1（最大值），所以無阻力時 45° 飛最遠——跟你的數據吻合嗎？<br>
+            但這個公式假設<strong>完全沒有空氣阻力</strong>。你的有阻力數據已經證明：現實比公式複雜得多。認出「模型的適用邊界」，這就是科學素養。
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小華想研究「紙飛機摺法對飛行距離的影響」。她的計畫：用不同的紙（A4 影印紙和色紙）摺出箭型和滑翔型各 1 架，在走廊上丟 1 次，用目測估計距離。<strong>有什麼問題？</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              紙張不同（沒有控制材質變因）、只丟 1 次（無法估計誤差）、用目測而非捲尺量測（不精確）、走廊可能有風或空間不夠、沒說明投擲角度和力道的控制方式。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/airplane-lv2.html">紙飛機 Lv2 規劃研究 →</a>
+    </div>
+
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

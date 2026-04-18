@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>有效數字與不確定度 · 論證建模 · 探究與實作</title>
+  <meta name="description" content="有效數字與不確定度的概念教學，建立科學測量的基礎素養。">
+  <meta property="og:title" content="有效數字與不確定度 · 論證建模 · 探究與實作">
+  <meta property="og:description" content="有效數字與不確定度的概念教學，建立科學測量的基礎素養。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/uncertainty.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .formula-main {
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      color: var(--phase1);
+      text-align: center;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 6px;
+      margin: 10px 0;
+      border: 1px solid #dbeafe;
+    }
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 0 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(step);
+      background: var(--phase1);
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .discuss-box {
+      background: #fff8e1;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    .discuss-box-header {
+      font-weight: 700;
+      color: #b45309;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .concept-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-right: 6px;
+      letter-spacing: 0.05em;
+      vertical-align: middle;
+      background: var(--phase1);
+      color: white;
+    }
+    .concept-badge.ex   { background: var(--phase3); }
+    .concept-badge.prac { background: var(--phase2); }
+    .concept-badge.supp { background: #6b7280; }
+    .example-card {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .type-ab { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .type-card { border-radius: 8px; padding: 14px 16px; }
+    .type-card.a-type { background: #eff6ff; border: 1px solid #bfdbfe; }
+    .type-card.b-type { background: #fff7ed; border: 1px solid #fed7aa; }
+    .supplement-block {
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 28px;
+    }
+    .supplement-block-header {
+      font-weight: 700;
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .verify-box {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .calc-block {
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      line-height: 2;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span style="color:var(--phase1)">論證建模</span>
+      <span>›</span>
+      <span>有效數字與不確定度</span>
+    </div>
+    <h1>📏 有效數字與測量不確定度</h1>
+    <p class="subtitle">從端點還是中間點按碼錶——這個問題，你需要不確定度才能回答</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">W2 · 2 節課</span>
+      <span class="tag">A1 整理數據</span>
+      <span class="tag">A2 分析詮釋</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="goal-grid">
+      <div class="goal-box">
+        <div class="goal-box-header teach">📌 教學目標（教師視角）</div>
+        <ul>
+          <li>用「爭論 → 實驗 → 數據 → 不確定度」驅動知識需求，讓概念從情境中自然浮現</li>
+          <li>建立 A 類（統計）與 B 類（儀器）不確定度的直覺區別</li>
+          <li>讓學生第一次體驗「數據有差，不代表結論有差」的科學判斷</li>
+        </ul>
+      </div>
+      <div class="goal-box">
+        <div class="goal-box-header learn">🎯 學習目標（學生視角）</div>
+        <ul>
+          <li>能正確判讀與計算有效數字</li>
+          <li>能用 u_A = s/√n 計算 A 類不確定度</li>
+          <li>能用儀器最小刻度計算 B 類不確定度</li>
+          <li>能合成 u_c 並以「x̄ ± U」格式正確報告測量結果</li>
+          <li>能用不確定度區間判斷兩組數據是否真的不同</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">對應課綱指標</div>
+      <div class="ind-tags">
+        <span class="ind-tag p">P2 觀察與提問</span>
+        <span class="ind-tag r">R3 操作蒐集</span>
+        <span class="ind-tag a">A1 整理數據</span>
+        <span class="ind-tag a">A2 分析詮釋</span>
+      </div>
+      <p style="margin-top:8px;font-size:12.5px;">設計邏輯：先讓學生選邊站（端點派 vs 中間派），接著讓數據挑戰直覺，最後用不確定度給出科學答案。知識在需求中出現，而不是憑空出現。</p>
+      <div class="teacher-label" style="margin-top:12px;">⏱ 課堂節奏（W2，2節課）</div>
+      <p style="font-size:12.5px;">
+        <strong>第一節（45分）：</strong>開場討論 10分 → 製作單擺 + 收集兩組數據 25分 → 整理數據格式 10分。<br>
+        <strong>第二節（45分）：</strong>有效數字 10分 → A類、B類計算教學 20分 → 合成 + 驗證假設 + 練習 15分。
+      </p>
+      <div class="teacher-label" style="margin-top:10px;">教師提示</div>
+      <p style="font-size:12.5px;">大多數班級：兩組區間會重疊，說明人的反應時間（A類）才是主要誤差來源，不是選哪個點。這個「出乎意料」的結論本身就是很好的教學時刻——物理直覺和數據不符，要相信數據。</p>
+    </div>
+
+
+    <!-- ═══ PART 0 活動引入 ═══ -->
+    <div class="section-title">🧵 先做實驗，再學理論</div>
+
+    <div class="discuss-box">
+      <div class="discuss-box-header">💬 開場問題 · 小組討論（5 分鐘）</div>
+      <p style="font-size:14px;font-weight:700;color:#92400e;margin-bottom:12px;">
+        要測量單擺週期，你應該在哪個時刻按下碼錶？
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+        <div style="background:white;border-radius:6px;padding:12px;border:1px solid #fcd34d;">
+          <div style="font-weight:700;margin-bottom:6px;">🔴 端點派</div>
+          <div style="color:var(--text-secondary);">單擺在端點短暫靜止，位置最明確，應該在這裡計時。</div>
+        </div>
+        <div style="background:white;border-radius:6px;padding:12px;border:1px solid #fcd34d;">
+          <div style="font-weight:700;margin-bottom:6px;">🔵 中間派</div>
+          <div style="color:var(--text-secondary);">中間點速度最快、擺過去的瞬間最清楚，不容易看錯時機。</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#b45309;margin-top:12px;margin-bottom:0;">
+        → 老師提問：「你要怎麼<strong>用科學方法</strong>驗證哪個比較好？」
+      </p>
+    </div>
+
+    <div class="activity-block">
+      <div class="activity-header phase1">W2 活動 · 製作單擺 + 收集兩組數據（第一節，25 分鐘）</div>
+      <div class="activity-body">
+
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 16px;background:var(--bg);border-radius:6px;padding:14px;margin-bottom:16px;font-size:13px;">
+          <div style="font-weight:700;color:var(--phase1);white-space:nowrap;">材料</div>
+          <div style="color:var(--text-secondary);">棉繩約 20 cm、螺帽（或任何小重物）、固定支點（夾桌邊或門框）</div>
+          <div style="font-weight:700;color:var(--phase1);white-space:nowrap;">測量方式</div>
+          <div style="color:var(--text-secondary);">讓單擺擺動，計時連續 10 次後停下，T = 總時間 ÷ 10。重複 5 次。</div>
+          <div style="font-weight:700;color:var(--phase1);white-space:nowrap;">兩組對比</div>
+          <div style="color:var(--text-secondary);"><strong>第一輪：</strong>從端點出發時按碼錶。&emsp;<strong>第二輪：</strong>改為擺球經過中間垂直點時按。</div>
+        </div>
+
+        <!-- 虛擬實驗室入口 -->
+        <a href="pendulum-lab.html" target="_blank" style="display:block;text-decoration:none;">
+          <div style="background:linear-gradient(135deg,#1e3a8a,#2952c4);border-radius:10px;padding:20px 24px;color:white;margin-bottom:14px;cursor:pointer;transition:opacity 0.15s;">
+            <div style="font-size:16px;font-weight:700;margin-bottom:6px;">🔬 開啟單擺虛擬實驗室</div>
+            <div style="font-size:12px;opacity:0.85;line-height:1.6;">
+              在正確時機按下碼錶，計時 10 次擺動，收集兩組各 5 次數據。<br>
+              實驗室會自動計算 x̄、s、u_A、u_B、u_c、U，並比較兩組結果。
+            </div>
+            <div style="margin-top:12px;background:rgba(255,255,255,0.15);border-radius:6px;padding:8px 12px;font-size:12px;display:inline-block;">
+              → 新分頁開啟
+            </div>
+          </div>
+        </a>
+
+        <div style="background:#fff8e1;border-radius:6px;padding:12px;font-size:13px;">
+          <strong>暫停思考：</strong>兩組平均值看起來有差嗎？光看平均值，你有辦法確定哪個方法「比較準」嗎？<br>
+          <span style="color:#92400e;font-weight:600;">→ 這個問題，需要「不確定度」才能科學地回答。</span>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ═══ PART 1 有效數字 ═══ -->
+    <div class="section-title">1-1 有效數字</div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <span class="concept-badge">觀念</span>
+      <strong style="font-size:13px;">有效數字的判讀</strong>
+      <p style="font-size:13px;color:var(--text-secondary);margin:8px 0 10px;">測量值中每一個有意義的數字都算有效數字。</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>規則</th><th>範例</th><th>有效位數</th></tr></thead>
+          <tbody>
+            <tr><td>非零數字一律算</td><td style="font-family:'DM Mono',monospace;">14.3</td><td>3 位</td></tr>
+            <tr><td>兩非零之間的零算</td><td style="font-family:'DM Mono',monospace;">1.023</td><td>4 位</td></tr>
+            <tr><td>末位小數的零算</td><td style="font-family:'DM Mono',monospace;">1.20</td><td>3 位</td></tr>
+            <tr><td>小數點前的零不算</td><td style="font-family:'DM Mono',monospace;">0.0089</td><td>2 位</td></tr>
+            <tr><td>整數末位的零，用科學記號澄清</td><td style="font-family:'DM Mono',monospace;">1.30 × 10³</td><td>3 位</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <span class="concept-badge">觀念</span>
+      <strong style="font-size:13px;">有效數字的運算</strong>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+        <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:13px;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">加法 / 減法</div>
+          <div style="color:var(--text-secondary);">結果的<strong>小數位數</strong>取決於最少小數位數的那個數。</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--phase1);margin-top:8px;">12.35 + 1.4 → 13.8<br><span style="color:var(--text-muted);">（1.4 只到小數第 1 位）</span></div>
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:13px;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">乘法 / 除法</div>
+          <div style="color:var(--text-secondary);">結果的<strong>有效位數</strong>取決於最少有效位數的那個數。</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--phase1);margin-top:8px;">3.14 × 2.5 → 7.9<br><span style="color:var(--text-muted);">（2.5 只有 2 位有效數字）</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-block">
+      <div class="activity-header phase1">練習 A · 有效數字</div>
+      <div class="activity-body">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;"><strong>判讀題</strong>：說出下列各數的有效數字位數。</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;margin-bottom:16px;">
+          <div style="background:var(--bg);border-radius:4px;padding:8px 12px;">① 0.00520</div>
+          <div style="background:var(--bg);border-radius:4px;padding:8px 12px;">② 1.030 × 10⁴</div>
+          <div style="background:var(--bg);border-radius:4px;padding:8px 12px;">③ 300（無額外資訊）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:8px 12px;">④ 2.400</div>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><strong>計算題</strong>：</p>
+        <div style="display:grid;gap:8px;font-size:13px;">
+          <div style="background:var(--bg);border-radius:4px;padding:8px 12px;">⑤ 計算 3.76 + 0.2 + 14.135，並保留正確有效數字。</div>
+          <div style="background:var(--bg);border-radius:4px;padding:8px 12px;">⑥ 計算 6.24 × 0.53，並保留正確有效數字。</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ PART 2 不確定度 ═══ -->
+    <div class="section-title">1-2 測量不確定度</div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <span class="concept-badge">觀念</span>
+      <strong style="font-size:13px;">不確定度的意義</strong>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;line-height:1.8;">
+        任何測量都不完美。不確定度描述「真實值可能落在哪個範圍內」——數值越小，測量越可靠。完整的測量結果寫成：
+      </p>
+      <div class="formula-main">測量結果 = x̄ ± U</div>
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:4px;">
+        x̄ 為平均值（最佳估計值）；U 為擴充不確定度（真值有約 95% 的機率落在此範圍內）
+      </p>
+    </div>
+
+    <div class="type-ab" style="margin-bottom:16px;">
+      <div class="type-card a-type">
+        <div style="font-weight:700;font-size:13px;color:#1d4ed8;margin-bottom:6px;">A 類不確定度 u_A</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">
+          來自<strong>多次重複測量的統計分析</strong>，反映測量結果的隨機分散程度。
+        </div>
+      </div>
+      <div class="type-card b-type">
+        <div style="font-weight:700;font-size:13px;color:#c2410c;margin-bottom:6px;">B 類不確定度 u_B</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">
+          來自<strong>儀器特性或已知規格</strong>，不需重複測量，由解析度直接推算。
+        </div>
+      </div>
+    </div>
+
+    <!-- A類概念 -->
+    <div class="card" style="margin-bottom:14px;">
+      <span class="concept-badge">觀念</span>
+      <strong style="font-size:13px;">A 類不確定度：用統計計算</strong>
+      <ol class="step-list">
+        <li>
+          <div>
+            <strong>計算平均值</strong>（最佳估計值）<br>
+            <span style="font-family:'DM Mono',monospace;font-size:13px;color:var(--phase1);">x̄ = (x₁ + x₂ + ⋯ + xₙ) / n</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>計算樣本標準差 s</strong>（反映每次測量的分散程度）<br>
+            <span style="font-family:'DM Mono',monospace;font-size:13px;color:var(--phase1);">s = √[ Σ(xᵢ − x̄)² / (n − 1) ]</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>計算 A 類不確定度</strong>（平均值的標準誤差）<br>
+            <span style="font-family:'DM Mono',monospace;font-size:13px;color:var(--phase1);">u_A = s / √n</span><br>
+            <span style="font-size:12px;color:var(--text-muted);">→ 測量次數 n 越多，u_A 越小（平均值越可靠）</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- 例題1：碼錶計時 -->
+    <div class="example-card">
+      <span class="concept-badge ex">例題</span>
+      <strong style="font-size:13px;">A 類：碼錶測單擺週期（端點計時，5 次）</strong>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;">
+        某組同學從端點計時的 5 次紀錄（10 次擺動總時間 ÷ 10，單位：s）：
+      </p>
+      <div style="overflow-x:auto;margin:8px 0;">
+        <table>
+          <thead><tr><th>次數</th><th>T₁</th><th>T₂</th><th>T₃</th><th>T₄</th><th>T₅</th></tr></thead>
+          <tbody><tr><td>週期 (s)</td><td>0.89</td><td>0.91</td><td>0.90</td><td>0.92</td><td>0.89</td></tr></tbody>
+        </table>
+      </div>
+      <div class="calc-block">
+        <div>x̄ = (0.89 + 0.91 + 0.90 + 0.92 + 0.89) / 5 = <strong>0.902 s</strong></div>
+        <div>s = √[((0.89−0.902)²+(0.91−0.902)²+(0.90−0.902)²+(0.92−0.902)²+(0.89−0.902)²) / 4]</div>
+        <div style="padding-left:20px;">≈ <strong>0.013 s</strong></div>
+        <div>u_A = 0.013 / √5 ≈ <strong>0.0058 s</strong></div>
+      </div>
+    </div>
+
+    <!-- 例題2：長度含離群值 -->
+    <div class="example-card" style="margin-bottom:16px;">
+      <span class="concept-badge ex">例題</span>
+      <strong style="font-size:13px;">A 類：量繩長 6 次（含離群值討論）</strong>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;">
+        6 次測量結果（cm）：20.1、20.2、20.0、20.1、20.5、20.1
+      </p>
+      <div style="background:#fff8e1;border-radius:4px;padding:10px;font-size:12px;color:#92400e;margin:8px 0;">
+        ⚠️ 20.5 和其他值差了約 0.4 cm。討論：這是正常的隨機分散，還是操作失誤？保留 vs 剔除對結果有多大影響？
+      </div>
+      <div class="calc-block">
+        <div>x̄ = (20.1+20.2+20.0+20.1+20.5+20.1) / 6 ≈ <strong>20.17 cm</strong></div>
+        <div>s ≈ 0.173 cm（保留 20.5 的情況）</div>
+        <div>u_A = 0.173 / √6 ≈ <strong>0.071 cm</strong></div>
+      </div>
+    </div>
+
+    <!-- B類概念 -->
+    <div class="card" style="margin-bottom:14px;">
+      <span class="concept-badge">觀念</span>
+      <strong style="font-size:13px;">B 類不確定度：從儀器解析度推算</strong>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;line-height:1.8;">
+        若真值在最小刻度範圍內均勻分布（矩形分布），B 類不確定度為：
+      </p>
+      <div class="formula-main">u_B = 最小刻度 / (2√3)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;font-size:12px;color:var(--text-secondary);">
+        <div style="background:var(--bg);border-radius:4px;padding:10px;">
+          <strong>指針式 / 刻度盤：</strong><br>最小刻度 = 最小格值<br>
+          例：0.1 cm 尺 → u_B = 0.1/(2√3) ≈ 0.029 cm
+        </div>
+        <div style="background:var(--bg);border-radius:4px;padding:10px;">
+          <strong>數位顯示儀器：</strong><br>最小刻度 = 末位數字 1 個單位<br>
+          例：顯示到 0.01 s → u_B = 0.01/(2√3) ≈ 0.0029 s
+        </div>
+      </div>
+    </div>
+
+    <!-- 例題3：B類碼錶 -->
+    <div class="example-card" style="margin-bottom:16px;">
+      <span class="concept-badge ex">例題</span>
+      <strong style="font-size:13px;">B 類：數位碼錶（最小刻度 0.01 s）</strong>
+      <div class="calc-block">
+        <div>最小刻度 = 0.01 s</div>
+        <div>u_B = 0.01 / (2 × 1.732) ≈ <strong>0.0029 s</strong></div>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+        注意：u_B ≈ 0.003 s 遠小於 u_A ≈ 0.006 s——碼錶本身的解析度不是主要誤差來源，人的反應時間才是。
+      </p>
+    </div>
+
+    <!-- 合成不確定度 -->
+    <div class="card" style="margin-bottom:16px;">
+      <span class="concept-badge">觀念</span>
+      <strong style="font-size:13px;">組合不確定度與報告格式</strong>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;">A 類與 B 類同時存在時，以平方和開根號合成：</p>
+      <div class="formula-main">u_c = √(u_A² + u_B²)</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;">再乘擴充因子 k = 2（對應約 95% 信心水準）：</p>
+      <div class="formula-main">U = 2 × u_c</div>
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px;margin-top:12px;font-size:13px;">
+        <div style="font-weight:700;margin-bottom:8px;">📋 數據報告規範（GUM 準則）</div>
+        <ol style="padding-left:18px;color:var(--text-secondary);line-height:2.2;margin:0;">
+          <li>U 通常保留 <strong>2 位有效數字</strong>，且採<strong>無條件進位</strong>（後面有數字就往上加）</li>
+          <li>x̄ 的末位數必須對齊 U 的末位數</li>
+        </ol>
+        <div style="font-family:'DM Mono',monospace;font-size:12px;margin-top:10px;">
+          <span style="color:var(--phase2);">✓ 正確：14.160 ± 0.050 cm</span><br>
+          <span style="color:#dc2626;">✗ 錯誤：14.3 ± 0.02 cm（位數沒對齊）</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 完整例題 -->
+    <div class="example-card" style="margin-bottom:24px;">
+      <span class="concept-badge ex">例題</span>
+      <strong style="font-size:13px;">完整計算：單擺端點計時組的最終結果</strong>
+      <div class="calc-block">
+        <div style="color:var(--text-muted);">// 承接前面計算：</div>
+        <div>u_A = 0.0058 s</div>
+        <div>u_B = 0.01 / (2√3) ≈ 0.0029 s</div>
+        <div>u_c = √(0.0058² + 0.0029²) ≈ 0.0065 s</div>
+        <div>U   = 2 × 0.0065 = 0.013 → 無條件進位 → <strong>0.014 s</strong></div>
+        <div>x̄   = 0.902 s → 對齊末位 → <strong>0.902 s</strong></div>
+        <div style="margin-top:8px;padding:8px;background:#eff6ff;border-radius:4px;color:var(--phase1);">
+          最終結果：T_端點 = 0.902 ± 0.014 s
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ PART 3 驗證假設 ═══ -->
+    <div class="section-title">回答開場的問題</div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:12px;">⚖️ 用你的數據驗證：端點 vs 中間點，差異有意義嗎？</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+        分別計算兩組的完整結果（x̄ ± U），然後比較兩個區間：
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;font-size:13px;">
+        <div style="background:#eff6ff;border-radius:6px;padding:12px;">
+          <div style="font-weight:700;color:#1d4ed8;margin-bottom:6px;">端點計時</div>
+          <div style="font-family:'DM Mono',monospace;">T₁ = x̄₁ ± U₁</div>
+          <div style="color:var(--text-muted);font-size:12px;margin-top:6px;">區間：[ x̄₁ − U₁ , x̄₁ + U₁ ]</div>
+        </div>
+        <div style="background:#fff7ed;border-radius:6px;padding:12px;">
+          <div style="font-weight:700;color:#c2410c;margin-bottom:6px;">中間點計時</div>
+          <div style="font-family:'DM Mono',monospace;">T₂ = x̄₂ ± U₂</div>
+          <div style="color:var(--text-muted);font-size:12px;margin-top:6px;">區間：[ x̄₂ − U₂ , x̄₂ + U₂ ]</div>
+        </div>
+      </div>
+      <div style="background:#f8fafc;border-radius:6px;padding:12px;font-size:13px;margin-bottom:12px;">
+        <div style="font-weight:700;margin-bottom:8px;">判斷標準：</div>
+        <div style="color:var(--text-secondary);line-height:2.2;">
+          ✅ 若兩個區間<strong>重疊</strong> → 差異不顯著，無法判定哪個方法更準<br>
+          ❌ 若兩個區間<strong>不重疊</strong> → 兩種方法有系統性差異
+        </div>
+      </div>
+      <div class="verify-box">
+        💡 <strong>預期結論：</strong>大多數情況下兩組區間會重疊。這說明：
+        測量的主要不確定度來自<strong>人的反應時間</strong>（u_A 較大），而不是選端點或中間的差異。
+        選哪個點不是關鍵，<strong>每次保持一致</strong>才是。
+      </div>
+      <div class="teacher-only" style="display:none;margin-top:12px;">
+        <div class="teacher-label">課堂討論引導</div>
+        <ul style="font-size:12.5px;">
+          <li>「你原來的假設是什麼？數據支持你了嗎？如果沒有，你願意修正假設嗎？」</li>
+          <li>「如果我們測 20 次而不是 5 次，u_A 會怎麼變？為什麼？」</li>
+          <li>「什麼樣的操作方式可以讓 u_A 更小？（提示：更一致的按錶時機）」</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 練習 B -->
+    <div class="activity-block">
+      <div class="activity-header phase1">練習 B · 不確定度計算</div>
+      <div class="activity-body">
+        <div style="display:grid;gap:10px;font-size:13px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>① B 類</strong>：一支體重計，最小刻度 0.5 kg。計算 u_B。
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>② A 類</strong>：5 次測量彈簧伸長量（cm）：3.5、3.7、3.6、3.8、3.5。<br>
+            計算 x̄、s、u_A，並以 x̄ ± U 格式報告結果。
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>③ 完整流程</strong>：用最小刻度 1 mm 的直尺量長度，4 次數據（mm）：152、154、153、153。<br>
+            計算 u_A、u_B、u_c、U，並寫出完整結果。
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══ 補充 ═══ -->
+    <div class="supplement-block">
+      <div class="supplement-block-header">📎 補充：不確定度的傳播（本單元不要求，W3 單擺實驗時會用到）</div>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:14px;">
+        如果最終結果 Z 是由多個測量量 A、B 計算而來，不確定度會一起「傳播」過去：
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:white;border:1px solid var(--border);border-radius:6px;padding:12px;font-size:13px;">
+          <div style="font-weight:700;margin-bottom:6px;">加法 / 減法　Z = A ± B</div>
+          <div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--phase1);">u_Z = u_A + u_B</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">絕對不確定度直接相加</div>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:6px;padding:12px;font-size:13px;">
+          <div style="font-weight:700;margin-bottom:6px;">乘法 / 除法　Z = A × B 或 A/B</div>
+          <div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--phase1);">u_Z/Z = u_A/A + u_B/B</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">相對不確定度相加</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);">
+        → 下一單元（W3）計算 g = 4π²L/T² 時，L 和 T 各自有不確定度，就需要用乘除的傳播規則。
+      </p>
+    </div>
+
+    <!-- 學習歷程提示 -->
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-top:24px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">最有說服力的學習歷程：你的兩組原始數據 + 完整計算步驟 + 「用不確定度區間比較結論」的反思。如果數據推翻了你一開始的直覺，這個過程特別值得記錄——這正是科學思維的核心。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="vaccine.html">← W1：課程說明 × 疫苗選擇</a>
+      <a href="pendulum.html">下一單元：單擺與數據處理 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

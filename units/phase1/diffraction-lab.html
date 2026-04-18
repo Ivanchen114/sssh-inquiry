@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>虛擬實驗室 · 單狹縫繞射模擬器 · 探究與實作</title>
+  <meta name="description" content="單狹縫繞射模擬器，調整狹縫寬度與波長觀察繞射圖樣變化。">
+  <meta property="og:title" content="虛擬實驗室 · 單狹縫繞射模擬器 · 探究與實作">
+  <meta property="og:description" content="單狹縫繞射模擬器，調整狹縫寬度與波長觀察繞射圖樣變化。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/diffraction-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>DNA繞射模組</span><span>›</span>
+      <span style="color:var(--phase1)">虛擬實驗室</span>
+    </div>
+    <h1>🔬 單狹縫繞射模擬器</h1>
+    <p class="subtitle">調整狹縫寬度、螢幕距離與波長，觀察繞射圖案的變化</p>
+  </div>
+  <div class="page-body">
+
+    <div style="background:linear-gradient(135deg,#0e7490,#06b6d4);border-radius:12px;padding:20px;color:white;margin-bottom:20px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:14px;">🔬 單狹縫繞射實驗</div>
+      <p style="font-size:12px;opacity:0.85;margin-bottom:14px;">雷射光通過狹縫後會因為繞射而展開，在螢幕上形成明暗相間的圖案。中央亮紋最寬最亮，兩側依序變暗變窄。調整參數觀察 $\Delta y_0 = 2L\lambda/a$ 的關係。</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">狹縫寬度 a (mm)</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="d-slit" min="0.02" max="0.30" value="0.10" step="0.01" style="flex:1;accent-color:#67e8f9;" oninput="document.getElementById('d-slit-val').textContent=parseFloat(this.value).toFixed(2)+' mm'">
+            <span id="d-slit-val" style="font-family:'DM Mono',monospace;font-size:13px;min-width:60px;text-align:right;">0.10 mm</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">螢幕距離 L (cm)</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="d-dist" min="50" max="300" value="100" step="10" style="flex:1;accent-color:#67e8f9;" oninput="document.getElementById('d-dist-val').textContent=this.value+' cm'">
+            <span id="d-dist-val" style="font-family:'DM Mono',monospace;font-size:13px;min-width:55px;text-align:right;">100 cm</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">雷射波長 λ (nm)</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="d-wave" min="400" max="700" value="650" step="10" style="flex:1;accent-color:#67e8f9;" oninput="updateWavelengthDisplay(this.value)">
+            <span id="d-wave-val" style="font-family:'DM Mono',monospace;font-size:13px;min-width:55px;text-align:right;">650 nm</span>
+          </div>
+          <div id="d-wave-color" style="font-size:11px;opacity:0.7;margin-top:4px;">紅色</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <button onclick="runDiffraction()" style="background:#67e8f9;color:#164e63;border:none;padding:8px 18px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;">🔬 照射！</button>
+        <button onclick="clearDiffraction()" style="background:rgba(255,255,255,0.15);color:white;border:none;padding:8px 14px;border-radius:6px;font-size:12px;cursor:pointer;">清除數據</button>
+      </div>
+
+      <!-- 繞射圖案 Canvas -->
+      <canvas id="diff-canvas" width="680" height="300" style="width:100%;background:#0a0a0a;border-radius:8px;margin-bottom:10px;"></canvas>
+      <div id="diff-result" style="font-family:'DM Mono',monospace;font-size:13px;opacity:0.85;min-height:20px;"></div>
+
+      <div style="margin-top:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄</div>
+        <table style="width:100%;font-size:12px;background:rgba(255,255,255,0.05);border-radius:6px;">
+          <thead><tr style="color:#67e8f9;">
+            <th style="padding:8px;">a (mm)</th><th style="padding:8px;">L (cm)</th><th style="padding:8px;">λ (nm)</th><th style="padding:8px;">$\Delta y_0$ (mm)</th><th style="padding:8px;">$\Delta y_0$/L</th><th style="padding:8px;">a×$\Delta y_0$ (mm²)</th>
+          </tr></thead>
+          <tbody id="diff-data"></tbody>
+        </table>
+        <button onclick="exportDiffData()" style="margin-top:8px;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;">📋 複製數據</button>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:8px;font-size:13px;margin-bottom:20px;">
+      <div class="q-item">Q1：固定 a 和 λ，改變 L——$\Delta y_0$ 和 L 是什麼關係？（看 $\Delta y_0$/L 那一欄）</div>
+      <div class="q-item">Q2：固定 L 和 λ，改變 a——$\Delta y_0$ 和 a 是什麼關係？（看 a×$\Delta y_0$ 那一欄）</div>
+      <div class="q-item">Q3：波長越長（紅→綠→藍），中央亮紋寬度怎麼變？這符合 $\Delta y_0 = 2L\lambda/a$ 嗎？</div>
+      <div class="q-item">Q4：為什麼狹縫越窄，光反而散得越開？這和粒子的行為有什麼不同？</div>
+    </div>
+
+    <div class="info-box green">
+      <strong>💡 物理模型：</strong>單狹縫繞射的中央亮紋寬度 $\Delta y_0 = 2L\lambda/a$。第一暗紋位置滿足 $\sin\theta = \lambda/a$（小角近似下 $\theta \approx \lambda/a$）。模擬器加入了 ±3% 的測量誤差，讓你體驗真實實驗中的數據波動。
+    </div>
+
+    <div class="unit-nav">
+      <a href="diffraction-lv1.html">← 回到繞射 Lv1</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('diff-canvas');
+  const ctx = canvas.getContext('2d');
+  let dataRows = [];
+
+  function wavelengthToRGB(wl){
+    // 簡化的波長→RGB轉換
+    let r=0,g=0,b=0;
+    if(wl>=380 && wl<440){ r=-(wl-440)/(440-380); b=1; }
+    else if(wl>=440 && wl<490){ g=(wl-440)/(490-440); b=1; }
+    else if(wl>=490 && wl<510){ g=1; b=-(wl-510)/(510-490); }
+    else if(wl>=510 && wl<580){ r=(wl-510)/(580-510); g=1; }
+    else if(wl>=580 && wl<645){ r=1; g=-(wl-645)/(645-580); }
+    else if(wl>=645 && wl<=700){ r=1; }
+    // 邊緣衰減
+    let factor;
+    if(wl>=380 && wl<420) factor=0.3+0.7*(wl-380)/(420-380);
+    else if(wl>=420 && wl<645) factor=1;
+    else if(wl>=645 && wl<=700) factor=0.3+0.7*(700-wl)/(700-645);
+    else factor=0;
+    return {
+      r: Math.round(255*Math.pow(r*factor,0.8)),
+      g: Math.round(255*Math.pow(g*factor,0.8)),
+      b: Math.round(255*Math.pow(b*factor,0.8))
+    };
+  }
+
+  function wavelengthName(wl){
+    if(wl<450) return '紫色';
+    if(wl<480) return '藍色';
+    if(wl<510) return '青色';
+    if(wl<560) return '綠色';
+    if(wl<590) return '黃色';
+    if(wl<630) return '橙色';
+    return '紅色';
+  }
+
+  window.updateWavelengthDisplay = function(val){
+    document.getElementById('d-wave-val').textContent = val + ' nm';
+    document.getElementById('d-wave-color').textContent = wavelengthName(parseInt(val));
+  };
+
+  function drawDiffractionPattern(a_mm, L_cm, lambda_nm){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const a = a_mm * 1e-3;       // m
+    const L = L_cm * 1e-2;       // m
+    const lambda = lambda_nm*1e-9;// m
+
+    const rgb = wavelengthToRGB(lambda_nm);
+    const midY = canvas.height / 2;
+
+    // 繞射強度 I(θ) = [sin(β)/β]² where β = πa·sinθ/λ
+    // 螢幕座標 y 對應 sinθ ≈ y/L
+    // 模擬螢幕範圍：±50 mm
+    const screenRange = 0.06; // ±60 mm in meters
+    const px = canvas.width;
+
+    // 畫背景裝置示意（左側）
+    const setupW = 100;
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, setupW, canvas.height);
+
+    // 雷射
+    ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+    ctx.fillRect(10, midY-2, 30, 4);
+    ctx.fillStyle = '#333';
+    ctx.fillRect(8, midY-8, 8, 16);
+    ctx.font = '10px sans-serif';
+    ctx.fillStyle = '#888';
+    ctx.textAlign = 'center';
+    ctx.fillText('雷射', 12, midY+22);
+
+    // 狹縫
+    const slitX = 60;
+    const slitPixelHalf = Math.max(1, (a_mm / 0.3) * 15);
+    ctx.fillStyle = '#444';
+    ctx.fillRect(slitX-3, 0, 6, midY - slitPixelHalf);
+    ctx.fillRect(slitX-3, midY + slitPixelHalf, 6, canvas.height - midY - slitPixelHalf);
+    ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},0.3)`;
+    ctx.fillRect(slitX-1, midY-slitPixelHalf, 2, slitPixelHalf*2);
+    ctx.fillStyle = '#888';
+    ctx.fillText('狹縫', slitX, canvas.height-8);
+
+    // 光束展開示意
+    ctx.save();
+    ctx.globalAlpha = 0.08;
+    ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+    ctx.beginPath();
+    ctx.moveTo(slitX+3, midY-slitPixelHalf);
+    ctx.lineTo(setupW, 10);
+    ctx.lineTo(setupW, canvas.height-10);
+    ctx.lineTo(slitX+3, midY+slitPixelHalf);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 繞射圖案（右側螢幕）
+    const patternX = setupW;
+    const patternW = canvas.width - setupW;
+
+    // 畫螢幕上的繞射條紋（垂直方向）
+    for(let py = 0; py < canvas.height; py++){
+      const y_screen = (py - midY) / canvas.height * screenRange * 2;
+      const sinTheta = y_screen / L;
+      const beta = Math.PI * a * sinTheta / lambda;
+
+      let intensity;
+      if(Math.abs(beta) < 1e-10){
+        intensity = 1;
+      } else {
+        intensity = Math.pow(Math.sin(beta)/beta, 2);
+      }
+
+      // 用顏色繪製
+      const bright = Math.pow(intensity, 0.5); // gamma校正讓暗紋更明顯
+      ctx.fillStyle = `rgb(${Math.round(rgb.r*bright)},${Math.round(rgb.g*bright)},${Math.round(rgb.b*bright)})`;
+      ctx.fillRect(patternX, py, patternW * 0.6, 1);
+    }
+
+    // 右側：強度曲線
+    const graphX = patternX + patternW * 0.65;
+    const graphW = patternW * 0.3;
+
+    // 軸
+    ctx.strokeStyle = '#444'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(graphX, 10);
+    ctx.lineTo(graphX, canvas.height - 10);
+    ctx.stroke();
+
+    // 強度曲線
+    ctx.strokeStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},0.9)`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    let first = true;
+    for(let py = 0; py < canvas.height; py++){
+      const y_screen = (py - midY) / canvas.height * screenRange * 2;
+      const sinTheta = y_screen / L;
+      const beta = Math.PI * a * sinTheta / lambda;
+      let intensity;
+      if(Math.abs(beta) < 1e-10) intensity = 1;
+      else intensity = Math.pow(Math.sin(beta)/beta, 2);
+
+      const ix = graphX + intensity * graphW;
+      if(first){ ctx.moveTo(ix, py); first=false; }
+      else ctx.lineTo(ix, py);
+    }
+    ctx.stroke();
+
+    // 標注中央亮紋寬度
+    const deltaY0_m = 2 * L * lambda / a;
+    const deltaY0_mm = deltaY0_m * 1000;
+    const deltaY0_px = (deltaY0_m / (screenRange*2)) * canvas.height;
+
+    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(patternX, midY - deltaY0_px/2); ctx.lineTo(graphX + graphW+10, midY - deltaY0_px/2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(patternX, midY + deltaY0_px/2); ctx.lineTo(graphX + graphW+10, midY + deltaY0_px/2); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 雙箭頭標示 Δy₀
+    const arrowX = graphX + graphW + 16;
+    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(arrowX, midY-deltaY0_px/2+4); ctx.lineTo(arrowX, midY+deltaY0_px/2-4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(arrowX-3, midY-deltaY0_px/2+8); ctx.lineTo(arrowX, midY-deltaY0_px/2+2); ctx.lineTo(arrowX+3, midY-deltaY0_px/2+8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(arrowX-3, midY+deltaY0_px/2-8); ctx.lineTo(arrowX, midY+deltaY0_px/2-2); ctx.lineTo(arrowX+3, midY+deltaY0_px/2-8); ctx.stroke();
+
+    ctx.fillStyle = '#fbbf24'; ctx.font = '11px monospace'; ctx.textAlign = 'left';
+    ctx.fillText('Δy₀', arrowX+6, midY+4);
+
+    // 標籤
+    ctx.fillStyle = '#888'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('螢幕圖案', patternX + patternW*0.3, canvas.height-4);
+    ctx.fillText('強度 I(y)', graphX + graphW/2, 8);
+
+    return deltaY0_mm;
+  }
+
+  window.runDiffraction = function(){
+    const a = parseFloat(document.getElementById('d-slit').value);
+    const L = parseInt(document.getElementById('d-dist').value);
+    const lambda = parseInt(document.getElementById('d-wave').value);
+
+    const deltaY0_theory = drawDiffractionPattern(a, L, lambda);
+    // 加 ±3% 測量誤差
+    const noise = 0.97 + Math.random() * 0.06;
+    const deltaY0 = deltaY0_theory * noise;
+
+    const ratio = (deltaY0 / (L*10)).toFixed(6); // Δy₀(mm) / L(mm)
+    const product = (a * deltaY0).toFixed(3);     // a(mm) × Δy₀(mm)
+
+    document.getElementById('diff-result').textContent =
+      `a=${a.toFixed(2)}mm | L=${L}cm | λ=${lambda}nm | Δy₀ ≈ ${deltaY0.toFixed(1)} mm | Δy₀/L = ${ratio} | a×Δy₀ = ${product} mm²`;
+
+    dataRows.push({a: a.toFixed(2), L, lambda, dy: deltaY0.toFixed(1), ratio, product});
+    updateTable();
+  };
+
+  function updateTable(){
+    const tbody = document.getElementById('diff-data');
+    tbody.innerHTML = '';
+    dataRows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td style="padding:6px 8px;text-align:center;">${r.a}</td>
+        <td style="padding:6px 8px;text-align:center;">${r.L}</td>
+        <td style="padding:6px 8px;text-align:center;">${r.lambda}</td>
+        <td style="padding:6px 8px;text-align:center;color:#67e8f9;">${r.dy}</td>
+        <td style="padding:6px 8px;text-align:center;">${r.ratio}</td>
+        <td style="padding:6px 8px;text-align:center;">${r.product}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.clearDiffraction = function(){
+    dataRows = [];
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    document.getElementById('diff-result').textContent = '';
+    document.getElementById('diff-data').innerHTML = '';
+  };
+
+  window.exportDiffData = function(){
+    let txt = 'a(mm)\tL(cm)\tλ(nm)\tΔy₀(mm)\tΔy₀/L\ta×Δy₀(mm²)\n';
+    dataRows.forEach(r => { txt += `${r.a}\t${r.L}\t${r.lambda}\t${r.dy}\t${r.ratio}\t${r.product}\n`; });
+    navigator.clipboard.writeText(txt).then(()=>{
+      const btn = event.target;
+      btn.textContent = '✅ 已複製！';
+      setTimeout(()=> btn.textContent = '📋 複製數據', 1500);
+    });
+  };
+
+  // 預設畫一次
+  drawDiffractionPattern(0.10, 100, 650);
+})();
+</script>
+</body>
+</html>

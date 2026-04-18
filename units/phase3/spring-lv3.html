@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>彈簧 Lv3 · 橡皮筋磅秤競賽 · 探究與實作</title>
+  <meta name="description" content="彈簧 Lv3 發現問題：橡皮筋磅秤競賽，設計精準的橡皮筋測力裝置。">
+  <meta property="og:title" content="彈簧 Lv3 · 橡皮筋磅秤競賽 · 探究與實作">
+  <meta property="og:description" content="彈簧 Lv3 發現問題：橡皮筋磅秤競賽，設計精準的橡皮筋測力裝置。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/spring-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·彈簧</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>🌀 彈簧模組 · Lv3 發現問題</h1>
+    <p class="subtitle">用橡皮筋做一把秤——最接近電子秤的組別獲勝。</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">競賽 + 自主探究</span>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
+    <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
+    <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
+    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+  </nav>
+  <div class="page-body">
+
+    <div class="collapsible teacher-toggle">
+      <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+      <div class="collapsible-body">
+        <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+          <li>讓學生將 Lv1 的虎克定律知識 + Lv2 的變因設計能力，應用到真實工程問題</li>
+          <li>從「設計失敗」中自然產生可探究的科學問題</li>
+          <li>體驗「理論計算 vs 實際工程」的落差</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="collapsible goal-toggle open">
+      <div class="collapsible-header">🎯 學習目標<span class="toggle-icon">▶</span></div>
+      <div class="collapsible-body">
+        <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+          <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：橡皮筋的伸長是否完全遵守虎克定律？）</li>
+          <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：橡皮筋拉伸到 1.5x–3x 後，k 值怎麼變？溫度如何影響 k 值？）</li>
+          <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「校準砝碼間距（5g vs 20g）如何影響量測精度？」vs「橡皮筋為什麼會斷？」）</li>
+          <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══ Step 1：挑戰規則 ═══ -->
+    <div class="step-panel active">
+      <div style="font-weight:700;font-size:16px;margin-bottom:10px;">🏆 挑戰規則</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:0;">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">材料</div>
+            橡皮筋（數量不限）、紙杯、迴紋針、竹筷、膠帶、量尺
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">勝負判定</div>
+            老師給 3 個未知物，用你的秤量出質量。<br>和電子秤的差距最小的組獲勝。
+          </div>
+        </div>
+      </div>
+      <div class="step-action" style="background:#f0f9ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;font-size:13px;color:#1e40af;margin-bottom:20px;">
+        📌 挑戰任務：閱讀挑戰規則，了解橡皮筋磅秤的設計任務。
+      </div>
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：製作與測試 ═══ -->
+    <div class="step-panel">
+      <div style="font-weight:700;font-size:16px;margin-bottom:14px;">🔧 製作與測試</div>
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 1 · 校準實驗</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">用已知質量的砝碼（10g–200g）測量橡皮筋伸長量，建立校準曲線。<strong>這就是你的「刻度」。</strong></p>
+          <div class="collapsible think-first" style="margin-top:10px;">
+            <div class="collapsible-header">🧠 關鍵問題：先想想再看提示<span class="toggle-icon">▶</span></div>
+            <div class="collapsible-body">
+              <p style="font-size:12px;color:var(--text-secondary);">F vs x 是線性的嗎？在什麼範圍內是線性的？超出範圍會怎樣？如果你的校準點太少（只量 3 個點），精度會受影響嗎？</p>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 2 · 搭建磅秤 + 試量</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">利用校準數據搭建你的磅秤。思考：刻度怎麼標？量測範圍多大？精度多高？先試量已知物確認準確度。</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 3 · 正式比賽（25 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">老師提供 3 個未知物。量測結果填入比賽表格，和電子秤比較。</p>
+        </div>
+      </div>
+      <div class="step-action" style="background:#f0f9ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;font-size:13px;color:#1e40af;margin-bottom:20px;">
+        📌 挑戰任務：校準橡皮筋、搭建磅秤、參加正式比賽。
+      </div>
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：從競賽到問題 ═══ -->
+    <div class="step-panel">
+      <div style="font-weight:700;font-size:16px;margin-bottom:14px;">💭 從競賽到問題</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">賽後反思：你的秤哪裡不準？為什麼？</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">你的秤一定和電子秤有差距。那些「差距」就是問題的起點。</p>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item phase3">
+            <strong>Step 1 · 記錄觀察</strong>：寫下 3 個你在競賽中注意到的「理論和現實的落差」
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 2 · 轉化為問題</strong>：用「如果改變___，___會怎樣？」的句型，從觀察中提出至少 3 個問題
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 3 · 篩選品質</strong>：四條件檢查——可量化？可操作？非查書題？有變因？選出 1 個最想探究的
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible think-first">
+        <div class="collapsible-header">🔍 好問題 vs 需要改進的問題（先自己想，再點開對照）<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="overflow-x:auto;">
+            <table style="font-size:12px;">
+              <thead><tr><th>❌ 需要改進</th><th>問題出在哪</th><th>✅ 好的探究問題</th></tr></thead>
+              <tbody>
+                <tr><td>「橡皮筋為什麼會斷？」</td><td style="color:var(--text-muted);">沒有操縱變因</td><td>「橡皮筋拉伸到 1.5x–3x 後，k 值怎麼變？」</td></tr>
+                <tr><td>「我的秤不準」</td><td style="color:var(--text-muted);">不是問題</td><td>「校準砝碼間距（5g vs 20g）如何影響量測精度？」</td></tr>
+                <tr><td>「溫度會不會影響？」</td><td style="color:var(--text-muted);">太模糊</td><td>「溫度從 15°C 到 35°C，橡皮筋的 k 值下降多少 %？」</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12px;color:#92400e;margin-top:10px;">→ <a href="../../tools/good-question.html" style="color:#92400e;font-weight:700;">工具箱：什麼是好的探究問題</a></p>
+        </div>
+      </div>
+
+      <!-- Layer 1: 虎克定律與實際的落差 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你的秤和電子秤的差距來自哪裡？想想至少 3 個可能的原因。</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p><strong>可能的原因：</strong>橡皮筋在不同拉伸範圍內不遵守虎克定律（非線性）、你的校準點太少（只量了 3 個質量會遺漏中間的非線性）、橡皮筋有遲滯效應（拉伸和放鬆的曲線不同）、溫度變化、重複使用導致疲勞。你注意到哪些？</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 觀察記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你最想探究的一個問題及其原因</div>
+        <textarea class="think-input" data-key="spring-lv3-q1" placeholder="例如：我想探究「校準砝碼間距是否影響精度」，因為我發現用 5g 間距時結果比較準…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 問題品質判斷 -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 下列哪個問題最適合做實驗探究？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 「拉伸範圍（0–50% vs 50–100% vs 100–150%）會影響虎克定律的適用性嗎？」</button>
+          <button class="think-opt" data-val="b">B. 「為什麼橡皮筋會變形？」</button>
+          <button class="think-opt" data-val="c">C. 「我的秤設計得怎麼樣？」</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          A 是最好的——有明確的操縱變因（拉伸範圍）、可量化的結果（k 值變化），可用實驗驗證。B 是查書題，C 太主觀。</div>
+      </div>
+
+      <div class="step-action" style="background:#f0f9ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;font-size:13px;color:#1e40af;margin-bottom:20px;">
+        📌 挑戰任務：反思競賽結果，把觀察轉化為可探究的科學問題。
+      </div>
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：後續探究 ═══ -->
+    <div class="step-panel">
+      <div style="font-weight:700;font-size:16px;margin-bottom:14px;">🔬 後續探究</div>
+      <div class="card" style="margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">選定問題後，規劃一個小型研究：</p>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📋 實驗計畫（操縱/控制/應變/水準/重複次數）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🔬 執行實驗、收集數據</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📊 畫圖、找趨勢、寫結論</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🎤 口頭報告：問題 → 設計 → 數據 → 結論 → 新問題</div>
+        </div>
+      </div>
+      <div class="step-action" style="background:#f0f9ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;font-size:13px;color:#1e40af;margin-bottom:20px;">
+        📌 挑戰任務：選定問題，規劃並執行後續探究。
+      </div>
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 協作、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body">
+        <!-- 問題發現單 -->
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">💡</span>
+          <div>
+            <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+            <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+          </div>
+        </div>
+
+        <!-- AI 協作 -->
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📐 規劃階段</div>
+              把你的任務限制告訴 AI（材料、規則、目標），請它幫你發想設計方案。記得截圖保存對話——展示你怎麼提問比 AI 給了什麼答案更重要。
+            </div>
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📝 反思階段</div>
+              活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+            </div>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ 規劃時 AI 是設計夥伴；反思時 AI 是文字編輯。兩個階段都是你在主導。</p>
+        </div>
+
+        <!-- 學習歷程提示 -->
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">校準曲線圖 + 磅秤設計照片 + 比賽結果 + 賽後觀察 + 你提出的問題——這完整呈現了「發現問題」的歷程。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+            <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「第一次船壁做 3cm 太矮改成 5cm」才有說服力。</span>
+          </div>
+        </div>
+
+        <!-- 教師備註 (collapsible) -->
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              這個活動把 Lv1（虎克定律）和 Lv2（變因設計）全部用上。學生會發現橡皮筋不完全遵守虎克定律（遲滯效應、疲勞效應），這些「理論和現實的落差」就是最好的問題來源。階段二的問題發想建議用 15–20 分鐘，讓每組上台分享 1 個問題，全班投票選出最有潛力的 3 個。
+            </p>
+          </div>
+        </div>
+
+        <!-- 教學目標 教師視角 (collapsible) -->
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生將 Lv1 的虎克定律知識 + Lv2 的變因設計能力，應用到真實工程問題</li>
+              <li>從「設計失敗」中自然產生可探究的科學問題</li>
+              <li>體驗「理論計算 vs 實際工程」的落差</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- unit-nav -->
+        <div class="unit-nav">
+          <a href="../phase2/spring.html">← 彈簧 Lv2</a>
+          <a href="../../index.html">回到課程總覽 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

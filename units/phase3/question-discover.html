@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>問題發現單 · 探究與實作</title>
+  <meta name="description" content="問題發現單：引導學生從實驗結果中發現新的探究問題。">
+  <meta property="og:title" content="問題發現單 · 探究與實作">
+  <meta property="og:description" content="問題發現單：引導學生從實驗結果中發現新的探究問題。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/question-discover.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    /* 漏斗視覺 */
+    .funnel {
+      display: grid;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .funnel-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      padding-bottom: 18px;
+    }
+    .funnel-step:last-child { padding-bottom: 0; }
+    .step-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .step-line {
+      flex: 1;
+      width: 2px;
+      background: var(--border);
+      margin-top: 6px;
+    }
+    .funnel-step:last-child .step-line { display: none; }
+    .step-content { padding-top: 4px; }
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 10px;
+    }
+
+    /* 填寫區 */
+    .fill-area {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .fill-label {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .fill-blank {
+      display: block;
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px dashed var(--border);
+      background: transparent;
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 4px;
+    }
+    .fill-blank:focus { border-bottom-color: var(--phase3); }
+    .fill-blank::placeholder { color: var(--text-muted); font-style: italic; }
+    textarea.fill-blank {
+      resize: vertical;
+      min-height: 48px;
+      border: 1.5px dashed var(--border);
+      border-radius: 4px;
+      padding: 8px;
+    }
+    textarea.fill-blank:focus { border-color: var(--phase3); }
+
+    /* 觀察卡片 */
+    .obs-card {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+    .obs-card:focus-within {
+      border-color: var(--phase3);
+    }
+
+    /* 四條件檢查 */
+    .check-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    @media (max-width: 550px) { .check-grid { grid-template-columns: 1fr; } }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      cursor: pointer;
+    }
+    .check-item input[type="checkbox"] {
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .check-item.pass {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+
+    /* 匯出 */
+    .export-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1.5px solid var(--phase3);
+      background: rgba(124, 58, 237, 0.08);
+      color: var(--phase3);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .export-btn:hover {
+      background: rgba(124, 58, 237, 0.15);
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span>研究工具</span>
+      <span>›</span>
+      <span style="color:var(--phase3)">問題發現單</span>
+    </div>
+    <h1>💡 問題發現單</h1>
+    <p class="subtitle">從「船沉了好氣」到「一個值得研究的科學問題」——三步收斂。</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">通用工具</span>
+      <span class="tag">INa 發現能力</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="collapsible teacher-toggle">
+      <div class="collapsible-header">📌 教師備註<span class="toggle-icon">▶</span></div>
+      <div class="collapsible-body">
+        <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+          這張單是 Lv3 競賽之後使用的收斂工具，也是期末自主探究的起點。設計上刻意比 Lv1、Lv2 的工具表更輕——只有三步，因為 Lv3 學生應該已經有能力獨立思考，不需要手把手。<br><br>
+          <strong>使用時機</strong>：Lv3 競賽結束後 10–15 分鐘，趁記憶最鮮明的時候填。也適用於期末自主探究的第一堂課。<br><br>
+          <strong>常見卡點</strong>：學生在 Step 1 寫的觀察常常太模糊（「船沉了」），要引導他們加上感官細節（「水從左邊角落滲入」「放第 4 顆砝碼時船突然傾斜」）。<br><br>
+          <strong>銜接設計</strong>：這張單的產出（一個合格的研究問題）直接銜接<a href="../phase2/research-plan.html" style="color:var(--phase2);font-weight:600;">研究規劃表</a>的 Step 2（聚焦問題）。學生可以跳過規劃表的 Step 1，因為問題已經在這裡產出了。
+        </p>
+      </div>
+    </div>
+
+    <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#4c1d95;line-height:1.7;">
+      <strong>什麼時候用這張單？</strong> 剛做完競賽或活動，腦中充滿「為什麼？」的時候。趁記憶還熱，花 10 分鐘把它寫下來。
+    </div>
+
+    <!-- ═══ 三步漏斗 ═══ -->
+
+    <div class="funnel">
+
+      <!-- Step 1: 倒出觀察 -->
+      <div class="funnel-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase3);">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">倒出來：你觀察到什麼？</div>
+          <div class="step-desc">不用想太多，把你在活動中<strong>看到、聽到、感覺到</strong>的現象全部寫下來。越具體越好。</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div style="background:#fee2e2;border-radius:6px;padding:10px 12px;font-size:12px;">
+              <div style="font-weight:700;color:#991b1b;margin-bottom:4px;">❌ 模糊的觀察</div>
+              <div style="color:#7f1d1d;line-height:1.6;">「船沉了」<br>「效果不好」<br>「橡皮筋沒彈」</div>
+            </div>
+            <div style="background:#dcfce7;border-radius:6px;padding:10px 12px;font-size:12px;">
+              <div style="font-weight:700;color:#166534;margin-bottom:4px;">✅ 具體的觀察</div>
+              <div style="color:#14532d;line-height:1.6;">「放第 4 顆砝碼時水從右邊角落滲入」<br>「纏 3 圈的比纏 1 圈的多滾了 40cm」<br>「橡皮筋第 5 次拉伸後明顯變鬆」</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin-bottom:10px;">
+            好的觀察公式 = <strong>什麼東西</strong> + <strong>在什麼條件下</strong> + <strong>怎麼了</strong>（帶數字或比較更佳）
+          </div>
+
+          <div class="fill-area">
+            <div class="fill-label">我觀察到的現象（至少寫 5 個）</div>
+            <div id="obs-container">
+              <div class="obs-card">
+                <input type="text" class="fill-blank" style="border-bottom:none;margin:0;padding:2px 0;" placeholder="① 例如：水從接縫處滲入，尤其是轉角的地方" data-obs>
+              </div>
+              <div class="obs-card">
+                <input type="text" class="fill-blank" style="border-bottom:none;margin:0;padding:2px 0;" placeholder="② 例如：飲料罐放上去的瞬間船劇烈搖晃" data-obs>
+              </div>
+              <div class="obs-card">
+                <input type="text" class="fill-blank" style="border-bottom:none;margin:0;padding:2px 0;" placeholder="③ 例如：隔壁組的船壁比較低但反而更穩" data-obs>
+              </div>
+              <div class="obs-card">
+                <input type="text" class="fill-blank" style="border-bottom:none;margin:0;padding:2px 0;" placeholder="④" data-obs>
+              </div>
+              <div class="obs-card">
+                <input type="text" class="fill-blank" style="border-bottom:none;margin:0;padding:2px 0;" placeholder="⑤" data-obs>
+              </div>
+            </div>
+            <button onclick="addObs()" style="margin-top:6px;font-size:11px;color:var(--phase3);background:none;border:1px dashed var(--phase3);border-radius:4px;padding:4px 10px;cursor:pointer;">+ 再加一個</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: 轉化為問題 -->
+      <div class="funnel-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase3);">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">轉化：把觀察變成問題</div>
+          <div class="step-desc">從上面挑 3 個最讓你好奇的觀察，用<strong>「如果改變___，___會怎樣？」</strong>的格式寫成問題。</div>
+
+          <div class="fill-area">
+            <div class="fill-label">我的 3 個候選問題</div>
+            <div style="display:grid;gap:10px;">
+              <div>
+                <div style="font-size:11px;color:var(--phase3);font-weight:700;margin-bottom:4px;">問題 A</div>
+                <input type="text" class="fill-blank" id="q-a" placeholder="例如：如果改變船壁高度（2/3/4/5 cm），最大承載重量會怎樣變化？">
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--phase3);font-weight:700;margin-bottom:4px;">問題 B</div>
+                <input type="text" class="fill-blank" id="q-b" placeholder="例如：如果改變接縫的膠帶層數（1/2/3 層），滲水速率會怎樣？">
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--phase3);font-weight:700;margin-bottom:4px;">問題 C</div>
+                <input type="text" class="fill-blank" id="q-c" placeholder="例如：如果把載重放在不同位置（中央 vs 邊緣），船能撐多久？">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: 篩選 -->
+      <div class="funnel-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase3);">3</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">篩選：哪個問題值得追？</div>
+          <div class="step-desc">用四條件檢查你的三個問題。全部打勾的才是「好的探究問題」。選一個你最想追的。</div>
+
+          <div style="display:grid;gap:14px;">
+
+            <!-- 問題 A 檢查 -->
+            <div class="fill-area">
+              <div class="fill-label" style="color:var(--phase3);">問題 A 的四條件檢查</div>
+              <div class="check-grid">
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>有操縱變因</strong>：問題裡有一個你可以刻意改變的東西嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>可量化測量</strong>：應變變因可以用數字記錄嗎？（不是「感覺」）</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>教室可行</strong>：在學校的設備和時間內做得到嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>不是查書題</strong>：不能直接 Google 到答案，需要動手做才知道？</span></label>
+              </div>
+            </div>
+
+            <!-- 問題 B 檢查 -->
+            <div class="fill-area">
+              <div class="fill-label" style="color:var(--phase3);">問題 B 的四條件檢查</div>
+              <div class="check-grid">
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>有操縱變因</strong>：問題裡有一個你可以刻意改變的東西嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>可量化測量</strong>：應變變因可以用數字記錄嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>教室可行</strong>：在學校的設備和時間內做得到嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>不是查書題</strong>：不能直接 Google 到答案？</span></label>
+              </div>
+            </div>
+
+            <!-- 問題 C 檢查 -->
+            <div class="fill-area">
+              <div class="fill-label" style="color:var(--phase3);">問題 C 的四條件檢查</div>
+              <div class="check-grid">
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>有操縱變因</strong>：問題裡有一個你可以刻意改變的東西嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>可量化測量</strong>：應變變因可以用數字記錄嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>教室可行</strong>：在學校的設備和時間內做得到嗎？</span></label>
+                <label class="check-item"><input type="checkbox" onchange="updateCheck(this)"> <span><strong>不是查書題</strong>：不能直接 Google 到答案？</span></label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="fill-area" style="margin-top:14px;border:2px solid var(--phase3);">
+            <div class="fill-label" style="color:var(--phase3);font-size:13px;">🎯 我選擇追的問題是：</div>
+            <input type="text" class="fill-blank" id="q-final" placeholder="把你選的問題完整寫在這裡" style="font-size:14px;font-weight:600;">
+            <div class="fill-label" style="margin-top:8px;">為什麼選這個？</div>
+            <textarea class="fill-blank" id="q-why" placeholder="例如：因為我在競賽中親眼看到船壁高度差 1cm 結果就差很多，而且這個實驗材料簡單、一節課內做得完。"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end funnel -->
+
+    <!-- 銜接提示 -->
+    <div style="background:linear-gradient(135deg, #ede9fe 0%, #dbeafe 100%);border:1px solid #c4b5fd;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:#4c1d95;font-size:13px;margin-bottom:8px;">🔗 下一步</div>
+      <div style="font-size:13px;color:#3b0764;line-height:1.8;">
+        你已經有了一個好問題。接下來把它變成實驗計畫——直接貼進研究規劃表的 <strong>Step 2（聚焦問題）</strong>，從 Step 3 開始拆變因：
+      </div>
+      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+        <a href="../phase2/research-plan.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;background:white;border:1.5px solid var(--phase2);color:var(--phase2);font-size:12px;font-weight:700;text-decoration:none;transition:all 0.15s;">📋 研究規劃表 →</a>
+        <a href="../../tools/good-question.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;background:white;border:1.5px solid var(--border);color:var(--text-secondary);font-size:12px;font-weight:600;text-decoration:none;transition:all 0.15s;">❓ 什麼是好的探究問題</a>
+      </div>
+    </div>
+
+    <!-- 匯出 -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <button class="export-btn" onclick="exportQ()">📄 匯出問題發現單（純文字）</button>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">複製到剪貼簿，可貼到報告或帶入研究規劃表</div>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">這張問題發現單展示你「怎麼從經驗中長出科學問題」的過程。從 5 個觀察收斂到 3 個問題、再收斂到 1 個——這個漏斗本身就是最好的素材。搭配競賽照片一起放更有說服力。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../phase2/research-plan.html">← 研究規劃表</a>
+      <a href="final.html">期末成果發表 →</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+  let obsCount = 5;
+
+  function addObs() {
+    obsCount++;
+    const container = document.getElementById('obs-container');
+    const card = document.createElement('div');
+    card.className = 'obs-card';
+    card.innerHTML = `<input type="text" class="fill-blank" style="border-bottom:none;margin:0;padding:2px 0;" placeholder="⑥" data-obs>`;
+    // update placeholder number
+    card.querySelector('input').placeholder = circledNum(obsCount);
+    container.appendChild(card);
+  }
+
+  function circledNum(n) {
+    const nums = ['', '①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'];
+    return n <= 10 ? nums[n] : `(${n})`;
+  }
+
+  function updateCheck(cb) {
+    const item = cb.closest('.check-item');
+    item.classList.toggle('pass', cb.checked);
+  }
+
+  function exportQ() {
+    const obs = [];
+    document.querySelectorAll('[data-obs]').forEach((input, i) => {
+      if (input.value.trim()) obs.push(`  ${i+1}. ${input.value.trim()}`);
+    });
+
+    const get = id => (document.getElementById(id)?.value || '').trim();
+
+    const lines = [
+      '═══ 問題發現單 ═══',
+      '',
+      '【觀察到的現象】',
+      ...obs,
+      '',
+      '【候選問題】',
+      '  A. ' + get('q-a'),
+      '  B. ' + get('q-b'),
+      '  C. ' + get('q-c'),
+      '',
+      '【我選擇追的問題】',
+      get('q-final'),
+      '',
+      '【選擇理由】',
+      get('q-why'),
+      '',
+      '══════════════════',
+      '→ 下一步：帶著這個問題去填「研究規劃表」',
+      '  把上面的問題貼進規劃表 Step 2（聚焦問題），然後從 Step 3（變因拆解）繼續。',
+    ];
+
+    const text = lines.join('\n');
+
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.export-btn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✅ 已複製到剪貼簿！';
+      btn.style.borderColor = '#16a34a';
+      btn.style.color = '#16a34a';
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }, 2000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alert('已複製到剪貼簿！');
+    });
+  }
+</script>
+</body>
+</html>

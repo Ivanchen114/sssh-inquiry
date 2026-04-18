@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>紙飛機 Lv2 · 變因設計 · 探究與實作</title>
+  <meta name="description" content="紙飛機 Lv2 規劃研究：設計紙飛機飛行的變因控制實驗。">
+  <meta property="og:title" content="紙飛機 Lv2 · 變因設計 · 探究與實作">
+  <meta property="og:description" content="紙飛機 Lv2 規劃研究：設計紙飛機飛行的變因控制實驗。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/airplane-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·紙飛機</span><span>›</span>
+      <span style="color:var(--phase2)">Lv2 規劃研究</span>
+    </div>
+    <h1>✈️ 紙飛機模組 · Lv2 規劃研究</h1>
+    <p class="subtitle">什麼讓紙飛機飛更遠？你來設計實驗、你來回答。</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">變因設計</span>
+      <span class="tag">飛行力學</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從現象或理論出發，提出可驗證的研究問題（例如：機翼面積如何影響飛行距離？）</li>
+      <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：控制投擲力道，只改變機翼面積）</li>
+      <li>能有系統地蒐集數據，並判斷數據的可靠性（重複測量至少 3 次）</li>
+      <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>選題</button>
+    <button class="step-tab"><span class="step-num">2</span>設計實驗</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與數據</button>
+    <button class="step-tab"><span class="step-num">4</span>分析與發表</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ STEP 1: 選題 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">
+        從下列研究問題選一個，或自己設計一個。每個問題都附上變因提示，幫你快速上手。
+      </div>
+
+      <div class="section-title">可能的研究問題</div>
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <div class="q-item phase2">
+          <strong>機翼面積如何影響飛行距離？</strong><br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：機翼寬度（2, 3, 4, 5, 6 cm）　應變：水平距離（m）</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>機鼻配重如何影響飛行穩定性？</strong><br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：迴紋針數量（0, 1, 2, 3, 4 個）　應變：距離（m）或偏移角度（°）</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>紙張厚度（磅數）如何影響飛行距離？</strong><br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：紙張（70g, 80g, 100g, 120g, 150g 影印紙）　應變：距離（m）</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>尾翼角度如何影響飛行軌跡？</strong><br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：尾翼上翻角度（0°, 10°, 20°, 30°, 45°）　應變：距離或滯空時間</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>摺法對稱性如何影響直線性？</strong><br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：左右翼差（0mm, 2mm, 4mm, 6mm, 8mm 不對稱）　應變：落點偏移量</span>
+        </div>
+      </div>
+
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:12px 16px;font-size:13px;color:#166534;margin-bottom:20px;">
+        💡 <strong>不確定怎麼分變因？</strong> 想像你在做實驗：<em>你主動改變的東西</em>→操縱變因；<em>你拿捲尺量的結果</em>→應變變因；<em>你拼命不讓它動的一切</em>→控制變因。
+      </div>
+
+      <!-- Layer 2: 選題與預測 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你選擇哪個研究問題？寫出理由和預測。</div>
+        <textarea class="think-input" data-key="airplane-lv2-choice" placeholder="例如：我選機翼寬度，因為我猜翅膀大的飛機應該飛更遠。我預測機翼寬度越大，飛行距離越遠…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 變因理解選擇題 -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 你研究「機翼面積」。如果你決定「測 5 次、計算平均值」作為一個水準，下列哪個做法違反了「控制變因」的原則？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 5 次投擲時，每次用不同的力道（有時輕、有時重）</button>
+          <button class="think-opt" data-val="b">B. 用同一架紙飛機投擲 5 次</button>
+          <button class="think-opt" data-val="c">C. 在同一室內的同一位置投擲</button>
+          <button class="think-opt" data-val="d">D. 同一個人負責所有投擲</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          正確！A 項破壞了「控制變因」——你無法區分「機翼面積的影響」和「力道不一致的影響」。B、C、D 都是正確的控制做法。這就是為什麼紙飛機實驗最難——你必須讓每次投擲的力道盡量一致（這幾乎不可能），所以通常要增加重複次數來補償。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2: 設計實驗 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">
+        把你選的研究問題轉化成完整的實驗計畫。用清單確認你有沒有漏東西。
+      </div>
+
+      <div class="section-title" style="color:var(--phase2);">規劃你的研究</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">📋 實驗設計清單</div>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>1. 研究問題：</strong>用「___如何影響___？」的句型寫出你的問題
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>2. 變因拆解：</strong>操縱變因（至少 4 個水準）、應變變因、控制變因（至少列出 3 個）
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>3. 測量方式：</strong>用什麼工具量？捲尺？碼錶？角度尺？精度多少？
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>4. 重複次數：</strong>每個水準至少 3 次。想想為什麼不能只做 1 次？
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>5. 力道控制策略：</strong>你打算怎麼讓每次投擲的力道盡量一致？（這是紙飛機實驗最大的挑戰）
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1.5px solid var(--phase2);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:22px;">📝</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);">填寫研究規劃表</div>
+          <div style="font-size:12px;color:var(--text-secondary);">用六步流程把你的想法變成可執行的實驗計畫 → <a href="research-plan.html" style="color:var(--phase2);font-weight:600;">開始填寫</a></div>
+        </div>
+      </div>
+
+      <!-- 力道控制挑戰 -->
+      <div class="section-title">紙飛機特有的挑戰：力道控制</div>
+      <div class="card" style="margin-bottom:20px;">
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">紙飛機實驗最大的難題是：<strong>你無法完美控制每次投擲的力道</strong>。這不是你的錯——這是這個實驗的本質困難。以下是幾種應對策略：</p>
+        <div style="display:grid;gap:8px;font-size:12px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+            <strong style="color:var(--phase2);">策略 A：橡皮筋彈射器</strong> — 用固定拉長的橡皮筋彈射，力道最一致（但需要製作工具）
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+            <strong style="color:var(--phase2);">策略 B：固定姿勢投擲</strong> — 手臂伸直、只用手腕甩，減少自由度。每次從耳朵旁同一位置出手
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+            <strong style="color:var(--phase2);">策略 C：增加重複次數</strong> — 如果力道控制不佳（標準差很大），就做 5 次甚至 8 次取平均
+          </div>
+        </div>
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;margin-top:10px;">
+          💡 <strong>誠實面對你的限制：</strong>在報告中寫「我們的力道控制不夠好，標準差偏大」不是丟臉，反而是科學態度的展現。
+        </div>
+
+        <!-- Layer 1: 力道控制的困難 -->
+        <div class="think-block reveal">
+          <div class="think-prompt">🤔 想一想：紙飛機實驗中，「力道控制」為什麼那麼難？有沒有什麼客觀指標可以判斷力道一致？</div>
+          <button class="think-toggle">想好了？點擊看提示 →</button>
+          <div class="think-hidden">
+            <p>力道困難的原因：<strong>人的肌肉無法精確重複</strong>——每次手臂出力的加速度都不一樣。客觀指標：<strong>觀察飛機出手時的速度</strong>（看飛機消失的速度）、<strong>聲音大小</strong>（力道大聲音大，但這不準確）、<strong>測量飛機落點的標準差</strong>（標準差大代表力道不一致）。最好的辦法是增加重複次數（至少 5 次），計算平均值和標準差，在報告中坦白說明「力道控制的限制」。</p>
+          </div>
+        </div>
+
+        <!-- Layer 2: 計畫反思 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 你打算如何控制「投擲力道」保持一致？寫出你的策略。</div>
+          <textarea class="think-input" data-key="airplane-lv2-control" placeholder="例如：我們決定每次都從耳朵旁同一位置出手，手臂伸直，只用手腕甩。每個水準重複 6 次取平均…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 3: 執行與數據 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">
+        開始投擲。記住：試飛→正式蒐集→記錄每個細節。
+      </div>
+
+      <div class="section-title" style="color:var(--phase2);">執行實驗</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:6px;">⚡ 先跑一次再改</div>
+          <div style="font-size:12px;color:#78350f;line-height:1.7;">
+            正式蒐集前先做一輪「試飛」：<br>
+            ✓ 確認場地夠長<br>
+            ✓ 確認量測方式可行<br>
+            ✓ 確認水準之間有可觀察的差異<br>
+            ✓ 確認你的力道控制方法 OK<br>
+            不 OK 就趁現在改計畫！
+          </div>
+        </div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:6px;">🤝 小組分工提示</div>
+          <div style="font-size:12px;color:#1e3a8a;line-height:1.7;">
+            <strong>投擲員：</strong>負責每次用相同方式投擲<br>
+            <strong>記錄員：</strong>站在側面記錄落點位置<br>
+            <strong>品管員：</strong>確認每次投擲條件一致（角度、位置、風向）<br>
+            ⚠️ 投擲員不要中途換人！
+          </div>
+        </div>
+      </div>
+
+      <!-- 數據品質 -->
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 18px;margin-bottom:20px;">
+        <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:8px;">📊 數據會說話——但你要會聽</div>
+        <div style="display:grid;gap:8px;font-size:12px;color:#15803d;">
+          <div style="background:white;border-radius:4px;padding:8px 12px;">
+            <strong>看趨勢：</strong>隨著操縱變因增加，距離是越來越遠、越來越近、還是先升後降？
+          </div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">
+            <strong>看離散：</strong>同一水準的 3 次結果差多少？標準差大代表你的控制有問題
+          </div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">
+            <strong>看意外：</strong>有沒有某個水準的數據特別奇怪？先別急著刪——記錄下來，想想為什麼
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 3: 結果判讀 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 你的數據：機翼寬 3cm 飛行距離平均 4.2±0.8 m，4cm 是 5.5±1.2 m。下列哪個結論合理？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 兩組標準差大，所以實驗失敗了</button>
+          <button class="think-opt" data-val="b">B. 不確定度範圍不重疊（3.4–5.0 vs 4.3–6.7 有重疊），但平均值確有上升趨勢，還需要更多數據</button>
+          <button class="think-opt" data-val="c">C. 平均值差 1.3 m，所以機翼寬度有影響</button>
+          <button class="think-opt" data-val="d">D. 力道控制不好，這個實驗沒價值</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 項最合理。標準差大反映現實（紙飛機實驗本來就難控），不代表失敗。重點是有沒有看到明確的趨勢。兩組不確定度範圍確實重疊，所以還不能下「有顯著差異」的結論，但平均值的上升趨勢值得注意。增加重複次數（8 次甚至 10 次）可能讓結論更清晰。
+        </div>
+      </div>
+
+      <!-- Layer 2: 結論撰寫 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用 2–3 句寫下你的結論（變因、結果趨勢、力道控制的坦白說明）。</div>
+        <textarea class="think-input" data-key="airplane-lv2-conclusion" placeholder="例如：機翼寬度從 3–6 cm，飛行距離整體上升，但標準差較大，反映投擲力道控制的難度…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4: 分析與發表 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">
+        用圖表呈現數據，寫出結論。數據說了什麼故事？
+      </div>
+
+      <div class="section-title" style="color:var(--phase2);">分析與發表結果</div>
+
+      <!-- AI 檢核站 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 檢核站（審稿人模式）</div>
+        <p style="font-size:12px;color:#1e3a8a;margin-bottom:10px;">實驗計畫寫好後，把它貼給 AI「審稿」。AI 不會幫你做實驗，但會幫你找到計畫裡的漏洞：</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
+          <div style="background:white;border-radius:6px;padding:10px 12px;">
+            <div style="font-weight:700;margin-bottom:4px;">📋 檢核清單</div>
+            <div style="line-height:1.7;">
+              ✓ 你的操縱變因的水準間距夠嗎？<br>
+              ✓ 控制變因列完整了嗎？<br>
+              ✓ 重複次數足夠嗎？<br>
+              ✓ 測量工具的精度夠嗎？
+            </div>
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px 12px;">
+            <div style="font-weight:700;margin-bottom:4px;">📝 提示 Prompt 範本</div>
+            <div style="background:#f0f9ff;border-radius:4px;padding:8px;font-size:11px;line-height:1.6;font-family:'DM Mono',monospace;color:#334155;">
+              我是高中生，正在做紙飛機實驗。我的研究問題是「___」，操縱變因是___（水準：___），應變變因是___，控制___。每組重複___次。請以審稿人的角色，指出我計畫中可能的漏洞。
+            </div>
+            <button onclick="navigator.clipboard.writeText('我是高中生，正在做紙飛機實驗。我的研究問題是「___」，操縱變因是___（水準：___），應變變因是___，控制___。每組重複___次。請以審稿人的角色，指出我計畫中可能的漏洞。').then(()=>{this.textContent='✅ 已複製';setTimeout(()=>this.textContent='📋 複製 Prompt',1500)})" style="margin-top:6px;background:#dbeafe;border:none;padding:4px 10px;border-radius:4px;font-size:11px;cursor:pointer;color:#1e40af;">📋 複製 Prompt</button>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是老闆。它的建議你可以採納也可以駁回——但要有理由。</p>
+      </div>
+
+      <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+        <p style="font-size:13px;color:#6d28d9;">好素材：研究規劃表截圖 + 實驗照片 + 數據表與圖表 + AI 審稿對話截圖 + 結論。</p>
+        <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+          ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+          你的實驗計畫和實際執行之間最大的落差是什麼？你怎麼處理的？<br>
+          <span style="font-size:11px;color:#8b5cf6;">「計畫 vs 實際」的具體對比，比「這次實驗很順利」有說服力一百倍。</span>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ POST-CLASS ═══ -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 檢核、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body" style="display:none;">
+
+        <!-- 數據品質預防針 -->
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px;">💉 數據品質預防針</div>
+          <div style="display:grid;gap:6px;font-size:12px;color:#78350f;">
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>每個水準至少重複 <strong>3 次</strong>（力道不穩就做 5 次）</span>
+            </label>
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>遇到異常值先記錄原因（「撞到牆」「風突然吹」），再決定要不要排除</span>
+            </label>
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>如果標準差 > 平均值的 30%，代表你的控制需要改進——停下來想辦法</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 教師筆記 -->
+        <div style="background:#f5f3ff;border:1px solid #d8b4fe;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#6d28d9;font-size:13px;margin-bottom:8px;">👩‍🏫 教學指引（教師版）</div>
+          <ul style="font-size:12px;color:#5d2f8d;padding-left:18px;line-height:1.9;">
+            <li><strong>教學目標：</strong>學生自選一個變因（摺法、配重、紙張、機翼面積等）設計完整實驗</li>
+            <li><strong>核心能力：</strong>練習「控制其他變因只改一個」的實驗邏輯</li>
+            <li><strong>重點體驗：</strong>體驗紙飛機實驗中「控制力道」的困難，反思測量品質</li>
+            <li><strong>完整經驗：</strong>建立「觀察→假設→變因→實驗→數據→結論」的完整研究經驗</li>
+          </ul>
+          <div style="background:#faf5ff;border:1px dashed #d8b4fe;border-radius:6px;padding:10px 12px;margin-top:10px;font-size:12px;color:#5d2f8d;">
+            <strong>課綱指標：</strong>
+            <span class="ind-tag q" style="font-size:11px;">Q2 計畫研究</span>
+            <span class="ind-tag r" style="font-size:11px;">R2 變因控制</span>
+            <span class="ind-tag r" style="font-size:11px;">R3 操作蒐集</span>
+            <span class="ind-tag a" style="font-size:11px;">A1 整理數據</span>
+            <span class="ind-tag c" style="font-size:11px;">C1 陳述結果</span>
+          </div>
+        </div>
+
+        <!-- 學習目標 -->
+        <div style="background:#e0f2fe;border:1px solid #7dd3fc;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#0369a1;font-size:13px;margin-bottom:8px;">🎯 學習目標</div>
+          <ul style="font-size:12px;color:#0c4a6e;padding-left:18px;line-height:1.9;">
+            <li>能從現象或理論出發，提出可驗證的研究問題（例如：機翼面積如何影響飛行距離？）</li>
+            <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：控制投擲力道，只改變機翼面積）</li>
+            <li>能有系統地蒐集數據，並判斷數據的可靠性（重複測量至少 3 次，檢查力道控制）</li>
+            <li>能用圖表呈現結果，並以數據為基礎進行分析與發表（變因與飛行距離的定性或定量關係）</li>
+          </ul>
+        </div>
+
+        <!-- Unit Nav -->
+        <div class="unit-nav">
+          <a href="../phase1/airplane-lv1.html">← 紙飛機 Lv1</a>
+          <a href="../phase3/airplane-lv3.html">下一站：紙飛機 Lv3 →</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>
