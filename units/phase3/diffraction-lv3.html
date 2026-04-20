@@ -47,7 +47,7 @@
     <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
     <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
     <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
-    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+    <button class="step-tab"><span class="step-num">4</span>規劃與答辯</button>
   </nav>
 
   <div class="page-body">
@@ -56,6 +56,7 @@
     <!--  STEP 1: 挑戰規則                            -->
     <!-- ═══════════════════════════════════════════ -->
     <div class="step-panel active">
+      <div class="stage-map-tag">對應 · 發現問題 · 情境鋪陳</div>
       <div class="step-action">
         了解挑戰規則、材料與學習目標。
       </div>
@@ -107,6 +108,7 @@
     <!--  STEP 2: 製作與測試                          -->
     <!-- ═══════════════════════════════════════════ -->
     <div class="step-panel">
+      <div class="stage-map-tag">對應 · 發現問題 · 觀察體驗</div>
       <div class="step-action">
         搭建光學系統、測量繞射圖案、反推未知結構的尺寸。
       </div>
@@ -174,60 +176,13 @@
     </div>
 
     <!-- ═══════════════════════════════════════════ -->
-    <!-- ════════════════════════════════════ -->
-    <!-- 發現問題鷹架：直覺對照站 -->
-    <!-- ════════════════════════════════════ -->
-    <section class="step-card" style="border-left:4px solid #16a34a;background:#f0fdf4;">
-      <div class="step-title" style="color:#166534;">🔍 直覺對照站：從落差中挖問題</div>
-      <div class="step-action">科學提問常從「我以為會這樣，結果不是」的直覺落差開始。不用公式、不用模型——先誠實面對你自己的直覺。</div>
 
-      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
-        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">💭 Step 1：實作前的直覺預期</div>
-        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
-          回到你動手之前——那時你心裡以為結果會怎樣？用白話寫，不要背公式。
-        </div>
-        <textarea placeholder="我做之前以為會 ___，因為 ___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
-      </div>
-
-      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
-        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">👀 Step 2：實作時的觀察</div>
-        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
-          實際做下去、或看同學做，你觀察到什麼？特別是<strong>預期外的</strong>結果、驚訝、卡關、意外。
-        </div>
-        <div style="background:#fef3c7;border:1px solid #fbbf24;padding:10px;border-radius:6px;font-size:12px;color:#78350f;margin-bottom:10px;">
-          💡 這個模組可以留意：縫寬、縫到屏距離、光波長對亮紋寬度的影響；亮紋邊緣的清晰度；手切縫的毛邊造成的雜訊
-        </div>
-        <textarea placeholder="我看到 ___，其中最讓我意外的是 ___" style="width:100%;min-height:70px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
-      </div>
-
-      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
-        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">⚖️ Step 3：落差盤點</div>
-        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
-          你的直覺預期和實際觀察差在哪？往哪個方向偏？偏多還偏少？可以從「方向、大小、時機」三個角度想。
-        </div>
-        <textarea placeholder="預期：___&#10;實際：___&#10;落差：___（方向/大小/時機）" style="width:100%;min-height:80px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
-      </div>
-
-      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
-        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">❓ Step 4：把落差變問題</div>
-        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
-          從落差最讓你困惑的地方，用句型生出一個可探究的問題：<br>
-          · 「改變 ___，___ 會怎麼變？」<br>
-          · 「什麼條件下 ___ 會反轉？」<br>
-          · 「___ 和 ___ 哪個影響比較大？」
-        </div>
-        <textarea placeholder="我的探究問題：___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
-      </div>
-
-      <div style="background:#dcfce7;border:1px solid #16a34a;padding:12px;border-radius:8px;font-size:13px;color:#14532d;">
-        <strong>👉 承接下一步：</strong>這個從落差長出來的問題，就是你接下來要自己規劃研究、自己建模、自己解釋的起點。發現問題不需要公式——只需要誠實的直覺 + 敏銳的觀察。
-      </div>
-    </section>
 
     <!-- ═══════════════════════════════════════════ -->
     <!--  STEP 3: 從競賽到問題                         -->
     <!-- ═══════════════════════════════════════════ -->
     <div class="step-panel">
+      <div class="stage-map-tag">對應 · 發現問題 · 提問 + 建立假設</div>
       <div class="step-action">
         從競賽中的觀察反思，轉化為可探究的科學問題。
       </div>
@@ -300,12 +255,22 @@
           B 對！操縱變因是「你故意改變」的因素——在這裡是「環境光的明暗」（從暗室到普通亮度）。A 是結果，C 是應變變因（你量出來的）。</div>
       </div>
 
-      <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:22px;">💡</span>
-        <div>
-          <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
-          <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+      <div class="section-title">為你的問題建立假設</div>
+      <div class="hypothesis-ladder">
+        <div class="ladder-must">
+          <div class="ladder-must-label">必做</div>
+          <p style="font-size:13px;line-height:1.7;margin-bottom:10px;">把問題改寫成「結構化假設」——三要素：<strong>有變因、有方向、（能寫就寫）量化關係</strong>。</p>
+          <textarea class="think-input" data-key="diffraction-lv3-hypothesis" placeholder="格式建議：若改變 ___（操縱變因），則 ___（應變變因）會 ___（方向），（關係：___）。&#10;&#10;範例：若狹縫間距減半，則繞射條紋間距會加倍，因為間距與條紋距離成反比（d·sinθ = nλ）。" style="width:100%;min-height:80px;padding:8px 10px;border:1px solid var(--border);border-radius:4px;font-size:12.5px;font-family:inherit;resize:vertical;"></textarea>
         </div>
+        <details class="ladder-optional">
+          <summary>寫不太出來？展開鷹架，用三步慢慢想</summary>
+          <div style="padding:12px 14px;font-size:12.5px;line-height:1.8;">
+            <p><strong>步驟 a · 直覺預測：</strong>從你 Step 2 的觀察，你猜會發生什麼？</p>
+            <textarea placeholder="我猜 ___，因為 ___" style="width:100%;min-height:50px;padding:8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-bottom:10px;"></textarea>
+            <p><strong>步驟 b · 對照範例：</strong>看看上面的「範例」格式——它有：(1) 操縱變因 (2) 應變變因 (3) 變化方向。</p>
+            <p><strong>步驟 c · 升級：</strong>回到上面「必做」的 textarea，把你的直覺改寫成結構化假設。對照三要素自檢：變因、方向、（量化關係可選）。</p>
+          </div>
+        </details>
       </div>
 
       <div class="step-footer">
@@ -321,71 +286,125 @@
     </div>
 
     <!-- ═══════════════════════════════════════════ -->
-    <!--  STEP 4: 後續探究                            -->
+    <!--  STEP 4: 規劃與答辯                          -->
     <!-- ═══════════════════════════════════════════ -->
     <div class="step-panel">
-      <div class="step-action">
-        規劃並執行自主探究，深化你的科學問題。
-      </div>
+      <div class="stage-map-tag">對應 · 規劃研究 · 論證建模 · 表達分享</div>
+      <div class="step-action">把你的問題和假設寫成可執行的計畫，用答辯練論證與表達——不要求當堂執行。</div>
 
-      <div class="section-title">後續探究（節 3–4，自由選題）</div>
-      <div class="card" style="margin-bottom:16px;">
-        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">賽後反思中，你選出了最好的 1–2 個問題。現在你可以自主規劃一個小型探究：</p>
-        <div style="display:grid;gap:10px;">
-          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
-            <div style="font-weight:700;margin-bottom:6px;">選項 A · 「雙狹縫干涉」探究</div>
-            <p>用雙狹縫代替單狹縫，測量干涉條紋間距如何隨狹縫間距、光波長變化。</p>
-          </div>
-          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
-            <div style="font-weight:700;margin-bottom:6px;">選項 B · 「環境與精度」探究</div>
-            <p>固定樣本和 L，在不同環境光條件下重複測量 Δy₀，比較數據的重複性。</p>
-          </div>
-          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
-            <div style="font-weight:700;margin-bottom:6px;">選項 C · 「波長效應」探究</div>
-            <p>用紅雷射（650 nm）和綠雷射（532 nm）照同一個狹縫，比較 Δy₀ 的變化。</p>
-          </div>
-          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
-            <div style="font-weight:700;margin-bottom:6px;">選項 D · 自主設計</div>
-            <p>提出你自己的研究問題（需通過老師審查），自行規劃實驗。</p>
-          </div>
+      <!-- 定位說明 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:20px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:6px;">📌 這一 Step 在練什麼</div>
+        <div style="font-size:12.5px;color:#1e3a8a;line-height:1.9;">
+          Lv3 的「執行」不在課堂發生——因為每組問題不同，器材、時間、進度都會散掉。這一 Step 產出的是<strong>一份被同儕質詢過、修訂完成的研究計畫書（proposal）</strong>。<br>
+          你可以：（A）留到最後 4–5 週的<strong>自主探究週</strong>真的拿去做；（B）只當作規劃能力的練習，存檔。兩種都合法。
         </div>
       </div>
 
-      <div class="card" style="margin-bottom:20px;background:#f9fafb;border-left:3px solid var(--phase3);">
-        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:10px;">你的探究計畫</div>
-        <div style="display:grid;gap:12px;font-size:12px;color:var(--text-secondary);">
-          <div>
-            <strong>研究問題：</strong>
-            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
-          </div>
-          <div>
-            <strong>預測：</strong>
-            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
-          </div>
-          <div>
-            <strong>操縱變因 / 測量反應變因 / 控制變因：</strong>
-            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
-          </div>
-          <div>
-            <strong>預期的數據蒐集與分析方法：</strong>
-            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
-          </div>
+      <!-- ① 寫完整計畫書 -->
+      <div class="section-title">① 寫完整計畫書</div>
+      <div class="card" style="border-left:3px solid var(--phase2);margin-bottom:20px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 用「研究規劃工具」寫完整計畫</div>
+        <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+          從你 Step 3 的問題和假設出發，走六步流程：研究問題 → 假設 → 變因（操縱/控制/應變）→ 量測方法 → 重複次數 → 預期結果。
+        </p>
+        <a href="../../tools/research-plan.html" style="display:inline-block;background:var(--phase2);color:white;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">→ 前往研究規劃工具</a>
+      </div>
+
+      <!-- ② 預期結果圖 + 資源盤點 -->
+      <div class="section-title">② 預期結果圖 + 資源盤點</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div class="card" style="border-top:3px solid var(--phase1);">
+          <div style="font-weight:700;font-size:13px;margin-bottom:6px;">📈 預期結果圖</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px;">
+            <strong>如果你的假設對</strong>，數據圖會長什麼樣？畫一張草圖（可以手畫拍照，或用文字描述）：X 軸、Y 軸、趨勢方向、預期斜率或曲線形狀。
+          </p>
+          <textarea class="think-input" data-key="diffraction-lv3-predict-plot" rows="4" placeholder="例：X 軸 = 狹縫寬度（0.05/0.1/0.15 mm），Y 軸 = 繞射中央亮紋寬度 (mm)。預期成反比——縫越寬，亮紋越窄。" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;font-family:inherit;resize:vertical;"></textarea>
+        </div>
+        <div class="card" style="border-top:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;margin-bottom:6px;">🧰 資源盤點</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px;">
+            誠實盤點：器材找得到嗎？要多少時間？最困難的一步是什麼？這會決定你的計畫值不值得真的做。
+          </p>
+          <textarea class="think-input" data-key="diffraction-lv3-resources" rows="7" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;font-family:inherit;resize:vertical;line-height:1.8;">器材（哪裡拿）：
+
+時間（節課 / 小時）：
+
+最難的一步（怎麼克服）：
+</textarea>
         </div>
       </div>
 
-      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
-        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
-          <div style="background:white;border-radius:6px;padding:10px 12px;">
-            <div style="font-weight:700;margin-bottom:4px;">📐 規劃階段</div>
-            把你的任務限制告訴 AI（材料、規則、目標），請它幫你發想設計方案。記得截圖保存對話——展示你怎麼提問比 AI 給了什麼答案更重要。
+      <!-- ③ 組間答辯 -->
+      <div class="section-title">③ 組間答辯（論證 + 表達）</div>
+      <div class="card" style="border-left:3px solid var(--express);margin-bottom:20px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🎤 5 分鐘 pitch + 3 分鐘質詢</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div style="background:var(--bg);border-radius:6px;padding:10px 12px;">
+            <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:4px;">提案者（你）</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
+              按順序講：<br>
+              ① 問題（你想問什麼）<br>
+              ② 假設（你猜答案是什麼）<br>
+              ③ 計畫（怎麼測）<br>
+              ④ 預期結果（圖長怎樣）<br>
+              ⑤ 資源（器材、時間、難點）
+            </div>
           </div>
-          <div style="background:white;border-radius:6px;padding:10px 12px;">
-            <div style="font-weight:700;margin-bottom:4px;">📝 反思階段</div>
-            活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+          <div style="background:var(--bg);border-radius:6px;padding:10px 12px;">
+            <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:4px;">聽眾（質詢三角度）</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
+              ① <strong>邏輯一致</strong>：假設和計畫對得上嗎？計畫真的能檢驗這條假設？<br>
+              ② <strong>變因控制</strong>：有沒有漏掉重要的控制變因？<br>
+              ③ <strong>可行性</strong>：這個實驗真的做得出來嗎？資源估得合理嗎？
+            </div>
           </div>
         </div>
-        <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ 規劃時 AI 是設計夥伴；反思時 AI 是文字編輯。兩個階段都是你在主導。</p>
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 記錄：同儕問了你最「紮」的一個問題是什麼？你打算怎麼修你的計畫？</div>
+          <textarea class="think-input" data-key="diffraction-lv3-rebuttal" rows="6" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;font-family:inherit;resize:vertical;line-height:1.8;">最紮的問題：
+
+我的回應 / 修訂方向：
+</textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- ④ 修訂 proposal 存檔 -->
+      <div class="section-title">④ 修訂 proposal 存檔</div>
+      <div class="card" style="border-left:3px solid var(--phase3);margin-bottom:20px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">💾 存下你修訂後的最終計畫</div>
+        <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+          把答辯後修訂的計畫書寫下來。這份是你<strong>最終版的 proposal</strong>——答辯回應過、盤點過、改過一輪，品質會比初稿高很多。
+        </p>
+        <textarea class="think-input" data-key="diffraction-lv3-final-proposal" rows="12" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:4px;font-size:12.5px;font-family:inherit;resize:vertical;line-height:1.8;">【最終版研究計畫】
+
+問題：
+
+假設：
+
+變因（操縱 / 控制 / 應變）：
+
+量測方法：
+
+重複次數：
+
+預期結果：
+
+答辯修訂重點：
+</textarea>
+      </div>
+
+      <!-- 自主探究週銜接 -->
+      <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:6px;">🌱 銜接自主探究週</div>
+        <div style="font-size:12.5px;color:#78350f;line-height:1.9;">
+          學期最後 4–5 週是<strong>自主探究</strong>時段。那時你可以：<br>
+          <strong>A. 拿這份 proposal 去執行</strong>——器材都盤點好、計畫答辯過，直接執行即可<br>
+          <strong>B. 從 Lv3 的練習挑一個「你最想做」的主題</strong>重新提案<br>
+          <strong>C. 綜合多個 Lv3 的想法</strong>，提出新問題<br>
+          <span style="color:#92400e;">💡 如果你選 A，Step 4 的產出就是你的起跑線；如果選 B/C，Step 4 練的「規劃 + 答辯」能力本身就是你要反覆用的工具。</span>
+        </div>
       </div>
 
       <div class="step-footer">
