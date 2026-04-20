@@ -44,13 +44,13 @@
 - [ ] `about.html`
 - [ ] `units/phase1/shm.html`（SHM週期）
 - [ ] `units/phase1/uncertainty.html`（有效數字與不確定度）
-- [ ] `units/phase1/pendulum.html`（單擺與數據處理）
-- [ ] `units/phase2/spring.html`（彈簧變因設計）
+- [ ] `units/phase1/pendulum-lv1.html`（單擺與數據處理）
+- [ ] `units/phase2/spring-lv2.html`（彈簧變因設計）
 - [ ] `units/phase2/power-law.html`（冪級數與線性化）
 - [ ] `units/phase2/report.html`（報告撰寫規範）
-- [ ] `units/phase2/buoyancy.html`（浮力：鐵達尼號）
-- [ ] `units/phase3/roller.html`（翻滾仔）
-- [ ] `units/phase3/speaker.html`（揚聲器）
+- [ ] `units/phase2/buoyancy-lv2.html`（浮力：鐵達尼號）
+- [x] `units/phase3/roller-lv3.html`（翻滾仔 Lv3 競賽）
+- [x] `units/phase3/sound-lv3.html`（聲音 Lv3 水瓶琴）
 - [ ] `units/phase3/final.html`（期末發表）
 - [ ] `tools/report.html`
 - [ ] `tools/orid.html`
