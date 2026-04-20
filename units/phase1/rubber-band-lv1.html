@@ -59,17 +59,23 @@
 
   <!-- ═══ 步驟導航列 ═══ -->
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>情境×預測</button>
-    <button class="step-tab"><span class="step-num">2</span>橡皮筋不是彈簧</button>
-    <button class="step-tab"><span class="step-num">3</span>建立飽和模型</button>
-    <button class="step-tab"><span class="step-num">4</span>CER 論證</button>
-    <button class="step-tab"><span class="step-num">5</span>反思×延伸</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
 
-    <!-- ═══ Step 1：情境×預測 ═══ -->
-    <div class="step-panel active">
+    <!-- ═════ 階段 1：發現問題 ═════ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">從生活經驗出發，預測「橡皮筋拉力 vs 伸長量」的關係</div>
+        <p class="stage-desc">Lv1 老師已經把問題定好了：<strong>橡皮筋的拉力和伸長量是什麼關係？</strong>你的工作是——在看任何數據前，用生活直覺回答三個預測題。做完實驗回來對照，你會看到直覺 vs 數據的落差。</p>
+        <span class="who-bar teacher">🔒 研究問題：老師提供</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
+      </div>
       <div class="step-action">在看任何數據之前，先用你對生活的直覺回答三個預測題。</div>
 
       <div style="background:#fef3c7;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;">
@@ -107,7 +113,9 @@
       <!-- Layer 2: 預測記錄 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 把你的三個預測（P1、P2、P3）簡短寫下，稍後回來對照。</div>
-        <textarea class="think-input" data-key="rubber-band-lv1-predict" placeholder="P1: 橡皮筋轉越多圈…&#10;P2: 推出距離 vs 回滾距離…&#10;P3: 加倍轉圈數，距離會…"></textarea>
+        <textarea class="think-input" data-key="rubber-band-lv1-predict" rows="4" style="line-height:1.8;">P1: 橡皮筋轉越多圈…
+P2: 推出距離 vs 回滾距離…
+P3: 加倍轉圈數，距離會…</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -118,14 +126,19 @@
           <span class="step-dot"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>
-          <span class="step-dot"></span>
         </div>
         <button class="step-btn primary" data-step="next">下一步 →</button>
       </div>
     </div>
 
-    <!-- ═══ Step 2：橡皮筋不是彈簧 ═══ -->
-    <div class="step-panel">
+    <!-- ═════ 階段 2：規劃研究 ═════ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼規劃這個研究：橡皮筋不是彈簧，所以要測什麼？</div>
+        <p class="stage-desc">Lv1 你不用自己設計——但規劃研究的第一步是「釐清你在研究什麼」。橡皮筋<strong>不遵守胡克定律</strong>（不是彈簧），所以<strong>不能假設拉力和伸長量成正比</strong>。這個認知決定了 Stage 3 要比較三種模型：線性、冪次、飽和。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
       <div class="step-action">認識一個常被誤解的事實：橡皮筋不是彈簧，也不遵守胡克定律。</div>
 
       <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;">
@@ -201,14 +214,19 @@
           <span class="step-dot current"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>
-          <span class="step-dot"></span>
         </div>
         <button class="step-btn primary" data-step="next">下一步 →</button>
       </div>
     </div>
 
-    <!-- ═══ Step 3：建立飽和模型 ═══ -->
-    <div class="step-panel">
+    <!-- ═════ 階段 3：執行與分析 ═════ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">用數據比較三種模型：線性、冪次、飽和——哪個最合理？</div>
+        <p class="stage-desc">按照階段二的規劃，把橡皮筋的拉力-伸長量數據用三種模型去擬合，比較 R²、殘差、物理合理性，找出最適合的模型。重點不是算對一個係數——是看懂「為什麼飽和模型才合理」。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">用數據比較三種模型：線性、冪次、飽和模型——哪個最合理？</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">下表是同一個橡皮筋動力罐，轉不同圈數時的推出距離和回滾距離（每組重複 3 次）：</p>
@@ -279,7 +297,10 @@
       <!-- Layer 2: 模型選擇記錄 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你選的模型、R²、與一句理由（從物理機制出發）</div>
-        <textarea class="think-input" data-key="rubber-band-lv1-model" placeholder="我選：飽和模型&#10;R² = …&#10;D∞ ≈ … cm&#10;理由：橡皮筋有彈性極限，超過就…"></textarea>
+        <textarea class="think-input" data-key="rubber-band-lv1-model" rows="5" style="line-height:1.8;">我選：飽和模型
+R² = …
+D∞ ≈ … cm
+理由：橡皮筋有彈性極限，超過就…</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -315,18 +336,27 @@
           <span class="step-dot"></span>
           <span class="step-dot current"></span>
           <span class="step-dot"></span>
-          <span class="step-dot"></span>
         </div>
         <button class="step-btn primary" data-step="next">下一步 →</button>
       </div>
     </div>
 
-    <!-- ═══ Step 4：CER 論證 ═══ -->
-    <div class="step-panel">
-      <div class="step-action">用「主張—證據—推理」架構論證兩個關鍵問題。這是論證建模的核心。</div>
+    <!-- ═════ 階段 4：論證與反思 ═════ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">用 CER 論證結論、對照預測、長出自己的下一個問題</div>
+        <p class="stage-desc">這階段有兩件事：先用 <strong>CER（主張-證據-推理）</strong>把 Stage 3 的結論論證完整。然後對照 Stage 1 的預測——對了幾題？差在哪？從意外或疑惑長出一個<strong>自己的探究問題</strong>，帶到 Lv2。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
+      <div class="step-action">用「主張—證據—推理」架構論證兩個關鍵問題，再對照預測、寫下自己的問題。</div>
+
+      <div style="background:var(--bg);border-left:4px solid var(--phase4);padding:12px 16px;margin:20px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase4);">📣 CER 論證</div>
+      </div>
 
       <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
-        <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:6px;">📣 CER 論證框架</div>
+        <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:6px;">CER 論證框架</div>
         <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.9;">
           <strong>Claim（主張）</strong>：你認為答案是什麼？用一句肯定句。<br>
           <strong>Evidence（證據）</strong>：從數據或觀察中引用<strong>具體數字或圖形特徵</strong>。不能只說「數據顯示」。<br>
@@ -344,7 +374,9 @@
         </p>
         <div class="think-block record" style="margin:0;">
           <div class="think-prompt">✏️ 請用 CER 格式寫下你的論證（建議 4-6 句）</div>
-          <textarea class="think-input" data-key="rubber-band-lv1-cer1" rows="5" placeholder="主張（Claim）：橡皮筋動力罐的推出距離會隨轉圈數增加而飽和。&#10;證據（Evidence）：從 5→10 圈，距離增加 41.7 cm；但從 25→30 圈，只增加 5 cm。飽和模型的 D∞ ≈ 170 cm。&#10;推理（Reasoning）：橡皮筋進入塑性變形區後……"></textarea>
+          <textarea class="think-input" data-key="rubber-band-lv1-cer1" rows="4" style="line-height:1.8;">主張（Claim）：橡皮筋動力罐的推出距離會隨轉圈數增加而飽和。
+證據（Evidence）：從 5→10 圈，距離增加 41.7 cm；但從 25→30 圈，只增加 5 cm。飽和模型的 D∞ ≈ 170 cm。
+推理（Reasoning）：橡皮筋進入塑性變形區後……</textarea>
           <div class="think-status"></div>
         </div>
       </div>
@@ -374,7 +406,9 @@
 
         <div class="think-block record" style="margin:0;">
           <div class="think-prompt">✏️ 請用 CER 格式論證「為什麼高圈數時推出-回滾差距變大」</div>
-          <textarea class="think-input" data-key="rubber-band-lv1-cer2" rows="5" placeholder="主張：…&#10;證據：…&#10;推理：…"></textarea>
+          <textarea class="think-input" data-key="rubber-band-lv1-cer2" rows="4" style="line-height:1.8;">主張：…
+證據：…
+推理：…</textarea>
           <div class="think-status"></div>
         </div>
       </div>
@@ -393,22 +427,9 @@
         </div>
       </div>
 
-      <div class="step-footer">
-        <button class="step-btn" data-step="prev">← 上一步</button>
-        <div class="step-dots">
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot current"></span>
-          <span class="step-dot"></span>
-        </div>
-        <button class="step-btn primary" data-step="next">下一步 →</button>
+      <div style="background:var(--bg);border-left:4px solid var(--phase4);padding:12px 16px;margin:24px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase4);">🔄 反思×延伸</div>
       </div>
-    </div>
-
-    <!-- ═══ Step 5：反思×延伸 ═══ -->
-    <div class="step-panel">
-      <div class="step-action">對照預測、延伸思考、寫下你自己想探究的問題（Lv2 會精雕這部分）。</div>
 
       <!-- 發現問題 checkpoint -->
       <div style="background:var(--bg);border-left:4px solid var(--phase3);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;">
@@ -461,7 +482,6 @@
       <div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
-          <span class="step-dot"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>

@@ -59,17 +59,25 @@
 
   <!-- ═══ 步驟導航列 ═══ -->
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>預測</button>
-    <button class="step-tab"><span class="step-num">2</span>歷史脈絡</button>
-    <button class="step-tab"><span class="step-num">3</span>活動一</button>
-    <button class="step-tab"><span class="step-num">4</span>活動二</button>
-    <button class="step-tab"><span class="step-num">5</span>延伸與反思</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
 
-    <!-- ═══ Step 1：預測 ═══ -->
-    <div class="step-panel active">
+    <!-- ═════════════════════════════════════════════ -->
+    <!-- 階段一：發現問題（預測 + 歷史脈絡）-->
+    <!-- ═════════════════════════════════════════════ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">從光的波性出發，預測並理解繞射圖案的變化</div>
+        <p class="stage-desc">Lv1 的研究問題老師已經定好了：<strong>繞射亮紋寬度 Δy₀ 和哪些變因有關？</strong>你的工作是——先用直覺預測 Δy₀ 怎麼變，然後透過 Rosalind Franklin 的 Photo 51 歷史脈絡理解「為什麼這個問題值得問」。後面做完分析再回來對照直覺 vs 數據。</p>
+        <span class="who-bar teacher">🔒 研究問題：老師提供</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
+      </div>
       <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
 
       <div class="q-item" style="margin-bottom:8px;">
@@ -100,29 +108,15 @@
       <!-- Layer 2: 預測記錄 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 把你的三個預測（P1、P2、P3）寫下來</div>
-        <textarea class="think-input" data-key="diffraction-lv1-predict" placeholder="P1: 光會…&#10;P2: 狹縫變窄時…&#10;P3: 螢幕更遠時…"></textarea>
+        <textarea class="think-input" data-key="diffraction-lv1-predict" rows="4" style="line-height:1.8;">P1: 光會…
+P2: 狹縫變窄時…
+P3: 螢幕更遠時…</textarea>
         <div class="think-status"></div>
       </div>
 
-      <div class="step-footer">
-        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
-        <div class="step-dots">
-          <span class="step-dot current"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-        </div>
-        <button class="step-btn primary" data-step="next">下一步 →</button>
-      </div>
-    </div>
-
-    <!-- ═══ Step 2：歷史脈絡 ═══ -->
-    <div class="step-panel">
-      <div class="step-action">理解光如何幫我們看見微觀世界的結構。</div>
-
-      <div style="margin-bottom:16px;">
-        <div style="font-weight:700;font-size:14px;color:var(--phase1);margin-bottom:10px;">📸 Rosalind Franklin 的 Photo 51（1952）</div>
+      <!-- ─── 歷史脈絡：Photo 51 與光的波性 ─── -->
+      <div style="margin-top:24px;padding-top:20px;border-top:2px solid var(--border);">
+        <div style="font-weight:700;font-size:14px;color:var(--phase1);margin-bottom:10px;margin-top:8px;">📸 Rosalind Franklin 的 Photo 51（1952）</div>
         <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">DNA 雙螺旋的發現不是直接「看到」的——而是用 X 射線照射 DNA 結晶，看繞射圖案<strong>反推</strong>結構。Rosalind Franklin 拍的 Photo 51 是關鍵證據。</p>
         <div style="background:#fef3c7;border-left:3px solid #f59e0b;border-radius:0 6px 6px 0;padding:10px 14px;font-size:12.5px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
           <strong>⚠️ 不要搞混：</strong>Photo 51 的<strong>十字花紋</strong>是「雙螺旋週期性結構」對 X 射線的繞射——和本課的「<strong>單狹縫</strong>繞射」<strong>不是同一種圖案</strong>。但支撐兩者的原理是同一個：<strong>光通過和波長相近的結構時會繞射，繞射圖案反映結構尺寸</strong>。今天先從最單純的單狹縫開始，建立因次分析技能，再把這個思維搬到真實的 DNA 繞射上。
@@ -130,7 +124,7 @@
         <p style="font-size:13px;color:var(--text-secondary);">今天的任務：用雷射 + 狹縫，從繞射圖案反推狹縫寬度。小小的狹縫，能製造出精巧的光學圖案——這就是物理學探索微觀世界的方式。</p>
       </div>
 
-      <div class="info-box yellow" style="margin-bottom:16px;">
+      <div class="info-box yellow" style="margin:16px 0;">
         <div style="font-weight:700;margin-bottom:8px;">核心概念</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;font-size:12px;color:var(--text-secondary);line-height:1.8;">
           <div>
@@ -169,9 +163,8 @@
       </div>
 
       <div class="step-footer">
-        <button class="step-btn" data-step="prev">← 上一步</button>
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
         <div class="step-dots">
-          <span class="step-dot"></span>
           <span class="step-dot current"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>
@@ -181,8 +174,58 @@
       </div>
     </div>
 
-    <!-- ═══ Step 3：活動一 ═══ -->
-    <div class="step-panel">
+    <!-- ═════════════════════════════════════════════ -->
+    <!-- 階段二：規劃研究（新增）-->
+    <!-- ═════════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼設計這個研究：控制變因 + 兩個活動的對照</div>
+        <p class="stage-desc">Lv1 你不用自己規劃——老師已經把<strong>要測什麼</strong>（Δy₀ vs L、Δy₀ vs a）、<strong>怎麼控制變因</strong>（固定兩個、變動一個）都安排好了。下面 Stage 3 會讓你做兩個對照活動：活動一固定 a、變動 L；活動二固定 L、變動 a。這樣你就能用因次分析把 $\Delta y_0$ 和 $L$、$a$、$\lambda$ 的完整關係推出來。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+      <div class="step-action">理解兩個活動的控制變因設計——等等自己做時知道每個活動在控制什麼。</div>
+
+      <div class="info-box blue" style="margin-bottom:16px;">
+        <div style="font-weight:700;margin-bottom:8px;">📋 實驗規劃總表</div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>活動</th><th>固定</th><th>變動</th><th>觀察</th></tr></thead>
+            <tbody>
+              <tr><td>活動一</td><td>狹縫寬 a = 0.1 mm、波長 λ = 650 nm</td><td>螢幕距離 L</td><td>Δy₀ 與 L 的關係</td></tr>
+              <tr><td>活動二</td><td>螢幕距離 L = 1 m、波長 λ = 650 nm</td><td>狹縫寬 a</td><td>Δy₀ 與 a 的關係</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═════════════════════════════════════════════ -->
+    <!-- 階段三：執行與分析（活動一 + 活動二）-->
+    <!-- ═════════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">做兩組對照活動：分析 Δy₀ 和 L、a 的關係</div>
+        <p class="stage-desc">按照階段二的實驗設計，做兩個對照活動，畫圖、找出關係。重點是用<strong>因次分析</strong>把 Δy₀ 和 L、a、λ 的完整關係自己推出來。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
+
+      <!-- 活動一 -->
+      <div style="background:var(--bg);border-left:4px solid var(--phase1);padding:12px 16px;margin:16px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase1);">🧪 活動一：Δy₀ vs L（固定 a = 0.1 mm）</div>
+      </div>
       <div class="step-action">分析「螢幕距離 vs 中央亮紋寬度」的數據，找出它們的關係。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">固定狹縫寬度 $a = 0.1$ mm，雷射波長 $\lambda = 650$ nm（紅色），改變螢幕距離 $L$，測量中央亮紋寬度 $\Delta y_0$：</p>
@@ -236,21 +279,10 @@
         </div>
       </div>
 
-      <div class="step-footer">
-        <button class="step-btn" data-step="prev">← 上一步</button>
-        <div class="step-dots">
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot current"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-        </div>
-        <button class="step-btn primary" data-step="next">下一步 →</button>
+      <!-- 活動二 -->
+      <div style="background:var(--bg);border-left:4px solid var(--phase1);padding:12px 16px;margin:24px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase1);">🧪 活動二：Δy₀ vs a（固定 L = 1 m）</div>
       </div>
-    </div>
-
-    <!-- ═══ Step 4：活動二 ═══ -->
-    <div class="step-panel">
       <div class="step-action">分析「狹縫寬度 vs 中央亮紋寬度」的數據，用因次分析推導完整公式。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">固定 $L = 100$ cm，$\lambda = 650$ nm，改變狹縫寬 $a$，測量 $\Delta y_0$：</p>
@@ -333,7 +365,9 @@
         </p>
         <div class="think-block record" style="margin:0;">
           <div class="think-prompt">✏️ 寫下你的 CER 論證（4-6 句）</div>
-          <textarea class="think-input" data-key="diffraction-lv1-cer" rows="5" placeholder="主張（Claim）：狹縫越窄，中央亮紋越寬。&#10;證據（Evidence）：a=0.05mm 時 Δy₀=26mm；a=0.20mm 時 Δy₀=6.5mm。a×Δy₀ ≈ 1.3 mm²（固定），R² = …。&#10;推理（Reasoning）：光是波，通過寬度 a 的狹縫時，繞射角度 θ 滿足 sin(θ) = λ/a。狹縫越窄 → θ 越大 → 螢幕上光散得越開……"></textarea>
+          <textarea class="think-input" data-key="diffraction-lv1-cer" rows="4" style="line-height:1.8;">主張（Claim）：狹縫越窄，中央亮紋越寬。
+證據（Evidence）：a=0.05mm 時 Δy₀=26mm；a=0.20mm 時 Δy₀=6.5mm。a×Δy₀ ≈ 1.3 mm²（固定），R² = …。
+推理（Reasoning）：光是波，通過寬度 a 的狹縫時，繞射角度 θ 滿足 sin(θ) = λ/a。狹縫越窄 → θ 越大 → 螢幕上光散得越開……</textarea>
           <div class="think-status"></div>
         </div>
       </div>
@@ -355,7 +389,6 @@
         <div class="step-dots">
           <span class="step-dot"></span>
           <span class="step-dot"></span>
-          <span class="step-dot"></span>
           <span class="step-dot current"></span>
           <span class="step-dot"></span>
         </div>
@@ -363,8 +396,16 @@
       </div>
     </div>
 
-    <!-- ═══ Step 5：延伸與反思 ═══ -->
-    <div class="step-panel">
+    <!-- ═════════════════════════════════════════════ -->
+    <!-- 階段四：論證與反思（延伸與反思）-->
+    <!-- ═════════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">回頭對照預測：你的因次分析和直覺預測對了嗎？</div>
+        <p class="stage-desc">回頭翻看 Stage 1 的預測（P1–P3），和你在 Stage 3 得到的數據及推導的公式對比。找出差異、思考為什麼，並寫出你自己想進一步探究的問題。</p>
+        <span class="who-bar student">✏️ 本階段學生自主反思</span>
+      </div>
       <div class="step-action">回頭對照預測，思考延伸問題，寫出你自己的探究題。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">先翻回 P1–P3 的預測，和你的數據分析比較——差多少？差在哪裡？</p>
@@ -417,7 +458,6 @@
       <div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
-          <span class="step-dot"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>

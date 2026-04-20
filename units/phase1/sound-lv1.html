@@ -152,16 +152,24 @@
 
   <!-- ═══ 步驟導航列 ═══ -->
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>預測</button>
-    <button class="step-tab"><span class="step-num">2</span>認識概念</button>
-    <button class="step-tab"><span class="step-num">3</span>數據分析</button>
-    <button class="step-tab"><span class="step-num">4</span>延伸與反思</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
 
     <!-- ═══ Step 1：預測 ═══ -->
-    <div class="step-panel active">
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">在動手之前，先用直覺預測「聲音的特性」</div>
+        <p class="stage-desc">Lv1 老師已定好研究問題，你的工作是——在做聲波實驗前，把你的<strong>直覺預測</strong>寫下來。做完實驗回來對照，你會親眼看到「直覺 vs 數據」的落差。</p>
+        <span class="who-bar teacher">🔒 研究問題：老師提供</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
+      </div>
+
       <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
 
       <div class="q-item" style="margin-bottom:8px;">
@@ -207,7 +215,14 @@
     </div>
 
     <!-- ═══ Step 2：認識概念 ═══ -->
-    <div class="step-panel">
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼設計這個研究：實驗裝置 + 量測變因</div>
+        <p class="stage-desc">Lv1 你不用自己規劃實驗——老師已經把要測的變因、怎麼量、重複次數都定好了。下一 Lv 你就要自己設計實驗了。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+
       <div class="step-action">認識波形的三個關鍵物理量：頻率、振幅、波速。</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -257,7 +272,14 @@
     </div>
 
     <!-- ═══ Step 3：數據分析（核心任務）═══ -->
-    <div class="step-panel">
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼設計這個研究：實驗裝置 + 量測變因</div>
+        <p class="stage-desc">Lv1 你不用自己規劃實驗——老師已經把要測的變因、怎麼量、重複次數都定好了。下一 Lv 你就要自己設計實驗了。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+
       <div class="step-action">操作虛擬聲音產生器，記錄音高與頻率的對應。</div>
 
       <!-- 主實驗區 -->
@@ -430,7 +452,14 @@
     </div>
 
     <!-- ═══ Step 4：延伸與反思 ═══ -->
-    <div class="step-panel">
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼設計這個研究：實驗裝置 + 量測變因</div>
+        <p class="stage-desc">Lv1 你不用自己規劃實驗——老師已經把要測的變因、怎麼量、重複次數都定好了。下一 Lv 你就要自己設計實驗了。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+
       <div class="step-action">回頭對照預測，思考延伸問題，為 Lv2 做準備。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回 P1、P2、P3 的預測題，和你的數據結果比較——差多少？差在哪裡？</p>

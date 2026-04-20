@@ -79,16 +79,26 @@
 
   <!-- ═══ 步驟導航列 ═══ -->
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>情境×預測</button>
-    <button class="step-tab"><span class="step-num">2</span>破除拋體迷思</button>
-    <button class="step-tab"><span class="step-num">3</span>變因掃描</button>
-    <button class="step-tab"><span class="step-num">4</span>建立你的模型</button>
-    <button class="step-tab"><span class="step-num">5</span>反思與延伸</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
   <div class="page-body">
 
-    <!-- ═══ Step 1：情境×預測 ═══ -->
-    <div class="step-panel active">
+    <!-- ═════ 階段 1：發現問題 ═════ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">從紙飛機競賽情境出發，先預測、再破除「這是拋體」迷思</div>
+        <p class="stage-desc">Lv1 老師已經把問題定好了：<strong>紙飛機飛得遠的關鍵變因是什麼？</strong>你的工作是——先用直覺預測三個變因的影響，然後透過小活動釐清「紙飛機不是拋體運動」，重新對這個問題定性。這一步會決定你後面要建什麼樣的模型。</p>
+        <span class="who-bar teacher">🔒 研究問題與情境：老師提供</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測 + 定性分析：你來寫</span>
+      </div>
+
+      <div style="background:var(--bg);border-left:4px solid var(--phase1);padding:12px 16px;margin:20px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase1);">📋 情境與預測</div>
+      </div>
       <div class="step-action">觀察紙飛機競賽記錄，對飛行距離的關鍵變因做預測。</div>
 
       <div style="background:linear-gradient(135deg,#1e3a8a,#2952c4);color:white;border-radius:10px;padding:16px 18px;margin-bottom:16px;">
@@ -122,25 +132,15 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 把你的三個預測（P1、P2、P3）寫下來</div>
-        <textarea class="think-input" data-key="airplane-lv1-predict" placeholder="P1: 我覺得影響最大的三個變因是⋯&#10;P2: 機翼面積⋯&#10;P3: 拋體公式沒考慮⋯"></textarea>
+        <textarea class="think-input" data-key="airplane-lv1-predict" rows="4" style="line-height:1.8;">P1: 我覺得影響最大的三個變因是⋯
+P2: 機翼面積⋯
+P3: 拋體公式沒考慮⋯</textarea>
         <div class="think-status"></div>
       </div>
 
-      <div class="step-footer">
-        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
-        <div class="step-dots">
-          <span class="step-dot current"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-        </div>
-        <button class="step-btn primary" data-step="next">下一步 →</button>
+      <div style="background:var(--bg);border-left:4px solid var(--phase1);padding:12px 16px;margin:20px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase1);">🔍 破除拋體迷思</div>
       </div>
-    </div>
-
-    <!-- ═══ Step 2：破除拋體迷思 ═══ -->
-    <div class="step-panel">
       <div class="step-action">釐清紙飛機為什麼不是拋體——這決定了你要建什麼樣的模型。</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -188,9 +188,8 @@
       </div>
 
       <div class="step-footer">
-        <button class="step-btn" data-step="prev">← 上一步</button>
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
         <div class="step-dots">
-          <span class="step-dot"></span>
           <span class="step-dot current"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>
@@ -200,8 +199,54 @@
       </div>
     </div>
 
-    <!-- ═══ Step 3：變因掃描 ═══ -->
-    <div class="step-panel">
+    <!-- ═════ 階段 2：規劃研究 ═════ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼設計這個研究：三組變因掃描的規劃</div>
+        <p class="stage-desc">Lv1 你不用自己設計實驗——老師已經把<strong>要掃哪三個變因</strong>、<strong>怎麼控制其他變因</strong>都安排好了。下面會讓你用模擬器做三次掃描：各自固定兩個變因、變動一個，觀察關係的形狀。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+
+      <div class="step-action">理解三組變因掃描的設計：每次固定兩個、變動一個。</div>
+
+      <div class="info-box blue" style="margin-bottom:16px;">
+        <div style="font-weight:700;margin-bottom:8px;">📋 三組變因掃描規劃</div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>掃描</th><th>固定</th><th>變動</th><th>觀察</th></tr></thead>
+            <tbody>
+              <tr><td>#1</td><td>發射角 θ、質量</td><td>發射速度 v</td><td>距離 vs v 的形狀</td></tr>
+              <tr><td>#2</td><td>發射速度、質量</td><td>發射角 θ</td><td>距離 vs θ 的形狀</td></tr>
+              <tr><td>#3</td><td>發射速度、角度</td><td>質量 m</td><td>距離 vs m 的形狀</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-secondary);">為什麼這樣設計？每組只變一個變因，其他固定——這樣觀察到的變化才能歸因到那個變因。如果全部一起變，看到的關係就分不清楚誰造成的。</p>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═════ 階段 3：執行與分析 ═════ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">動手做三組模擬掃描：測、記、找出三個關係的形狀</div>
+        <p class="stage-desc">按照階段二的規劃，實際操作模擬器、記錄數據、畫圖分析。重點是看出<strong>每個變因對飛行距離的影響形狀</strong>（線性？平方？飽和？），這些形狀是下一階段建模的素材。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
+
       <div class="step-action">用模擬器做三次「變因掃描」：各自固定兩個、變動一個，觀察關係形狀。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">模擬器已經內建紙飛機的真實變異（雜訊約 ±15%）。每組設定按一次「丟 10 次」看平均。</p>
@@ -268,7 +313,9 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 做完三次掃描，寫下你觀察到的三種「關係形狀」</div>
-        <textarea class="think-input" data-key="airplane-lv1-scan" placeholder="D vs A：看起來像⋯形狀，最佳值在⋯&#10;D vs x_cg：看起來像⋯&#10;D vs v：看起來像⋯"></textarea>
+        <textarea class="think-input" data-key="airplane-lv1-scan" rows="4" style="line-height:1.8;">D vs A：看起來像⋯形狀，最佳值在⋯
+D vs x_cg：看起來像⋯
+D vs v：看起來像⋯</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -279,14 +326,23 @@
           <span class="step-dot"></span>
           <span class="step-dot current"></span>
           <span class="step-dot"></span>
-          <span class="step-dot"></span>
         </div>
         <button class="step-btn primary" data-step="next">下一步 →</button>
       </div>
     </div>
 
-    <!-- ═══ Step 4：建立你的模型 ═══ -->
-    <div class="step-panel">
+    <!-- ═════ 階段 4：論證與反思 ═════ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">把三個關係整合成經驗模型，用 CER 論證並長出自己的下一個問題</div>
+        <p class="stage-desc">這階段有兩件事：先把三個關係形狀<strong>整合成一個經驗模型</strong>（F = f(v, θ, m) 的形式），用 CER 架構論證。然後對照階段一的預測——對了幾題？差在哪？從意外或疑惑長出一個<strong>自己的探究問題</strong>，帶到 Lv2。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
+
+      <div style="background:var(--bg);border-left:4px solid var(--phase4);padding:12px 16px;margin:20px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase4);">🧩 建立你的模型</div>
+      </div>
       <div class="step-action">把三個關係形狀整合成一個「經驗模型」，並用 CER 論證。</div>
 
       <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:14px;">
@@ -347,25 +403,15 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 用上面 CER 架構寫下你的經驗模型（填入數字，也可以挑戰 Q1–Q3）</div>
-        <textarea class="think-input" data-key="airplane-lv1-model" placeholder="主張：在我們的實驗範圍內⋯&#10;理由：⋯&#10;證據：⋯" style="min-height:100px;"></textarea>
+        <textarea class="think-input" data-key="airplane-lv1-model" style="min-height:100px;line-height:1.8" rows="4">主張：在我們的實驗範圍內⋯
+理由：⋯
+證據：⋯</textarea>
         <div class="think-status"></div>
       </div>
 
-      <div class="step-footer">
-        <button class="step-btn" data-step="prev">← 上一步</button>
-        <div class="step-dots">
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot current"></span>
-          <span class="step-dot"></span>
-        </div>
-        <button class="step-btn primary" data-step="next">下一步 →</button>
+      <div style="background:var(--bg);border-left:4px solid var(--phase4);padding:12px 16px;margin:20px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase4);">🔄 反思與延伸</div>
       </div>
-    </div>
-
-    <!-- ═══ Step 5：反思與延伸 ═══ -->
-    <div class="step-panel">
       <div class="step-action">回頭對照預測，評估「經驗模型」的適用範圍。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回第 1 步的預測，和你的模型比對——哪題準？哪題偏差最大？</p>
@@ -408,7 +454,6 @@
       <div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
-          <span class="step-dot"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>
           <span class="step-dot"></span>

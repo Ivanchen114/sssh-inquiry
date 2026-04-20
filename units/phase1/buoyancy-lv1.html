@@ -240,16 +240,28 @@
 
   <!-- ═══ 步驟導航列 ═══ -->
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>情境 × 預測</button>
-    <button class="step-tab"><span class="step-num">2</span>認識變因</button>
-    <button class="step-tab"><span class="step-num">3</span>實驗 × 論證</button>
-    <button class="step-tab"><span class="step-num">4</span>回到鐵達尼</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
 
     <!-- ═══ Step 1：情境 × 預測 ═══ -->
-    <div class="step-panel active">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段一：發現問題（情境鐵達尼 + 三個預測） -->
+    <!-- 四階段模板備忘：依 108 課綱，P3「建立假設」屬於「發現問題」。 -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">從鐵達尼號情境出發，先用直覺預測「什麼決定船會不會沉」</div>
+        <p class="stage-desc">Lv1 老師已經把情境（鐵達尼號）和研究問題定好了。你的工作是——在做任何實驗前，把你對「載重極限、排水量、木板位置」的<strong>直覺預測</strong>寫下來。實驗後回來對照，你會看到直覺和數據的落差。</p>
+        <span class="who-bar teacher">🔒 情境與研究問題：老師提供</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
+      </div>
+
       <div class="step-action">先看情境、短暫討論、再做三個預測——實驗完回來對照。</div>
 
       <!-- 情境框 -->
@@ -273,7 +285,9 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你的三個預測（P1–P3），實驗後回來對照。</div>
-        <textarea class="think-input" data-key="buoyancy-lv1-predict" placeholder="P1：載重會⋯⋯因為⋯⋯&#10;P2：正中央 vs 邊角⋯⋯&#10;P3：剛好全入水時的載重 ≈ ___ g" style="min-height:90px;"></textarea>
+        <textarea class="think-input" data-key="buoyancy-lv1-predict" style="min-height:90px;line-height:1.8" rows="4">P1：載重會⋯⋯因為⋯⋯
+P2：正中央 vs 邊角⋯⋯
+P3：剛好全入水時的載重 ≈ ___ g</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -302,8 +316,17 @@
       </div>
     </div>
 
-    <!-- ═══ Step 2：認識變因 ═══ -->
-    <div class="step-panel">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段二：規劃研究（Lv1 全部由老師示範：認識變因 + 控制方法）-->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼把「鐵達尼為什麼沉」拆成可測量的變因</div>
+        <p class="stage-desc">Lv1 你不用自己設計實驗——老師已經把<strong>操縱變因</strong>（截面積、砝碼位置）、<strong>應變變因</strong>（下沉深度）、<strong>控制條件</strong>（水溫、木板材質）都定好了。下一 Lv 你就要自己規劃了。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+
       <div class="step-action">理解變因定義與控制方法，準備做實驗。</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -359,8 +382,17 @@
       </div>
     </div>
 
-    <!-- ═══ Step 3：實驗 × 論證 ═══ -->
-    <div class="step-panel">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段三：執行與分析（操作虛擬浮力實驗 + 數據分析）-->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">動手操作虛擬實驗：測下沉深度、畫圖、找出浮力關係</div>
+        <p class="stage-desc">按照階段二的實驗設計，實際操作、記錄、畫圖、分析。重點不是算出一個單一數字——是看懂「m 和 h 的關係」「斜率背後的物理意義」。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
+
       <div class="step-action">① 選截面積 → ② 選砝碼，點木板放置 → ③ 量下沉深度 → ④ 記錄並分析。</div>
 
       <!-- 主實驗區 -->
@@ -457,7 +489,11 @@
 
           <div class="think-block record" style="margin-top:12px;">
             <div class="think-prompt">✏️ 用「主張—理由—證據」寫下你推導出的浮力公式</div>
-            <textarea class="think-input" data-key="buoyancy-lv1-model" placeholder="主張：F_浮 = ρ_水 · V_排開 · g&#10;理由：h 正比於 m_總、反比於 A → m_總 = ρ_水·A·h → 兩邊乘 g 即得&#10;證據：&#10;  ・圖 1 斜率 k₁ ≈ ___ → ρ_水 = m_總/k₁ ≈ ___ g/cm³&#10;  ・圖 2 截距 b ≈ ___ → m_木 = b·ρ·A ≈ ___ g（應接近 120 g）" style="min-height:110px;"></textarea>
+            <textarea class="think-input" data-key="buoyancy-lv1-model" style="min-height:110px;line-height:1.8" rows="6">主張：F_浮 = ρ_水 · V_排開 · g
+理由：h 正比於 m_總、反比於 A → m_總 = ρ_水·A·h → 兩邊乘 g 即得
+證據：
+  ・圖 1 斜率 k₁ ≈ ___ → ρ_水 = m_總/k₁ ≈ ___ g/cm³
+  ・圖 2 截距 b ≈ ___ → m_木 = b·ρ·A ≈ ___ g（應接近 120 g）</textarea>
             <div class="think-status"></div>
           </div>
         </div>
@@ -475,8 +511,16 @@
       </div>
     </div>
 
-    <!-- ═══ Step 4：回到鐵達尼 ═══ -->
-    <div class="step-panel">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段四：論證與反思（回到鐵達尼 + CER + 延伸問題）-->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">回到鐵達尼：用你推導的公式論證、找出自己的下一個問題</div>
+        <p class="stage-desc">回頭對照 Step 1 的預測——對了幾題？差在哪？用你推導的公式分析 Jack 的困境，然後從意外或疑惑長出一個自己的探究問題，帶到 Lv2。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">用你推導的公式回頭分析 Jack 的困境。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回 Step 1 的預測——你當時猜的 vs 實際數據，哪題準？哪題偏差最大？為什麼？</p>

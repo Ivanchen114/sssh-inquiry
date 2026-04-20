@@ -167,18 +167,29 @@
     </ul>
   </div>
 
-  <!-- ═══ 步驟導航列 ═══ -->
+  <!-- ═══ 步驟導航列（108 課綱四階段）═══ -->
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>預測</button>
-    <button class="step-tab"><span class="step-num">2</span>認識裝置</button>
-    <button class="step-tab"><span class="step-num">3</span>數據分析</button>
-    <button class="step-tab"><span class="step-num">4</span>延伸與反思</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
 
-    <!-- ═══ Step 1：預測 ═══ -->
-    <div class="step-panel active">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段一：發現問題（預測 + 建立假設直覺） -->
+    <!-- 四階段模板備忘：依 108 課綱，P3「建立假設」屬於「發現問題」。 -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">在動手之前，先用直覺預測「力與伸長量」的關係</div>
+        <p class="stage-desc">Lv1 老師已經把研究問題定好了：<strong>F 和 x 是什麼數學關係？</strong>你的工作是——在操作虛擬彈簧前，把你的<strong>直覺預測</strong>寫下來。做完實驗回來對照，你會親眼看到「直覺 vs 數據」的落差。</p>
+        <span class="who-bar teacher">🔒 研究問題：老師提供</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
+      </div>
+
       <div class="step-action">在操作虛擬彈簧之前，先用直覺回答三個預測題。</div>
 
       <div class="q-item" style="margin-bottom:8px;">
@@ -194,7 +205,9 @@
       <!-- Layer 2: 預測記錄 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 把你的三個預測寫下來（P1–P3），實驗完回來對照。</div>
-        <textarea class="think-input" data-key="spring-lv1-predict" placeholder="P1：我覺得加倍重量，伸長量會…&#10;P2：我猜圖形是…&#10;P3：我認為極限…" style="min-height:80px;"></textarea>
+        <textarea class="think-input" data-key="spring-lv1-predict" style="min-height:80px;line-height:1.8" rows="4">P1：我覺得加倍重量，伸長量會…
+P2：我猜圖形是…
+P3：我認為極限…</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -223,8 +236,17 @@
       </div>
     </div>
 
-    <!-- ═══ Step 2：認識裝置 ═══ -->
-    <div class="step-panel">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段二：規劃研究（Lv1 全部由老師示範：實驗裝置 + 研究任務）-->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼設計這個研究：實驗裝置 + 變因 + 任務</div>
+        <p class="stage-desc">Lv1 你不用自己規劃實驗——老師已經把<strong>要測什麼</strong>（F 和 x）、<strong>怎麼操作</strong>（掛砝碼、量伸長量）、<strong>重複次數</strong>（每種 3 次）都定好了。下一 Lv 你就要自己設計實驗了。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+
       <div class="step-action">認識虎克定律和實驗任務。</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -271,8 +293,17 @@
       </div>
     </div>
 
-    <!-- ═══ Step 3：數據分析（核心任務）═══ -->
-    <div class="step-panel">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段三：執行與分析（學生操作虛擬實驗 + 找規律）-->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">動手操作虛擬彈簧：測、畫、找出彈力常數 k</div>
+        <p class="stage-desc">按照階段二的實驗設計，實際操作、記錄、畫圖、分析。重點不是算對一個 k 值——是看懂「F vs x 的圖為什麼是直線」「斜率代表什麼物理意義」。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
+
       <div class="step-action">操作虛擬彈簧，記錄數據，畫 F vs x 圖，找出彈力常數 k。</div>
 
 
@@ -355,7 +386,9 @@
 
           <div class="think-block record" style="margin-top:12px;">
             <div class="think-prompt">✏️ 用「主張—理由—證據」論證你選的模型</div>
-            <textarea class="think-input" data-key="spring-lv1-model" placeholder="例如：我選線性模型。&#10;理由：R² = 0.998，而且截距接近 0，符合「不施力就不伸長」的物理意義。&#10;證據：冪次模型的指數 n ≈ 1.0，本質上就是線性…" style="min-height:80px;"></textarea>
+            <textarea class="think-input" data-key="spring-lv1-model" style="min-height:80px;line-height:1.8" rows="4">例如：我選線性模型。
+理由：R² = 0.998，而且截距接近 0，符合「不施力就不伸長」的物理意義。
+證據：冪次模型的指數 n ≈ 1.0，本質上就是線性…</textarea>
             <div class="think-status"></div>
           </div>
 
@@ -398,7 +431,17 @@
     </div>
 
     <!-- ═══ Step 4：延伸與反思 ═══ -->
-    <div class="step-panel">
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 階段四：論證與反思（CER + 延伸問題）-->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">對照預測、論證結果、長出你自己的下一個問題</div>
+        <p class="stage-desc">回頭對照 P1–P3 的預測——對了幾題？差在哪？用 CER 架構把你的結論論證完整（主張、證據、理由）。最後試著從你的意外或疑惑生出一個<strong>自己的探究問題</strong>，帶到 Lv2 去。</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
+
       <div class="step-action">回頭對照預測，思考誤差來源，並找出一個你自己的研究問題。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回 P1–P3 的預測，和你的實驗結果比較——對了幾題？差在哪裡？</p>

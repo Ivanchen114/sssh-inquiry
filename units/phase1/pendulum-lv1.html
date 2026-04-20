@@ -191,14 +191,17 @@
 
   <div class="page-body">
 
-    <!-- ═══ 階段一：發現問題（老師提供情境+問題；學生寫直覺預測） ═══ -->
+    <!-- ═══ 階段一：發現問題（情境+研究問題+直覺預測+結構化假設示範） ═══ -->
+    <!-- 四階段模板備忘：依 108 課綱，P3「建立假設」屬於「發現問題」。
+         任何 Lv 的「結構化假設」都應放在 Stage 1（不論是老師示範還是學生自寫）。
+         Stage 2 是「規劃研究」——只放「怎麼檢驗這個假設」的實驗計畫與變因設計。 -->
     <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
       <div class="stage-intro">
         <div class="stage-label">階段一 · 發現問題</div>
-        <div class="stage-title">老師給你一個情境和問題，你先用直覺猜答案</div>
-        <p class="stage-desc">這個 Lv 老師已經把「要研究什麼」定好了。你的工作是——在看任何數據之前，把你的<strong>直覺預測</strong>寫下來。4 節課後回來對照，你就會親眼看到「直覺 vs 數據」的落差。</p>
-        <span class="who-bar teacher">🔒 情境與問題：老師提供</span>
-        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
+        <div class="stage-title">你寫直覺預測，老師示範怎麼升級成「結構化假設」</div>
+        <p class="stage-desc">依 108 課綱，「建立假設」就屬於發現問題的環節。這個 Lv 你先憑直覺寫下預測，接著老師把你的直覺升級成<strong>可檢驗的結構化假設</strong>——下一 Lv 你就要自己寫假設了。</p>
+        <span class="who-bar teacher">🔒 情境、問題、結構化假設：老師</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你</span>
       </div>
 
       <!-- 🔒 老師提供：情境 + 研究問題（合併成一塊） -->
@@ -219,7 +222,7 @@
       <div class="student-block">
         <div class="sb-title">💭 在看任何數據之前，用直覺回答三個預測題</div>
         <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.8;">
-          <strong>寫得粗糙沒關係</strong>——這是「直覺預測」，不是「結構化假設」（那是下一階段老師會示範的）。先把你當下的想法寫下來，4 節課後回來對照。
+          <strong>寫得粗糙沒關係</strong>——這是「直覺預測」，不是「結構化假設」（老師待會就在下面示範）。先把你當下的想法寫下來，4 節課後回來對照。
         </p>
         <div class="q-item" style="margin-bottom:6px;">
           <strong>P1：</strong>擺得比較高（大振幅），週期會比較長、比較短、還是一樣？
@@ -232,35 +235,16 @@
         </div>
         <div class="think-block record">
           <div class="think-prompt">✏️ 寫下你的三個預測（一句話一個即可）</div>
-          <textarea class="think-input" data-key="pendulum-lv1-predict" placeholder="例如：P1 預計會一樣快，因為…&#10;P2 預計質量不影響…&#10;P3 預計越…"></textarea>
+          <textarea class="think-input" data-key="pendulum-lv1-predict" rows="4" style="line-height:1.8;">例如：P1 預計會一樣快，因為…
+P2 預計質量不影響…
+P3 預計越…</textarea>
           <div class="think-status"></div>
         </div>
       </div>
 
-      <div class="step-footer">
-        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
-        <div class="step-dots">
-          <span class="step-dot current"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-          <span class="step-dot"></span>
-        </div>
-        <button class="step-btn primary" data-step="next">下一步 →</button>
-      </div>
-    </div>
-
-    <!-- ═══ 階段二：規劃研究（老師全部示範；學生對照自己的預測） ═══ -->
-    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
-      <div class="stage-intro phase2">
-        <div class="stage-label">階段二 · 規劃研究</div>
-        <div class="stage-title">看老師怎麼把「直覺」升級成「結構化假設」和「實驗計畫」</div>
-        <p class="stage-desc">下一 Lv 你就要自己寫假設和設計實驗了。這個 Lv 先看老師示範——重點是<strong>結構化假設</strong>（有變因、有方向、有量化關係）和你剛剛寫的<strong>直覺預測</strong>差在哪。</p>
-        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
-      </div>
-
-      <!-- 🔒 老師提供：結構化假設 vs 你的直覺預測 -->
+      <!-- 🔒 老師提供：結構化假設示範（承接學生的直覺預測） -->
       <div class="teacher-block">
-        <div class="tb-title">🧪 把直覺升級成「結構化假設」</div>
+        <div class="tb-title">🧪 把你的直覺升級成「結構化假設」</div>
         <p style="margin-bottom:10px;">結構化假設 = <strong>操縱變因 → 應變變因</strong>的可檢驗命題，要寫清楚<strong>方向</strong>和（能寫就寫）<strong>量化關係</strong>。下面三條是老師從你的 P1–P3 升級而來的範例：</p>
 
         <div class="hypothesis-box">
@@ -279,6 +263,29 @@
         <p style="font-size:12.5px;color:var(--text-muted);margin-top:12px;line-height:1.8;">
           💡 <strong>注意看差別</strong>：你的預測只是<em>方向性猜測</em>，假設則把<em>變因、方向、量化關係</em>寫清楚。至於「為什麼是這個關係」的理論機制，<strong>Lv3 再來補</strong>——那時候你已經學過 SHM 和牛頓第二定律，工具才夠。
         </p>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ 階段二：規劃研究（老師示範：假設 → 實驗計畫的對應） ═══ -->
+    <!-- 四階段模板備忘：Stage 2 只放「要怎麼檢驗假設」——變因控制、量測方法、活動設計。
+         假設本身屬於 Stage 1；Stage 2 的任務是把假設轉成「可執行的檢驗動作」。 -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼把「假設」轉成可執行的實驗計畫</div>
+        <p class="stage-desc">假設只是「可能成立的命題」，要真正檢驗它得有具體設計。注意看：<strong>每個活動恰好對應一條假設</strong>——變因操作方式就是為了能支持或推翻該假設。下一 Lv 你要自己設計時，就從「我的假設要怎麼被檢驗」倒推。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
       </div>
 
       <!-- 🔒 老師提供：實驗計畫 -->
@@ -353,7 +360,11 @@
         <div class="q-item" style="margin-bottom:10px;">Q3：對照頁首量測準則——你的計時不確定度約 ±? s？差距 ΔT 比不確定度大還小？</div>
         <div class="think-block record">
           <div class="think-prompt">✏️ 先把計算結果記下來（下一階段才寫論證）</div>
-          <textarea class="think-input" data-key="pendulum-lv1-amp-compute" placeholder="A 組平均 T ≈ __ s&#10;B 組平均 T ≈ __ s&#10;差距 ΔT ≈ __ s&#10;我判斷計時不確定度約 ±__ s&#10;→ ΔT (比不確定度大／比不確定度小／差不多)"></textarea>
+          <textarea class="think-input" data-key="pendulum-lv1-amp-compute" rows="6" style="line-height:1.8;">A 組平均 T ≈ __ s
+B 組平均 T ≈ __ s
+差距 ΔT ≈ __ s
+我判斷計時不確定度約 ±__ s
+→ ΔT (比不確定度大／比不確定度小／差不多)</textarea>
           <div class="think-status"></div>
         </div>
       </div>
@@ -464,7 +475,10 @@
           </p>
           <div class="think-block record">
             <div class="think-prompt">✏️ 觀察記錄（數字填空，不寫推論）</div>
-            <textarea class="think-input" data-key="pendulum-lv1-obs" placeholder="T vs L（線性）：截距 ≈ __ s，R² = __&#10;T² vs L（線性）：截距 ≈ __ s²，R² = __&#10;T vs L（冪次）：指數 n ≈ __，R² = __&#10;T vs L（多項式）：R² = __" style="min-height:110px;"></textarea>
+            <textarea class="think-input" data-key="pendulum-lv1-obs" style="min-height:110px;line-height:1.8" rows="5">T vs L（線性）：截距 ≈ __ s，R² = __
+T² vs L（線性）：截距 ≈ __ s²，R² = __
+T vs L（冪次）：指數 n ≈ __，R² = __
+T vs L（多項式）：R² = __</textarea>
             <div class="think-status"></div>
           </div>
         </div>
@@ -540,7 +554,9 @@
 
         <div class="think-block record">
           <div class="think-prompt">✏️ 用 CER 論證你選的模型（截距、R²、物理意義都要講）</div>
-          <textarea class="think-input" data-key="pendulum-lv1-model" placeholder="主張：我選 ____ 模型。&#10;證據：T vs L 線性截距 = __ s；T² vs L 線性截距 = __ s²，R² = __。&#10;理由：L = 0（沒有擺繩）時 T 物理上應該 = __。因此 ____ 模型的截距才合理；R² 只是輔助，因為多項式可以靠加項數拉高 R² 卻失去物理意義。" style="min-height:110px;"></textarea>
+          <textarea class="think-input" data-key="pendulum-lv1-model" style="min-height:110px;line-height:1.8" rows="4">主張：我選 ____ 模型。
+證據：T vs L 線性截距 = __ s；T² vs L 線性截距 = __ s²，R² = __。
+理由：L = 0（沒有擺繩）時 T 物理上應該 = __。因此 ____ 模型的截距才合理；R² 只是輔助，因為多項式可以靠加項數拉高 R² 卻失去物理意義。</textarea>
           <div class="think-status"></div>
         </div>
 
@@ -565,12 +581,15 @@
           翻回階段一，你寫過 P1/P2/P3 三個預測。跟實驗結果對照——猜錯的題目，<strong>通常才是這門課真正送你的禮物</strong>。
         </p>
         <div class="q-item" style="margin-bottom:6px;">你的 P1/P2/P3 對了幾個？哪一題最意外？</div>
-        <div class="q-item" style="margin-bottom:6px;">你的「直覺預測」和老師階段二示範的「結構化假設」差在哪裡？</div>
+        <div class="q-item" style="margin-bottom:6px;">你的「直覺預測」和老師階段一示範的「結構化假設」差在哪裡？</div>
         <div class="q-item" style="margin-bottom:10px;">T² vs L 的截距實際上不是 0 —— 可能的誤差來源有哪些？</div>
 
         <div class="think-block record">
           <div class="think-prompt">✏️ 反思記錄</div>
-          <textarea class="think-input" data-key="pendulum-lv1-reflection" rows="5" placeholder="例：&#10;P1 對、P2 對、P3 錯——我以為繩越長擺越快，其實越長週期越長。&#10;我的預測只是「方向」，老師的假設把「量化關係 T² ∝ L」也寫出來了。&#10;T² vs L 截距 ≈ 0.05 s²，可能因為計時反應慢、擺錘大小、空氣阻力…"></textarea>
+          <textarea class="think-input" data-key="pendulum-lv1-reflection" rows="5" style="line-height:1.8;">例：
+P1 對、P2 對、P3 錯——我以為繩越長擺越快，其實越長週期越長。
+我的預測只是「方向」，老師的假設把「量化關係 T² ∝ L」也寫出來了。
+T² vs L 截距 ≈ 0.05 s²，可能因為計時反應慢、擺錘大小、空氣阻力…</textarea>
           <div class="think-status"></div>
         </div>
       </div>
