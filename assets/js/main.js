@@ -20,81 +20,81 @@ const NAV_DATA = [
     sublabel: '主題 · 單擺',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模', path: 'units/phase1/pendulum-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究', path: 'units/phase2/pendulum-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：10 秒競賽', path: 'units/phase3/pendulum-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究', path: 'units/phase1/pendulum-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究', path: 'units/phase2/pendulum-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：10 秒競賽', path: 'units/phase3/pendulum-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · 彈簧',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：虎克定律', path: 'units/phase1/spring-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/spring-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：橡皮筋磅秤', path: 'units/phase3/spring-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：虎克定律', path: 'units/phase1/spring-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/spring-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：橡皮筋磅秤', path: 'units/phase3/spring-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · 浮力',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：阿基米德', path: 'units/phase1/buoyancy-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：鐵達尼號', path: 'units/phase2/buoyancy-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：智造微船', path: 'units/phase3/buoyancy-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：阿基米德', path: 'units/phase1/buoyancy-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：鐵達尼號', path: 'units/phase2/buoyancy-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：智造微船', path: 'units/phase3/buoyancy-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · 聲音',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：頻率與波形', path: 'units/phase1/sound-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：聲音變因', path: 'units/phase2/sound-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：水瓶琴競賽', path: 'units/phase3/sound-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：頻率與波形', path: 'units/phase1/sound-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：聲音變因', path: 'units/phase2/sound-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：水瓶琴競賽', path: 'units/phase3/sound-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · 翻滾仔',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：滾動數據', path: 'units/phase1/roller-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/roller-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：競速競賽', path: 'units/phase3/roller-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：滾動數據', path: 'units/phase1/roller-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/roller-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：競速競賽', path: 'units/phase3/roller-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · 橡皮筋動力罐',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：能量轉換', path: 'units/phase1/rubber-band-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/rubber-band-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：精準回滾', path: 'units/phase3/rubber-band-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：能量轉換', path: 'units/phase1/rubber-band-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/rubber-band-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：精準回滾', path: 'units/phase3/rubber-band-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · DNA 繞射',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：繞射數據', path: 'units/phase1/diffraction-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：光學實驗', path: 'units/phase2/diffraction-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：用光看結構', path: 'units/phase3/diffraction-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：繞射數據', path: 'units/phase1/diffraction-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：光學實驗', path: 'units/phase2/diffraction-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：用光看結構', path: 'units/phase3/diffraction-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · 冰屋',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：鹽冰降溫', path: 'units/phase1/icehouse-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：保冷方案', path: 'units/phase2/icehouse-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：保冷箱競賽', path: 'units/phase3/icehouse-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：鹽冰降溫', path: 'units/phase1/icehouse-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：保冷方案', path: 'units/phase2/icehouse-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：保冷箱競賽', path: 'units/phase3/icehouse-lv3.html', week: 'Lv3' },
     ]
   },
   {
     sublabel: '主題 · 紙飛機',
     phase: 1,
     items: [
-      { name: 'Lv1 論證建模：拋體運動', path: 'units/phase1/airplane-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 規劃研究：變因設計', path: 'units/phase2/airplane-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 發現問題：定點降落', path: 'units/phase3/airplane-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式探究：拋體運動', path: 'units/phase1/airplane-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/airplane-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式探究：定點降落', path: 'units/phase3/airplane-lv3.html', week: 'Lv3' },
     ]
   },
   {
