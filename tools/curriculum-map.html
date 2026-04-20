@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/tools/curriculum-map">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>課綱能力對應 · 工具箱 · 探究與實作</title>
+  <meta name="description" content="108 課綱自然科學探究與實作的核心素養與學習表現對應表。">
+  <meta property="og:title" content="課綱能力對應 · 工具箱 · 探究與實作">
+  <meta property="og:description" content="108 課綱自然科學探究與實作的核心素養與學習表現對應表。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/curriculum-map.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    /* ── 課綱對應頁專屬樣式 ──────────────────────────── */
+    .indicator-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 900px) {
+      .indicator-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .indicator-grid { grid-template-columns: 1fr; }
+    }
+
+    .ind-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .ind-card-header {
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ind-card-header.p { background: #2952c4; }
+    .ind-card-header.r { background: #1e7a52; }
+    .ind-card-header.a { background: #b5621e; }
+    .ind-card-header.c { background: #6d28d9; }
+    .ind-card-body { background: var(--sidebar-bg); }
+    .ind-item {
+      padding: 8px 14px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.55;
+    }
+    .ind-item:last-child { border-bottom: none; }
+    .ind-code {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-weight: 700;
+    }
+    .ind-code.p { background: #eef2fe; color: #2952c4; }
+    .ind-code.r { background: #edf9f3; color: #1e7a52; }
+    .ind-code.a { background: #fef6ee; color: #b5621e; }
+    .ind-code.c { background: #f5f0fe; color: #6d28d9; }
+
+    /* ── 對應矩陣 ─────────────────────────────────────── */
+    .matrix-wrap {
+      overflow-x: auto;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      min-width: 780px;
+    }
+    .matrix-table th {
+      background: var(--bg);
+      font-weight: 600;
+      padding: 8px 10px;
+      border: 1px solid var(--border-light);
+      font-size: 11px;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .matrix-table th.week-col { text-align: left; min-width: 180px; background: var(--bg); }
+    .matrix-table td {
+      padding: 7px 10px;
+      border: 1px solid var(--border-light);
+      vertical-align: middle;
+      text-align: center;
+    }
+    .matrix-table tr:nth-child(even) td { background: #fafaf8; }
+    .matrix-table td.week-cell {
+      text-align: left;
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--sidebar-bg) !important;
+      white-space: nowrap;
+    }
+    .matrix-table td.week-cell .wk {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      display: inline-block;
+      width: 26px;
+    }
+
+    /* indicator dots in matrix */
+    .dot-p  { display:inline-block; width:8px; height:8px; border-radius:50%; background:#2952c4; }
+    .dot-r  { display:inline-block; width:8px; height:8px; border-radius:50%; background:#1e7a52; }
+    .dot-a  { display:inline-block; width:8px; height:8px; border-radius:50%; background:#b5621e; }
+    .dot-c  { display:inline-block; width:8px; height:8px; border-radius:50%; background:#6d28d9; }
+    .check {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .check.p { color: #2952c4; }
+    .check.r { color: #1e7a52; }
+    .check.a { color: #b5621e; }
+    .check.c { color: #6d28d9; }
+
+    /* Group header rows */
+    .matrix-table tr.phase-row td {
+      background: var(--bg) !important;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 5px 10px;
+    }
+    .matrix-table tr.phase-row.p1 td { color: #2952c4; background: #f0f3fe !important; }
+    .matrix-table tr.phase-row.p2 td { color: #1e7a52; background: #f0f9f4 !important; }
+    .matrix-table tr.phase-row.p3 td { color: #b5621e; background: #fdf6f0 !important; }
+    .matrix-table tr.phase-row td { text-align: left; }
+
+    /* gap row highlight */
+    .matrix-table tr.gap-row td { background: #fffbeb !important; }
+    .matrix-table tr.gap-row td.week-cell { border-left: 3px solid #d97706; }
+
+    /* ── 缺口說明 ─────────────────────────────────────── */
+    .gap-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: 10px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-family: 'DM Mono', monospace;
+      margin-left: 4px;
+    }
+
+    /* ── 補充教案卡 ───────────────────────────────────── */
+    .lesson-plan {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .lp-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .lp-header.gap { background: #fffbeb; border-bottom: 1px solid #fde68a; }
+    .lp-week-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      padding: 3px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+    .lp-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+    .lp-sub { font-size: 12px; color: var(--text-secondary); }
+    .lp-body { padding: 20px; background: var(--sidebar-bg); }
+    .lp-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 640px) { .lp-row { grid-template-columns: 1fr; } }
+    .lp-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .lp-list { list-style: none; padding: 0; }
+    .lp-list li {
+      display: flex;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 4px 0;
+      line-height: 1.55;
+    }
+    .lp-list li::before { content: '–'; color: var(--text-muted); flex-shrink: 0; }
+
+    .lp-timeline {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      overflow: hidden;
+      font-size: 11px;
+      margin-top: 12px;
+    }
+    .lp-tl-block {
+      flex: 1;
+      padding: 9px 12px;
+      border-right: 1px solid var(--border-light);
+      background: var(--bg);
+    }
+    .lp-tl-block:last-child { border-right: none; }
+    .lp-tl-time { font-family: 'DM Mono', monospace; color: var(--text-muted); margin-bottom: 3px; }
+    .lp-tl-label { font-weight: 700; font-size: 12px; color: var(--text-primary); }
+    .lp-tl-desc { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+    .coverage-bar {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .cov-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+    .cov-tag.p { background: #eef2fe; color: #2952c4; border: 1px solid #bfcef8; }
+    .cov-tag.r { background: #edf9f3; color: #1e7a52; border: 1px solid #b3dcc8; }
+    .cov-tag.a { background: #fef6ee; color: #b5621e; border: 1px solid #f0c8a0; }
+    .cov-tag.c { background: #f5f0fe; color: #6d28d9; border: 1px solid #d4b8f8; }
+
+    /* ── 圖例 ─────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a>
+      <span>›</span>
+      <a href="index.html">工具箱</a>
+      <span>›</span>
+      <span>課綱能力對應</span>
+    </div>
+    <h1>課綱能力對應表</h1>
+    <p class="subtitle">18 週課程 × 108 課綱四大核心能力指標──哪裡有、哪裡缺、如何補</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag phase3">發現問題</span>
+      <span class="tag express">表達分享</span>
+    </div>
+  </div>
+
+  <div class="page-body" style="max-width:1000px;">
+
+    <!-- ── 108 課綱指標說明 ──────────────────────────── -->
+    <div class="section-title">108 課綱四大核心能力指標</div>
+
+    <div class="indicator-grid">
+      <!-- P 發現問題 -->
+      <div class="ind-card">
+        <div class="ind-card-header p">🔍 發現問題（P）</div>
+        <div class="ind-card-body">
+          <div class="ind-item"><span class="ind-code p">P1</span>察覺日常現象的規律，提出可探究的問題</div>
+          <div class="ind-item"><span class="ind-code p">P2</span>蒐集與分析資訊，評估問題的可行性與意義</div>
+          <div class="ind-item"><span class="ind-code p">P3</span>建立假設，將問題轉化為可操作的探究目標</div>
+        </div>
+      </div>
+      <!-- R 規劃研究 -->
+      <div class="ind-card">
+        <div class="ind-card-header r">📐 規劃研究（R）</div>
+        <div class="ind-card-body">
+          <div class="ind-item"><span class="ind-code r">R1</span>設計可驗證假設的探究計畫與實驗流程</div>
+          <div class="ind-item"><span class="ind-code r">R2</span>識別並控制變因，建立對照設計</div>
+          <div class="ind-item"><span class="ind-code r">R3</span>安全且正確地操作工具、蒐集可靠數據</div>
+        </div>
+      </div>
+      <!-- A 論證建模 -->
+      <div class="ind-card">
+        <div class="ind-card-header a">⚙️ 論證建模（A）</div>
+        <div class="ind-card-body">
+          <div class="ind-item"><span class="ind-code a">A1</span>整理數據，識別規律、趨勢與異常值</div>
+          <div class="ind-item"><span class="ind-code a">A2</span>建立數學或概念模型，解釋與預測現象</div>
+          <div class="ind-item"><span class="ind-code a">A3</span>評估論證合理性，辨識謬誤與局限</div>
+        </div>
+      </div>
+      <!-- C 表達分享 -->
+      <div class="ind-card">
+        <div class="ind-card-header c">📢 表達與分享（C）</div>
+        <div class="ind-card-body">
+          <div class="ind-item"><span class="ind-code c">C1</span>清楚陳述探究歷程、結果與結論</div>
+          <div class="ind-item"><span class="ind-code c">C2</span>以適當媒介（書面、口頭、海報）呈現成果</div>
+          <div class="ind-item"><span class="ind-code c">C3</span>給予與接受同儕回饋，反思並改善探究</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 週次對應矩陣 ──────────────────────────────── -->
+    <div class="section-title">18 週 × 能力指標對應矩陣</div>
+
+    <div class="legend">
+      <span class="legend-item"><span style="font-size:14px;">●</span> 主要培養</span>
+      <span class="legend-item"><span style="font-size:14px;color:var(--text-muted);">◌</span> 隱性涉及</span>
+      <span class="legend-item"><span style="background:#fef3c7;border:1px solid #fde68a;border-radius:3px;padding:1px 6px;font-size:10px;color:#92400e;font-family:monospace;">缺口</span> 該週缺乏明確對應</span>
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th class="week-col">週次 · 單元</th>
+            <th title="察覺問題">P1</th>
+            <th title="評估可行性">P2</th>
+            <th title="建立假設">P3</th>
+            <th title="設計實驗">R1</th>
+            <th title="控制變因">R2</th>
+            <th title="操作蒐集">R3</th>
+            <th title="整理數據">A1</th>
+            <th title="建立模型">A2</th>
+            <th title="評估論證">A3</th>
+            <th title="陳述結果">C1</th>
+            <th title="呈現成果">C2</th>
+            <th title="同儕回饋">C3</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Phase 1 -->
+          <tr class="phase-row p1">
+            <td colspan="13">第一站 · 論證建模</td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W1</span> 課程說明與科學本質</td>
+            <td><span class="check p">●</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W2</span> 疫苗選擇：論證分析</td>
+            <td></td>
+            <td><span class="check p">●</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="check a">●</span></td>
+            <td></td>
+            <td><span class="check a">●</span></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W3</span> SHM 週期：觀測實驗</td>
+            <td></td>
+            <td></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W4</span> 有效數字與不確定度</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W5</span> 單擺：完整數據處理</td>
+            <td></td>
+            <td></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <!-- Phase 2 -->
+          <tr class="phase-row p2">
+            <td colspan="13">第二站 · 規劃研究</td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W6</span> 彈簧變因設計</td>
+            <td></td>
+            <td></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr class="gap-row">
+            <td class="week-cell"><span class="wk">W7</span> <em style="color:#92400e;">補充：科學論證與同儕回饋</em> <span class="gap-badge">教案設計</span></td>
+            <td></td>
+            <td><span class="check p">●</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td></td>
+            <td><span class="check c">●</span></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W8</span> 冪級數與線性化</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W9</span> 報告撰寫規範</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="check c">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W10</span> 浮力：鐵達尼號</td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <!-- Phase 3 -->
+          <tr class="phase-row p3">
+            <td colspan="13">第三站 · 發現問題</td>
+          </tr>
+
+          <tr class="gap-row">
+            <td class="week-cell"><span class="wk">W11</span> <em style="color:#92400e;">補充：從觀察到問題的方法</em> <span class="gap-badge">教案設計</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W12</span> 翻滾仔：自訂變因</td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr class="gap-row">
+            <td class="week-cell"><span class="wk">W13</span> <em style="color:#92400e;">補充：中期成果互評與修正</em> <span class="gap-badge">教案設計</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td></td>
+            <td><span class="check c">●</span></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W14–15</span> 揚聲器：自主探究（執行）</td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check p">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check r">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span style="color:var(--text-muted);">◌</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W16</span> 揚聲器：分析與定稿</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td></td>
+          </tr>
+
+          <tr class="gap-row">
+            <td class="week-cell"><span class="wk">W17</span> <em style="color:#92400e;">補充：發表彩排與同儕提問</em> <span class="gap-badge">教案設計</span></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="check a">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td><span class="check c">●</span></td>
+          </tr>
+
+          <tr>
+            <td class="week-cell"><span class="wk">W18</span> 期末成果發表</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="check c">●</span></td>
+            <td><span class="check c">●</span></td>
+            <td><span class="check c">●</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── 缺口分析說明 ──────────────────────────────── -->
+    <div class="section-title">缺口分析摘要</div>
+
+    <div class="card" style="margin-bottom: 24px;">
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
+        矩陣掃描後，發現四個指標的覆蓋有明顯落差。<strong>A3（評估論證）</strong>在 W2 疫苗單元後幾乎缺席，學生缺乏持續練習批判論證的機會。<strong>P1–P3（發現問題三步驟）</strong>在第一、二站被動學習，直到 W12 才讓學生自行發問，中間缺乏橋接。<strong>C3（同儕回饋）</strong>雖在 presentation.html 有架構介紹，但課程中從未系統執行互評環節。<strong>W7、W11、W13、W17</strong>原為空週或緩衝週，正好用來填補這些缺口。
+      </p>
+      <div class="coverage-bar">
+        <span class="cov-tag p">P1 ↑ 需前置橋接</span>
+        <span class="cov-tag a">A3 ↑ 論證評估不足</span>
+        <span class="cov-tag c">C3 ↑ 互評機制缺位</span>
+        <span class="cov-tag r">R2 ✓ 覆蓋良好</span>
+        <span class="cov-tag a">A1 ✓ 覆蓋良好</span>
+      </div>
+    </div>
+
+    <!-- ── 補充教案設計 ──────────────────────────────── -->
+    <div class="section-title">補充教案設計</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:20px;line-height:1.75;">
+      以下四份教案針對缺口週次設計，每份均為 2 節課（100 分鐘）。教案採模組化設計，若當週進度壓縮，可各自獨立縮減為 1 節。
+    </p>
+
+    <!-- 教案 1: W7 科學論證與同儕回饋 -->
+    <div class="lesson-plan">
+      <div class="lp-header gap">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="lp-week-badge">W7</span>
+            <div class="lp-title">科學論證與同儕回饋入門</div>
+          </div>
+          <div class="lp-sub">主題：讓學生第一次正式練習「挑戰別人的論點，也接受別人挑戰自己」</div>
+          <div class="coverage-bar" style="margin-top:8px;">
+            <span class="cov-tag p">P2</span>
+            <span class="cov-tag a">A3</span>
+            <span class="cov-tag c">C1</span>
+            <span class="cov-tag c">C3</span>
+          </div>
+        </div>
+      </div>
+      <div class="lp-body">
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">教學目標</div>
+            <ul class="lp-list">
+              <li>能區分「資料」、「推論」、「主張」三層論證結構（Toulmin model 簡化版）</li>
+              <li>能針對他人論點提出澄清型、質疑型問題，而非人身攻擊</li>
+              <li>能以結構化格式接受回饋，修改自己的主張</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">教學流程（100 分）</div>
+            <div class="lp-timeline">
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">0–15 min</div>
+                <div class="lp-tl-label">解構案例</div>
+                <div class="lp-tl-desc">用 W5 單擺數據，示範三層論證拆解</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">15–50 min</div>
+                <div class="lp-tl-label">小組論證競技</div>
+                <div class="lp-tl-desc">各組提出 W6 彈簧假設，互相以「資料–推論–主張」格式提問挑戰</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">50–80 min</div>
+                <div class="lp-tl-label">書面互評練習</div>
+                <div class="lp-tl-desc">使用同儕回饋表，針對另一組的 W6 設計稿給出三點具體意見</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">80–100 min</div>
+                <div class="lp-tl-label">反思討論</div>
+                <div class="lp-tl-desc">哪類問題最有幫助？哪類最難回答？ORID 快速反思</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">所需材料</div>
+            <ul class="lp-list">
+              <li>W6 彈簧設計稿（各組）</li>
+              <li>論證三層結構學習單（教師自製，A4 × 1）</li>
+              <li>同儕回饋表（見「工具箱 → 表達與分享」）</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">評量方式</div>
+            <ul class="lp-list">
+              <li>同儕回饋表的完整性（形成性，不計分）</li>
+              <li>觀察學生是否能從「我覺得不對」升級為「你的推論假設了 X，但資料顯示 Y」</li>
+            </ul>
+          </div>
+        </div>
+        <div class="teacher-only">
+          <div class="teacher-label">🎓 教師備注</div>
+          <p>此單元刻意安排在 W6–W8 之間：學生已有彈簧變因設計的作品，論證競技有真實素材可用，不是空談。如果時間不足，可以把「書面互評」改為口頭，整節課仍完整。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 教案 2: W11 從觀察到問題 -->
+    <div class="lesson-plan">
+      <div class="lp-header gap">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="lp-week-badge">W11</span>
+            <div class="lp-title">從觀察到問題：科學問題的發現方法</div>
+          </div>
+          <div class="lp-sub">主題：進入第三站前，系統性訓練「怎麼問出一個好的科學問題」</div>
+          <div class="coverage-bar" style="margin-top:8px;">
+            <span class="cov-tag p">P1</span>
+            <span class="cov-tag p">P2</span>
+            <span class="cov-tag p">P3</span>
+          </div>
+        </div>
+      </div>
+      <div class="lp-body">
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">教學目標</div>
+            <ul class="lp-list">
+              <li>能將生活觀察轉化為「可測量」、「有範圍」的科學問題</li>
+              <li>能判斷一個問題的「可探究性」——哪些問題太大、太小、太主觀</li>
+              <li>能透過資料蒐集（文獻或初步測試）評估問題的可行性</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">教學流程（100 分）</div>
+            <div class="lp-timeline">
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">0–20 min</div>
+                <div class="lp-tl-label">問題分類遊戲</div>
+                <div class="lp-tl-desc">教師給 10 個問題，學生投票「可探究 / 不可探究」，討論原因</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">20–50 min</div>
+                <div class="lp-tl-label">現象觀察站</div>
+                <div class="lp-tl-desc">各組輪流觀察 3 個現象（水波、磁鐵、彈性繩），盡量寫出 5 個問題</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">50–80 min</div>
+                <div class="lp-tl-label">精煉問題</div>
+                <div class="lp-tl-desc">用「PICOT 精煉框架」（現象、影響因素、比較對象、可測指標、時間範圍）逐步縮小問題</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">80–100 min</div>
+                <div class="lp-tl-label">問題市集</div>
+                <div class="lp-tl-desc">各組貼出精煉後的問題，全班投票「最想探究」的前三名，說明原因</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">延伸任務</div>
+            <ul class="lp-list">
+              <li>課後查找：你的問題有沒有人做過？找到一篇相關文獻並讀摘要</li>
+              <li>這個問題將成為 W12 翻滾仔或 W14 揚聲器探究的前期暖身</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">評量方式</div>
+            <ul class="lp-list">
+              <li>「問題精煉單」收回，檢核是否達到可操作化程度</li>
+              <li>形成性評量，提供文字回饋而非分數</li>
+            </ul>
+          </div>
+        </div>
+        <div class="teacher-only">
+          <div class="teacher-label">🎓 教師備注</div>
+          <p>「問題分類遊戲」的 10 個問題建議包含：太哲學（意識是什麼）、太寬廣（氣候變遷的影響）、剛好可以（磁力與距離的關係）、太瑣碎（今天教室有幾把椅子）。學生辯論這些分類比直接講定義更有效。PICOT 框架源自醫學實證，改編後在自然科探究有良好效果。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 教案 3: W13 中期成果互評 -->
+    <div class="lesson-plan">
+      <div class="lp-header gap">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="lp-week-badge">W13</span>
+            <div class="lp-title">中期成果互評：讓數據說話，讓同儕說真話</div>
+          </div>
+          <div class="lp-sub">主題：W12 翻滾仔探究完成後，進行正式的組間互評與修正</div>
+          <div class="coverage-bar" style="margin-top:8px;">
+            <span class="cov-tag a">A3</span>
+            <span class="cov-tag c">C1</span>
+            <span class="cov-tag c">C3</span>
+          </div>
+        </div>
+      </div>
+      <div class="lp-body">
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">教學目標</div>
+            <ul class="lp-list">
+              <li>能以「資料–推論–主張」格式評析他組的探究報告</li>
+              <li>能接受批評並區分「建設性意見」與「個人偏好」</li>
+              <li>能根據回饋修正自己的研究設計或分析方式</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">教學流程（100 分）</div>
+            <div class="lp-timeline">
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">0–10 min</div>
+                <div class="lp-tl-label">規則說明</div>
+                <div class="lp-tl-desc">說明互評標準，強調「批評報告，不批評人」原則</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">10–50 min</div>
+                <div class="lp-tl-label">靜默閱讀互評</div>
+                <div class="lp-tl-desc">每組閱讀另一組的翻滾仔報告，填寫結構化回饋表（優點 × 2、問題 × 2、建議 × 1）</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">50–75 min</div>
+                <div class="lp-tl-label">面對面回饋會</div>
+                <div class="lp-tl-desc">兩組互換，各 12 分鐘：5 分報告、7 分提問，聚焦數據解讀</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">75–100 min</div>
+                <div class="lp-tl-label">修正計畫</div>
+                <div class="lp-tl-desc">各組寫下「收到的最重要一點回饋」與「如何在揚聲器探究中避免同樣問題」</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">結構化回饋表格式</div>
+            <ul class="lp-list">
+              <li>優點（資料面）：他們的哪個數據處理讓你信服？</li>
+              <li>優點（論證面）：推論過程有哪裡做得清楚？</li>
+              <li>問題（資料面）：有哪個數據讓你不確定怎麼解讀？</li>
+              <li>問題（論證面）：有哪個推論缺少支撐？</li>
+              <li>建議：如果你是這組，接下來會多做一件什麼事？</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">評量方式</div>
+            <ul class="lp-list">
+              <li>回饋表內容深度（形成性）</li>
+              <li>「修正計畫」作為揚聲器探究的起點，列入期末自評</li>
+            </ul>
+          </div>
+        </div>
+        <div class="teacher-only">
+          <div class="teacher-label">🎓 教師備注</div>
+          <p>互評最大的風險是流於表面（「你們做得很好，加油」）。建議教師在「靜默閱讀」期間巡視，若發現學生寫的回饋太籠統，當場要求追問：「這個『不夠清楚』是指哪一步？」面對面回饋會的 7 分鐘提問，教師可引導從「我不懂你的 XX 步驟」開始。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 教案 4: W17 發表彩排 -->
+    <div class="lesson-plan">
+      <div class="lp-header gap">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="lp-week-badge">W17</span>
+            <div class="lp-title">期末發表彩排：從「說給老師聽」到「說給陌生人聽」</div>
+          </div>
+          <div class="lp-sub">主題：在正式發表前一週進行組內外彩排，訓練表達清晰度與問答能力</div>
+          <div class="coverage-bar" style="margin-top:8px;">
+            <span class="cov-tag a">A3</span>
+            <span class="cov-tag c">C1</span>
+            <span class="cov-tag c">C2</span>
+            <span class="cov-tag c">C3</span>
+          </div>
+        </div>
+      </div>
+      <div class="lp-body">
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">教學目標</div>
+            <ul class="lp-list">
+              <li>能在 8 分鐘內清晰呈現：問題、方法、數據、結論</li>
+              <li>能回答「為什麼你會這樣推論」的追問，而不只是重複投影片內容</li>
+              <li>能給予其他組具體且友善的口頭回饋</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">教學流程（100 分）</div>
+            <div class="lp-timeline">
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">0–15 min</div>
+                <div class="lp-tl-label">自我彩排</div>
+                <div class="lp-tl-desc">各組對自己計時，確認 8 分鐘剛好，調整哪裡要快或慢</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">15–65 min</div>
+                <div class="lp-tl-label">組間輪轉發表</div>
+                <div class="lp-tl-desc">每組對隔壁組報告 8 分鐘 + 問答 5 分鐘，教師在各組輪轉觀察</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">65–85 min</div>
+                <div class="lp-tl-label">問題準備</div>
+                <div class="lp-tl-desc">每組針對自己聽到的報告，準備 W18 正式問答要問的 2 個問題</div>
+              </div>
+              <div class="lp-tl-block">
+                <div class="lp-tl-time">85–100 min</div>
+                <div class="lp-tl-label">最終調整</div>
+                <div class="lp-tl-desc">根據彩排回饋，各組列出「W18 前要修改的三件事」</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-row">
+          <div>
+            <div class="lp-section-title">問答訓練技巧</div>
+            <ul class="lp-list">
+              <li>收到問題先複述：「你問的是……，我的理解對嗎？」</li>
+              <li>不知道就說不知道，但說出「可能的原因」</li>
+              <li>「這是個好問題」是迴避，禁止使用</li>
+              <li>用投影片上的圖表回答，不要光用語言</li>
+            </ul>
+          </div>
+          <div>
+            <div class="lp-section-title">評量方式</div>
+            <ul class="lp-list">
+              <li>觀察問答品質，記錄「無法回答的問題」類型</li>
+              <li>「W18 前要修改的三件事」作為自我評量依據</li>
+            </ul>
+          </div>
+        </div>
+        <div class="teacher-only">
+          <div class="teacher-label">🎓 教師備注</div>
+          <p>彩排最大功能是讓學生發現自己「以為說得很清楚但聽眾沒懂」的地方。建議教師在「組間輪轉」期間不要主動解釋，刻意讓聽眾問出讓報告者困窘的問題——這正是彩排的價值。可以告訴學生：「如果彩排沒有一個問題讓你不知道怎麼回答，表示你的報告太平庸了。」</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 完整能力覆蓋率 ──────────────────────────── -->
+    <div class="section-title">補充後能力覆蓋率估算</div>
+    <div class="card">
+      <table style="margin-bottom:0;">
+        <thead>
+          <tr>
+            <th>能力指標</th>
+            <th>補充前覆蓋週數</th>
+            <th>補充後覆蓋週數</th>
+            <th>狀態</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#2952c4;">P1</span> 察覺問題</td>
+            <td>W1、W10、W12、W14–15</td>
+            <td>+ W11 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 補足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#2952c4;">P2</span> 評估可行性</td>
+            <td>W2、W10、W12、W14–15</td>
+            <td>+ W7、W11 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 補足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#2952c4;">P3</span> 建立假設</td>
+            <td>W3、W5、W6、W10、W12、W14–15</td>
+            <td>+ W11 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 已完整</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#1e7a52;">R1</span> 設計實驗</td>
+            <td>W3、W5、W6、W10、W12、W14–15</td>
+            <td>（原本充足）</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 充足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#1e7a52;">R2</span> 控制變因</td>
+            <td>W3、W5、W6、W10、W12、W14–15</td>
+            <td>（原本充足）</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 充足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#1e7a52;">R3</span> 操作蒐集</td>
+            <td>W3、W4、W5、W6、W10、W12、W14–15</td>
+            <td>（原本充足）</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 充足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#b5621e;">A1</span> 整理數據</td>
+            <td>W2、W3、W4、W5、W8、W10、W12、W14–16</td>
+            <td>（原本充足）</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 充足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#b5621e;">A2</span> 建立模型</td>
+            <td>W5、W8、W14–16</td>
+            <td>+ W13 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 補足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#b5621e;">A3</span> 評估論證</td>
+            <td>W2、W16</td>
+            <td>+ W7、W13、W17 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 大幅補足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#6d28d9;">C1</span> 陳述結果</td>
+            <td>W9、W16、W18</td>
+            <td>+ W7、W13、W17 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 補足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#6d28d9;">C2</span> 呈現成果</td>
+            <td>W9、W16、W18</td>
+            <td>+ W17 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 補足</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-weight:700;color:#6d28d9;">C3</span> 同儕回饋</td>
+            <td>W18（隱性）</td>
+            <td>+ W7、W13、W17 補充</td>
+            <td><span style="color:#1e7a52;font-weight:700;">✓ 大幅補足</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="unit-nav">
+      <a href="presentation.html">← 表達與分享</a>
+      <a href="portfolio.html">學習歷程指引 →</a>
+    </div>
+
+  </div><!-- /page-body -->
+</div><!-- /main-content -->
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

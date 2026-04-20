@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/tools/presentation">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>表達與分享 · 工具箱 · 探究與實作</title>
+  <meta name="description" content="科學探究的表達與分享技巧，涵蓋口頭報告、海報展示與簡報製作。">
+  <meta property="og:title" content="表達與分享 · 工具箱 · 探究與實作">
+  <meta property="og:description" content="科學探究的表達與分享技巧，涵蓋口頭報告、海報展示與簡報製作。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/presentation.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a> ›
+      <a href="index.html">工具箱</a> ›
+      <span>表達與分享</span>
+    </div>
+    <h1>🗣️ 表達與分享</h1>
+    <p class="subtitle">口頭報告、研究海報、聆聽與回饋——貫穿全學期的核心能力</p>
+    <div class="meta-tags">
+      <span class="tag express">表達與分享</span>
+      <span class="tag">每週穿插</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- 課綱對應 -->
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">108 課綱對應學習內容</div>
+      <ul>
+        <li>適當利用口語、文字、圖像、影音或實物等表達方式，呈現探究過程與成果</li>
+        <li>正確運用科學名詞、符號或模型，呈現自己或理解他人的探究過程</li>
+        <li>有條理且具科學性的陳述探究成果</li>
+        <li>傾聽他人報告，並能提出具體的意見或建議</li>
+        <li>評估同學探究過程、結果或模型的優點和限制，提出合理疑問或改善方案</li>
+        <li>反思探究成果的應用性、限制性及改進之處</li>
+      </ul>
+    </div>
+
+    <!-- 三大子能力導覽 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;">
+      <a href="#oral" class="card" style="display:block;border-top:3px solid var(--express);text-align:center;padding:18px 12px;">
+        <div style="font-size:28px;margin-bottom:8px;">🎤</div>
+        <div style="font-weight:700;font-size:13px;color:var(--express);">口頭報告</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">結構、語速、問答</div>
+      </a>
+      <a href="#poster" class="card" style="display:block;border-top:3px solid var(--express);text-align:center;padding:18px 12px;">
+        <div style="font-size:28px;margin-bottom:8px;">📋</div>
+        <div style="font-weight:700;font-size:13px;color:var(--express);">研究海報</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">版面、視覺化、重點</div>
+      </a>
+      <a href="#feedback" class="card" style="display:block;border-top:3px solid var(--express);text-align:center;padding:18px 12px;">
+        <div style="font-size:28px;margin-bottom:8px;">💬</div>
+        <div style="font-weight:700;font-size:13px;color:var(--express);">聆聽與回饋</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">提問、同儕評量</div>
+      </a>
+    </div>
+
+    <!-- ① 口頭報告 -->
+    <div id="oral" class="section-title">① 口頭報告</div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px;">標準報告結構（5 分鐘版）</div>
+      <div style="display:grid;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:13px;">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border-light);">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);width:48px;flex-shrink:0;">0'–0'30</span>
+          <span style="font-weight:700;color:var(--text-primary);width:80px;">情境引入</span>
+          <span style="color:var(--text-secondary);">一句話說清楚「我在研究什麼，為什麼重要」</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border-light);">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);width:48px;flex-shrink:0;">0'30–1'</span>
+          <span style="font-weight:700;color:var(--text-primary);width:80px;">研究問題</span>
+          <span style="color:var(--text-secondary);">明確說出你的探究問題（操縱/應變變因）</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border-light);">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);width:48px;flex-shrink:0;">1'–2'</span>
+          <span style="font-weight:700;color:var(--text-primary);width:80px;">方法</span>
+          <span style="color:var(--text-secondary);">你怎麼設計實驗？控制了哪些變因？</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border-light);">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);width:48px;flex-shrink:0;">2'–3'30</span>
+          <span style="font-weight:700;color:var(--text-primary);width:80px;">結果</span>
+          <span style="color:var(--text-secondary);">數據圖表 + 你看到了什麼規律或趨勢</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border-light);">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);width:48px;flex-shrink:0;">3'30–4'30</span>
+          <span style="font-weight:700;color:var(--text-primary);width:80px;">討論</span>
+          <span style="color:var(--text-secondary);">這個結果說明了什麼？有什麼限制或誤差來源？</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted);width:48px;flex-shrink:0;">4'30–5'</span>
+          <span style="font-weight:700;color:var(--text-primary);width:80px;">結論</span>
+          <span style="color:var(--text-secondary);">回應研究問題，一句話收尾</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">✅ 報告時常見好習慣</div>
+        <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+          <li>先說結論，再說細節（不要讓聽眾猜）</li>
+          <li>指著圖表說「你看這裡……」而非唸旁白</li>
+          <li>語速放慢，每個數據停頓一下</li>
+          <li>用「我們發現……」而非「可以看出……」</li>
+          <li>預先準備一個你自己也想知道的問題</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">❌ 常見 NG 做法</div>
+        <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+          <li>唸逐字稿（眼睛不離螢幕）</li>
+          <li>投影片文字超過 5 行</li>
+          <li>「這個圖應該大家看得懂」（沒有解釋）</li>
+          <li>結論只說「實驗成功」</li>
+          <li>時間到了還在說方法</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">教師提示：口頭報告評分規準（建議）</div>
+      <table style="margin-top:8px;">
+        <thead>
+          <tr><th>面向</th><th>優（3）</th><th>可（2）</th><th>待加強（1）</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>內容結構</strong></td>
+            <td>問題→方法→結果→討論，脈絡完整清晰</td>
+            <td>有結構但部分環節跳躍</td>
+            <td>缺乏邏輯順序</td>
+          </tr>
+          <tr>
+            <td><strong>數據呈現</strong></td>
+            <td>圖表清楚，主動解釋趨勢與意義</td>
+            <td>有圖表但只陳述不詮釋</td>
+            <td>無圖表或圖表不清</td>
+          </tr>
+          <tr>
+            <td><strong>問答回應</strong></td>
+            <td>能直接回應並補充說明</td>
+            <td>回應部分正確</td>
+            <td>無法回應或偏離問題</td>
+          </tr>
+          <tr>
+            <td><strong>表達方式</strong></td>
+            <td>語速適中、用詞精確、有眼神接觸</td>
+            <td>部分唸稿，語速偏快或慢</td>
+            <td>全程唸稿，聽眾難以跟隨</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ② 研究海報 -->
+    <div id="poster" class="section-title" style="margin-top:36px;">② 研究海報</div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:14px;">海報版面配置（A1 標準）</div>
+
+      <!-- 海報示意圖 -->
+      <div style="border:2px solid var(--border);border-radius:6px;padding:12px;background:var(--bg);font-size:12px;margin-bottom:16px;">
+        <div style="text-align:center;font-weight:700;color:var(--text-muted);font-size:11px;margin-bottom:8px;">▼ 海報結構示意（由上到下、由左到右）</div>
+        <div style="display:grid;grid-template-columns:1fr;gap:4px;">
+          <div style="background:#e8eeff;border:1px solid #bfcef8;border-radius:4px;padding:8px 14px;text-align:center;">
+            <span style="font-weight:700;color:var(--phase1);">標題區</span>
+            <span style="color:var(--text-muted);margin-left:8px;">研究題目 · 組員姓名 · 學校班級</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+            <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;font-size:11px;">
+              <div style="font-weight:700;margin-bottom:4px;">研究動機與問題</div>
+              <div style="color:var(--text-muted);">為什麼做這個研究？你的探究問題是？</div>
+            </div>
+            <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;font-size:11px;">
+              <div style="font-weight:700;margin-bottom:4px;">研究方法</div>
+              <div style="color:var(--text-muted);">器材、變因設計、實驗步驟（可加照片）</div>
+            </div>
+            <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;font-size:11px;">
+              <div style="font-weight:700;margin-bottom:4px;">結果與討論</div>
+              <div style="color:var(--text-muted);">圖表為主，數字為輔，趨勢說明清楚</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:4px;">
+            <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;font-size:11px;">
+              <div style="font-weight:700;margin-bottom:4px;">結論</div>
+              <div style="color:var(--text-muted);">回應研究問題 · 限制與改進建議 · 延伸方向</div>
+            </div>
+            <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;font-size:11px;">
+              <div style="font-weight:700;margin-bottom:4px;">參考資料</div>
+              <div style="color:var(--text-muted);">APA 格式</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+        <div>
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;">排版原則</div>
+          <ul style="color:var(--text-secondary);padding-left:18px;line-height:2.1;">
+            <li>字體最小 <strong>20pt</strong>（站 1 公尺外要能讀）</li>
+            <li>標題用粗體，正文用標準字重</li>
+            <li>每個區塊留白 ≥ 1cm，不要塞滿</li>
+            <li>配色最多 3 色，用同色系</li>
+            <li>圖表占版面 40–50%</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;">圖表設計</div>
+          <ul style="color:var(--text-secondary);padding-left:18px;line-height:2.1;">
+            <li>每張圖都有標題和軸標籤（含單位）</li>
+            <li>誤差棒（error bar）要畫出來</li>
+            <li>趨勢線要有說明，不要讓圖自己說話</li>
+            <li>避免 3D 圖表（會扭曲視覺比例）</li>
+            <li>色盲友善配色（避免紅綠並排）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">海報說明技巧（站報時）</div>
+        <ol style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2.1;">
+          <li>先問觀眾背景（「你有接觸過這個主題嗎？」）</li>
+          <li>用 1 分鐘說完整個故事，再展開細節</li>
+          <li>手指指向海報，引導視線</li>
+          <li>歡迎打斷提問（「有問題隨時說」）</li>
+          <li>每次說完問「這樣清楚嗎？」</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">製作工具推薦</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:2.2;">
+          <div style="display:flex;justify-content:space-between;"><span>PowerPoint / Keynote</span><span style="color:var(--text-muted);">最常用，容易排版</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Canva</span><span style="color:var(--text-muted);">有海報模板，免費</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Google 簡報</span><span style="color:var(--text-muted);">共同編輯方便</span></div>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border-light);padding-top:6px;margin-top:4px;"><span>建議尺寸</span><span style="color:var(--text-muted);">A1 = 594×841mm</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">教師提示：海報評分規準（建議）</div>
+      <table style="margin-top:8px;">
+        <thead>
+          <tr><th>面向</th><th>優（3）</th><th>可（2）</th><th>待加強（1）</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>版面設計</strong></td>
+            <td>層次清晰、留白適當、視線引導自然</td>
+            <td>資訊齊全但稍顯擁擠</td>
+            <td>資訊凌亂或關鍵區塊缺失</td>
+          </tr>
+          <tr>
+            <td><strong>圖表品質</strong></td>
+            <td>圖表清晰、有軸標籤、趨勢說明完整</td>
+            <td>圖表存在但說明不足</td>
+            <td>缺乏圖表或圖表無法閱讀</td>
+          </tr>
+          <tr>
+            <td><strong>科學性</strong></td>
+            <td>問題、方法、結果、結論邏輯一貫</td>
+            <td>結構存在但部分環節薄弱</td>
+            <td>欠缺科學論證邏輯</td>
+          </tr>
+          <tr>
+            <td><strong>說明能力</strong></td>
+            <td>能流暢導覽並即時回應提問</td>
+            <td>能說明但依賴海報文字</td>
+            <td>無法獨立說明內容</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ③ 聆聽與回饋 -->
+    <div id="feedback" class="section-title" style="margin-top:36px;">③ 聆聽與回饋</div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px;">提出好問題的框架</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">聽完別人報告後，好的提問不只是「有疑問就問」，而是幫助對方思考得更深。以下四種提問類型，每次報告後練習用至少一種：</p>
+      <div style="display:grid;gap:8px;">
+        <div style="display:grid;grid-template-columns:100px 1fr;gap:12px;padding:10px 14px;background:var(--bg);border-radius:4px;align-items:start;">
+          <div style="font-weight:700;font-size:12px;color:var(--phase1);">澄清型</div>
+          <div style="font-size:13px;color:var(--text-secondary);">「你說的 X，是指……還是……？」——確認自己理解正確</div>
+        </div>
+        <div style="display:grid;grid-template-columns:100px 1fr;gap:12px;padding:10px 14px;background:var(--bg);border-radius:4px;align-items:start;">
+          <div style="font-weight:700;font-size:12px;color:var(--phase2);">探究型</div>
+          <div style="font-size:13px;color:var(--text-secondary);">「如果把 X 換成 Y，你預測結果會怎麼變？」——延伸假設</div>
+        </div>
+        <div style="display:grid;grid-template-columns:100px 1fr;gap:12px;padding:10px 14px;background:var(--bg);border-radius:4px;align-items:start;">
+          <div style="font-weight:700;font-size:12px;color:var(--phase3);">質疑型</div>
+          <div style="font-size:13px;color:var(--text-secondary);">「控制變因方面，X 有沒有可能也影響結果？」——找漏洞</div>
+        </div>
+        <div style="display:grid;grid-template-columns:100px 1fr;gap:12px;padding:10px 14px;background:var(--bg);border-radius:4px;align-items:start;">
+          <div style="font-weight:700;font-size:12px;color:var(--express);">建議型</div>
+          <div style="font-size:13px;color:var(--text-secondary);">「如果下次重做，你覺得哪個環節最值得改進？」——正向推進</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 同儕評量單 -->
+    <div class="section-title">同儕評量單（通用版）</div>
+    <div class="card" style="margin-bottom:24px;">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">每次小組分享後使用，填寫對象是「你聽的那組」，不是自己的組。</p>
+
+      <div style="display:grid;gap:10px;font-size:13px;">
+        <div style="padding:12px 16px;border:1px solid var(--border);border-radius:6px;">
+          <div style="font-weight:700;margin-bottom:6px;">1. 這組的探究問題是什麼？（用自己的話寫）</div>
+          <div style="height:36px;border-bottom:1px dashed var(--border);"></div>
+        </div>
+        <div style="padding:12px 16px;border:1px solid var(--border);border-radius:6px;">
+          <div style="font-weight:700;margin-bottom:6px;">2. 你認為他們最有說服力的一個論點或數據是？</div>
+          <div style="height:36px;border-bottom:1px dashed var(--border);"></div>
+        </div>
+        <div style="padding:12px 16px;border:1px solid var(--border);border-radius:6px;">
+          <div style="font-weight:700;margin-bottom:6px;">3. 你有什麼問題或疑問想問他們？（至少一個）</div>
+          <div style="height:36px;border-bottom:1px dashed var(--border);"></div>
+        </div>
+        <div style="padding:12px 16px;border:1px solid var(--border);border-radius:6px;">
+          <div style="font-weight:700;margin-bottom:8px;">4. 綜合評量</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:12px;">
+            <div>
+              <div style="color:var(--text-muted);margin-bottom:4px;">內容清晰度</div>
+              <div style="display:flex;gap:4px;">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              </div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted);margin-bottom:4px;">論證說服力</div>
+              <div style="display:flex;gap:4px;">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              </div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted);margin-bottom:4px;">圖表品質</div>
+              <div style="display:flex;gap:4px;">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              </div>
+            </div>
+            <div>
+              <div style="color:var(--text-muted);margin-bottom:4px;">整體印象</div>
+              <div style="display:flex;gap:4px;">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">教師提示：表達與分享的評量原則</div>
+      <p>課綱強調的是「能力」而非「成果美觀」——學生能不能用科學語言精確說明，能不能針對他人論證提出有根據的疑問，才是評量核心。建議同儕評量占比不超過 30%，避免學生因人際關係而打高分或打低分。</p>
+      <div class="teacher-label" style="margin-top:12px;">何時使用海報 vs 口頭報告？</div>
+      <ul>
+        <li><strong>口頭報告</strong>：適合中期進度報告、翻滾仔比賽、期末定稿後的成果分享</li>
+        <li><strong>海報</strong>：適合學期末的完整探究成果展示，因為能讓多組同時並行，互相走動觀摩</li>
+        <li>建議期末同時進行：先 10 分鐘海報展（走動式），再 3 組口頭報告示範</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/tools/data-workshop">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>數據分析工坊 · 工具箱 · 探究與實作</title>
+  <meta name="description" content="數據分析工坊，手把手教你從原始數據到科學結論的完整分析流程。">
+  <meta property="og:title" content="數據分析工坊 · 工具箱 · 探究與實作">
+  <meta property="og:description" content="數據分析工坊，手把手教你從原始數據到科學結論的完整分析流程。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/data-workshop.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    .ws-step { counter-increment: ws-step; position: relative; padding-left: 42px; margin-bottom: 20px; }
+    .ws-step::before {
+      content: counter(ws-step);
+      position: absolute; left: 0; top: 0;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--phase1); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+    .ws-step.done::before { background: #16a34a; content: '✓'; }
+    .ws-input { width: 70px; text-align: center; border: 1.5px solid var(--border); border-radius: 4px; padding: 4px 6px; font-family: 'DM Mono', monospace; font-size: 13px; }
+    .ws-input:focus { border-color: var(--phase1); outline: none; }
+    .ws-input.correct { border-color: #16a34a; background: #f0fdf4; }
+    .ws-input.wrong { border-color: #dc2626; background: #fef2f2; }
+    .ws-check-btn { background: var(--phase1); color: white; border: none; padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .ws-check-btn:hover { opacity: 0.9; }
+    .ws-feedback { font-size: 12px; margin-top: 8px; min-height: 18px; }
+    .dataset-tab { display: inline-block; padding: 6px 16px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); border-bottom: none; background: var(--sidebar-bg); color: var(--text-muted); margin-right: 4px; }
+    .dataset-tab.active { background: white; color: var(--phase1); border-color: var(--phase1); }
+    .chart-area { width: 100%; height: 280px; background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; position: relative; }
+  </style>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a><span>›</span>
+      <a href="index.html">工具箱</a><span>›</span>
+      <span>數據分析工坊</span>
+    </div>
+    <h1>🔢 數據分析工坊</h1>
+    <p class="subtitle">用真實數據動手練——從原始數據到圖表到結論的完整流程</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">互動練習</span>
+    </div>
+  </div>
+  <div class="page-body">
+
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:#1e3a8a;">
+      <strong>這個工坊要幹嘛？</strong> 光看 Excel 教學還是不會分析數據——你需要動手算。這裡用真正的實驗數據，帶你一步一步走完「原始數據→計算→畫圖→判讀→結論」的全流程。每一步都有即時檢查，算錯了馬上知道。
+    </div>
+
+    <!-- ═══ 數據集選擇 ═══ -->
+    <div style="margin-bottom:16px;">
+      <span class="dataset-tab active" onclick="switchDataset('pendulum')">🕰️ 單擺數據</span>
+      <span class="dataset-tab" onclick="switchDataset('spring')">🔩 彈簧數據</span>
+      <span class="dataset-tab" onclick="switchDataset('buoyancy')">🚢 浮力數據</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  單擺數據集  -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="ds-pendulum" class="dataset-content" style="counter-reset:ws-step;">
+
+      <div class="card" style="margin-bottom:20px;border-left:3px solid var(--phase1);">
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">📋 情境</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">你的小組測量了 5 種擺長的單擺，每種擺長計時「10 個週期的總時間」3 次。以下是原始數據。你的任務：算出每個擺長的平均週期 T̄ 和 T̄²，畫 T² vs L 圖，求出 g 值。</p>
+      </div>
+
+      <!-- Step 1: 原始數據 + 計算平均 -->
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">計算平均週期</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">先把「10T 的總時間」÷10 得到單次週期，再取平均。填入下表空格（保留小數 2 位）。</p>
+        <div style="overflow-x:auto;">
+          <table style="font-size:12px;">
+            <thead><tr>
+              <th>擺長 L (m)</th><th>10T₁ (s)</th><th>10T₂ (s)</th><th>10T₃ (s)</th>
+              <th style="color:var(--phase1);">T̄ (s)</th>
+              <th style="color:var(--phase2);">T̄² (s²)</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>0.10</td><td>6.32</td><td>6.28</td><td>6.35</td>
+                <td><input class="ws-input" id="p-t1" data-answer="0.63"></td>
+                <td><input class="ws-input" id="p-t1sq" data-answer="0.40"></td></tr>
+              <tr><td>0.20</td><td>8.96</td><td>8.92</td><td>8.99</td>
+                <td><input class="ws-input" id="p-t2" data-answer="0.90"></td>
+                <td><input class="ws-input" id="p-t2sq" data-answer="0.81"></td></tr>
+              <tr><td>0.30</td><td>10.98</td><td>11.02</td><td>10.95</td>
+                <td><input class="ws-input" id="p-t3" data-answer="1.10"></td>
+                <td><input class="ws-input" id="p-t3sq" data-answer="1.21"></td></tr>
+              <tr><td>0.40</td><td>12.68</td><td>12.72</td><td>12.65</td>
+                <td><input class="ws-input" id="p-t4" data-answer="1.27"></td>
+                <td><input class="ws-input" id="p-t4sq" data-answer="1.61"></td></tr>
+              <tr><td>0.50</td><td>14.18</td><td>14.22</td><td>14.15</td>
+                <td><input class="ws-input" id="p-t5" data-answer="1.42"></td>
+                <td><input class="ws-input" id="p-t5sq" data-answer="2.02"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="ws-check-btn" onclick="checkStep('pendulum-1',['p-t1','p-t1sq','p-t2','p-t2sq','p-t3','p-t3sq','p-t4','p-t4sq','p-t5','p-t5sq'])">檢查答案</button>
+        <div class="ws-feedback" id="fb-pendulum-1"></div>
+      </div>
+
+      <!-- Step 2: 畫圖 -->
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">畫 T² vs L 散佈圖</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">按下方按鈕，系統會用你剛才算的數據自動畫圖（實際操作時請用 Excel）。觀察圖形回答問題。</p>
+        <button class="ws-check-btn" onclick="drawPendulumChart()" style="margin-bottom:12px;">📊 生成圖表</button>
+        <canvas id="pendulum-chart" width="640" height="280" class="chart-area"></canvas>
+        <div id="pendulum-chart-info" style="font-size:12px;color:var(--text-muted);margin-top:8px;"></div>
+      </div>
+
+      <!-- Step 3: 從斜率算 g -->
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">從斜率算出 g 值</div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px 14px;font-size:13px;margin-bottom:12px;">
+          <div style="font-family:'DM Mono',monospace;color:var(--text-primary);">
+            $T^2 = \frac{4\pi^2}{g} \times L$<br>
+            斜率 $m = \frac{4\pi^2}{g}$<br>
+            → $g = \frac{4\pi^2}{m} = \frac{39.48}{m}$
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">從上方圖表讀出斜率（系統會顯示），計算 g 值（保留 1 位小數）：</p>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:13px;">g = 39.48 ÷ 斜率 =</span>
+          <input class="ws-input" id="p-g" data-answer="9.7" style="width:80px;">
+          <span style="font-size:13px;">m/s²</span>
+        </div>
+        <button class="ws-check-btn" onclick="checkStep('pendulum-3',['p-g'])">檢查答案</button>
+        <div class="ws-feedback" id="fb-pendulum-3"></div>
+      </div>
+
+      <!-- Step 4: 判讀 -->
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">判讀與結論</div>
+        <div style="display:grid;gap:8px;font-size:13px;">
+          <div class="q-item">
+            <strong>Q1：</strong>你算出的 g 值和標準值 9.8 m/s² 相差多少百分比？這算好還是不好？
+          </div>
+          <div class="q-item">
+            <strong>Q2：</strong>R² 值是多少？這代表數據點和趨勢線的吻合度如何？
+          </div>
+          <div class="q-item">
+            <strong>Q3：</strong>如果有一個數據點明顯偏離趨勢線，你會怎麼處理？
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 14px;font-size:12px;color:#15803d;margin-top:12px;">
+          ✅ <strong>恭喜！</strong>你剛剛完成了一次完整的數據分析流程：原始數據 → 計算 → 畫圖 → 線性回歸 → 求物理量 → 判讀品質。這就是每個 Lv1 模組的核心技能。
+        </div>
+      </div>
+
+    </div><!-- /ds-pendulum -->
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  彈簧數據集  -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="ds-spring" class="dataset-content" style="display:none;counter-reset:ws-step;">
+
+      <div class="card" style="margin-bottom:20px;border-left:3px solid var(--phase2);">
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">📋 情境</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">你掛不同質量的砝碼在彈簧上，測量彈簧伸長量。每個質量測 3 次。你的任務：算平均、畫力 vs 伸長量的圖、求彈力常數 k。</p>
+      </div>
+
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">計算平均伸長量</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">力 F = mg（g = 9.8 m/s²）。填入平均伸長量 x̄（保留小數 1 位，單位 cm）。</p>
+        <div style="overflow-x:auto;">
+          <table style="font-size:12px;">
+            <thead><tr>
+              <th>質量 (g)</th><th>力 F (N)</th><th>x₁ (cm)</th><th>x₂ (cm)</th><th>x₃ (cm)</th>
+              <th style="color:var(--phase1);">x̄ (cm)</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>50</td><td>0.49</td><td>2.1</td><td>2.0</td><td>2.2</td>
+                <td><input class="ws-input" id="s-x1" data-answer="2.1"></td></tr>
+              <tr><td>100</td><td>0.98</td><td>4.0</td><td>4.1</td><td>3.9</td>
+                <td><input class="ws-input" id="s-x2" data-answer="4.0"></td></tr>
+              <tr><td>150</td><td>1.47</td><td>6.2</td><td>6.0</td><td>6.1</td>
+                <td><input class="ws-input" id="s-x3" data-answer="6.1"></td></tr>
+              <tr><td>200</td><td>1.96</td><td>8.0</td><td>8.2</td><td>8.1</td>
+                <td><input class="ws-input" id="s-x4" data-answer="8.1"></td></tr>
+              <tr><td>250</td><td>2.45</td><td>10.1</td><td>9.9</td><td>10.0</td>
+                <td><input class="ws-input" id="s-x5" data-answer="10.0"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="ws-check-btn" onclick="checkStep('spring-1',['s-x1','s-x2','s-x3','s-x4','s-x5'])">檢查答案</button>
+        <div class="ws-feedback" id="fb-spring-1"></div>
+      </div>
+
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">畫 F vs x 散佈圖</div>
+        <button class="ws-check-btn" onclick="drawSpringChart()" style="margin-bottom:12px;">📊 生成圖表</button>
+        <canvas id="spring-chart" width="640" height="280" class="chart-area"></canvas>
+        <div id="spring-chart-info" style="font-size:12px;color:var(--text-muted);margin-top:8px;"></div>
+      </div>
+
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">求彈力常數 k</div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px 14px;font-size:13px;margin-bottom:12px;">
+          <div style="font-family:'DM Mono',monospace;color:var(--text-primary);">
+            $F = kx$ → 斜率 = $k$<br>
+            注意：x 的單位要轉成公尺 (m)！<br>
+            $k$ = 斜率（N/m）
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:13px;">k =</span>
+          <input class="ws-input" id="s-k" data-answer="24.5" style="width:80px;">
+          <span style="font-size:13px;">N/m</span>
+        </div>
+        <button class="ws-check-btn" onclick="checkStep('spring-3',['s-k'])">檢查答案</button>
+        <div class="ws-feedback" id="fb-spring-3"></div>
+      </div>
+
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">判讀與結論</div>
+        <div style="display:grid;gap:8px;font-size:13px;">
+          <div class="q-item">
+            <strong>Q1：</strong>F vs x 圖是直線嗎？R² 接近 1 嗎？這代表什麼物理意義？
+          </div>
+          <div class="q-item">
+            <strong>Q2：</strong>如果掛 300g 砝碼，你預測伸長量大概多少 cm？怎麼算的？
+          </div>
+          <div class="q-item">
+            <strong>Q3：</strong>如果加到 500g 時圖形突然彎了——這代表什麼？（提示：彈性限度）
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 14px;font-size:12px;color:#15803d;margin-top:12px;">
+          ✅ 虎克定律 F = kx 在彈性限度內是線性的。斜率就是 k。這是最經典的線性關係範例。
+        </div>
+      </div>
+    </div><!-- /ds-spring -->
+
+    <!-- ═══════════════════════════════════════ -->
+    <!--  浮力數據集  -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="ds-buoyancy" class="dataset-content" style="display:none;counter-reset:ws-step;">
+
+      <div class="card" style="margin-bottom:20px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">📋 情境</div>
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;">你把同一個鋁塊分別浸入水中不同深度，測量彈簧秤讀數。浸入越深，排開水越多。你的任務：計算浮力、畫浮力 vs 排水體積的圖、驗證阿基米德原理。</p>
+      </div>
+
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">計算浮力</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">鋁塊在空氣中重 W = 1.96 N。浮力 = W − 彈簧秤讀數。填入浮力值（保留小數 2 位）。</p>
+        <div style="overflow-x:auto;">
+          <table style="font-size:12px;">
+            <thead><tr>
+              <th>浸入深度 (cm)</th><th>排水體積 (cm³)</th><th>秤讀數 (N)</th>
+              <th style="color:var(--phase1);">浮力 F_b (N)</th>
+              <th style="color:var(--text-muted);">理論 ρgV (N)</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>1.0</td><td>4.0</td><td>1.92</td>
+                <td><input class="ws-input" id="b-f1" data-answer="0.04"></td>
+                <td style="color:var(--text-muted);font-size:11px;">0.039</td></tr>
+              <tr><td>2.0</td><td>8.0</td><td>1.88</td>
+                <td><input class="ws-input" id="b-f2" data-answer="0.08"></td>
+                <td style="color:var(--text-muted);font-size:11px;">0.078</td></tr>
+              <tr><td>3.0</td><td>12.0</td><td>1.84</td>
+                <td><input class="ws-input" id="b-f3" data-answer="0.12"></td>
+                <td style="color:var(--text-muted);font-size:11px;">0.118</td></tr>
+              <tr><td>4.0</td><td>16.0</td><td>1.80</td>
+                <td><input class="ws-input" id="b-f4" data-answer="0.16"></td>
+                <td style="color:var(--text-muted);font-size:11px;">0.157</td></tr>
+              <tr><td>5.0</td><td>20.0</td><td>1.76</td>
+                <td><input class="ws-input" id="b-f5" data-answer="0.20"></td>
+                <td style="color:var(--text-muted);font-size:11px;">0.196</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="ws-check-btn" onclick="checkStep('buoyancy-1',['b-f1','b-f2','b-f3','b-f4','b-f5'])">檢查答案</button>
+        <div class="ws-feedback" id="fb-buoyancy-1"></div>
+      </div>
+
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">畫浮力 vs 排水體積圖</div>
+        <button class="ws-check-btn" onclick="drawBuoyancyChart()" style="margin-bottom:12px;">📊 生成圖表</button>
+        <canvas id="buoyancy-chart" width="640" height="280" class="chart-area"></canvas>
+        <div id="buoyancy-chart-info" style="font-size:12px;color:var(--text-muted);margin-top:8px;"></div>
+      </div>
+
+      <div class="ws-step">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">驗證阿基米德原理</div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px 14px;font-size:13px;margin-bottom:12px;">
+          <div style="font-family:'DM Mono',monospace;color:var(--text-primary);">
+            $F_b = \rho_{水} \times g \times V_{排}$<br>
+            斜率應該 = $\rho_{水} \times g = 1000 \times 9.8 = 9800$ N/m³<br>
+            注意：V 要從 cm³ 轉成 m³（÷1,000,000）
+          </div>
+        </div>
+        <div style="display:grid;gap:8px;font-size:13px;">
+          <div class="q-item">
+            <strong>Q1：</strong>你的實測浮力和理論值 ρgV 差多少？誤差在可接受範圍嗎？
+          </div>
+          <div class="q-item">
+            <strong>Q2：</strong>圖形是直線嗎？斜率的物理意義是什麼？
+          </div>
+          <div class="q-item">
+            <strong>Q3：</strong>完全浸入後繼續往下壓，浮力還會增加嗎？為什麼？
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 14px;font-size:12px;color:#15803d;margin-top:12px;">
+          ✅ 阿基米德原理：浮力 = 排開液體的重量。這個線性關係的斜率就是 ρg。完全浸入後排水量不再增加，浮力也不再增加——這是模型的適用邊界。
+        </div>
+      </div>
+    </div><!-- /ds-buoyancy -->
+
+    <!-- ═══ 通用技巧總結 ═══ -->
+    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:24px;margin-bottom:16px;">
+      <div style="font-weight:700;color:#92400e;font-size:14px;margin-bottom:10px;">📌 數據分析必備 Checklist</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:#78350f;">
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>原始數據有標題和單位</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>每組至少重複 3 次取平均</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>散佈圖（不是折線圖）</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>X 軸 Y 軸都有標籤和單位</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>趨勢線 + 方程式 + R²</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>從斜率/截距算出物理量</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>和理論值/標準值比較</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>討論誤差來源和模型限制</span></label>
+      </div>
+    </div>
+
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+      想看 Excel 操作細節？→ <a href="excel.html" style="color:var(--phase1);font-weight:600;">Excel 數據分析指南</a>
+    </div>
+
+    <div class="unit-nav">
+      <a href="excel.html">← Excel 數據分析指南</a>
+      <a href="portfolio.html">學習歷程指引 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+// ═══ 數據集切換 ═══
+function switchDataset(name){
+  document.querySelectorAll('.dataset-content').forEach(d => d.style.display='none');
+  document.querySelectorAll('.dataset-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ds-'+name).style.display='';
+  event.target.classList.add('active');
+}
+
+// ═══ 答案檢查 ═══
+function checkStep(stepId, inputIds){
+  let allCorrect = true;
+  inputIds.forEach(id => {
+    const el = document.getElementById(id);
+    const answer = parseFloat(el.dataset.answer);
+    const user = parseFloat(el.value);
+    if(isNaN(user)){
+      el.className = 'ws-input wrong';
+      allCorrect = false;
+    } else if(Math.abs(user - answer) <= 0.05){
+      el.className = 'ws-input correct';
+    } else {
+      el.className = 'ws-input wrong';
+      allCorrect = false;
+    }
+  });
+  const fb = document.getElementById('fb-'+stepId);
+  if(allCorrect){
+    fb.innerHTML = '<span style="color:#16a34a;font-weight:700;">✅ 全對！繼續下一步。</span>';
+  } else {
+    fb.innerHTML = '<span style="color:#dc2626;">有些數值需要修正。提示：先÷10 得到單次週期，再取三次平均。</span>';
+  }
+}
+
+// ═══ 圖表繪製：單擺 ═══
+function drawPendulumChart(){
+  const canvas = document.getElementById('pendulum-chart');
+  const ctx = canvas.getContext('2d');
+  const L = [0.10, 0.20, 0.30, 0.40, 0.50];
+  const T2 = [0.40, 0.81, 1.21, 1.61, 2.02];
+
+  // 線性回歸
+  const n = L.length;
+  let sumX=0, sumY=0, sumXY=0, sumX2=0;
+  for(let i=0;i<n;i++){ sumX+=L[i]; sumY+=T2[i]; sumXY+=L[i]*T2[i]; sumX2+=L[i]*L[i]; }
+  const slope = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
+  const intercept = (sumY - slope*sumX)/n;
+
+  // R²
+  const meanY = sumY/n;
+  let ssTot=0, ssRes=0;
+  for(let i=0;i<n;i++){
+    ssTot += (T2[i]-meanY)**2;
+    ssRes += (T2[i]-(slope*L[i]+intercept))**2;
+  }
+  const r2 = 1 - ssRes/ssTot;
+
+  drawScatter(ctx, canvas, L, T2, slope, intercept, r2,
+    'L (m)', 'T² (s²)', 0, 0.6, 0, 2.5, '#2952c4');
+
+  document.getElementById('pendulum-chart-info').innerHTML =
+    `趨勢線：T² = <strong>${slope.toFixed(2)}</strong> × L + ${intercept.toFixed(3)}　|　R² = ${r2.toFixed(4)}　|　斜率 = ${slope.toFixed(2)} → g = 39.48 ÷ ${slope.toFixed(2)} = <strong>${(39.48/slope).toFixed(1)}</strong> m/s²`;
+}
+
+// ═══ 圖表繪製：彈簧 ═══
+function drawSpringChart(){
+  const canvas = document.getElementById('spring-chart');
+  const ctx = canvas.getContext('2d');
+  const x = [2.1, 4.0, 6.1, 8.1, 10.0]; // cm
+  const F = [0.49, 0.98, 1.47, 1.96, 2.45];
+
+  const n = x.length;
+  let sumX=0, sumY=0, sumXY=0, sumX2=0;
+  for(let i=0;i<n;i++){ sumX+=x[i]; sumY+=F[i]; sumXY+=x[i]*F[i]; sumX2+=x[i]*x[i]; }
+  const slope = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
+  const intercept = (sumY - slope*sumX)/n;
+  const meanY = sumY/n;
+  let ssTot=0, ssRes=0;
+  for(let i=0;i<n;i++){ ssTot+=(F[i]-meanY)**2; ssRes+=(F[i]-(slope*x[i]+intercept))**2; }
+  const r2 = 1 - ssRes/ssTot;
+
+  drawScatter(ctx, canvas, x, F, slope, intercept, r2,
+    'x (cm)', 'F (N)', 0, 12, 0, 3, '#1e7a52');
+
+  const kVal = slope * 100; // N/m（斜率是 N/cm，×100 得 N/m）
+  document.getElementById('spring-chart-info').innerHTML =
+    `趨勢線：F = <strong>${slope.toFixed(4)}</strong> × x + ${intercept.toFixed(3)}　|　R² = ${r2.toFixed(4)}　|　k = ${slope.toFixed(4)} N/cm = <strong>${kVal.toFixed(1)}</strong> N/m`;
+}
+
+// ═══ 圖表繪製：浮力 ═══
+function drawBuoyancyChart(){
+  const canvas = document.getElementById('buoyancy-chart');
+  const ctx = canvas.getContext('2d');
+  const V = [4.0, 8.0, 12.0, 16.0, 20.0];
+  const Fb = [0.04, 0.08, 0.12, 0.16, 0.20];
+
+  const n = V.length;
+  let sumX=0, sumY=0, sumXY=0, sumX2=0;
+  for(let i=0;i<n;i++){ sumX+=V[i]; sumY+=Fb[i]; sumXY+=V[i]*Fb[i]; sumX2+=V[i]*V[i]; }
+  const slope = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
+  const intercept = (sumY - slope*sumX)/n;
+  const meanY = sumY/n;
+  let ssTot=0, ssRes=0;
+  for(let i=0;i<n;i++){ ssTot+=(Fb[i]-meanY)**2; ssRes+=(Fb[i]-(slope*V[i]+intercept))**2; }
+  const r2 = 1 - ssRes/ssTot;
+
+  drawScatter(ctx, canvas, V, Fb, slope, intercept, r2,
+    'V_排 (cm³)', 'F_b (N)', 0, 24, 0, 0.25, '#b5621e');
+
+  document.getElementById('buoyancy-chart-info').innerHTML =
+    `趨勢線：F_b = <strong>${slope.toFixed(5)}</strong> × V + ${intercept.toFixed(4)}　|　R² = ${r2.toFixed(4)}　|　斜率 ≈ ρg (N/cm³)`;
+}
+
+// ═══ 通用散佈圖繪製 ═══
+function drawScatter(ctx, canvas, xData, yData, slope, intercept, r2, xLabel, yLabel, xMin, xMax, yMin, yMax, color){
+  const w = canvas.width, h = canvas.height;
+  const pad = {top:20, right:20, bottom:40, left:55};
+  const pw = w-pad.left-pad.right, ph = h-pad.top-pad.bottom;
+
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = '#fafbfc';
+  ctx.fillRect(0,0,w,h);
+
+  // 網格
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth = 0.5;
+  for(let i=0;i<=5;i++){
+    const x = pad.left + (i/5)*pw;
+    const y = pad.top + (i/5)*ph;
+    ctx.beginPath(); ctx.moveTo(x,pad.top); ctx.lineTo(x,h-pad.bottom); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(w-pad.right,y); ctx.stroke();
+  }
+
+  // 軸
+  ctx.strokeStyle = '#64748b';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad.left,h-pad.bottom); ctx.lineTo(w-pad.right,h-pad.bottom); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left,h-pad.bottom); ctx.stroke();
+
+  // 刻度
+  ctx.fillStyle = '#64748b';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'center';
+  for(let i=0;i<=5;i++){
+    const v = xMin + (i/5)*(xMax-xMin);
+    const x = pad.left + (i/5)*pw;
+    ctx.fillText(v.toFixed(1), x, h-pad.bottom+14);
+  }
+  ctx.textAlign = 'right';
+  for(let i=0;i<=5;i++){
+    const v = yMin + (i/5)*(yMax-yMin);
+    const y = h - pad.bottom - (i/5)*ph;
+    ctx.fillText(v.toFixed(2), pad.left-6, y+4);
+  }
+
+  // 軸標籤
+  ctx.fillStyle = '#334155';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(xLabel, pad.left+pw/2, h-4);
+  ctx.save();
+  ctx.translate(12, pad.top+ph/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText(yLabel, 0, 0);
+  ctx.restore();
+
+  function toPixel(xv, yv){
+    return {
+      x: pad.left + ((xv-xMin)/(xMax-xMin))*pw,
+      y: h - pad.bottom - ((yv-yMin)/(yMax-yMin))*ph
+    };
+  }
+
+  // 趨勢線
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6,4]);
+  const p1 = toPixel(xMin, slope*xMin+intercept);
+  const p2 = toPixel(xMax, slope*xMax+intercept);
+  ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 數據點
+  ctx.fillStyle = color;
+  xData.forEach((xv,i) => {
+    const p = toPixel(xv, yData[i]);
+    ctx.beginPath(); ctx.arc(p.x,p.y,5,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'white'; ctx.lineWidth=1.5; ctx.stroke();
+  });
+}
+</script>
+</body>
+</html>

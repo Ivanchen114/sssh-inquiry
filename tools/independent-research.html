@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/tools/independent-research">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自主探究指引 · 工具箱 · 探究與實作</title>
+  <meta name="description" content="自主探究指引，從選題、文獻回顧到實驗設計的完整研究流程。">
+  <meta property="og:title" content="自主探究指引 · 工具箱 · 探究與實作">
+  <meta property="og:description" content="自主探究指引，從選題、文獻回顧到實驗設計的完整研究流程。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/independent-research.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    .week-card { border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+    .week-card h3 { font-size: 15px; margin-bottom: 10px; }
+    .milestone { display: flex; align-items: start; gap: 10px; padding: 8px 0; font-size: 13px; }
+    .milestone-check { width: 20px; height: 20px; border: 2px solid; border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; margin-top: 1px; }
+    .milestone-check.checked { background: #16a34a; border-color: #16a34a; color: white; }
+    .danger-zone { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #991b1b; margin-top: 8px; }
+    .progress-bar-outer { background: #e5e7eb; border-radius: 10px; height: 12px; margin: 10px 0 4px; overflow: hidden; }
+    .progress-bar-inner { height: 100%; border-radius: 10px; transition: width 0.3s ease; }
+  </style>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a><span>›</span>
+      <a href="index.html">工具箱</a><span>›</span>
+      <span>自主探究指引</span>
+    </div>
+    <h1>🧭 自主探究指引</h1>
+    <p class="subtitle">4 週獨立研究的完整鷹架——從選題到報告的里程碑地圖</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 週</span>
+    </div>
+  </div>
+  <div class="page-body">
+
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#1e3a8a;">
+      <strong>什麼時候用這頁？</strong> 當你完成了 Lv3 模組、從競賽中找到了自己的探究問題之後。接下來的 4 週，你要獨立（或小組）完成一個完整的探究研究。這頁幫你追蹤進度、避免踩坑。
+    </div>
+
+    <!-- ═══ 整體進度追蹤 ═══ -->
+    <div class="card" style="margin-bottom:24px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:6px;">📊 整體進度</div>
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="overall-progress" style="width:0%;background:linear-gradient(90deg,var(--phase3),var(--phase2),var(--phase1));"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);">
+        <span>Week 1: 選題</span><span>Week 2: 規劃</span><span>Week 3: 執行</span><span>Week 4: 報告</span>
+      </div>
+    </div>
+
+    <!-- ═══ Week 1: 選題與聚焦 ═══ -->
+    <div class="week-card" style="background:#fef6ee;border:1px solid #f0c8a0;">
+      <h3 style="color:var(--phase3);">Week 1 · 選題與聚焦</h3>
+      <p style="font-size:12px;color:#78350f;margin-bottom:12px;">從 Lv3 的經驗出發，把模糊的好奇心變成精確的研究問題。</p>
+
+      <div class="milestone" data-week="1">
+        <div class="milestone-check" style="border-color:var(--phase3);" onclick="toggleMilestone(this)"></div>
+        <div><strong>完成問題發現單</strong><br><span style="color:var(--text-muted);font-size:12px;">把 Lv3 的觀察寫進問題發現單，產出至少 3 個候選問題</span></div>
+      </div>
+      <div class="milestone" data-week="1">
+        <div class="milestone-check" style="border-color:var(--phase3);" onclick="toggleMilestone(this)"></div>
+        <div><strong>四條件篩選</strong><br><span style="color:var(--text-muted);font-size:12px;">可測量？有變因？教室可行？不是查書題？通過 4 項才選</span></div>
+      </div>
+      <div class="milestone" data-week="1">
+        <div class="milestone-check" style="border-color:var(--phase3);" onclick="toggleMilestone(this)"></div>
+        <div><strong>初步文獻搜尋</strong><br><span style="color:var(--text-muted);font-size:12px;">Google Scholar 或課本，了解別人做過什麼類似研究</span></div>
+      </div>
+      <div class="milestone" data-week="1">
+        <div class="milestone-check" style="border-color:var(--phase3);" onclick="toggleMilestone(this)"></div>
+        <div><strong>確定最終研究問題</strong><br><span style="color:var(--text-muted);font-size:12px;">用「___ 如何影響 ___？」的句型，經老師確認</span></div>
+      </div>
+
+      <div style="background:white;border-radius:6px;padding:10px 14px;font-size:12px;color:#78350f;margin-top:10px;">
+        <strong>🔗 工具連結：</strong>
+        <a href="../units/phase3/question-discover.html" style="color:var(--phase3);">問題發現單</a> ·
+        <a href="good-question.html" style="color:var(--phase3);">什麼是好的探究問題</a>
+      </div>
+
+      <div class="danger-zone">
+        ⚠️ <strong>Week 1 常見卡關：</strong>「想不到問題」→ 翻翻 Lv3 的筆記，找「讓你意外的事」；「問題太大」→ 加一個限制條件就會變小。
+      </div>
+    </div>
+
+    <!-- ═══ Week 2: 實驗設計 ═══ -->
+    <div class="week-card" style="background:#edf9f3;border:1px solid #b3dcc8;">
+      <h3 style="color:var(--phase2);">Week 2 · 實驗設計</h3>
+      <p style="font-size:12px;color:#065f46;margin-bottom:12px;">把問題拆成變因，寫出完整的實驗計畫。</p>
+
+      <div class="milestone" data-week="2">
+        <div class="milestone-check" style="border-color:var(--phase2);" onclick="toggleMilestone(this)"></div>
+        <div><strong>完成研究規劃表</strong><br><span style="color:var(--text-muted);font-size:12px;">六步流程全部填完，包括變因拆解和數據收集計畫</span></div>
+      </div>
+      <div class="milestone" data-week="2">
+        <div class="milestone-check" style="border-color:var(--phase2);" onclick="toggleMilestone(this)"></div>
+        <div><strong>AI 審稿</strong><br><span style="color:var(--text-muted);font-size:12px;">把計畫貼給 AI 審稿，記錄 AI 的建議和你的回應</span></div>
+      </div>
+      <div class="milestone" data-week="2">
+        <div class="milestone-check" style="border-color:var(--phase2);" onclick="toggleMilestone(this)"></div>
+        <div><strong>試做一輪（pilot run）</strong><br><span style="color:var(--text-muted);font-size:12px;">用 1 個水準測一次，確認器材、量測方式、場地都 OK</span></div>
+      </div>
+      <div class="milestone" data-week="2">
+        <div class="milestone-check" style="border-color:var(--phase2);" onclick="toggleMilestone(this)"></div>
+        <div><strong>修正計畫</strong><br><span style="color:var(--text-muted);font-size:12px;">根據 pilot run 結果調整（水準間距、重複次數、量測工具）</span></div>
+      </div>
+
+      <div style="background:white;border-radius:6px;padding:10px 14px;font-size:12px;color:#065f46;margin-top:10px;">
+        <strong>🔗 工具連結：</strong>
+        <a href="../units/phase2/research-plan.html" style="color:var(--phase2);">研究規劃表</a> ·
+        <a href="excel.html" style="color:var(--phase2);">Excel 數據分析</a>
+      </div>
+
+      <div class="danger-zone">
+        ⚠️ <strong>Week 2 常見卡關：</strong>「不知道水準要選幾個」→ 至少 4 個，間距要均勻；「控制變因列不完」→ 想像你是品管員，什麼東西不能動？
+      </div>
+    </div>
+
+    <!-- ═══ Week 3: 實驗執行 ═══ -->
+    <div class="week-card" style="background:#eef2fe;border:1px solid #bfcef8;">
+      <h3 style="color:var(--phase1);">Week 3 · 實驗執行與分析</h3>
+      <p style="font-size:12px;color:#1e3a8a;margin-bottom:12px;">動手做、記錄、分析。這是最刺激也最容易出錯的一週。</p>
+
+      <div class="milestone" data-week="3">
+        <div class="milestone-check" style="border-color:var(--phase1);" onclick="toggleMilestone(this)"></div>
+        <div><strong>完成全部數據蒐集</strong><br><span style="color:var(--text-muted);font-size:12px;">每個水準至少 3 次重複，異常值記錄原因</span></div>
+      </div>
+      <div class="milestone" data-week="3">
+        <div class="milestone-check" style="border-color:var(--phase1);" onclick="toggleMilestone(this)"></div>
+        <div><strong>Excel 表格建好</strong><br><span style="color:var(--text-muted);font-size:12px;">原始數據 + 平均 + 標準差（或不確定度）全部算完</span></div>
+      </div>
+      <div class="milestone" data-week="3">
+        <div class="milestone-check" style="border-color:var(--phase1);" onclick="toggleMilestone(this)"></div>
+        <div><strong>散佈圖 + 趨勢線完成</strong><br><span style="color:var(--text-muted);font-size:12px;">X/Y 軸標籤、單位、方程式、R² 都有</span></div>
+      </div>
+      <div class="milestone" data-week="3">
+        <div class="milestone-check" style="border-color:var(--phase1);" onclick="toggleMilestone(this)"></div>
+        <div><strong>初步結論</strong><br><span style="color:var(--text-muted);font-size:12px;">看圖說話：趨勢是什麼？和你的預測一樣嗎？有意外嗎？</span></div>
+      </div>
+
+      <div style="background:white;border-radius:6px;padding:10px 14px;font-size:12px;color:#1e3a8a;margin-top:10px;">
+        <strong>🔗 工具連結：</strong>
+        <a href="data-workshop.html" style="color:var(--phase1);">數據分析工坊</a> ·
+        <a href="../units/phase2/power-law.html" style="color:var(--phase1);">冪級數與線性化</a>
+      </div>
+
+      <div class="danger-zone">
+        ⚠️ <strong>Week 3 常見卡關：</strong>「數據很亂」→ 先看標準差，太大就增加重複次數或改善控制；「圖形不是直線」→ 試試線性化（log-log 或 T²）。
+      </div>
+    </div>
+
+    <!-- ═══ Week 4: 報告與發表 ═══ -->
+    <div class="week-card" style="background:#f5f0fe;border:1px solid #d4b8f8;">
+      <h3 style="color:var(--express);">Week 4 · 報告撰寫與口頭發表</h3>
+      <p style="font-size:12px;color:#5b21b6;margin-bottom:12px;">把你的研究寫成報告，準備 8 分鐘口頭發表。</p>
+
+      <div class="milestone" data-week="4">
+        <div class="milestone-check" style="border-color:var(--express);" onclick="toggleMilestone(this)"></div>
+        <div><strong>報告初稿完成</strong><br><span style="color:var(--text-muted);font-size:12px;">包含：動機/問題/方法/數據/圖表/結論/限制/未來方向</span></div>
+      </div>
+      <div class="milestone" data-week="4">
+        <div class="milestone-check" style="border-color:var(--express);" onclick="toggleMilestone(this)"></div>
+        <div><strong>AI 文字潤飾</strong><br><span style="color:var(--text-muted);font-size:12px;">核心內容（數據解讀、結論、反思）必須是你自己寫的，AI 只改文字</span></div>
+      </div>
+      <div class="milestone" data-week="4">
+        <div class="milestone-check" style="border-color:var(--express);" onclick="toggleMilestone(this)"></div>
+        <div><strong>投影片 / 海報製作</strong><br><span style="color:var(--text-muted);font-size:12px;">8 分鐘發表建議 8–10 頁，每頁一個重點</span></div>
+      </div>
+      <div class="milestone" data-week="4">
+        <div class="milestone-check" style="border-color:var(--express);" onclick="toggleMilestone(this)"></div>
+        <div><strong>練習口頭發表</strong><br><span style="color:var(--text-muted);font-size:12px;">對鏡子或隊友講一次，注意時間控制</span></div>
+      </div>
+      <div class="milestone" data-week="4">
+        <div class="milestone-check" style="border-color:var(--express);" onclick="toggleMilestone(this)"></div>
+        <div><strong>學習歷程檔案整理</strong><br><span style="color:var(--text-muted);font-size:12px;">蒐集 4 週的素材，寫一段 200 字的 ORID 反思</span></div>
+      </div>
+
+      <div style="background:white;border-radius:6px;padding:10px 14px;font-size:12px;color:#5b21b6;margin-top:10px;">
+        <strong>🔗 工具連結：</strong>
+        <a href="../units/phase2/report.html" style="color:var(--express);">報告撰寫規範</a> ·
+        <a href="presentation.html" style="color:var(--express);">表達與分享</a> ·
+        <a href="orid.html" style="color:var(--express);">ORID 反思框架</a> ·
+        <a href="portfolio.html" style="color:var(--express);">學習歷程指引</a>
+      </div>
+
+      <div class="danger-zone">
+        ⚠️ <strong>Week 4 常見卡關：</strong>「結論不知道怎麼寫」→ 用 CER：先寫主張、再貼數據、最後解釋為什麼；「報告太短」→ 「限制」和「未來方向」通常是被忽略但很重要的部分。
+      </div>
+    </div>
+
+    <!-- ═══ 報告結構快速參考 ═══ -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="font-weight:700;font-size:14px;margin-bottom:10px;">📝 報告結構快速參考</div>
+      <div style="display:grid;gap:6px;font-size:12px;">
+        <div class="q-item" style="display:flex;gap:8px;background:var(--bg);padding:8px 12px;border-radius:4px;">
+          <span style="font-weight:700;color:var(--phase3);min-width:80px;">1. 動機</span>
+          <span style="color:var(--text-secondary);">你為什麼想研究這個？從哪個觀察或經驗出發的？</span>
+        </div>
+        <div class="q-item" style="display:flex;gap:8px;background:var(--bg);padding:8px 12px;border-radius:4px;">
+          <span style="font-weight:700;color:var(--phase3);min-width:80px;">2. 研究問題</span>
+          <span style="color:var(--text-secondary);">精確的問題陳述 + 你的假設（預測）</span>
+        </div>
+        <div class="q-item" style="display:flex;gap:8px;background:var(--bg);padding:8px 12px;border-radius:4px;">
+          <span style="font-weight:700;color:var(--phase2);min-width:80px;">3. 實驗方法</span>
+          <span style="color:var(--text-secondary);">變因（操縱/控制/應變）、器材、步驟、重複次數</span>
+        </div>
+        <div class="q-item" style="display:flex;gap:8px;background:var(--bg);padding:8px 12px;border-radius:4px;">
+          <span style="font-weight:700;color:var(--phase1);min-width:80px;">4. 數據與圖表</span>
+          <span style="color:var(--text-secondary);">數據表 + 散佈圖 + 趨勢線 + R²</span>
+        </div>
+        <div class="q-item" style="display:flex;gap:8px;background:var(--bg);padding:8px 12px;border-radius:4px;">
+          <span style="font-weight:700;color:var(--phase1);min-width:80px;">5. 結論</span>
+          <span style="color:var(--text-secondary);">用 CER 格式：主張→證據→理由。和預測比較。</span>
+        </div>
+        <div class="q-item" style="display:flex;gap:8px;background:var(--bg);padding:8px 12px;border-radius:4px;">
+          <span style="font-weight:700;color:var(--text-muted);min-width:80px;">6. 限制</span>
+          <span style="color:var(--text-secondary);">哪些控制不夠好？哪些因素被忽略？模型的適用範圍？</span>
+        </div>
+        <div class="q-item" style="display:flex;gap:8px;background:var(--bg);padding:8px 12px;border-radius:4px;">
+          <span style="font-weight:700;color:var(--text-muted);min-width:80px;">7. 未來方向</span>
+          <span style="color:var(--text-secondary);">如果再給你 4 週，你會怎麼改進或延伸？</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 時間管理建議 ═══ -->
+    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+      <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px;">⏰ 時間管理 Pro Tips</div>
+      <div style="display:grid;gap:6px;font-size:12px;color:#78350f;">
+        <div style="background:white;border-radius:4px;padding:8px 12px;">
+          <strong>80/20 法則：</strong>花 80% 時間在數據蒐集和分析，20% 在寫報告。不要反過來。
+        </div>
+        <div style="background:white;border-radius:4px;padding:8px 12px;">
+          <strong>Week 2 是關鍵：</strong>pilot run 省下的時間遠超過你花在它上面的時間。沒試過就正式做，80% 會踩坑。
+        </div>
+        <div style="background:white;border-radius:4px;padding:8px 12px;">
+          <strong>每週五檢查：</strong>看看這週的里程碑完成了幾個。落後 1 個可以追，落後 3 個就要求助了。
+        </div>
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="portfolio.html">← 學習歷程指引</a>
+      <a href="curriculum-map.html">課綱能力對應 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+// ═══ 里程碑勾選 + 進度追蹤 ═══
+function toggleMilestone(el){
+  el.classList.toggle('checked');
+  el.textContent = el.classList.contains('checked') ? '✓' : '';
+  updateProgress();
+}
+
+function updateProgress(){
+  const total = document.querySelectorAll('.milestone-check').length;
+  const done = document.querySelectorAll('.milestone-check.checked').length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('overall-progress').style.width = pct + '%';
+}
+</script>
+</body>
+</html>

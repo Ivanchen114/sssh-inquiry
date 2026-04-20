@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/tools/guide">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>網站操作說明 · 探究與實作</title>
+  <meta name="description" content="松山高中探究與實作課程網站的學生操作指南，包含課程結構、互動功能、虛擬實驗室與學習記錄匯出教學。">
+  <meta property="og:title" content="網站操作說明 · 探究與實作">
+  <meta property="og:description" content="松山高中探究與實作課程網站的學生操作指南，包含課程結構、互動功能、虛擬實驗室與學習記錄匯出教學。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/guide.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    .guide-step {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 18px; margin-bottom: 10px;
+    }
+    .guide-step-num {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      background: var(--phase1); color: #fff; font-weight: 700; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .guide-step-body { flex: 1; font-size: 13px; line-height: 1.7; color: var(--text-secondary); }
+    .guide-step-body strong { color: var(--text-primary); }
+
+    .feature-card {
+      border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .feature-card-header {
+      padding: 14px 18px; font-weight: 700; font-size: 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .feature-card-body {
+      padding: 0 18px 16px; font-size: 13px; line-height: 1.8; color: var(--text-secondary);
+    }
+    .feature-card-body p { margin: 0 0 8px; }
+
+    .demo-block {
+      border-radius: 8px; padding: 14px 16px; margin: 10px 0;
+      font-size: 13px; line-height: 1.7;
+    }
+    .demo-reveal { background: #fffdf7; border-left: 3px solid #f59e0b; }
+    .demo-record { background: #f0f9f4; border-left: 3px solid var(--phase2); }
+    .demo-choice { background: #f0f3fe; border-left: 3px solid var(--phase1); }
+
+    .shortcut-table {
+      width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0;
+    }
+    .shortcut-table th {
+      background: var(--surface); text-align: left; padding: 8px 12px;
+      border-bottom: 2px solid var(--border); font-weight: 700; font-size: 12px;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .shortcut-table td {
+      padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text-secondary);
+    }
+    .shortcut-table code {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;
+    }
+
+    .tip-box {
+      background: #f0f9f4; border: 1px solid #bbf7d0; border-radius: 8px;
+      padding: 14px 18px; font-size: 13px; color: #15803d; margin: 14px 0;
+    }
+    .warn-box {
+      background: #fffdf7; border: 1px solid #fde68a; border-radius: 8px;
+      padding: 14px 18px; font-size: 13px; color: #92400e; margin: 14px 0;
+    }
+
+    .level-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 10px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .level-badge.lv1 { background: #dbeafe; color: #1e40af; }
+    .level-badge.lv2 { background: #d1fae5; color: #065f46; }
+    .level-badge.lv3 { background: #ffedd5; color: #9a3412; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">首頁</a>
+      <span>›</span>
+      <a href="index.html">工具箱</a>
+      <span>›</span>
+      <span>網站操作說明</span>
+    </div>
+    <h1>🧭 網站操作說明</h1>
+    <p class="subtitle">第一次使用？花 3 分鐘看完這頁，上課就能無痛操作。</p>
+    <div class="meta-tags">
+      <span class="tag">新手必讀</span>
+      <span class="tag express">操作指南</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ====== 一、課程結構 ====== -->
+    <div class="section-title">這個網站在幹嘛？</div>
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:14px;">
+        這是松山高中「探究與實作」課程的專屬網站。每個主題（單擺、彈簧、浮力……）都有三個等級的課程頁面，對應三個學習階段：
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
+        <div style="background:#dbeafe;border-radius:8px;padding:14px 16px;text-align:center;">
+          <span class="level-badge lv1">Lv1</span>
+          <div style="font-weight:700;font-size:14px;margin:8px 0 4px;color:#1e40af;">論證建模</div>
+          <div style="font-size:12px;color:#3b82f6;">觀察數據 → 建立模型</div>
+        </div>
+        <div style="background:#d1fae5;border-radius:8px;padding:14px 16px;text-align:center;">
+          <span class="level-badge lv2">Lv2</span>
+          <div style="font-weight:700;font-size:14px;margin:8px 0 4px;color:#065f46;">規劃研究</div>
+          <div style="font-size:12px;color:#10b981;">設計實驗 → 控制變因</div>
+        </div>
+        <div style="background:#ffedd5;border-radius:8px;padding:14px 16px;text-align:center;">
+          <span class="level-badge lv3">Lv3</span>
+          <div style="font-weight:700;font-size:14px;margin:8px 0 4px;color:#9a3412;">發現問題</div>
+          <div style="font-size:12px;color:#f59e0b;">競賽挑戰 → 解決真實問題</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== 二、基本操作 ====== -->
+    <div class="section-title">基本操作</div>
+
+    <div class="guide-step">
+      <div class="guide-step-num">1</div>
+      <div class="guide-step-body">
+        <strong>左側選單</strong>：所有課程模組都在左邊的側邊欄。點擊主題名稱可以展開／收合該模組的三個等級。手機上按右上角 <strong>☰</strong> 可以打開選單。
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-step-num">2</div>
+      <div class="guide-step-body">
+        <strong>分步驟上課</strong>：大部分課程頁面分成 3～4 個步驟（Step），頁面頂端有步驟分頁。依序從 Step 1 做到最後一步，每一步完成後按 <strong>「下一步 →」</strong> 前進。
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-step-num">3</div>
+      <div class="guide-step-body">
+        <strong>閱讀進度條</strong>：頁面最上方有一條細細的進度條，讓你知道目前看到整頁的多少百分比。
+      </div>
+    </div>
+
+    <table class="shortcut-table">
+      <thead><tr><th>快捷鍵</th><th>功能</th></tr></thead>
+      <tbody>
+        <tr><td><code>←</code></td><td>上一步</td></tr>
+        <tr><td><code>→</code></td><td>下一步</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ====== 三、互動功能 ====== -->
+    <div class="section-title">頁面上的互動元件</div>
+    <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:14px;">
+      上課時你會遇到三種互動區塊，它們的作用是讓你「停下來想一想」，而不是一直滑過去。
+    </p>
+
+    <!-- 想一想 · 展開提示 -->
+    <div class="feature-card">
+      <div class="feature-card-header" style="background:#fffdf7;border-bottom:1px solid #fde68a;">
+        💡 想一想 · 展開提示
+      </div>
+      <div class="feature-card-body">
+        <div class="demo-reveal">
+          先自己想一下答案，想好之後點 <strong>「想好了？點擊看提示 →」</strong> 就會展開參考解答或提示。
+        </div>
+        <p>這種黃色區塊的重點是<strong>先想再看</strong>。看了提示之後不會記錄任何東西，純粹幫助你理解。</p>
+      </div>
+    </div>
+
+    <!-- 自我記錄 -->
+    <div class="feature-card">
+      <div class="feature-card-header" style="background:#f0f9f4;border-bottom:1px solid #bbf7d0;">
+        ✏️ 自我記錄
+      </div>
+      <div class="feature-card-body">
+        <div class="demo-record">
+          綠色區塊裡有一個文字輸入框，你可以在裡面打字記錄你的想法、預測、觀察或結論。
+        </div>
+        <p><strong>自動儲存</strong>：你打的字會自動存在瀏覽器裡（停止打字 0.8 秒後儲存）。下次打開同一頁，之前寫的內容還在。</p>
+        <p>儲存成功時，輸入框下方會顯示 <span style="color:#15803d;font-weight:600;">✓ 已自動儲存</span>。</p>
+      </div>
+    </div>
+
+    <!-- 選擇題 -->
+    <div class="feature-card">
+      <div class="feature-card-header" style="background:#f0f3fe;border-bottom:1px solid #c7d2fe;">
+        🔘 選擇題 · 即時回饋
+      </div>
+      <div class="feature-card-body">
+        <div class="demo-choice">
+          藍色區塊是選擇題。點選一個選項後，正確答案會變<span style="color:#15803d;font-weight:700;">綠色</span>，選錯的會變<span style="color:#dc2626;font-weight:700;">紅色</span>，同時顯示解說。
+        </div>
+        <p>每題<strong>只能選一次</strong>，所以先想清楚再按！</p>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>小提醒：</strong>你的記錄存在<strong>這台電腦的這個瀏覽器</strong>裡。換電腦或清除瀏覽器資料就會消失，所以記得定期匯出（往下看）。
+    </div>
+
+    <!-- ====== 四、虛擬實驗室 ====== -->
+    <div class="section-title">虛擬實驗室</div>
+    <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:14px;">
+      部分 Lv1 課程頁面內建了虛擬實驗室，你可以直接在頁面上操作實驗，不需要跳到別的網站。
+    </p>
+
+    <div class="guide-step">
+      <div class="guide-step-num">1</div>
+      <div class="guide-step-body">
+        <strong>找到實驗室</strong>：通常在 Step 3（活動二）裡面，會看到一個左右分欄的操作區。左邊是控制面板和動畫，右邊是數據表和圖表。
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-step-num">2</div>
+      <div class="guide-step-body">
+        <strong>操作實驗</strong>：根據指引選擇參數（例如擺長、物體）→ 觀察模擬動畫 → 按「記錄」把數據存進表格。重複不同參數，收集足夠的數據。
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-step-num">3</div>
+      <div class="guide-step-body">
+        <strong>看圖表與結論</strong>：當你收集夠多數據，右邊會自動畫出圖表，部分實驗還會做線性回歸、計算物理量（如重力加速度 g）並顯示誤差。
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;">
+        <div style="font-weight:700;margin-bottom:6px;">🕰️ 單擺實驗</div>
+        <span style="color:var(--text-muted);">測量不同擺長的週期，算出 g 值</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;">
+        <div style="font-weight:700;margin-bottom:6px;">🔊 聲音實驗</div>
+        <span style="color:var(--text-muted);">播放不同音符，觀察頻率與波形</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;">
+        <div style="font-weight:700;margin-bottom:6px;">🚢 浮力實驗</div>
+        <span style="color:var(--text-muted);">投放不同物體，探究密度與浮沉</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;">
+        <div style="font-weight:700;margin-bottom:6px;">📏 彈簧實驗</div>
+        <span style="color:var(--text-muted);">掛不同砝碼，驗證虎克定律</span>
+      </div>
+    </div>
+
+    <!-- ====== 五、匯出學習記錄 ====== -->
+    <div class="section-title">匯出學習記錄</div>
+    <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:14px;">
+      這是最重要的功能之一——把你在網站上的所有記錄打包帶走，可以當作<strong>學習歷程</strong>的素材。
+    </p>
+
+    <div class="guide-step">
+      <div class="guide-step-num">1</div>
+      <div class="guide-step-body">
+        <strong>找到匯出按鈕</strong>：在有互動元件的頁面上，右下角會出現兩個浮動按鈕，綠色的顯示你已填寫了幾題（例如 3/7）。
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-step-num">2</div>
+      <div class="guide-step-body">
+        <strong>兩種匯出方式</strong>，選你方便的：
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+          <div style="background:#d1fae5;border-radius:8px;padding:10px 14px;text-align:center;">
+            <div style="font-size:18px;">📋</div>
+            <div style="font-weight:700;font-size:13px;color:#065f46;">複製學習記錄</div>
+            <div style="font-size:12px;color:#15803d;margin-top:4px;">一鍵複製 → 直接貼上<br>Google Classroom、學習歷程平台等</div>
+          </div>
+          <div style="background:#e5e7eb;border-radius:8px;padding:10px 14px;text-align:center;">
+            <div style="font-size:18px;">📥</div>
+            <div style="font-weight:700;font-size:13px;color:var(--text-primary);">下載 .md 檔</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">下載 Markdown 檔案<br>留存備份或上傳附件用</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="guide-step">
+      <div class="guide-step-num">3</div>
+      <div class="guide-step-body">
+        <strong>推薦用法</strong>：大多數情況按「📋 複製」最快——直接貼到 Classroom 作業、Google 文件或學習歷程平台。如果需要留檔，再按「📥 下載」存一份 .md 檔到電腦。
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <strong>注意：</strong>匯出的是<strong>你當前在這一頁</strong>的記錄。如果你做了多個主題，每個主題的頁面都要分別匯出。建議每次上完課就匯出一次。
+    </div>
+
+    <div class="tip-box">
+      <strong>匯出內容包含什麼？</strong><br>
+      ① 你在綠色記錄框裡寫的所有文字<br>
+      ② 選擇題的作答結果與解說<br>
+      ③ 虛擬實驗的完整數據表（擺長-週期、頻率-音符、密度-浮沉等）與計算結果
+    </div>
+
+    <!-- ====== 六、常見問題 ====== -->
+    <div class="section-title">常見問題</div>
+
+    <div class="collapsible" style="margin-bottom:8px;">
+      <div class="collapsible-header" style="cursor:pointer;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;">
+        Q：我換了一台電腦，之前寫的記錄還在嗎？
+      </div>
+      <div class="collapsible-body" style="padding:0 16px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+        <p style="padding:12px 0;font-size:13px;color:var(--text-secondary);line-height:1.7;">
+          不在。記錄存在瀏覽器的 localStorage 裡，換電腦或換瀏覽器就看不到了。所以<strong>每次上完課請記得匯出</strong>，下載的檔案就是你的永久備份。
+        </p>
+      </div>
+    </div>
+
+    <div class="collapsible" style="margin-bottom:8px;">
+      <div class="collapsible-header" style="cursor:pointer;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;">
+        Q：選擇題選錯了可以重選嗎？
+      </div>
+      <div class="collapsible-body" style="padding:0 16px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+        <p style="padding:12px 0;font-size:13px;color:var(--text-secondary);line-height:1.7;">
+          不行，每題只能選一次。這是刻意設計的——逼你先想清楚再作答。選錯也沒關係，重點是看懂解說。
+        </p>
+      </div>
+    </div>
+
+    <div class="collapsible" style="margin-bottom:8px;">
+      <div class="collapsible-header" style="cursor:pointer;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;">
+        Q：虛擬實驗室的數據可以重做嗎？
+      </div>
+      <div class="collapsible-body" style="padding:0 16px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+        <p style="padding:12px 0;font-size:13px;color:var(--text-secondary);line-height:1.7;">
+          可以。大部分實驗室都有「重置」按鈕，按下去會清空數據讓你重新收集。重做前記得先匯出你覺得有價值的數據。
+        </p>
+      </div>
+    </div>
+
+    <div class="collapsible" style="margin-bottom:8px;">
+      <div class="collapsible-header" style="cursor:pointer;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;">
+        Q：手機上可以用嗎？
+      </div>
+      <div class="collapsible-body" style="padding:0 16px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+        <p style="padding:12px 0;font-size:13px;color:var(--text-secondary);line-height:1.7;">
+          可以，網站有做響應式設計。但虛擬實驗室在電腦上操作體驗比較好，建議實驗的部分盡量用電腦或平板。
+        </p>
+      </div>
+    </div>
+
+    <div class="collapsible" style="margin-bottom:8px;">
+      <div class="collapsible-header" style="cursor:pointer;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;">
+        Q：匯出的 .md 檔怎麼打開？
+      </div>
+      <div class="collapsible-body" style="padding:0 16px;max-height:0;overflow:hidden;transition:max-height 0.3s;">
+        <p style="padding:12px 0;font-size:13px;color:var(--text-secondary);line-height:1.7;">
+          .md 是 Markdown 格式，可以用記事本、VS Code、Typora 等軟體打開。直接上傳到 Google Classroom 或學習歷程平台也沒問題——大部分平台都能正確顯示 Markdown 的標題、表格和粗體。
+        </p>
+      </div>
+    </div>
+
+    <!-- ====== 七、試試看 ====== -->
+    <div class="section-title">試試看：寫一個你自己的問題</div>
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">
+        做完實驗，一定有什麼讓你意外的結果。試著把它變成一個<strong>可以做實驗回答的問題</strong>：
+      </p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.7;color:var(--text-secondary);margin-bottom:12px;">
+        <strong>範例：</strong>「擺線材質（棉線 vs 釣魚線）會影響擺動衰減的速度嗎？」<br>
+        <span style="color:var(--text-muted);font-size:12px;">← 有操縱變因、有應變變因、教室裡做得到。</span>
+      </div>
+    </div>
+
+    <div class="think-block record" style="margin-bottom:24px;">
+      <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+      <div class="think-body">
+        <textarea class="think-input" data-key="guide-my-question" rows="4" placeholder="例：水溫會影響鹽溶解的速度嗎？"></textarea>
+        <div class="think-status"></div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <strong>恭喜！</strong>你剛剛用了綠色記錄框。這段文字已經自動儲存了——現在試試右下角的「📋 複製學習記錄」，貼到記事本看看效果。
+    </div>
+
+  </div><!-- .page-body -->
+</div><!-- #main-content -->
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
