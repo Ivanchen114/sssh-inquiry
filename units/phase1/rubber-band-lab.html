@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/rubber-band-lab">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>虛擬實驗室 · 橡皮筋動力罐模擬器 · 探究與實作</title>
+  <meta name="description" content="橡皮筋動力罐模擬器，調整扭轉次數觀察能量轉換與行進距離。">
+  <meta property="og:title" content="虛擬實驗室 · 橡皮筋動力罐模擬器 · 探究與實作">
+  <meta property="og:description" content="橡皮筋動力罐模擬器，調整扭轉次數觀察能量轉換與行進距離。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/rubber-band-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>橡皮筋動力罐</span><span>›</span>
+      <span style="color:var(--phase1)">虛擬實驗室</span>
+    </div>
+    <h1>🥫 橡皮筋動力罐模擬器</h1>
+    <p class="subtitle">調整圈數與橡皮筋條數，觀察滾動距離——能量轉換的直覺</p>
+  </div>
+  <div class="page-body">
+
+    <div style="background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:12px;padding:20px;color:white;margin-bottom:20px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:14px;">🔬 橡皮筋動力罐模擬器</div>
+      <p style="font-size:12px;opacity:0.85;margin-bottom:14px;">橡皮筋被扭轉後儲存彈性位能，釋放時轉為動能讓罐子滾動。圈數越多→位能越大→滾越遠（但超過某個點橡皮筋會「打滑」失效）。</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">扭轉圈數</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="rb-turns" min="5" max="60" value="20" step="5" style="flex:1;accent-color:#c084fc;" oninput="document.getElementById('turns-val').textContent=this.value+'圈'">
+            <span id="turns-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:50px;text-align:right;">20圈</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">橡皮筋條數</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="rb-bands" min="1" max="4" value="1" step="1" style="flex:1;accent-color:#c084fc;" oninput="document.getElementById('bands-val').textContent=this.value+'條'">
+            <span id="bands-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:40px;text-align:right;">1條</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <button onclick="rollCan()" style="background:#c084fc;color:#3b0764;border:none;padding:8px 18px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;">🥫 釋放！</button>
+        <button onclick="clearRolls()" style="background:rgba(255,255,255,0.15);color:white;border:none;padding:8px 14px;border-radius:6px;font-size:12px;cursor:pointer;">清除數據</button>
+      </div>
+
+      <canvas id="roll-canvas" width="680" height="200" style="width:100%;background:#1e1b4b;border-radius:8px;margin-bottom:10px;"></canvas>
+      <div id="roll-result" style="font-family:'DM Mono',monospace;font-size:13px;opacity:0.85;min-height:20px;"></div>
+
+      <div style="margin-top:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄</div>
+        <table style="width:100%;font-size:12px;background:rgba(255,255,255,0.05);border-radius:6px;">
+          <thead><tr style="color:#d8b4fe;">
+            <th style="padding:8px;">條數</th><th style="padding:8px;">圈數</th><th style="padding:8px;">儲存位能 (J)</th><th style="padding:8px;">滾動距離 (cm)</th><th style="padding:8px;">效率 (%)</th>
+          </tr></thead>
+          <tbody id="roll-data"></tbody>
+        </table>
+        <button onclick="exportRollData()" style="margin-top:8px;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;">📋 複製數據</button>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:8px;font-size:13px;margin-bottom:20px;">
+      <div class="q-item">Q1：圈數和距離是正比關係嗎？還是有其他規律？</div>
+      <div class="q-item">Q2：增加橡皮筋條數對距離有什麼影響？和圈數的效果一樣嗎？</div>
+      <div class="q-item">Q3：「效率」是什麼意思？為什麼不是 100%？能量跑去哪了？</div>
+    </div>
+
+    <div class="info-box purple">
+      <strong>💡 物理模型：</strong>橡皮筋的彈性位能 $\propto k\theta^2$（$\theta$ 為扭轉角度），類似彈簧 $E = \frac{1}{2}kx^2$。動能轉化效率受摩擦力（地面和罐內部）影響。圈數超過上限時橡皮筋打滑，能量不再增加。
+    </div>
+
+    <div class="unit-nav">
+      <a href="rubber-band-lv1.html">← 回到橡皮筋 Lv1</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('roll-canvas');
+  const ctx = canvas.getContext('2d');
+  let rollHistory = [];
+  let dataRows = [];
+
+  function drawTrack(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // 地面
+    ctx.strokeStyle = '#312e81'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(40, 150); ctx.lineTo(canvas.width-10, 150); ctx.stroke();
+    // 刻度
+    ctx.fillStyle = '#6366f1'; ctx.font = '10px monospace';
+    for(let d=0; d<=300; d+=50){
+      const x = 60 + (d/300)*(canvas.width-80);
+      ctx.fillText(d+'cm', x-12, 165);
+      ctx.beginPath(); ctx.moveTo(x,148); ctx.lineTo(x,152); ctx.stroke();
+    }
+    // 起點罐子
+    ctx.fillStyle = '#7c3aed';
+    ctx.fillRect(42, 125, 16, 25);
+    ctx.fillStyle = '#a78bfa';
+    ctx.fillRect(44, 127, 12, 21);
+  }
+
+  function animateRoll(dist, color){
+    const maxX = canvas.width - 80;
+    const pixelDist = 60 + (dist/300)*maxX;
+    let x = 60;
+    const speed = 4;
+    let angle = 0;
+
+    function frame(){
+      drawTrack();
+      // 畫所有之前的
+      rollHistory.forEach(h => {
+        ctx.fillStyle = h.color; ctx.globalAlpha = 0.4;
+        ctx.beginPath(); ctx.arc(h.x, 137, 12, 0, Math.PI*2); ctx.fill();
+        ctx.globalAlpha = 1;
+      });
+      // 當前罐子
+      ctx.save();
+      ctx.translate(x, 137);
+      ctx.rotate(angle);
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(0,0,12,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(-12,0); ctx.lineTo(12,0); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,-12); ctx.lineTo(0,12); ctx.stroke();
+      ctx.restore();
+
+      if(x < pixelDist){
+        x += speed;
+        angle += 0.15;
+        requestAnimationFrame(frame);
+      } else {
+        rollHistory.push({x: pixelDist, color});
+      }
+    }
+    frame();
+  }
+
+  const colors = ['#c084fc','#f59e0b','#34d399','#f87171','#60a5fa','#fb923c'];
+
+  window.rollCan = function(){
+    const turns = parseInt(document.getElementById('rb-turns').value);
+    const bands = parseInt(document.getElementById('rb-bands').value);
+
+    // 物理模型
+    const k = 0.0008 * bands; // 扭轉彈力常數
+    const theta = turns * 2 * Math.PI;
+    const maxTheta = 45 * 2 * Math.PI; // 打滑上限
+    const effectiveTheta = Math.min(theta, maxTheta);
+    const E = 0.5 * k * effectiveTheta * effectiveTheta; // 位能 (J)
+
+    // 距離：考慮滾動摩擦
+    const friction = 0.003 + Math.random()*0.001; // N（加一點隨機性）
+    const mass = 0.15; // kg
+    const dist = E / (friction * mass * 9.8) * 100; // cm
+    const distRound = Math.round(dist);
+    const efficiency = Math.min(95, 60 + Math.random()*15 - turns*0.2);
+
+    const color = colors[rollHistory.length % colors.length];
+    animateRoll(Math.min(distRound, 300), color);
+
+    document.getElementById('roll-result').textContent =
+      `${bands}條 × ${turns}圈 | 位能 ≈ ${E.toFixed(4)} J | 滾動距離 ≈ ${distRound} cm`;
+
+    dataRows.push({bands, turns, E: E.toFixed(4), dist: distRound, eff: efficiency.toFixed(0)});
+    updateTable();
+  };
+
+  window.clearRolls = function(){
+    rollHistory = []; dataRows = [];
+    drawTrack();
+    document.getElementById('roll-result').textContent = '';
+    document.getElementById('roll-data').innerHTML = '';
+  };
+
+  function updateTable(){
+    const tbody = document.getElementById('roll-data');
+    tbody.innerHTML = '';
+    dataRows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td style="padding:6px 8px;text-align:center;">${r.bands}</td>
+        <td style="padding:6px 8px;text-align:center;">${r.turns}</td>
+        <td style="padding:6px 8px;text-align:center;color:#d8b4fe;">${r.E}</td>
+        <td style="padding:6px 8px;text-align:center;color:#c084fc;">${r.dist}</td>
+        <td style="padding:6px 8px;text-align:center;">${r.eff}%</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.exportRollData = function(){
+    let txt = '條數\t圈數\t位能(J)\t距離(cm)\t效率(%)\n';
+    dataRows.forEach(r => { txt += `${r.bands}\t${r.turns}\t${r.E}\t${r.dist}\t${r.eff}\n`; });
+    navigator.clipboard.writeText(txt).then(()=>{
+      const btn = event.target;
+      btn.textContent = '✅ 已複製！';
+      setTimeout(()=> btn.textContent = '📋 複製數據', 1500);
+    });
+  };
+
+  drawTrack();
+})();
+</script>
+</body>
+</html>

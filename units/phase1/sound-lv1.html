@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/sound-lv1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>聲音 Lv1 · 頻率與波形 · 探究與實作</title>
+  <meta name="description" content="聲音 Lv1 論證建模：頻率與波形虛擬實驗，用 Web Audio 探索音階的等比頻率關係。">
+  <meta property="og:title" content="聲音 Lv1 · 頻率與波形 · 探究與實作">
+  <meta property="og:description" content="聲音 Lv1 論證建模：頻率與波形虛擬實驗，用 Web Audio 探索音階的等比頻率關係。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/sound-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .lab-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 700px) {
+      .lab-wrap { grid-template-columns: 1fr; }
+    }
+    .sound-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .note-btn {
+      width: 100%;
+      padding: 8px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .note-btn:hover { border-color: var(--phase1); background: #f0f9ff; }
+    .note-btn.active { border-color: var(--phase1); background: #dbeafe; color: #1e40af; }
+    .note-btn.done { border-color: #3b82f6; background: #eff6ff; }
+    .note-btn.done::after { content: ' ✓'; color: #2563eb; }
+
+    .sound-canvas-wrap {
+      position: relative;
+      width: 180px;
+      height: 200px;
+      margin: 0 auto;
+    }
+    #soundCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+
+    .record-btn {
+      width: 100%;
+      padding: 9px;
+      background: var(--phase1);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .record-btn:hover { opacity: 0.88; }
+    .record-btn:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+
+    .data-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #soundDataTable { font-size: 12px; width: 100%; }
+    #soundDataTable th { background: var(--phase1); color: white; padding: 6px 8px; }
+    #soundDataTable td { padding: 5px 8px; text-align: center; }
+    #soundDataTable tr:nth-child(even) { background: var(--bg); }
+
+    #freqCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+      width: 100%;
+    }
+    .insight-box {
+      background: #f0f9ff;
+      border: 1px solid #0ea5e9;
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·聲音</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>🔊 聲音 · Lv1 論證建模</h1>
+    <p class="subtitle">聲音看不見——但數據看得見。用波形圖認識聲音的三個物理量。</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">3 節課</span>
+      <span class="tag">波動 + 對數律</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從數據中辨識趨勢與規律（例如：從波形圖讀出頻率與振幅的對應）</li>
+      <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：用頻率比表示音階的等比關係）</li>
+      <li>能用「主張—證據—推理」的架構進行科學論證</li>
+      <li>能評估模型的適用範圍與限制</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>預測</button>
+    <button class="step-tab"><span class="step-num">2</span>認識概念</button>
+    <button class="step-tab"><span class="step-num">3</span>數據分析</button>
+    <button class="step-tab"><span class="step-num">4</span>延伸與反思</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">在看任何數據之前，先用直覺回答三個預測題。</div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>音叉的「高音 La」和「中音 La」聽起來不同。你覺得差異來自波的什麼特徵？振動快慢？振動幅度？還是其他？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>人的聲音和音叉能發出一樣高的音。但音色明顯不同——你覺得波形圖會長一樣嗎？
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>Do Re Mi Fa Sol La Si Do 這 8 個音，頻率是等距增加（像 100, 200, 300...），還是等比增加（像 100, 150, 225...）？
+      </div>
+
+      <!-- Layer 2: 預測記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測寫下來（P1–P3），活動結束後回來對照。</div>
+        <textarea class="think-input" data-key="sound-lv1-predict" placeholder="P1：高低音差在…&#10;P2：人聲和音叉的波形…&#10;P3：Do Re Mi 的頻率是等距/等比…因為…" style="min-height:80px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Interactive: Sound pitch and frequency -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 高音和低音的差異來自波的什麼特徵？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 頻率（振動快慢）</button>
+          <button class="think-opt" data-val="b">B. 振幅（波的高度）</button>
+          <button class="think-opt" data-val="c">C. 波長</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          正確！頻率越高→音越高（高音）；頻率越低→音越低（低音）。振幅影響響度（音量），波長是 v/f 決定的，都不是直接決定音高的因素。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：認識概念 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">認識波形的三個關鍵物理量：頻率、振幅、波速。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div class="card" style="border-top:3px solid var(--phase1);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase1);margin-bottom:6px;">頻率 f</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">每秒振動次數（Hz）。人耳範圍：20–20,000 Hz。<br><strong>頻率越高 → 音越高</strong></div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--phase2);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:6px;">振幅 A</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">波形偏離中線的最大距離。<br><strong>振幅越大 → 聲音越響</strong><br>單位：音壓 Pa 或 dB</div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:6px;">波速 v</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;">空氣中約 340 m/s（20°C）<br>波速和頻率、波長有什麼關係？<br>頻率不變，介質變 → 波速變</div>
+        </div>
+      </div>
+
+      <div class="info-box blue" style="margin-bottom:16px;">
+        💡 <strong>今天的任務</strong>：從波形中量出週期，算出頻率，再比較不同音符之間的頻率關係——你會發現一個意想不到的數學規律。
+      </div>
+
+      <div style="margin-top:16px;">
+        <a href="sound-lab.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
+          🔬 <span><strong style="color:var(--text-primary);">虛擬實驗室</strong>：看波形、量週期、算頻率、比較音色</span> <span style="margin-left:auto;">→</span>
+        </a>
+      </div>
+
+      <!-- Interactive: Period and frequency relationship -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：如果一次振動花 0.01 秒（週期 T），那一秒鐘能振動幾次（頻率 f）？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>週期 = 一次振動花的時間（秒）；頻率 = 每秒振動次數（次/秒 = Hz）。直覺想像：如果一次振動花 0.01 秒，那 1 秒可以做 1/0.01 = 100 次→ f = 100 Hz。所以 f = 1/T，這是倒數關係。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：數據分析（核心任務）═══ -->
+    <div class="step-panel">
+      <div class="step-action">操作虛擬聲音產生器，記錄音高與頻率的對應。</div>
+
+      <!-- 主實驗區 -->
+      <div class="lab-wrap">
+        <!-- 左：聲音產生器 -->
+        <div class="sound-panel">
+          <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:6px;">選擇音符：</div>
+          <div id="noteBtns" style="width:100%;display:flex;flex-direction:column;gap:5px;">
+            <button class="note-btn" data-note="C4" data-freq="262">C4 (262 Hz)</button>
+            <button class="note-btn" data-note="D4" data-freq="294">D4 (294 Hz)</button>
+            <button class="note-btn" data-note="E4" data-freq="330">E4 (330 Hz)</button>
+            <button class="note-btn" data-note="F4" data-freq="349">F4 (349 Hz)</button>
+            <button class="note-btn" data-note="G4" data-freq="392">G4 (392 Hz)</button>
+            <button class="note-btn" data-note="A4" data-freq="440">A4 (440 Hz)</button>
+            <button class="note-btn" data-note="B4" data-freq="494">B4 (494 Hz)</button>
+            <button class="note-btn" data-note="C5" data-freq="523">C5 (523 Hz)</button>
+          </div>
+
+          <div style="margin-top:10px;padding:10px;background:var(--bg);border-radius:6px;border:1px solid var(--border);">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">波形類型：</div>
+            <div style="display:flex;gap:6px;">
+              <button class="wave-btn active" data-wave="sine" style="flex:1;padding:6px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:var(--phase1);color:white;cursor:pointer;">純音</button>
+              <button class="wave-btn" data-wave="complex" style="flex:1;padding:6px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text-primary);cursor:pointer;">複合音</button>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-secondary);">
+              📢 音量
+              <input type="range" id="volumeSlider" min="0" max="100" value="50" style="flex:1;height:5px;">
+            </label>
+          </div>
+
+          <div class="sound-canvas-wrap">
+            <canvas id="soundCanvas" width="180" height="200"></canvas>
+          </div>
+
+          <div id="noteDisplay" style="font-size:13px;font-weight:700;color:var(--phase1);text-align:center;margin:8px 0;">
+            選擇音符開始
+          </div>
+
+          <button class="record-btn" id="recordNoteBtn" disabled>📝 記錄此音</button>
+          <button id="stopSoundBtn" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;font-size:12px;color:var(--text-secondary);margin-top:6px;" disabled>停止</button>
+        </div>
+
+        <!-- 右：數據表 + 圖 -->
+        <div class="data-panel">
+          <div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 頻率記錄表</div>
+            <div style="overflow-x:auto;">
+              <table id="soundDataTable">
+                <thead>
+                  <tr>
+                    <th>音名</th>
+                    <th>頻率 (Hz)</th>
+                    <th>相鄰比值</th>
+                  </tr>
+                </thead>
+                <tbody id="soundTableBody">
+                  <tr><td colspan="3" style="color:var(--text-muted);font-style:italic;padding:12px;">← 記錄音符後出現</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📈 頻率柱狀圖</div>
+            <canvas id="freqCanvas" height="200"></canvas>
+          </div>
+
+          <div id="soundInsightBox" class="insight-box" style="display:none;">
+            <div style="font-weight:700;margin-bottom:6px;color:var(--phase1);">📊 數據分析結果</div>
+            <div id="soundInsightContent" style="font-size:13px;color:var(--text-secondary);line-height:1.9;"></div>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;margin-top:16px;"><strong>活動一 · 讀波形圖</strong></p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">下表是三段聲音的波形數據（用手機 app 錄製後，讀取週期和振幅）：</p>
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table>
+          <thead><tr><th>聲音</th><th>5 個週期的總時間 (ms)</th><th>週期 T (ms)</th><th>頻率 f (Hz)</th><th>振幅（格數）</th></tr></thead>
+          <tbody>
+            <tr><td>音叉 A（中音 La）</td><td>11.36</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td>4.2</td></tr>
+            <tr><td>音叉 B（高音 La）</td><td>5.68</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td>3.1</td></tr>
+            <tr><td>人聲哼唱（La）</td><td>11.50</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td>6.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:grid;gap:6px;margin-bottom:16px;">
+        <div class="q-item"><strong>Q1：</strong>算出三段聲音的 T 和 f。音叉 B 的頻率是音叉 A 的幾倍？（理論上應為 2 倍）</div>
+        <div class="q-item"><strong>Q2：</strong>人聲和音叉 A 的頻率接近，但你聽起來音色不同——波形圖還有什麼不一樣？</div>
+        <div class="q-item"><strong>Q3：</strong>振幅最大的是哪個聲音？它一定是最響的嗎？（提示：距離麥克風多遠？）</div>
+      </div>
+
+      <!-- Interactive: Timbre vs frequency -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 人聲和音叉發出同樣頻率的聲音，為什麼音色不同？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 人聲的振幅更大</button>
+          <button class="think-opt" data-val="b">B. 波形不同——含有基音和諧波的組合</button>
+          <button class="think-opt" data-val="c">C. 人聲頻率其實略有差異</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          正確！音叉發出「純正弦波」（只有基頻），人聲是複雜的「複合波」（基音+諸多諧波疊加）。這種波形的複雜度就是「音色」(timbre)。這也是為什麼不同樂器的 La 聽起來質感不同。
+        </div>
+      </div>
+
+      <!-- Interactive: Musical scale frequency ratio -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 計算音階 Do Re Mi Fa Sol La Si Do 的頻率比（f/f_Do）。規律是什麼？</div>
+        <textarea class="think-input" data-key="sound-lv1-scale" placeholder="例如：Do=1.0, Re≈1.122, Mi≈1.260, …&#10;規律：不是等差數列（1.0, 2.0, 3.0），而是等比數列，比例約 1.059…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin:20px 0 12px;"><strong>活動二 · 音階的頻率規律</strong></p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">以下是一組音階的頻率測量值。找出規律。</p>
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table>
+          <thead><tr><th>音名</th><th>Do</th><th>Re</th><th>Mi</th><th>Fa</th><th>Sol</th><th>La</th><th>Si</th><th>高音 Do</th></tr></thead>
+          <tbody>
+            <tr><td><strong>f (Hz)</strong></td><td>262</td><td>294</td><td>330</td><td>349</td><td>392</td><td>440</td><td>494</td><td>524</td></tr>
+            <tr><td><strong>f / f_Do</strong></td><td>1.000</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td><td style="color:var(--text-muted);">?</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 散佈圖 + 趨勢線：音階頻率 -->
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+          <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">📈 音階序號 vs 頻率</span>
+          <div id="soundTrendControls" style="display:flex;align-items:center;gap:5px;margin-left:auto;font-size:11px;color:var(--text-secondary);">
+            趨勢線：
+            <button class="trend-btn snd active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+            <button class="trend-btn snd" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+            <button class="trend-btn snd" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+            <button class="trend-btn snd" data-trend="poly" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">多項式</button>
+          </div>
+        </div>
+        <canvas id="soundGraphCanvas" width="400" height="220" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;background:#fafbfc;"></canvas>
+        <div id="soundFitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+      </div>
+
+      <div style="display:grid;gap:6px;margin-bottom:14px;">
+        <div class="q-item"><strong>Q4：</strong>高音 Do 的頻率是低音 Do 的幾倍？這叫什麼？物理上「頻率加倍 = 高八度」，這個關係是<strong>等差</strong>還是<strong>等比</strong>？</div>
+        <div class="q-item"><strong>Q5：</strong>選<strong>線性</strong>趨勢線——它能描述你的數據嗎？如果音階頻率是等差的，每個音之間應該差多少 Hz？實際數據是這樣嗎？</div>
+        <div class="q-item"><strong>Q6：</strong>試試<strong>冪次</strong>趨勢線——R² 比線性高嗎？但真正的音階規律是「每半音×1.059…」（等比數列）。用「主張—理由—證據」論證為什麼音階不是等差數列。</div>
+      </div>
+
+      <div class="collapsible think-first" style="margin:0;">
+        <div class="collapsible-header">🧠 Q1 提示：先自己想，再點開<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            先算出一個週期的時間（總時間 ÷ 週期數），再想想：每秒能振動幾次？兩支音叉的頻率比是多少？這個比值和你聽到的音高差距吻合嗎？
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：延伸與反思 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">回頭對照預測，思考延伸問題，為 Lv2 做準備。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回 P1、P2、P3 的預測題，和你的數據結果比較——差多少？差在哪裡？</p>
+
+      <!-- Interactive: Musical scale discovery -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼音階是等比而非等差？這有什麼優勢？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>人耳感知頻率是「相對」的——從 100 Hz 升到 200 Hz 的「音感變化」和從 1000 Hz 升到 2000 Hz 的變化聽起來一樣（都是「升一個八度」）。所以需要等比關係，不是等差。這個設計讓樂曲在任何調都聽起來舒服。</p>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:6px;">同一根弦，拉得越緊音越高——這表示頻率和弦的什麼物理量有關？</div>
+      <div class="q-item" style="margin-bottom:6px;">為什麼吉他的弦有粗有細？粗弦和細弦的功能分別是什麼？</div>
+      <div class="q-item" style="margin-bottom:16px;">聲音在水中的速度約 1500 m/s，在空氣中約 340 m/s。如果頻率不變，波長會怎麼變？</div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">用「如果改變___，___會怎樣？」的句型：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「不同材質的杯子（紙杯 vs 玻璃杯 vs 鐵罐）敲擊後的頻率有什麼差異？」← 有操縱變因、可量化。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="sound-lv1-my-question" rows="3" placeholder="例：瓶中水量改變時，敲擊音和吹氣音的頻率變化方向一樣嗎？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/sound-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          聲音 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生從波形圖讀出頻率和振幅，建立「音高↔頻率」「音量↔振幅」的模型</li>
+              <li>用數據比較不同聲音，練習「看圖說話」的論證能力</li>
+              <li>發現音階的等比關係，理解音樂與數學的深層連結</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              P3 提示：標準音階是 12 平均律，頻率比 $2^{1/12}$ ≈ 1.059。學生初期可能混淆「振幅大 = 響」（實際需考慮距離），Q2 特別重要——音色由基音加諧波決定。活動二的等比發現往往令學生驚喜。
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">你的音階頻率比表和「等比數列論證」是好素材。展現你如何從數據中發現數學規律。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ 反思錨點：你<em>之前</em>的預測 vs 實際結果差在哪？（2-3 句就好）
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 原來前人也整理過——波動基本公式</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">你從波形中量出了週期和頻率的關係。物理學家把它整理成兩個基本公式：</p>
+          <div style="text-align:center;padding:14px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text-primary);background:white;border-radius:6px;margin:10px 0;">
+            $f = \frac{1}{T}$ &nbsp;&nbsp;；&nbsp;&nbsp; $v = f \times \lambda$
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            頻率 $f$ 就是週期 $T$ 的倒數——你在實驗中已經用過了。波速 $v$ = 頻率 × 波長，在空氣中約 340 m/s。你還發現了音階的頻率是等比數列，相鄰半音的比值是 $2^{1/12} \approx 1.059$——這就是 12 平均律。
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小強想研究「水量對瓶子音高的影響」。他的計畫：拿 3 個一樣的瓶子，分別裝 100ml、200ml、300ml 的水，用筷子敲，聽哪個比較高音。<strong>有什麼問題？</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              「聽」不是量化測量（應該用 App 測頻率）、只有 3 個水準（偏少）、沒說明敲的位置和力道要一致（控制變因）、沒有重複。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/sound-lv2.html">聲音 Lv2 規劃研究 →</a>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+<script>
+// ─── 音符定義 ───
+const notes = {
+  C4: 262, D4: 294, E4: 330, F4: 349, G4: 392, A4: 440, B4: 494, C5: 523
+};
+
+// ─── 全局狀態 ───
+let audioCtx = null;
+let oscillators = [];
+let gainNode = null;
+let analyser = null;
+let isPlaying = false;
+const recordedNotes = {};
+let currentNote = null;
+let currentWave = 'sine';
+
+// ─── UI 元素 ───
+const soundCanvas = document.getElementById('soundCanvas');
+const sCtx = soundCanvas.getContext('2d');
+const freqCanvas = document.getElementById('freqCanvas');
+const fCtx = freqCanvas.getContext('2d');
+const soundTableBody = document.getElementById('soundTableBody');
+const recordNoteBtn = document.getElementById('recordNoteBtn');
+const stopSoundBtn = document.getElementById('stopSoundBtn');
+const noteDisplay = document.getElementById('noteDisplay');
+const volumeSlider = document.getElementById('volumeSlider');
+
+// ─── 初始化音頻上下文 ───
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    gainNode = audioCtx.createGain();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+    gainNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  }
+}
+
+// ─── 停止所有振蕩器 ───
+function stopAllOscillators() {
+  oscillators.forEach(osc => {
+    try {
+      osc.stop();
+    } catch (e) {}
+  });
+  oscillators = [];
+  isPlaying = false;
+}
+
+// ─── 播放單個音符 ───
+function playNote(note, freq) {
+  initAudio();
+  stopAllOscillators();
+
+  const volume = volumeSlider.value / 100;
+  gainNode.gain.setValueAtTime(volume * 0.3, audioCtx.currentTime);
+
+  if (currentWave === 'sine') {
+    // 純音：只有基頻
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    osc.connect(gainNode);
+    osc.start();
+    oscillators.push(osc);
+  } else {
+    // 複合音：基頻 + 二次諧波 + 三次諧波
+    // 基頻：100%
+    const osc1 = audioCtx.createOscillator();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    const gain1 = audioCtx.createGain();
+    gain1.gain.setValueAtTime(1.0, audioCtx.currentTime);
+    osc1.connect(gain1);
+    gain1.connect(gainNode);
+    osc1.start();
+    oscillators.push(osc1);
+
+    // 二次諧波：50%
+    const osc2 = audioCtx.createOscillator();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(freq * 2, audioCtx.currentTime);
+    const gain2 = audioCtx.createGain();
+    gain2.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    osc2.connect(gain2);
+    gain2.connect(gainNode);
+    osc2.start();
+    oscillators.push(osc2);
+
+    // 三次諧波：25%
+    const osc3 = audioCtx.createOscillator();
+    osc3.type = 'sine';
+    osc3.frequency.setValueAtTime(freq * 3, audioCtx.currentTime);
+    const gain3 = audioCtx.createGain();
+    gain3.gain.setValueAtTime(0.25, audioCtx.currentTime);
+    osc3.connect(gain3);
+    gain3.connect(gainNode);
+    osc3.start();
+    oscillators.push(osc3);
+  }
+
+  isPlaying = true;
+  startWaveformVisualization(freq);
+}
+
+// ─── 波形可視化 ───
+function startWaveformVisualization(freq) {
+  function drawWaveform() {
+    if (!isPlaying) return;
+
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteTimeDomainData(dataArray);
+
+    const W = soundCanvas.width;
+    const H = soundCanvas.height;
+    sCtx.clearRect(0, 0, W, H);
+
+    // 中線
+    sCtx.strokeStyle = '#e2e8f0';
+    sCtx.lineWidth = 1;
+    sCtx.beginPath();
+    sCtx.moveTo(0, H / 2);
+    sCtx.lineTo(W, H / 2);
+    sCtx.stroke();
+
+    // 波形
+    sCtx.strokeStyle = '#2563eb';
+    sCtx.lineWidth = 2;
+    sCtx.beginPath();
+    const sliceWidth = W / dataArray.length;
+    let x = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+      const v = dataArray[i] / 128.0;
+      const y = (v * H) / 2;
+      if (i === 0) {
+        sCtx.moveTo(x, y);
+      } else {
+        sCtx.lineTo(x, y);
+      }
+      x += sliceWidth;
+    }
+    sCtx.stroke();
+
+    // 標籤
+    sCtx.fillStyle = '#64748b';
+    sCtx.font = 'bold 11px sans-serif';
+    sCtx.textAlign = 'center';
+    sCtx.fillText(`${freq} Hz`, W / 2, H - 6);
+
+    requestAnimationFrame(drawWaveform);
+  }
+  drawWaveform();
+}
+
+// ─── 音符按鈕 ───
+document.querySelectorAll('.note-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const note = btn.dataset.note;
+    const freq = parseInt(btn.dataset.freq);
+    currentNote = note;
+
+    // 更新 UI
+    document.querySelectorAll('.note-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // 播放音符
+    playNote(note, freq);
+    noteDisplay.textContent = `正在播放 ${note} (${freq} Hz)`;
+    recordNoteBtn.disabled = false;
+    stopSoundBtn.disabled = false;
+
+    // 2 秒後自動停止
+    setTimeout(() => {
+      if (isPlaying && oscillators.length > 0) {
+        stopAllOscillators();
+        noteDisplay.textContent = `選擇音符開始`;
+        recordNoteBtn.disabled = true;
+        stopSoundBtn.disabled = true;
+      }
+    }, 2000);
+  });
+});
+
+// ─── 波形類型切換 ───
+document.querySelectorAll('.wave-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.wave-btn').forEach(b => {
+      b.style.background = 'var(--bg)';
+      b.style.color = 'var(--text-primary)';
+    });
+    btn.style.background = 'var(--phase1)';
+    btn.style.color = 'white';
+    currentWave = btn.dataset.wave;
+  });
+});
+
+// ─── 記錄按鈕 ───
+recordNoteBtn.addEventListener('click', () => {
+  if (currentNote && isPlaying) {
+    const freq = parseInt(notes[currentNote]);
+    if (!recordedNotes[currentNote]) {
+      recordedNotes[currentNote] = freq;
+    }
+    updateSoundTable();
+    updateFreqChart();
+
+    // 視覺回饋
+    document.querySelector(`.note-btn[data-note="${currentNote}"]`).classList.add('done');
+    recordNoteBtn.disabled = true;
+  }
+});
+
+// ─── 停止按鈕 ───
+stopSoundBtn.addEventListener('click', () => {
+  stopAllOscillators();
+  noteDisplay.textContent = `選擇音符開始`;
+  recordNoteBtn.disabled = true;
+  stopSoundBtn.disabled = true;
+  sCtx.clearRect(0, 0, soundCanvas.width, soundCanvas.height);
+  drawEmptyCanvas();
+});
+
+// ─── 更新數據表 ───
+function updateSoundTable() {
+  const noteList = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+  const recorded = noteList.filter(n => recordedNotes[n] !== undefined);
+
+  if (recorded.length === 0) {
+    soundTableBody.innerHTML = '<tr><td colspan="3" style="color:var(--text-muted);font-style:italic;padding:12px;">← 記錄音符後出現</td></tr>';
+    return;
+  }
+
+  soundTableBody.innerHTML = recorded.map((note, idx) => {
+    const freq = recordedNotes[note];
+    let ratio = '—';
+    if (idx > 0) {
+      const prevFreq = recordedNotes[recorded[idx - 1]];
+      ratio = (freq / prevFreq).toFixed(3);
+    }
+    return `<tr><td><strong>${note}</strong></td><td>${freq}</td><td>${ratio}</td></tr>`;
+  }).join('');
+}
+
+// ─── 空白畫布 ───
+function drawEmptyCanvas() {
+  const W = soundCanvas.width;
+  const H = soundCanvas.height;
+  sCtx.fillStyle = '#f8fafc';
+  sCtx.fillRect(0, 0, W, H);
+  sCtx.strokeStyle = '#e2e8f0';
+  sCtx.lineWidth = 1;
+  sCtx.strokeRect(0, 0, W, H);
+  sCtx.fillStyle = '#cbd5e1';
+  sCtx.font = '12px sans-serif';
+  sCtx.textAlign = 'center';
+  sCtx.fillText('按下音符開始', W / 2, H / 2);
+}
+drawEmptyCanvas();
+
+// ─── 繪製頻率圖 ───
+function drawFreqEmpty() {
+  const W = freqCanvas.width;
+  const H = freqCanvas.height;
+  fCtx.clearRect(0, 0, W, H);
+  const pad = { l: 42, r: 16, t: 14, b: 36 };
+  fCtx.strokeStyle = '#e2e8f0';
+  fCtx.strokeRect(pad.l, pad.t, W - pad.l - pad.r, H - pad.t - pad.b);
+  fCtx.fillStyle = '#cbd5e1';
+  fCtx.font = '12px sans-serif';
+  fCtx.textAlign = 'center';
+  fCtx.fillText('等待數據…', W / 2, H / 2);
+}
+drawFreqEmpty();
+
+function updateFreqChart() {
+  const noteList = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+  const recorded = noteList.filter(n => recordedNotes[n] !== undefined);
+
+  const parent = freqCanvas.parentElement;
+  const W = (parent ? parent.clientWidth : 0) || freqCanvas.width || 400;
+  freqCanvas.width = W;
+  freqCanvas.height = 200;
+  const H = 200;
+  const pad = { l: 48, r: 20, t: 18, b: 40 };
+  fCtx.clearRect(0, 0, W, H);
+
+  if (recorded.length < 2) {
+    drawFreqEmpty();
+    return;
+  }
+
+  const freqs = recorded.map(n => recordedNotes[n]);
+  const maxFreq = Math.max(...freqs) * 1.15;
+
+  function toCanvasY(val) {
+    return H - pad.b - (val / maxFreq) * (H - pad.t - pad.b);
+  }
+
+  // 軸
+  fCtx.strokeStyle = '#94a3b8';
+  fCtx.lineWidth = 1.5;
+  fCtx.beginPath();
+  fCtx.moveTo(pad.l, pad.t);
+  fCtx.lineTo(pad.l, H - pad.b);
+  fCtx.lineTo(W - pad.r, H - pad.b);
+  fCtx.stroke();
+
+  // 軸標籤
+  fCtx.fillStyle = '#64748b';
+  fCtx.font = '11px sans-serif';
+  fCtx.textAlign = 'center';
+  fCtx.fillText('頻率 (Hz)', W / 2, H - 4);
+
+  // 柱子
+  const barWidth = (W - pad.l - pad.r) / recorded.length * 0.7;
+  const spacing = (W - pad.l - pad.r) / recorded.length;
+  fCtx.fillStyle = '#2563eb';
+  recorded.forEach((note, i) => {
+    const freq = recordedNotes[note];
+    const x = pad.l + i * spacing + spacing / 2 - barWidth / 2;
+    const y = toCanvasY(freq);
+    fCtx.fillRect(x, y, barWidth, H - pad.b - y);
+  });
+
+  // 刻度和標籤
+  fCtx.fillStyle = '#94a3b8';
+  fCtx.font = '10px sans-serif';
+  recorded.forEach((note, i) => {
+    const x = pad.l + i * spacing + spacing / 2;
+    const freq = recordedNotes[note];
+    fCtx.textAlign = 'center';
+    fCtx.fillText(note, x, H - pad.b + 14);
+    const y = toCanvasY(freq);
+    fCtx.fillText(freq, x, y - 4);
+  });
+
+  // Insight
+  const insightBox = document.getElementById('soundInsightBox');
+  const insightContent = document.getElementById('soundInsightContent');
+  if (recorded.length >= 3) {
+    insightBox.style.display = 'block';
+    const baseFreq = recordedNotes[recorded[0]];
+    const ratios = [];
+    for (let i = 1; i < recorded.length; i++) {
+      const r = (recordedNotes[recorded[i]] / recordedNotes[recorded[i - 1]]).toFixed(3);
+      ratios.push(r);
+    }
+    const avgRatio = (ratios.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / ratios.length).toFixed(3);
+    insightContent.innerHTML = `
+      記錄了 <strong>${recorded.length} 個音符</strong>（${recorded.join(', ')}）<br>
+      相鄰音的頻率比約為 <strong>${avgRatio}</strong>（理論值 2^(1/12) ≈ 1.059）<br>
+      <span style="color:var(--text-muted);font-size:12px;">→ 音階的頻率呈等比數列！</span>
+    `;
+  }
+}
+
+// ─── 全局 labData ───
+window.labData = recordedNotes;
+
+// ─── 音階散佈圖 + 趨勢線引擎 ───
+(function(){
+  const NOTES = ['Do','Re','Mi','Fa','Sol','La','Si','Do\''];
+  const FREQS = [262,294,330,349,392,440,494,524];
+  const DATA = FREQS.map((f,i)=>({x:i+1,y:f,name:NOTES[i]}));
+
+  const canvas = document.getElementById('soundGraphCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let trendType = 'none';
+
+  document.getElementById('soundTrendControls').addEventListener('click',e=>{
+    const btn=e.target.closest('.trend-btn.snd');
+    if(!btn)return;
+    trendType=btn.dataset.trend;
+    document.querySelectorAll('.trend-btn.snd').forEach(b=>{
+      b.style.background=b===btn?'#059669':'var(--bg)';
+      b.style.color=b===btn?'white':'inherit';
+    });
+    drawGraph();
+  });
+
+  function computeFit(x,y,type){
+    const n=x.length;
+    const meanY=y.reduce((a,b)=>a+b,0)/n;
+    const SS_tot=y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+    if(type==='linear'){
+      const sx=x.reduce((a,b)=>a+b,0),sy=y.reduce((a,b)=>a+b,0);
+      const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0),sx2=x.reduce((s,xi)=>s+xi*xi,0);
+      const a=(n*sxy-sx*sy)/(n*sx2-sx*sx),b=(sy-a*sx)/n;
+      const pred=xi=>a*xi+b;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：f = ${a.toFixed(1)}·序號 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>R² = ${R2.toFixed(4)}<br>斜率 = ${a.toFixed(1)} Hz/音<br>截距 = ${b.toFixed(1)} Hz`};
+    }
+    if(type==='power'){
+      const lx=x.map(Math.log),ly=y.map(Math.log);
+      const slx=lx.reduce((a,b)=>a+b,0),sly=ly.reduce((a,b)=>a+b,0);
+      const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0),slx2=lx.reduce((s,v)=>s+v*v,0);
+      const nn=(n*slxy-slx*sly)/(n*slx2-slx*slx);
+      const a=Math.exp((sly-nn*slx)/n);
+      const pred=xi=>a*Math.pow(xi,nn);
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：f = ${a.toFixed(1)}·序號^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}`};
+    }
+    if(type==='poly'){
+      const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
+      const syp=p=>x.reduce((s,xi,i)=>s+Math.pow(xi,p)*y[i],0);
+      const A=[[n,sp(1),sp(2),syp(0)],[sp(1),sp(2),sp(3),syp(1)],[sp(2),sp(3),sp(4),syp(2)]];
+      for(let col=0;col<3;col++){let mr=col;for(let r=col+1;r<3;r++)if(Math.abs(A[r][col])>Math.abs(A[mr][col]))mr=r;[A[col],A[mr]]=[A[mr],A[col]];for(let r=col+1;r<3;r++){const f=A[r][col]/A[col][col];for(let j=col;j<=3;j++)A[r][j]-=f*A[col][j];}}
+      const c=[0,0,0];for(let i=2;i>=0;i--){c[i]=A[i][3];for(let j=i+1;j<3;j++)c[i]-=A[i][j]*c[j];c[i]/=A[i][i];}
+      const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`方程式：f = ${c[2].toFixed(2)}·序號² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(1)}·序號 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(1)}<br>R² = ${R2.toFixed(4)}`};
+    }
+    return null;
+  }
+
+  function drawGraph(){
+    const parent=canvas.parentElement;
+    const W=(parent?parent.clientWidth-24:0)||400;
+    canvas.width=W;canvas.height=220;
+    const H=220,pad={l:50,r:20,t:18,b:40};
+    ctx.clearRect(0,0,W,H);
+
+    const xArr=DATA.map(d=>d.x),yArr=DATA.map(d=>d.y);
+    const xMax=9,yMax=580;
+    function toX(v){return pad.l+(v/xMax)*(W-pad.l-pad.r);}
+    function toY(v){return H-pad.b-(v/yMax)*(H-pad.t-pad.b);}
+
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let i=1;i<=4;i++){const gx=pad.l+i/4*(W-pad.l-pad.r),gy=H-pad.b-i/4*(H-pad.t-pad.b);ctx.beginPath();ctx.moveTo(gx,pad.t);ctx.lineTo(gx,H-pad.b);ctx.stroke();ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(W-pad.r,gy);ctx.stroke();}
+    ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();
+    ctx.fillStyle='#64748b';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('音階序號',W/2,H-4);
+    ctx.save();ctx.translate(12,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('頻率 f (Hz)',0,0);ctx.restore();
+    // X 軸：音名
+    DATA.forEach(d=>{ctx.fillStyle='#94a3b8';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(d.name,toX(d.x),H-pad.b+13);});
+    for(let i=0;i<=4;i++){const yv=yMax*i/4;ctx.fillStyle='#94a3b8';ctx.font='10px sans-serif';ctx.textAlign='right';ctx.fillText(yv.toFixed(0),pad.l-4,toY(yv)+4);}
+
+    const fi=document.getElementById('soundFitInfo');
+    if(trendType!=='none'){
+      const fit=computeFit(xArr,yArr,trendType);
+      if(fit){
+        ctx.strokeStyle='#059669';ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.beginPath();
+        for(let i=0;i<=60;i++){const xv=1+7*i/60;const yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?ctx.moveTo(cx,cy):ctx.lineTo(cx,cy);}
+        ctx.stroke();ctx.setLineDash([]);
+        ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
+        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.55),toY(yMax*0.85));
+        fi.style.display='block';fi.innerHTML=fit.info;
+      }
+    } else {fi.style.display='none';}
+
+    DATA.forEach(p=>{ctx.beginPath();ctx.arc(toX(p.x),toY(p.y),5,0,Math.PI*2);ctx.fillStyle='#2563eb';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=1.5;ctx.stroke();});
+  }
+  drawGraph();
+})();
+</script>
+</body>
+</html>

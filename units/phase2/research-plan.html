@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase2/research-plan">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>研究規劃表 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="研究規劃表模板，引導學生撰寫完整的實驗計畫書。">
+  <meta property="og:title" content="研究規劃表 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="研究規劃表模板，引導學生撰寫完整的實驗計畫書。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/research-plan.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    /* 規劃流程步驟 */
+    .plan-flow {
+      display: grid;
+      gap: 0;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .plan-step {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      padding-bottom: 20px;
+      position: relative;
+    }
+    .plan-step:last-child { padding-bottom: 0; }
+    .step-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .step-line {
+      flex: 1;
+      width: 2px;
+      background: var(--border);
+      margin-top: 6px;
+    }
+    .plan-step:last-child .step-line { display: none; }
+    .step-content {
+      padding-top: 4px;
+    }
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 10px;
+    }
+
+    /* 填寫區 */
+    .fill-area {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .fill-area .fill-label {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .fill-blank {
+      display: block;
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px dashed var(--border);
+      background: transparent;
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 4px;
+    }
+    .fill-blank:focus {
+      border-bottom-color: var(--phase2);
+    }
+    .fill-blank::placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    textarea.fill-blank {
+      resize: vertical;
+      min-height: 48px;
+      border: 1.5px dashed var(--border);
+      border-radius: 4px;
+      padding: 8px;
+    }
+    textarea.fill-blank:focus {
+      border-color: var(--phase2);
+    }
+
+    /* 變因表格 */
+    .var-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 600px) { .var-grid { grid-template-columns: 1fr; } }
+    .var-card {
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 12px;
+    }
+    .var-card .var-type {
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    /* 數據表預覽 */
+    .data-preview {
+      overflow-x: auto;
+      margin-top: 8px;
+    }
+    .data-preview table {
+      font-size: 12px;
+      min-width: 400px;
+    }
+    .data-preview th {
+      background: var(--bg);
+      font-weight: 700;
+      text-align: center;
+    }
+    .data-preview td {
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* NG vs Good */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 550px) { .compare-row { grid-template-columns: 1fr; } }
+    .compare-box {
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .compare-box.ng { background: #fff1f2; border: 1px solid #fecdd3; color: #9f1239; }
+    .compare-box.good { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .compare-label {
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    /* 匯出按鈕 */
+    .export-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1.5px solid var(--phase2);
+      background: rgba(30, 122, 82, 0.08);
+      color: var(--phase2);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .export-btn:hover {
+      background: rgba(30, 122, 82, 0.15);
+      box-shadow: 0 2px 8px rgba(30, 122, 82, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span>研究工具</span>
+      <span>›</span>
+      <span style="color:var(--phase2)">研究規劃表</span>
+    </div>
+    <h1>📋 研究規劃表</h1>
+    <p class="subtitle">從模糊的好奇心到可執行的實驗計畫——六步完成。每次 Lv2 都用這張表。</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">通用工具</span>
+      <span class="tag">INb 規劃能力</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="collapsible teacher-toggle">
+      <div class="collapsible-header">📌 教師備註<span class="toggle-icon">▶</span></div>
+      <div class="collapsible-body">
+        <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+          這張表是所有 Lv2 模組共用的規劃鷹架。第一次使用建議老師帶著全班走一遍（用彈簧或單擺當示範），之後逐漸放手讓學生獨立填寫。<br><br>
+          <strong>常見問題</strong>：學生最容易卡在 Step 2（聚焦）。他們的原始問題通常太大（「浮力跟什麼有關？」），需要引導縮小到一個可測的變因關係。<br><br>
+          <strong>兩個操縱變因的設計</strong>：要求學生選兩個操縱變因，是為了確保探究有足夠深度，不會做一個實驗就結束。兩個變因分開測（不是同時），各自配一個假設。<br><br>
+          <strong>期末自主探究</strong>：最後四週學生獨立探究時，直接用這張表起步。到那時他們已經用過 2–3 次，流程應該已經內化。
+        </p>
+      </div>
+    </div>
+
+    <!-- ═══ 六步流程 ═══ -->
+    <div class="section-title" style="color:var(--phase2);">六步規劃流程</div>
+
+    <div class="plan-flow">
+
+      <!-- Step 1: 發想問題 -->
+      <div class="plan-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase2);">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">發想問題</div>
+          <div class="step-desc">從課堂活動、競賽經驗、或生活觀察出發，寫下你感到好奇的問題。不需要完美——先寫下來再說。</div>
+          <div class="fill-area">
+            <div class="fill-label">我的原始問題</div>
+            <input type="text" class="fill-blank" placeholder="例如：為什麼有些船會翻，有些不會？" id="q-raw">
+          </div>
+          <div class="compare-row" style="margin-top:10px;">
+            <div class="compare-box ng">
+              <div class="compare-label">❌ 常見問題</div>
+              「浮力是什麼？」→ 查書就有答案，不需要實驗
+            </div>
+            <div class="compare-box good">
+              <div class="compare-label">✅ 好的起點</div>
+              「為什麼我的船在放第 5 顆砝碼時翻了？」→ 有具體觀察，可以深挖
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: 聚焦問題 -->
+      <div class="plan-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase2);">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">聚焦：轉換為可測的問題</div>
+          <div class="step-desc">把模糊的好奇心變成一句<strong>包含變因關係</strong>的研究問題。格式：「改變 ___（操縱），___ （應變）會怎樣？」</div>
+          <div class="fill-area">
+            <div class="fill-label">聚焦後的研究問題</div>
+            <input type="text" class="fill-blank" placeholder="例如：船壁高度（2/3/4/5 cm）如何影響最大承載重量？" id="q-focused">
+          </div>
+          <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;margin-top:10px;">
+            💡 自我檢查：你的問題是否同時滿足——(1) 有明確的操縱變因 (2) 有可量化的應變變因 (3) 可以在課堂上實驗驗證 (4) 不是查書就能回答的？
+            <br><span style="font-size:11px;">→ 詳見 <a href="../../tools/good-question.html" style="color:#9a3412;font-weight:600;">什麼是好的探究問題</a></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: 變因拆解 -->
+      <div class="plan-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase2);">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">變因拆解</div>
+          <div class="step-desc">列出三種變因。操縱變因選<strong>兩個</strong>（分開測），各自至少 4–5 個水準。控制變因是「你刻意保持不變的所有東西」。</div>
+
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 14px;font-size:12px;color:#166534;margin-bottom:12px;">
+            💡 <strong>不確定怎麼分？</strong> 想像你在做實驗：<em>你主動轉的旋鈕</em>→操縱變因；<em>你盯著讀的儀器</em>→應變變因；<em>你拼命不讓它動的一切</em>→控制變因。如果你在 Lv1 論證建模工具做過「變因思考練習」，直接把那裡的答案搬過來就好。
+          </div>
+
+          <div class="var-grid">
+            <div class="var-card" style="background:#d1fae5;border:1px solid #86efac;">
+              <div class="var-type" style="color:#065f46;">操縱變因（改變的）</div>
+              <input type="text" class="fill-blank" placeholder="變因 1：例如 船壁高度" id="mv1" style="font-size:12px;">
+              <input type="text" class="fill-blank" placeholder="水準：2, 3, 4, 5 cm" id="mv1-levels" style="font-size:12px;">
+              <div style="border-top:1px dashed #86efac;margin:6px 0;"></div>
+              <input type="text" class="fill-blank" placeholder="變因 2：例如 底面形狀" id="mv2" style="font-size:12px;">
+              <input type="text" class="fill-blank" placeholder="水準：正方形, 長方形, 圓形" id="mv2-levels" style="font-size:12px;">
+            </div>
+            <div class="var-card" style="background:#dbeafe;border:1px solid #93c5fd;">
+              <div class="var-type" style="color:#1e40af;">應變變因（測量的）</div>
+              <input type="text" class="fill-blank" placeholder="例如：最大承載重量 (g)" id="dv" style="font-size:12px;">
+              <div style="font-size:11px;color:#3b82f6;margin-top:4px;">怎麼測？用什麼工具？精度多少？</div>
+              <input type="text" class="fill-blank" placeholder="例如：逐次加 10g 砝碼，記錄沉沒時的總重" id="dv-method" style="font-size:12px;">
+            </div>
+            <div class="var-card" style="background:#fef3c7;border:1px solid #fcd34d;">
+              <div class="var-type" style="color:#92400e;">控制變因（固定的）</div>
+              <input type="text" class="fill-blank" placeholder="1. 例如：珍珠板材質相同" id="cv1" style="font-size:12px;">
+              <input type="text" class="fill-blank" placeholder="2. 例如：水溫相同" id="cv2" style="font-size:12px;">
+              <input type="text" class="fill-blank" placeholder="3. 例如：膠帶用量相同" id="cv3" style="font-size:12px;">
+              <input type="text" class="fill-blank" placeholder="4. ..." id="cv4" style="font-size:12px;">
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);font-style:italic;">
+            ⚠️ 控制變因最容易被忽略，但它決定了你的實驗是否公平。問自己：「除了我刻意改的，還有什麼可能影響結果？」
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: 假設 -->
+      <div class="plan-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase2);">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">建立假設</div>
+          <div class="step-desc">對每個操縱變因各寫一個假設。好的假設要說清楚<strong>方向</strong>（增加/減少/不影響）和<strong>理由</strong>。</div>
+          <div class="fill-area">
+            <div class="fill-label">假設 1（對應操縱變因 1）</div>
+            <textarea class="fill-blank" placeholder="例如：我認為船壁越高，最大承載重量越大，因為排水體積增加，浮力也增加。但超過某個高度後可能反而變不穩定。" id="h1"></textarea>
+            <div class="fill-label" style="margin-top:10px;">假設 2（對應操縱變因 2）</div>
+            <textarea class="fill-blank" placeholder="例如：我認為正方形底面比長方形更穩定，因為四邊等長，重心比較均勻。" id="h2"></textarea>
+          </div>
+          <div class="compare-row" style="margin-top:10px;">
+            <div class="compare-box ng">
+              <div class="compare-label">❌ 弱假設</div>
+              「船壁高度會影響載重。」<br>→ 沒說方向、沒說理由
+            </div>
+            <div class="compare-box good">
+              <div class="compare-label">✅ 強假設</div>
+              「船壁從 2cm 增加到 5cm 時，最大載重會增加，因為排水體積 V = 面積 × 高度，V 越大浮力越大。」<br>→ 有方向、有機制
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: 實驗步驟 + 數據表 -->
+      <div class="plan-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase2);">5</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">實驗步驟與數據表</div>
+          <div class="step-desc">寫出關鍵步驟，每步標注「這步在做什麼」。不限幾步——寫到別人看了能重做就夠了。然後<strong>先畫好空白數據表</strong>，別等做完才想要記什麼。</div>
+
+          <div class="fill-area" style="margin-bottom:10px;">
+            <div class="fill-label">實驗步驟（操縱變因 1）</div>
+            <div style="display:grid;gap:4px;" id="steps-container">
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span style="font-weight:700;color:var(--phase2);min-width:18px;">1.</span>
+                <input type="text" class="fill-blank" placeholder="例如：準備 4 塊珍珠板，裁切成相同底面積（10×10 cm），船壁分別為 2/3/4/5 cm">
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span style="font-weight:700;color:var(--phase2);min-width:18px;">2.</span>
+                <input type="text" class="fill-blank" placeholder="例如：用雙面膠黏合，確保接縫處理方式一致（控制變因）">
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span style="font-weight:700;color:var(--phase2);min-width:18px;">3.</span>
+                <input type="text" class="fill-blank" placeholder="例如：將船放入水中，每次加 10g 砝碼於中央，等穩定 5 秒後再加下一個">
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span style="font-weight:700;color:var(--phase2);min-width:18px;">4.</span>
+                <input type="text" class="fill-blank" placeholder="例如：記錄船沉沒時的總砝碼重量，每個高度重複 3 次">
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span style="font-weight:700;color:var(--phase2);min-width:18px;">5.</span>
+                <input type="text" class="fill-blank" placeholder="">
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span style="font-weight:700;color:var(--phase2);min-width:18px;">6.</span>
+                <input type="text" class="fill-blank" placeholder="">
+              </div>
+            </div>
+            <button onclick="addStep()" style="margin-top:6px;font-size:11px;color:var(--phase2);background:none;border:1px dashed var(--phase2);border-radius:4px;padding:4px 10px;cursor:pointer;">+ 加一步</button>
+          </div>
+
+          <div class="fill-area">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <div class="fill-label" style="margin:0;">空白數據表（先畫好！）</div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:11px;">
+                <span style="color:var(--text-muted);">基礎版</span>
+                <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+                  <input type="checkbox" id="table-mode-toggle" onchange="toggleTableMode()" style="opacity:0;width:0;height:0;">
+                  <span style="position:absolute;inset:0;background:#cbd5e1;border-radius:10px;transition:.2s;"></span>
+                  <span id="toggle-dot" style="position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:.2s;"></span>
+                </label>
+                <span style="color:var(--text-muted);">進階版</span>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">範例格式（操縱變因 1 的數據表）：</div>
+
+            <!-- 基礎版：平均 + 標準差 -->
+            <div class="data-preview" id="table-basic">
+              <table>
+                <thead>
+                  <tr>
+                    <th>操縱變因<br><span style="font-weight:400;font-size:10px;">（水準）</span></th>
+                    <th>測量 1</th>
+                    <th>測量 2</th>
+                    <th>測量 3</th>
+                    <th>平均</th>
+                    <th>標準差</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>水準 1</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 2</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 3</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 4</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 5</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">每個水準至少測 3 次，才能算平均和標準差。重複測量 = 你的數據可信度。</div>
+            </div>
+
+            <!-- 進階版：A 類 + B 類不確定度 -->
+            <div class="data-preview" id="table-advanced" style="display:none;">
+              <table>
+                <thead>
+                  <tr>
+                    <th rowspan="2">操縱變因<br><span style="font-weight:400;font-size:10px;">（水準）</span></th>
+                    <th colspan="3" style="border-bottom:1px solid #e2e8f0;">測量值</th>
+                    <th rowspan="2">平均<br><span style="font-weight:400;font-size:10px;">x̄</span></th>
+                    <th rowspan="2" style="background:#dbeafe;color:#1e40af;">u<sub>A</sub><br><span style="font-weight:400;font-size:9px;">= s/√n</span></th>
+                    <th rowspan="2" style="background:#fed7aa;color:#9a3412;">u<sub>B</sub><br><span style="font-weight:400;font-size:9px;">= Δ/√3</span></th>
+                    <th rowspan="2" style="background:#d1fae5;color:#065f46;">u<sub>c</sub><br><span style="font-weight:400;font-size:9px;">= √(u<sub>A</sub>²+u<sub>B</sub>²)</span></th>
+                  </tr>
+                  <tr>
+                    <th>1</th><th>2</th><th>3</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>水準 1</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 2</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 3</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 4</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                  <tr><td>水準 5</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;font-size:11px;">
+                <div style="background:#eff6ff;border-radius:4px;padding:8px 10px;color:#1e40af;">
+                  <strong>A 類（統計）</strong>：重複量測的離散程度。<br>
+                  s = 標準差，n = 重複次數。<br>
+                  u<sub>A</sub> = s / √n　→　量越多次，u<sub>A</sub> 越小。
+                </div>
+                <div style="background:#fff7ed;border-radius:4px;padding:8px 10px;color:#9a3412;">
+                  <strong>B 類（儀器）</strong>：儀器解析度帶來的極限。<br>
+                  Δ = 最小刻度的一半。<br>
+                  u<sub>B</sub> = Δ / √3　→　跟量幾次無關，換更精密的儀器才能降低。
+                </div>
+              </div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">
+                合成不確定度 u<sub>c</sub> 就是把 A、B 兩類「平方相加再開根號」。畫誤差棒時用 u<sub>c</sub>。<br>
+                <span style="font-size:10px;">→ 忘了怎麼算？見 <a href="../phase1/uncertainty.html" style="color:var(--phase2);font-weight:600;">有效數字與不確定度</a></span>
+              </div>
+            </div>
+
+            <div id="table-mode-hint" style="font-size:11px;color:var(--phase2);margin-top:6px;display:none;">
+              📐 使用儀器：<input type="text" class="fill-blank" id="instrument" placeholder="例如：直尺（最小刻度 1mm，Δ = 0.5mm）" style="font-size:11px;display:inline;width:60%;border-bottom:1px dashed var(--phase2);">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: 預期分析 -->
+      <div class="plan-step">
+        <div class="step-marker">
+          <div class="step-num" style="background:var(--phase2);">6</div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">預期分析方式</div>
+          <div class="step-desc">還沒做實驗就先想好怎麼分析——這能幫你確認「我收集的數據真的能回答我的問題嗎？」</div>
+          <div class="fill-area">
+            <div class="fill-label">你打算怎麼分析數據？</div>
+            <div style="display:grid;gap:6px;">
+              <label style="display:flex;gap:8px;align-items:center;font-size:12px;cursor:pointer;">
+                <input type="checkbox"> 畫散佈圖（X 軸 = 操縱變因，Y 軸 = 應變變因）
+              </label>
+              <label style="display:flex;gap:8px;align-items:center;font-size:12px;cursor:pointer;">
+                <input type="checkbox"> 加趨勢線（線性 / 曲線 / 反比）
+              </label>
+              <label style="display:flex;gap:8px;align-items:center;font-size:12px;cursor:pointer;">
+                <input type="checkbox"> 加誤差棒（用標準差）
+              </label>
+              <label style="display:flex;gap:8px;align-items:center;font-size:12px;cursor:pointer;">
+                <input type="checkbox"> 嘗試線性化（log-log 或 semi-log）
+              </label>
+              <label style="display:flex;gap:8px;align-items:center;font-size:12px;cursor:pointer;">
+                <input type="checkbox"> 比較理論預測值 vs 實際測量值
+              </label>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">
+              → 需要 Excel 操作幫助？見 <a href="../../tools/excel.html" style="color:var(--phase2);font-weight:600;">Excel 數據分析工具箱</a>
+              <br>→ 需要線性化技巧？見 <a href="power-law.html" style="color:var(--phase2);font-weight:600;">冪級數與線性化</a>
+            </div>
+          </div>
+
+          <div style="background:#fefce8;border:1px solid #fde68a;border-radius:6px;padding:10px 14px;font-size:12px;color:#854d0e;margin-top:12px;">
+            📊 <strong>數據品質預防針</strong>——做之前先想好，做完才不會後悔：
+            <div style="display:grid;gap:4px;margin-top:6px;font-size:11px;color:#713f12;">
+              <div>• <strong>重複次數</strong>：每個水準至少量 3 次，算平均和標準差。只量 1 次等於沒有品管。</div>
+              <div>• <strong>異常值處理</strong>：如果某次數據跟其他兩次差很多，先記下來、寫原因，不要偷偷刪掉也不要無視。</div>
+              <div>• <strong>標準差太大？</strong> 代表你的量測方法不穩定，或有沒控制好的變因在搗亂。這時候回頭檢查控制變因比繼續往下做更重要。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end plan-flow -->
+
+    <!-- AI 檢核站 -->
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 檢核站</div>
+      <p style="font-size:13px;color:#1e3a8a;line-height:1.8;margin-bottom:10px;">填完上面六步之後，把你的規劃表交給 AI 審稿：</p>
+      <div style="display:grid;gap:6px;font-size:12px;color:#1e3a8a;">
+        <div style="background:white;border-radius:4px;padding:8px 12px;">「我的控制變因有沒有遺漏？還有什麼可能影響結果但我沒控制的？」</div>
+        <div style="background:white;border-radius:4px;padding:8px 12px;">「這個實驗步驟夠清楚嗎？別人看得懂怎麼重做嗎？」</div>
+        <div style="background:white;border-radius:4px;padding:8px 12px;">「我的數據量夠嗎？4 個水準 × 3 次重複夠不夠下結論？」</div>
+      </div>
+      <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px;color:#1e3a8a;">
+        <strong>💬 複製貼上範本：</strong>「我正在設計一個實驗，研究問題是＿＿。操縱變因是＿＿（水準：＿＿），應變變因是＿＿，控制變因有＿＿。請幫我檢查：(1) 控制變因有沒有遺漏 (2) 實驗步驟有沒有潛在問題 (3) 數據量夠不夠」<br>
+        <span style="font-size:10px;color:#60a5fa;">給 AI 越多上下文，它的回饋越有用。空白處填入你自己的內容再送出。</span>
+      </div>
+      <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是代筆人。它指出問題，你決定要不要改、怎麼改。</p>
+    </div>
+
+    <!-- 匯出 -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <button class="export-btn" onclick="exportPlan()">📄 匯出規劃表（純文字）</button>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">複製到剪貼簿，可貼到報告或交給 AI 審查</div>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">這張規劃表本身就是好素材——它展示你「怎麼從一個問題走到一個實驗」的思考過程。如果你後來發現規劃有問題而修改了，把修改前後的版本都留著，這正是「反思與改進」的最佳證據。</p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="report.html">← 報告撰寫規範</a>
+      <a href="../phase3/final.html">期末成果發表 →</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+  let stepCount = 6;
+
+  function toggleTableMode() {
+    const cb = document.getElementById('table-mode-toggle');
+    const basic = document.getElementById('table-basic');
+    const advanced = document.getElementById('table-advanced');
+    const hint = document.getElementById('table-mode-hint');
+    const dot = document.getElementById('toggle-dot');
+    const track = cb.parentElement.querySelector('span');
+    if (cb.checked) {
+      basic.style.display = 'none';
+      advanced.style.display = '';
+      hint.style.display = '';
+      dot.style.left = '18px';
+      track.style.background = 'var(--phase2)';
+    } else {
+      basic.style.display = '';
+      advanced.style.display = 'none';
+      hint.style.display = 'none';
+      dot.style.left = '2px';
+      track.style.background = '#cbd5e1';
+    }
+  }
+
+  function addStep() {
+    stepCount++;
+    const container = document.getElementById('steps-container');
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;gap:8px;align-items:center;';
+    div.innerHTML = `<span style="font-weight:700;color:var(--phase2);min-width:18px;">${stepCount}.</span><input type="text" class="fill-blank" placeholder="">`;
+    container.appendChild(div);
+  }
+
+  function exportPlan() {
+    const get = id => (document.getElementById(id)?.value || '').trim();
+
+    const lines = [
+      '═══ 研究規劃表 ═══',
+      '',
+      '【原始問題】' + get('q-raw'),
+      '【聚焦問題】' + get('q-focused'),
+      '',
+      '【操縱變因 1】' + get('mv1') + '　水準：' + get('mv1-levels'),
+      '【操縱變因 2】' + get('mv2') + '　水準：' + get('mv2-levels'),
+      '【應變變因】' + get('dv') + '　測量方式：' + get('dv-method'),
+      '【控制變因】',
+      '　1. ' + get('cv1'),
+      '　2. ' + get('cv2'),
+      '　3. ' + get('cv3'),
+      '　4. ' + get('cv4'),
+      '',
+      '【假設 1】' + get('h1'),
+      '【假設 2】' + get('h2'),
+      '',
+      '【實驗步驟】',
+    ];
+
+    const steps = document.querySelectorAll('#steps-container input');
+    steps.forEach((input, i) => {
+      if (input.value.trim()) {
+        lines.push(`　${i + 1}. ${input.value.trim()}`);
+      }
+    });
+
+    const text = lines.join('\n');
+
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.export-btn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✅ 已複製到剪貼簿！';
+      btn.style.borderColor = '#16a34a';
+      btn.style.color = '#16a34a';
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }, 2000);
+    }).catch(() => {
+      // Fallback: select text
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alert('已複製到剪貼簿！');
+    });
+  }
+</script>
+</body>
+</html>

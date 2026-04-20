@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/pendulum-lab">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>單擺虛擬實驗室 · 探究與實作</title>
+  <meta name="description" content="單擺虛擬實驗室，可調整擺長、擺角，即時觀察週期變化並記錄數據。">
+  <meta property="og:title" content="單擺虛擬實驗室 · 探究與實作">
+  <meta property="og:description" content="單擺虛擬實驗室，可調整擺長、擺角，即時觀察週期變化並記錄數據。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/pendulum-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <style>
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-panel: #111827;
+      --bg-surface: #1e293b;
+      --border-dim: #334155;
+      --border-glow: #475569;
+      --text-primary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-bright: #f8fafc;
+      --phosphor: #22d3ee;
+      --amber: #fbbf24;
+      --neon-green: #4ade80;
+      --neon-red: #f87171;
+      --accent: #6366f1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+    }
+
+    /* Header */
+    .lab-header {
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+      padding-bottom: 16px;
+    }
+    .lab-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--phosphor), transparent);
+    }
+    .lab-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-bright);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .lab-header p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Mode buttons */
+    .mode-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .mode-btn {
+      padding: 10px 24px;
+      border-radius: 10px;
+      border: 1px solid var(--border-dim);
+      background: var(--bg-panel);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-muted);
+    }
+    .mode-btn:hover {
+      border-color: var(--border-glow);
+      color: var(--text-primary);
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.1);
+    }
+    .mode-btn.ep-active {
+      background: var(--bg-surface);
+      border-color: var(--neon-red);
+      color: var(--neon-red);
+      box-shadow: 0 0 16px rgba(248, 113, 113, 0.2);
+    }
+    .mode-btn.mp-active {
+      background: var(--bg-surface);
+      border-color: var(--phosphor);
+      color: var(--phosphor);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.2);
+    }
+
+    /* Layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto 24px;
+    }
+
+    /* Canvas card */
+    .canvas-card {
+      background: var(--bg-panel);
+      border-radius: 14px;
+      border: 1px solid var(--border-dim);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: inset 0 0 20px rgba(34, 211, 238, 0.05);
+    }
+    #pendulum-canvas {
+      border-radius: 10px;
+      background: #0f172a;
+      border: 1px solid var(--border-glow);
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      height: auto;
+      box-shadow: inset 0 0 24px rgba(34, 211, 238, 0.08),
+                  0 0 24px rgba(34, 211, 238, 0.12);
+    }
+    .canvas-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Control card */
+    .control-card {
+      background: var(--bg-panel);
+      border-radius: 14px;
+      border: 1px solid var(--border-dim);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Elapsed timer */
+    .elapsed-display {
+      text-align: center;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+      font-size: 44px;
+      font-weight: 800;
+      color: var(--amber);
+      letter-spacing: 4px;
+      line-height: 1;
+      text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+    }
+    .elapsed-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Manual tap counter */
+    .tap-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    .tap-btn {
+      padding: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-dim);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--neon-green);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+    .tap-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
+    }
+    .tap-btn.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      color: var(--text-muted);
+    }
+    .tap-count {
+      font-size: 32px;
+      font-weight: 800;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-primary);
+      line-height: 1;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+    }
+    .tap-count span {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .tap-count.done {
+      color: var(--neon-green);
+      text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+    }
+
+    /* Status */
+    .status-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glow);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--phosphor);
+      text-align: center;
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.5;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+    }
+
+    /* Main action button */
+    .action-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.02em;
+    }
+    .action-btn.ready {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+    }
+    .action-btn.ready:hover {
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+    }
+    .action-btn.timing {
+      background: var(--neon-red);
+      color: white;
+      box-shadow: 0 4px 16px rgba(248, 113, 113, 0.3);
+      animation: pulse-red 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 4px 16px rgba(248, 113, 113, 0.3); }
+      50% { box-shadow: 0 4px 24px rgba(248, 113, 113, 0.5); }
+    }
+    .action-btn.off {
+      background: var(--border-dim);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+    .action-btn.done {
+      background: var(--bg-surface);
+      color: var(--neon-green);
+      border: 1px solid var(--neon-green);
+      cursor: not-allowed;
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.2);
+    }
+
+    .reset-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-dim);
+      background: transparent;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .reset-btn:hover {
+      border-color: var(--text-muted);
+      color: var(--text-primary);
+    }
+
+    /* Data tables */
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto 24px;
+    }
+    .data-card {
+      background: var(--bg-panel);
+      border-radius: 14px;
+      border: 1px solid var(--border-dim);
+      padding: 18px;
+    }
+    .data-card::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 16px;
+      background: var(--phosphor);
+      border-radius: 2px;
+      margin-bottom: 12px;
+    }
+    .data-card-title {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 12px;
+      color: var(--text-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid var(--border-dim);
+      text-align: center;
+    }
+    th {
+      background: var(--bg-surface);
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--phosphor);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    td.t-val {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+      font-weight: 700;
+      color: var(--amber);
+      text-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+    }
+    td {
+      color: var(--text-muted);
+    }
+
+    .stats-area {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 2;
+      background: var(--bg-surface);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      white-space: pre;
+      display: none;
+      border: 1px solid var(--border-dim);
+    }
+    .result-box {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--phosphor);
+      text-align: center;
+      background: var(--bg-surface);
+      border: 1px solid var(--phosphor);
+      border-radius: 8px;
+      padding: 12px;
+      display: none;
+      text-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.15);
+    }
+
+    /* Comparison */
+    .comparison-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--bg-panel);
+      border-radius: 14px;
+      border: 1px solid var(--border-dim);
+      padding: 24px;
+      display: none;
+    }
+    .comparison-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 16px;
+      color: var(--text-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .result-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .result-ep {
+      background: var(--bg-surface);
+      border: 1px solid var(--neon-red);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 13px;
+      box-shadow: 0 0 12px rgba(248, 113, 113, 0.15);
+    }
+    .result-mp {
+      background: var(--bg-surface);
+      border: 1px solid var(--phosphor);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 13px;
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
+    }
+    .result-ep > div:first-child {
+      font-weight: 700;
+      color: var(--neon-red);
+      margin-bottom: 6px;
+    }
+    .result-mp > div:first-child {
+      font-weight: 700;
+      color: var(--phosphor);
+      margin-bottom: 6px;
+    }
+    .result-ep div:last-child,
+    .result-mp div:last-child {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+      font-size: 12px;
+      white-space: pre;
+      color: var(--text-muted);
+    }
+
+    .verdict {
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .verdict.overlap {
+      background: var(--bg-surface);
+      color: var(--neon-green);
+      border: 1px solid var(--neon-green);
+      box-shadow: 0 0 16px rgba(74, 222, 128, 0.2);
+    }
+    .verdict.no-overlap {
+      background: var(--bg-surface);
+      color: var(--neon-red);
+      border: 1px solid var(--neon-red);
+      box-shadow: 0 0 16px rgba(248, 113, 113, 0.2);
+    }
+
+    .comparison-footer {
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 600px) {
+      .main-grid, .data-grid, .result-pair {
+        grid-template-columns: 1fr;
+      }
+      .elapsed-display {
+        font-size: 32px;
+        letter-spacing: 2px;
+      }
+      .tap-count {
+        font-size: 24px;
+      }
+      .tap-count span {
+        font-size: 10px;
+      }
+      .lab-header h1 {
+        font-size: 20px;
+      }
+      .lab-header p {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lab-header">
+  <h1>🔬 單擺虛擬實驗室</h1>
+  <p>繩長 L = 20 cm &nbsp;·&nbsp; 理論週期 T ≈ 0.90 s &nbsp;·&nbsp; 每次計時 <strong>10 次</strong>完整擺動後停錶，T = 總時間 ÷ 10</p>
+</div>
+
+<div class="mode-row">
+  <button class="mode-btn" id="btn-ep" onclick="setMode('ep')">🔴 端點計時</button>
+  <button class="mode-btn" id="btn-mp" onclick="setMode('mp')">🔵 中間點計時</button>
+</div>
+
+<div class="main-grid">
+  <div class="canvas-card">
+    <canvas id="pendulum-canvas" width="420" height="310"></canvas>
+    <div class="canvas-label">
+      🔴 紅點 = 端點 &nbsp;｜&nbsp; 🔵 藍線 = 中間點
+    </div>
+  </div>
+
+  <div class="control-card">
+
+    <!-- Timer -->
+    <div>
+      <div class="elapsed-display" id="elapsed-display">0.00</div>
+      <div class="elapsed-label">計時（秒）</div>
+    </div>
+
+    <!-- Manual tap counter -->
+    <div class="tap-row">
+      <button class="tap-btn disabled" id="tap-btn" onclick="handleTap()">
+        ＋ 擺動次數
+      </button>
+      <div>
+        <div class="tap-count" id="tap-count">0 <span>/ 10</span></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status-box" id="status-box">請先選擇計時模式</div>
+
+    <!-- Main button -->
+    <button class="action-btn off" id="action-btn" onclick="handleBtn()">選擇模式後開始</button>
+
+    <button class="reset-btn" onclick="resetAll()">↺ 重置所有數據</button>
+  </div>
+</div>
+
+<!-- Data tables -->
+<div class="data-grid">
+  <div class="data-card">
+    <div class="data-card-title">🔴 端點計時</div>
+    <table>
+      <thead><tr><th>次</th><th>T (s)</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="t-val" id="ep-t-1">—</td></tr>
+        <tr><td>2</td><td class="t-val" id="ep-t-2">—</td></tr>
+        <tr><td>3</td><td class="t-val" id="ep-t-3">—</td></tr>
+        <tr><td>4</td><td class="t-val" id="ep-t-4">—</td></tr>
+        <tr><td>5</td><td class="t-val" id="ep-t-5">—</td></tr>
+      </tbody>
+    </table>
+    <div class="stats-area" id="ep-stats"></div>
+    <div class="result-box"  id="ep-result"></div>
+  </div>
+  <div class="data-card">
+    <div class="data-card-title">🔵 中間點計時</div>
+    <table>
+      <thead><tr><th>次</th><th>T (s)</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="t-val" id="mp-t-1">—</td></tr>
+        <tr><td>2</td><td class="t-val" id="mp-t-2">—</td></tr>
+        <tr><td>3</td><td class="t-val" id="mp-t-3">—</td></tr>
+        <tr><td>4</td><td class="t-val" id="mp-t-4">—</td></tr>
+        <tr><td>5</td><td class="t-val" id="mp-t-5">—</td></tr>
+      </tbody>
+    </table>
+    <div class="stats-area" id="mp-stats"></div>
+    <div class="result-box"  id="mp-result"></div>
+  </div>
+</div>
+
+<!-- Comparison -->
+<div class="comparison-card" id="comparison-card">
+  <div class="comparison-title">⚖️ 兩組結果比較</div>
+  <div class="result-pair">
+    <div class="result-ep">
+      <div>🔴 端點計時</div>
+      <div id="cmp-ep"></div>
+    </div>
+    <div class="result-mp">
+      <div>🔵 中間點計時</div>
+      <div id="cmp-mp"></div>
+    </div>
+  </div>
+  <div class="verdict" id="verdict"></div>
+  <div class="comparison-footer">
+    理論值：T = <span id="t-theory"></span> s（L = 20 cm，g = 9.80 m/s²）
+  </div>
+</div>
+
+<script>
+// ═══ PHYSICS ═══
+const L_M   = 0.20;
+const G     = 9.80;
+const T_T   = 2 * Math.PI * Math.sqrt(L_M / G);
+const OMG   = 2 * Math.PI / T_T;
+const TH_MAX = 18 * Math.PI / 180;
+
+document.getElementById('t-theory').textContent = T_T.toFixed(3);
+
+// ═══ HELPERS ═══
+function getEventPos(e, canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const t = e.touches ? e.touches[0] : e;
+  return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+}
+
+// ═══ CANVAS ═══
+const canvas = document.getElementById('pendulum-canvas');
+const ctx    = canvas.getContext('2d');
+
+// Responsive canvas sizing
+function resizeCanvas() {
+  const parent = canvas.parentElement;
+  const w = Math.min(parent.clientWidth, 420);
+  canvas.width = w;
+  canvas.height = Math.round(w * 310 / 420);
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const W = canvas.width, H = canvas.height;
+const PX = W / 2, PY = 28, L_PX = 230;
+
+const EP_LX = PX - L_PX * Math.sin(TH_MAX);
+const EP_LY = PY + L_PX * Math.cos(TH_MAX);
+const EP_RX = PX + L_PX * Math.sin(TH_MAX);
+const EP_RY = PY + L_PX * Math.cos(TH_MAX);
+
+function getTheta(t_s) { return TH_MAX * Math.cos(OMG * t_s); }
+
+function drawFrame(t_s) {
+  ctx.clearRect(0, 0, W, H);
+  const th  = getTheta(t_s);
+  const bx  = PX + L_PX * Math.sin(th);
+  const by  = PY + L_PX * Math.cos(th);
+  const nearEP = Math.abs(Math.abs(th) - TH_MAX) < TH_MAX * 0.12;
+  const nearMP = Math.abs(th) < TH_MAX * 0.12;
+
+  // Motion arc
+  const a1 = Math.PI/2 - TH_MAX, a2 = Math.PI/2 + TH_MAX;
+  ctx.beginPath(); ctx.arc(PX, PY, L_PX, a1, a2);
+  ctx.strokeStyle = 'rgba(34, 211, 238, 0.08)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Center line
+  ctx.beginPath();
+  ctx.moveTo(PX, PY - 5); ctx.lineTo(PX, PY + L_PX + 24);
+  ctx.strokeStyle = (nearMP && currentMode === 'mp') ? 'rgba(34, 211, 238, 0.8)' : 'rgba(34, 211, 238, 0.15)';
+  ctx.lineWidth = (nearMP && currentMode === 'mp') ? 2.5 : 1;
+  ctx.setLineDash([5, 5]); ctx.stroke(); ctx.setLineDash([]);
+
+  // Endpoint markers
+  const epGlow = nearEP && currentMode === 'ep';
+  [[EP_LX, EP_LY], [EP_RX, EP_RY]].forEach(([ex, ey]) => {
+    if (epGlow) {
+      ctx.beginPath(); ctx.arc(ex, ey, 14, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(248, 113, 113, 0.2)'; ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(ex, ey, 7, 0, Math.PI*2);
+    ctx.fillStyle = epGlow ? '#f87171' : 'rgba(248, 113, 113, 0.2)'; ctx.fill();
+  });
+
+  // Center dot
+  const mpGlow = nearMP && currentMode === 'mp';
+  if (mpGlow) {
+    ctx.beginPath(); ctx.arc(PX, PY + L_PX, 14, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(34, 211, 238, 0.2)'; ctx.fill();
+  }
+  ctx.beginPath(); ctx.arc(PX, PY + L_PX, 5, 0, Math.PI*2);
+  ctx.fillStyle = mpGlow ? '#22d3ee' : 'rgba(34, 211, 238, 0.15)'; ctx.fill();
+
+  // Rope
+  ctx.beginPath(); ctx.moveTo(PX, PY); ctx.lineTo(bx, by);
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2.5; ctx.stroke();
+
+  // Pivot
+  ctx.beginPath(); ctx.arc(PX, PY, 6, 0, Math.PI*2);
+  ctx.fillStyle = '#1e293b'; ctx.fill();
+  ctx.beginPath(); ctx.arc(PX, PY, 4, 0, Math.PI*2);
+  ctx.fillStyle = '#334155'; ctx.fill();
+
+  // Bob shadow
+  ctx.beginPath(); ctx.arc(bx+2, by+2, 14, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fill();
+
+  // Bob gradient
+  const bobColor = currentMode === 'ep' ? '#f87171' : currentMode === 'mp' ? '#22d3ee' : '#64748b';
+  const grad = ctx.createRadialGradient(bx-4, by-5, 0, bx, by, 14);
+  grad.addColorStop(0, bobColor);
+  grad.addColorStop(1, bobColor);
+  ctx.beginPath(); ctx.arc(bx, by, 14, 0, Math.PI*2);
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Bob highlight
+  ctx.beginPath(); ctx.arc(bx-4, by-5, 4, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fill();
+
+  // "按！" prompt
+  const goodMoment = (currentMode === 'ep' && nearEP) || (currentMode === 'mp' && nearMP);
+  if (goodMoment && timingState === 'waiting-start') {
+    ctx.font = 'bold 14px system-ui'; ctx.textAlign = 'center';
+    ctx.fillStyle = currentMode === 'ep' ? '#f87171' : '#22d3ee';
+    ctx.fillText('▼ 按！', PX, H - 8);
+  }
+  if (goodMoment && timingState === 'timing') {
+    ctx.font = 'bold 14px system-ui'; ctx.textAlign = 'center';
+    ctx.fillStyle = currentMode === 'ep' ? '#f87171' : '#22d3ee';
+    ctx.fillText('▼ 停！', PX, H - 8);
+  }
+}
+
+// ═══ STATE ═══
+let currentMode  = null;
+let timingState  = 'idle';      // idle | waiting-start | timing
+let animStart    = null;
+let t_wall_start = null;
+let tapCount     = 0;
+let clickTheta   = 0;
+let rafId        = null;
+let timerInterval = null;
+
+const DATA = { ep: [], mp: [] };
+
+// ═══ ANIMATION ═══
+function loop(ts) {
+  if (!animStart) animStart = ts;
+  const t_s = (ts - animStart) / 1000;
+  drawFrame(t_s);
+  rafId = requestAnimationFrame(loop);
+}
+rafId = requestAnimationFrame(loop);
+
+// ═══ TOUCH SUPPORT ═══
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+}, { passive: false });
+canvas.addEventListener('touchend', (e) => {
+  e.preventDefault();
+}, { passive: false });
+
+// ═══ MODE ═══
+function setMode(mode) {
+  if (timingState === 'timing') return; // don't switch mid-timing
+  currentMode = mode;
+  document.getElementById('btn-ep').className = 'mode-btn' + (mode === 'ep' ? ' ep-active' : '');
+  document.getElementById('btn-mp').className = 'mode-btn' + (mode === 'mp' ? ' mp-active' : '');
+  timingState = DATA[mode].length >= 5 ? 'done' : 'waiting-start';
+  tapCount = 0;
+  refreshUI();
+}
+
+// ═══ MAIN BUTTON ═══
+function handleBtn() {
+  if (!currentMode) return;
+  const now = performance.now();
+  const t_s = animStart ? (now - animStart) / 1000 : 0;
+
+  if (timingState === 'waiting-start') {
+    // START
+    t_wall_start = now;
+    clickTheta   = getTheta(t_s);
+    tapCount     = 0;
+    document.getElementById('tap-count').textContent = '0';
+    document.getElementById('tap-count').className = 'tap-count';
+    timingState  = 'timing';
+    // Live timer
+    timerInterval = setInterval(() => {
+      const el = (performance.now() - t_wall_start) / 1000;
+      document.getElementById('elapsed-display').textContent = el.toFixed(2);
+    }, 50);
+    refreshUI();
+
+  } else if (timingState === 'timing') {
+    // STOP
+    clearInterval(timerInterval);
+    const totalSec  = (now - t_wall_start) / 1000;
+    const T_measured = totalSec / 10;
+
+    // Record
+    const idx = DATA[currentMode].length;
+    if (idx < 5) {
+      DATA[currentMode].push(T_measured);
+      const n   = idx + 1;
+      const pfx = currentMode;
+      document.getElementById(`${pfx}-t-${n}`).textContent = T_measured.toFixed(3);
+    }
+
+    document.getElementById('elapsed-display').textContent = totalSec.toFixed(2);
+
+    if (DATA[currentMode].length >= 5) {
+      timingState = 'done';
+      showStats(currentMode);
+      checkComparison();
+    } else {
+      timingState = 'waiting-start';
+      tapCount = 0;
+      document.getElementById('tap-count').textContent = '0';
+      document.getElementById('tap-count').className = 'tap-count';
+    }
+    refreshUI();
+  }
+}
+
+// ═══ TAP COUNTER ═══
+function handleTap() {
+  if (timingState !== 'timing') return;
+  if (tapCount >= 10) return;
+  tapCount++;
+  const el = document.getElementById('tap-count');
+  el.innerHTML = tapCount >= 10
+    ? `${tapCount} <span style="color:var(--neon-green)">✓ 可停錶</span>`
+    : `${tapCount} <span>/ 10</span>`;
+  if (tapCount >= 10) el.className = 'tap-count done';
+}
+
+// ═══ UI ═══
+function refreshUI() {
+  const btn = document.getElementById('action-btn');
+  const msg = document.getElementById('status-box');
+  const tap = document.getElementById('tap-btn');
+  const pfx = currentMode === 'ep' ? '端點' : '中間點';
+  const cnt = currentMode ? DATA[currentMode].length : 0;
+
+  // Tap button
+  tap.className = 'tap-btn' + (timingState === 'timing' ? '' : ' disabled');
+
+  if (!currentMode) {
+    btn.className = 'action-btn off';
+    btn.textContent = '選擇模式後開始';
+    msg.textContent = '請先選擇計時模式（端點或中間點）';
+    return;
+  }
+  if (timingState === 'done') {
+    btn.className = 'action-btn done';
+    btn.textContent = `✅ ${pfx}計時已完成（5 次）`;
+    msg.innerHTML = '<span>5 次測量完成！可切換另一個模式繼續。</span>';
+    return;
+  }
+  if (timingState === 'waiting-start') {
+    btn.className = 'action-btn ready';
+    btn.textContent = `▶ 第 ${cnt+1} 次：在${pfx}按下（開始計時）`;
+    msg.innerHTML = currentMode === 'ep'
+      ? `<span>觀察單擺，在<strong>端點</strong>（最遠點靜止瞬間）按下開始。<br>數 10 次後，再次在端點按下停止。</span>`
+      : `<span>觀察單擺，在<strong>中間點</strong>（擺球向右通過最低點）按下開始。<br>數 10 次後，再次在中間點按下停止。</span>`;
+  } else if (timingState === 'timing') {
+    btn.className = 'action-btn timing';
+    btn.textContent = `■ 數到 10 次後，在${pfx}按下（停止計時）`;
+    msg.innerHTML = `<span>計時中！用左邊「＋擺動次數」輔助計數，<br>數到 10 次後在<strong>${pfx}</strong>按下停止。</span>`;
+  }
+}
+
+// ═══ STATS ═══
+function calcStats(vals) {
+  const n    = vals.length;
+  const mean = vals.reduce((a,b) => a+b, 0) / n;
+  const s    = Math.sqrt(vals.reduce((s,v) => s+(v-mean)**2, 0) / (n-1));
+  const uA   = s / Math.sqrt(n);
+  const uB   = 0.01 / (2 * Math.sqrt(3));
+  const uc   = Math.sqrt(uA**2 + uB**2);
+  const U    = 2 * uc;
+  const U_up = Math.ceil(U * 1000) / 1000;
+  return { n, mean, s, uA, uB, uc, U, U_up };
+}
+
+function showStats(mode) {
+  const st  = calcStats(DATA[mode]);
+  const pfx = mode;
+  const el  = document.getElementById(`${pfx}-stats`);
+  el.style.display = 'block';
+  el.textContent =
+    `x̄  = ${st.mean.toFixed(4)} s\n` +
+    `s   = ${st.s.toFixed(4)} s\n` +
+    `u_A = s/√${st.n} = ${st.uA.toFixed(4)} s\n` +
+    `u_B = 0.01/(2√3) = ${st.uB.toFixed(4)} s\n` +
+    `u_c = √(u_A²+u_B²) = ${st.uc.toFixed(4)} s\n` +
+    `U   = 2×u_c → ${st.U_up.toFixed(3)} s`;
+
+  const res = document.getElementById(`${pfx}-result`);
+  res.style.display = 'block';
+  res.textContent   = `T = ${st.mean.toFixed(3)} ± ${st.U_up.toFixed(3)} s`;
+}
+
+// ═══ COMPARISON ═══
+function checkComparison() {
+  if (DATA.ep.length < 5 || DATA.mp.length < 5) return;
+  const ep = calcStats(DATA.ep);
+  const mp = calcStats(DATA.mp);
+  const ep_lo = ep.mean - ep.U, ep_hi = ep.mean + ep.U;
+  const mp_lo = mp.mean - mp.U, mp_hi = mp.mean + mp.U;
+  const overlap = ep_lo <= mp_hi && mp_lo <= ep_hi;
+
+  document.getElementById('comparison-card').style.display = 'block';
+  document.getElementById('cmp-ep').textContent =
+    `T₁ = ${ep.mean.toFixed(3)} ± ${ep.U_up.toFixed(3)} s\n區間：[${ep_lo.toFixed(3)}, ${ep_hi.toFixed(3)}]`;
+  document.getElementById('cmp-mp').textContent =
+    `T₂ = ${mp.mean.toFixed(3)} ± ${mp.U_up.toFixed(3)} s\n區間：[${mp_lo.toFixed(3)}, ${mp_hi.toFixed(3)}]`;
+
+  const vEl = document.getElementById('verdict');
+  vEl.className = 'verdict ' + (overlap ? 'overlap' : 'no-overlap');
+  vEl.innerHTML  = overlap
+    ? '✅ 兩組不確定度區間重疊 → 差異不顯著，兩種方法統計上沒有區別'
+    : '❌ 兩組區間不重疊 → 兩種方法有系統性差異，值得進一步探討';
+}
+
+// ═══ RESET ═══
+function resetAll() {
+  if (timingState === 'timing') { clearInterval(timerInterval); }
+  DATA.ep = []; DATA.mp = [];
+  currentMode = null; timingState = 'idle';
+  tapCount = 0; t_wall_start = null;
+
+  document.getElementById('btn-ep').className = 'mode-btn';
+  document.getElementById('btn-mp').className = 'mode-btn';
+  document.getElementById('elapsed-display').textContent = '0.00';
+  document.getElementById('tap-count').innerHTML = '0 <span>/ 10</span>';
+  document.getElementById('tap-count').className = 'tap-count';
+
+  ['ep','mp'].forEach(pfx => {
+    for (let i=1; i<=5; i++) {
+      document.getElementById(`${pfx}-t-${i}`).textContent = '—';
+      const h = document.getElementById(`${pfx}-h-${i}`);
+      h.textContent = '—'; h.style.color = '';
+    }
+    document.getElementById(`${pfx}-stats`).style.display = 'none';
+    document.getElementById(`${pfx}-result`).style.display = 'none';
+  });
+  document.getElementById('comparison-card').style.display = 'none';
+  refreshUI();
+}
+
+refreshUI();
+</script>
+</body>
+</html>

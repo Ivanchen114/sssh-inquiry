@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/airplane-lv1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>紙飛機 Lv1 · 論證建模 · 探究與實作</title>
+  <meta name="description" content="紙飛機 Lv1 論證建模：用多變因經驗模型分析機翼面積、配重、投擲力道對飛行距離的影響。">
+  <meta property="og:title" content="紙飛機 Lv1 · 論證建模 · 探究與實作">
+  <meta property="og:description" content="紙飛機 Lv1 論證建模：用多變因經驗模型分析機翼面積、配重、投擲力道對飛行距離的影響。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/airplane-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <style>
+    .var-slider { display:grid; grid-template-columns:80px 1fr 70px; align-items:center; gap:10px; margin:6px 0; font-size:12px; }
+    .var-slider input[type=range] { accent-color:#60a5fa; }
+    .var-val { font-family:'DM Mono',monospace; text-align:right; }
+    .shoot-btn { background:#60a5fa; color:#1e3a8a; border:none; padding:7px 16px; border-radius:6px; font-weight:700; font-size:12px; cursor:pointer; }
+    .shoot-btn.multi { background:#fbbf24; color:#78350f; }
+    .shoot-btn.clear { background:rgba(255,255,255,0.15); color:white; }
+    .runlog-row { display:grid; grid-template-columns:60px 70px 70px 60px 1fr 90px; gap:6px; font-size:11px; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.08); align-items:center; }
+    .runlog-row.head { font-weight:700; color:#93c5fd; border-bottom:1px solid rgba(255,255,255,0.3); }
+    .badge-var { display:inline-block; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:600; margin-right:4px; }
+    .b-A { background:#dbeafe; color:#1e40af; }
+    .b-cg { background:#fef3c7; color:#92400e; }
+    .b-v { background:#dcfce7; color:#166534; }
+    .scan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0 4px; }
+    .scan-card { background:white; border:1px solid var(--border); border-radius:6px; padding:8px; }
+    .scan-card canvas { width:100%; height:140px; background:#fafbfc; border:1px solid #e2e8f0; border-radius:4px; }
+    .scan-title { font-size:11px; font-weight:700; color:var(--text-secondary); margin-bottom:4px; }
+    @media (max-width:640px) { .scan-grid { grid-template-columns:1fr; } }
+  </style>
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span>
+      <span>紙飛機</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>✈️ 紙飛機 · Lv1 論證建模</h1>
+    <p class="subtitle">紙飛機不是石頭——用數據建立你自己的「經驗模型」</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">3 節課</span>
+      <span class="tag">機翼 × 配重 × 力道 → 飛行距離</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>辨識紙飛機與拋體運動的本質差異（升力、摺法效應、投擲變異）</li>
+      <li>用「多次取平均 ± 標準差」處理真實世界的變異性</li>
+      <li>一次操縱一個變因，分別找出 A、x_cg、v 對飛行距離的關係形狀（最佳值型 / 飽和型 / 單調型）</li>
+      <li>用 CER 寫出自己的「經驗模型」，指出哪個變因影響最大、模型的適用範圍</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>情境×預測</button>
+    <button class="step-tab"><span class="step-num">2</span>破除拋體迷思</button>
+    <button class="step-tab"><span class="step-num">3</span>變因掃描</button>
+    <button class="step-tab"><span class="step-num">4</span>建立你的模型</button>
+    <button class="step-tab"><span class="step-num">5</span>反思與延伸</button>
+  </nav>
+  <div class="page-body">
+
+    <!-- ═══ Step 1：情境×預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">觀察紙飛機競賽記錄，對飛行距離的關鍵變因做預測。</div>
+
+      <div style="background:linear-gradient(135deg,#1e3a8a,#2952c4);color:white;border-radius:10px;padding:16px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px;">✈️ 真實數據：同學丟同一架紙飛機 10 次</div>
+        <div style="font-family:'DM Mono',monospace;font-size:13px;line-height:1.8;opacity:0.95;">
+          7.2　 8.1　 6.5　 9.3　 7.8　 5.9　 8.7　 7.1　 6.8　 8.4　&nbsp;（單位：m）<br>
+          平均 ≈ <strong>7.58 m</strong>，最大最小差 <strong>3.4 m</strong>（40%）
+        </div>
+        <div style="font-size:12px;margin-top:10px;opacity:0.85;line-height:1.6;">
+          — 這就是紙飛機的真實變異。同一架飛機丟 10 次都差這麼多，何況換一個摺法？「飛多遠」不能用一次就決定。
+        </div>
+      </div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>列出你覺得最影響紙飛機飛行距離的 <strong>三個</strong>變因（從大到小排序）。
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>你猜「機翼面積越大、飛得越遠」嗎？還是有一個最佳大小？為什麼？
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>國中的拋體公式 R = v²sin(2θ)/g 告訴我們 45° 丟最遠——這個公式拿來預測紙飛機準嗎？有什麼 <strong>沒考慮</strong>的地方？
+      </div>
+
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼紙飛機丟 10 次，距離可以差 40%？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>因為你無法精確控制<strong>投擲速度、角度、機身姿態、手指離手時的微扭轉</strong>——每次都不一樣。紙飛機本身也有輕微變形。真實世界充滿雜訊，單次數據不能代表什麼。本模組的核心挑戰：<strong>在雜訊中找出訊號</strong>。</p>
+        </div>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測（P1、P2、P3）寫下來</div>
+        <textarea class="think-input" data-key="airplane-lv1-predict" placeholder="P1: 我覺得影響最大的三個變因是⋯&#10;P2: 機翼面積⋯&#10;P3: 拋體公式沒考慮⋯"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：破除拋體迷思 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">釐清紙飛機為什麼不是拋體——這決定了你要建什麼樣的模型。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:12px;">
+          <div style="font-weight:700;color:#991b1b;font-size:13px;margin-bottom:6px;">❌ 不能用的模型</div>
+          <div style="font-family:'DM Mono',monospace;background:white;padding:8px;border-radius:4px;font-size:12px;margin-bottom:6px;">
+            R = v₀²·sin(2θ) / g
+          </div>
+          <div style="font-size:12px;color:#7f1d1d;line-height:1.8;">
+            這是<strong>拋體公式</strong>，假設只有重力、沒有空氣作用。<br>
+            紙飛機有<strong>升力</strong>（機翼形成的向上推力）——飛得比拋體公式預測的遠得多。
+          </div>
+        </div>
+        <div style="background:#dcfce7;border:1px solid #bbf7d0;border-radius:8px;padding:12px;">
+          <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:6px;">✅ 我們要建的模型</div>
+          <div style="font-family:'DM Mono',monospace;background:white;padding:8px;border-radius:4px;font-size:12px;margin-bottom:6px;">
+            D = f(A) · g(x_cg) · h(v) ± 雜訊
+          </div>
+          <div style="font-size:12px;color:#14532d;line-height:1.8;">
+            <strong>經驗模型</strong>：不從公式推來，而是從資料蒐集中「長出來」。<br>
+            我們要找的是：每個變因對距離的<strong>關係形狀</strong>（最佳值？飽和？單調？）。
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:var(--text-primary);">📋 三類變因</div>
+        <div style="display:grid;gap:6px;font-size:12px;">
+          <div><span class="badge-var b-A">可控</span>機翼面積 <strong>A</strong>（摺法決定）、配重位置 <strong>x_cg</strong>（迴紋針位置）、紙張重量</div>
+          <div><span class="badge-var b-cg">難控</span>投擲速度 <strong>v</strong>、投擲角度 θ、出手時機身姿態 → 每次都有變異，要用多次取平均解決</div>
+          <div><span class="badge-var b-v">環境</span>室內風向、溫度、地面平整度 → 固定在同一教室做可消除</div>
+        </div>
+      </div>
+
+      <div class="info-box yellow">
+        💡 <strong>建模策略</strong>：一次只改一個變因，其他固定。每組設定丟 10 次取平均±標準差（排除雜訊）。把三個變因各自的關係形狀拼起來，就是你的經驗模型。
+      </div>
+
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 為什麼紙飛機「有升力」很關鍵？</div>
+        <button class="think-toggle">想好了？點擊看解釋 →</button>
+        <div class="think-hidden">
+          <p>機翼把氣流向下偏折，反作用力把紙飛機往上推——這就是<strong>升力</strong>（lift）。升力讓紙飛機可以<strong>滑翔</strong>很久很遠，而不是像石頭一樣拋物線落下。拋體公式沒升力項，所以預測紙飛機會低估很多。機翼面積 A 就是控制升力的關鍵變因——但也不是越大越好，因為阻力也隨 A 增加。有個<strong>最佳值</strong>，這就是今天要找的東西。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：變因掃描 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">用模擬器做三次「變因掃描」：各自固定兩個、變動一個，觀察關係形狀。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">模擬器已經內建紙飛機的真實變異（雜訊約 ±15%）。每組設定按一次「丟 10 次」看平均。</p>
+
+      <!-- ═══ 紙飛機模擬器 ═══ -->
+      <div style="background:linear-gradient(135deg,#1e3a8a,#2952c4);border-radius:12px;padding:18px;margin-bottom:14px;color:white;">
+        <!-- 三個 slider -->
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;margin-bottom:10px;">
+          <div class="var-slider">
+            <label><span class="badge-var b-A">A</span>機翼面積</label>
+            <input type="range" id="sim-A" min="50" max="300" value="180" step="10">
+            <span class="var-val"><span id="val-A">180</span> cm²</span>
+          </div>
+          <div class="var-slider">
+            <label><span class="badge-var b-cg">x_cg</span>配重位置</label>
+            <input type="range" id="sim-cg" min="15" max="75" value="35" step="5">
+            <span class="var-val"><span id="val-cg">0.35</span></span>
+          </div>
+          <div class="var-slider">
+            <label><span class="badge-var b-v">v</span>投擲力道</label>
+            <input type="range" id="sim-v" min="3" max="12" value="7" step="0.5">
+            <span class="var-val"><span id="val-v">7.0</span> m/s</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+          <button class="shoot-btn" onclick="shootOne()">🚀 丟 1 次</button>
+          <button class="shoot-btn multi" onclick="shoot10()">🎯 丟 10 次取平均</button>
+          <button class="shoot-btn clear" onclick="clearRuns()">清除紀錄</button>
+        </div>
+
+        <canvas id="sim-canvas" width="680" height="220" style="width:100%;background:#0f172a;border-radius:8px;margin-bottom:10px;"></canvas>
+
+        <div id="sim-result" style="font-family:'DM Mono',monospace;font-size:13px;opacity:0.9;min-height:22px;margin-bottom:8px;"></div>
+
+        <div style="background:rgba(255,255,255,0.05);border-radius:6px;padding:8px 10px;max-height:180px;overflow-y:auto;">
+          <div class="runlog-row head"><span>#</span><span>A</span><span>x_cg</span><span>v</span><span>距離（m）</span><span>平均±std</span></div>
+          <div id="runlog"></div>
+        </div>
+      </div>
+
+      <!-- 三張變因掃描圖 -->
+      <div class="scan-grid">
+        <div class="scan-card">
+          <div class="scan-title">📈 D vs A（固定 cg、v）</div>
+          <canvas id="scan-A"></canvas>
+        </div>
+        <div class="scan-card">
+          <div class="scan-title">📈 D vs x_cg（固定 A、v）</div>
+          <canvas id="scan-cg"></canvas>
+        </div>
+        <div class="scan-card">
+          <div class="scan-title">📈 D vs v（固定 A、cg）</div>
+          <canvas id="scan-v"></canvas>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-muted);margin:-2px 0 14px;">掃描圖從你的「丟 10 次」紀錄自動聚合。每次固定兩個變因、只改另一個，點「丟 10 次」，圖就會跑出來。</p>
+
+      <div style="display:grid;gap:8px;margin-bottom:12px;">
+        <div class="q-item"><strong>Q1：</strong>D vs A 是什麼形狀？<strong>單調增加</strong>、<strong>有最佳值</strong>、還是<strong>飽和</strong>？最佳點大約幾 cm²？</div>
+        <div class="q-item"><strong>Q2：</strong>D vs x_cg 呢？前重（值小）好還是後重（值大）好？為什麼？（提示：後重飛機會怎樣？）</div>
+        <div class="q-item"><strong>Q3：</strong>D vs v 呢？投擲力道越大真的飛越遠嗎？有「投得再大力也沒用」的上限嗎？</div>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 做完三次掃描，寫下你觀察到的三種「關係形狀」</div>
+        <textarea class="think-input" data-key="airplane-lv1-scan" placeholder="D vs A：看起來像⋯形狀，最佳值在⋯&#10;D vs x_cg：看起來像⋯&#10;D vs v：看起來像⋯"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：建立你的模型 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">把三個關係形狀整合成一個「經驗模型」，並用 CER 論證。</div>
+
+      <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:var(--text-primary);">🧩 模型組裝：把三個形狀乘起來</div>
+        <div style="font-family:'DM Mono',monospace;font-size:14px;color:#1e40af;background:white;padding:10px;border-radius:6px;margin-bottom:8px;text-align:center;">
+          D(A, x_cg, v) = D<sub>max</sub> · f(A) · g(x_cg) · h(v)
+        </div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          每個函數就是你在 Step 3 看到的「形狀」。常見三種：
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;font-size:11px;">
+          <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;">
+            <div style="font-weight:700;color:#2563eb;margin-bottom:4px;">有最佳值型</div>
+            倒 U 形，中間最高。例：機翼面積（太小沒升力、太大阻力大）
+          </div>
+          <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;">
+            <div style="font-weight:700;color:#059669;margin-bottom:4px;">飽和型</div>
+            一開始快速增加，後來持平。例：投擲力道（過了臨界點再大力也沒用）
+          </div>
+          <div style="background:white;border:1px solid var(--border);border-radius:4px;padding:8px;">
+            <div style="font-weight:700;color:#f59e0b;margin-bottom:4px;">單調型</div>
+            越來越高（或越低），沒有拐點。例：紙張越重飛越短（大致）
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;gap:8px;margin-bottom:14px;">
+        <div class="q-item"><strong>Q1：</strong>三個變因中，哪一個對距離的影響「最大」？怎麼定義「影響最大」？（提示：把變因從最差拉到最好，距離增加多少？）</div>
+        <div class="q-item"><strong>Q2：</strong>你的模型有哪些<strong>不能回答</strong>的問題？（例：不同紙材？在戶外有風？超出測試範圍的 A？）</div>
+        <div class="q-item"><strong>Q3：</strong>雜訊 ±15% 怎麼處理的？如果你把「丟 10 次取平均」改成「丟 3 次取平均」，會有什麼問題？</div>
+      </div>
+
+      <!-- CER 論證 -->
+      <div style="display:grid;gap:8px;margin-bottom:14px;">
+        <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+          <div style="background:var(--phase1);color:white;padding:7px 14px;font-size:12px;font-weight:700;">主張（Claim）— 你的經驗模型</div>
+          <div style="padding:10px 14px;background:var(--sidebar-bg);font-size:13px;color:var(--text-muted);font-style:italic;">
+            「在教室條件下，紙飛機飛行距離 D 主要受 <strong>___</strong>（最大影響因子）影響，其次是 <strong>___</strong>。最佳設定是 A ≈ ___ cm²、x_cg ≈ ___、v ≈ ___ m/s。」
+          </div>
+        </div>
+        <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+          <div style="background:var(--phase2);color:white;padding:7px 14px;font-size:12px;font-weight:700;">理由（Reasoning）— 物理直覺</div>
+          <div style="padding:10px 14px;background:var(--sidebar-bg);font-size:13px;color:var(--text-muted);">
+            A 太小升力不夠（沉得快）；A 太大阻力大（飛不遠）→ 倒 U 形。<br>
+            x_cg 後重時飛機容易仰頭失速（stall）→ 前重較好，但太前重會俯衝。<br>
+            v 有飽和：過了某個速度，機身會翻滾或拉高失速，再用力也沒用。
+          </div>
+        </div>
+        <div style="border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+          <div style="background:var(--phase3);color:white;padding:7px 14px;font-size:12px;font-weight:700;">證據（Evidence）— 從掃描圖讀數</div>
+          <div style="padding:10px 14px;background:var(--sidebar-bg);font-size:13px;color:var(--text-muted);">
+            A 從 50 到 ___ cm²，平均距離從 ___ m 升到 ___ m（增加 ___%）；超過 ___ 後反降。<br>
+            x_cg 從 0.2 到 0.35，平均距離從 ___ 到 ___ m。<br>
+            v 從 3 到 12 m/s，平均距離從 ___ 到 ___ m，但 v &gt; ___ 後幾乎不增。
+          </div>
+        </div>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用上面 CER 架構寫下你的經驗模型（填入數字，也可以挑戰 Q1–Q3）</div>
+        <textarea class="think-input" data-key="airplane-lv1-model" placeholder="主張：在我們的實驗範圍內⋯&#10;理由：⋯&#10;證據：⋯" style="min-height:100px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 5：反思與延伸 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">回頭對照預測，評估「經驗模型」的適用範圍。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回第 1 步的預測，和你的模型比對——哪題準？哪題偏差最大？</p>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:16px 0 8px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:6px;">如果把紙飛機換成<strong>塑膠滑翔機</strong>（升力更高、阻力更低），f(A)、g(x_cg)、h(v) 哪個最會改變？</div>
+      <div class="q-item" style="margin-bottom:6px;">你的模型是「在教室條件下」有效——如果搬到<strong>戶外</strong>（有風），模型還成立嗎？</div>
+      <div class="q-item" style="margin-bottom:16px;">棒球投手的最佳出手角度是 30° 左右，不是 45°——你認為他們的模型跟你的模型一樣是 f(A)·g(x_cg)·h(v)，還是另一種結構？</div>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#1e40af;margin-bottom:6px;">🌱 發現問題的種子（lv3 會用到）</div>
+        <div style="font-size:13px;color:#1e3a8a;line-height:1.8;">
+          你的模型回答了「什麼設定飛最遠」。但還有很多問題你沒測到：飛機<strong>停留時間</strong>（不是距離）最長的設定是什麼？<strong>穩定性</strong>（10 次標準差最小）呢？<strong>準確度</strong>（能否精準落在目標點）呢？這些都是 lv3 會挑戰的方向。
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">用「如果改變___，___會怎樣？」的句型，要包含操縱變因和應變變因：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「如果把紙張換成色紙（比 A4 紙重 20%），f(A) 的最佳點會往左移還是往右移？」← 有變因、可量化、教室做得到。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你的探究問題（要包含操縱變因和應變變因，且在教室裡做得到）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="airplane-lv1-my-question" rows="3" placeholder="例：紙張重量變重 20%，機翼面積的最佳值會改變嗎？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/airplane-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          紙飛機 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生親身經驗「真實世界有雜訊，不能看單次數據」</li>
+              <li>用三次「變因掃描」建立可拆解的經驗模型：倒 U / 飽和 / 單調</li>
+              <li>區分「拋體公式不適用」vs「經驗模型可用」的界線</li>
+              <li>CER 不只寫結論，要具體填入從掃描圖讀出的數字</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              模擬器刻意加入 ±15% 的雜訊，逼學生體驗「丟 10 次取平均」的必要性。若學生只丟 1 次就下結論，對比其他組會發現結果不一致，再引導到「多次取平均」。<br><br>
+              模擬器的隱藏公式：D = 12 · f(A) · g(cg) · h(v) · noise，其中 f(A) 在 A=180 cm² 附近最大（倒 U）、g(cg) 在 cg=0.35 附近最大（倒 U）、h(v) = 1 − exp(−v/5)（飽和）。學生不應看到這個公式——他們要從資料「發現」這個形狀。
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">本模組的好素材：① 三張掃描圖截圖 ② 你的 CER 論證 ③ 預測 vs 實測的對照 ④ 你發現的「模型適用邊界」。配 ORID 反思（100–150 字），說明「經驗模型 vs 物理公式」教會你什麼。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ <strong>反思錨點</strong>：你在 Step 1 預測影響最大的變因是什麼？Step 3 的數據同意嗎？偏差在哪？（2–3 句）
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 進階：拋體公式為什麼不適用？</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">
+            拋體公式 R = v₀²sin(2θ)/g 假設：①只有重力、②點質量（無姿態）、③在真空中。紙飛機三個都違反——有升力、有姿態（會失速）、在空氣中。所以 lv1 不教這個公式，而是教<strong>怎麼建一個適用於紙飛機的模型</strong>。這就是「論證建模」的核心：知道該用什麼模型，比會算公式更重要。
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小華想研究「紙飛機摺法對飛行距離的影響」。她的計畫：A4 和色紙各摺箭型和滑翔型 1 架，在走廊上丟 1 次，用目測估距離。<strong>有什麼問題？</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              紙材和摺法兩個變因同時改（違反「一次改一個」）、只丟 1 次（無法估計 ±15% 的雜訊）、目測距離不精確、走廊有風或空間限制、沒說投擲力道怎麼控制。<br>
+              修正：固定紙材（都用 A4），只改摺法；每組丟 10 次取平均；用捲尺量；在相同教室做；同一個人以相同力道丟。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/airplane-lv2.html">紙飛機 Lv2 規劃研究 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// 紙飛機模擬器（經驗模型，非拋體）
+// ═══════════════════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('sim-canvas');
+  const ctx = canvas.getContext('2d');
+  const A_el = document.getElementById('sim-A');
+  const cg_el = document.getElementById('sim-cg');
+  const v_el = document.getElementById('sim-v');
+  const valA = document.getElementById('val-A');
+  const valCg = document.getElementById('val-cg');
+  const valV = document.getElementById('val-v');
+  const runlogEl = document.getElementById('runlog');
+  const resultEl = document.getElementById('sim-result');
+
+  // 隱藏真實物理（學生不該看到）
+  const A_opt = 180, A_sigma = 80;
+  const cg_opt = 0.35, cg_sigma = 0.12;
+  const D_max = 12; // 最大距離 m
+  function f_A(A) { return Math.exp(-Math.pow((A - A_opt) / A_sigma, 2)); }
+  function g_cg(cg) { return Math.exp(-Math.pow((cg - cg_opt) / cg_sigma, 2)); }
+  function h_v(v) { return 1 - Math.exp(-v / 5); }
+
+  function simulateOnce(A, cg, v) {
+    const base = D_max * f_A(A) * g_cg(cg) * h_v(v);
+    const noise = 1 + (Math.random() - 0.5) * 0.3; // ±15%
+    return Math.max(0.2, base * noise);
+  }
+
+  // ─── 即時更新 slider 顯示 ───
+  A_el.addEventListener('input', () => { valA.textContent = A_el.value; });
+  cg_el.addEventListener('input', () => { valCg.textContent = (cg_el.value/100).toFixed(2); });
+  v_el.addEventListener('input', () => { valV.textContent = parseFloat(v_el.value).toFixed(1); });
+
+  // ─── runs：所有投擲紀錄 ───
+  const runs = []; // {A, cg, v, distances:[...], mean, std, id}
+  let runIdCounter = 1;
+
+  // ─── 繪製軌跡卡通 ───
+  function drawFlight(A, cg, v, distance) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 地面
+    const groundY = canvas.height - 30;
+    ctx.strokeStyle = '#475569';
+    ctx.beginPath(); ctx.moveTo(30, groundY); ctx.lineTo(canvas.width - 10, groundY); ctx.stroke();
+    // 刻度
+    ctx.fillStyle = '#64748b';
+    ctx.font = '10px monospace';
+    const maxD_draw = 15;
+    for (let d = 0; d <= maxD_draw; d += 3) {
+      const x = 30 + (d / maxD_draw) * (canvas.width - 50);
+      ctx.fillText(d + 'm', x - 8, groundY + 14);
+    }
+    // 發射點
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath(); ctx.arc(30, groundY - 10, 4, 0, Math.PI*2); ctx.fill();
+    // 軌跡（示意，不是真實物理）
+    const scaleX = (canvas.width - 50) / maxD_draw;
+    const peakY = groundY - 60 - 30 * h_v(v); // 高度隨 v 飽和
+    ctx.strokeStyle = '#60a5fa';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(30, groundY - 10);
+    // 簡化滑翔路徑：先上升後緩降
+    const landX = 30 + distance * scaleX;
+    const midX = (30 + landX) / 2;
+    ctx.bezierCurveTo(midX - 50, peakY, midX + 50, peakY + 10, landX, groundY);
+    ctx.stroke();
+    // 落點
+    ctx.fillStyle = '#60a5fa';
+    ctx.beginPath(); ctx.arc(landX, groundY, 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(distance.toFixed(2) + ' m', landX, groundY - 8);
+    ctx.textAlign = 'left';
+  }
+
+  // ─── 丟 1 次 ───
+  window.shootOne = function() {
+    const A = parseInt(A_el.value);
+    const cg = parseInt(cg_el.value) / 100;
+    const v = parseFloat(v_el.value);
+    const d = simulateOnce(A, cg, v);
+    runs.push({ A, cg, v, distances: [d], mean: d, std: 0, id: runIdCounter++, single: true });
+    drawFlight(A, cg, v, d);
+    resultEl.innerHTML = `A=${A} cm² | x_cg=${cg.toFixed(2)} | v=${v.toFixed(1)} m/s → <strong>D = ${d.toFixed(2)} m</strong>（單次）`;
+    updateLog();
+    updateScans();
+  };
+
+  // ─── 丟 10 次取平均 ───
+  window.shoot10 = function() {
+    const A = parseInt(A_el.value);
+    const cg = parseInt(cg_el.value) / 100;
+    const v = parseFloat(v_el.value);
+    const distances = [];
+    for (let i = 0; i < 10; i++) distances.push(simulateOnce(A, cg, v));
+    const mean = distances.reduce((a,b)=>a+b, 0) / 10;
+    const variance = distances.reduce((a,b)=>a + (b-mean)**2, 0) / 10;
+    const std = Math.sqrt(variance);
+    runs.push({ A, cg, v, distances, mean, std, id: runIdCounter++, single: false });
+    drawFlight(A, cg, v, mean);
+    resultEl.innerHTML = `A=${A} cm² | x_cg=${cg.toFixed(2)} | v=${v.toFixed(1)} m/s → <strong>平均 ${mean.toFixed(2)} ± ${std.toFixed(2)} m</strong>（10 次）`;
+    updateLog();
+    updateScans();
+  };
+
+  window.clearRuns = function() {
+    runs.length = 0;
+    runIdCounter = 1;
+    runlogEl.innerHTML = '';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    resultEl.innerHTML = '';
+    updateScans();
+  };
+
+  function updateLog() {
+    runlogEl.innerHTML = runs.slice().reverse().map(r => {
+      const distStr = r.single
+        ? r.distances[0].toFixed(2)
+        : r.distances.map(x => x.toFixed(1)).join(', ');
+      const meanStr = r.single ? '—' : `${r.mean.toFixed(2)}±${r.std.toFixed(2)}`;
+      return `<div class="runlog-row">
+        <span>#${r.id}</span>
+        <span>${r.A}</span>
+        <span>${r.cg.toFixed(2)}</span>
+        <span>${r.v.toFixed(1)}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${distStr}</span>
+        <span style="color:#fbbf24;font-weight:600;">${meanStr}</span>
+      </div>`;
+    }).join('');
+  }
+
+  // ═══════════════════════════════════════════════════
+  // 變因掃描圖（三張小圖）
+  // ═══════════════════════════════════════════════════
+  function drawScan(canvasEl, data, xLabel, xMin, xMax, yMax, color) {
+    const parent = canvasEl.parentElement;
+    const W = canvasEl.width = parent.clientWidth - 16;
+    const H = canvasEl.height = 140;
+    const g = canvasEl.getContext('2d');
+    g.clearRect(0, 0, W, H);
+    const pad = { l: 34, r: 8, t: 10, b: 24 };
+
+    // 格線
+    g.strokeStyle = '#f1f5f9'; g.lineWidth = 1;
+    for (let i = 1; i <= 3; i++) {
+      const gx = pad.l + i/3 * (W - pad.l - pad.r);
+      g.beginPath(); g.moveTo(gx, pad.t); g.lineTo(gx, H - pad.b); g.stroke();
+      const gy = H - pad.b - i/3 * (H - pad.t - pad.b);
+      g.beginPath(); g.moveTo(pad.l, gy); g.lineTo(W - pad.r, gy); g.stroke();
+    }
+    // 軸
+    g.strokeStyle = '#94a3b8';
+    g.beginPath(); g.moveTo(pad.l, pad.t); g.lineTo(pad.l, H - pad.b); g.lineTo(W - pad.r, H - pad.b); g.stroke();
+    // 軸標
+    g.fillStyle = '#64748b'; g.font = '9px sans-serif'; g.textAlign = 'center';
+    g.fillText(xLabel, W/2, H - 6);
+    for (let i = 0; i <= 3; i++) {
+      const xv = xMin + (xMax - xMin) * i/3;
+      const xPx = pad.l + i/3 * (W - pad.l - pad.r);
+      g.fillText(xv.toFixed(xv < 10 ? 1 : 0), xPx, H - pad.b + 11);
+    }
+    g.textAlign = 'right';
+    for (let i = 0; i <= 3; i++) {
+      g.fillText((yMax * i/3).toFixed(1), pad.l - 2, H - pad.b - i/3 * (H - pad.t - pad.b) + 3);
+    }
+    // 數據
+    const toX = v => pad.l + ((v - xMin)/(xMax - xMin)) * (W - pad.l - pad.r);
+    const toY = v => H - pad.b - (v/yMax) * (H - pad.t - pad.b);
+    if (data.length === 0) {
+      g.fillStyle = '#cbd5e1'; g.font = '10px sans-serif'; g.textAlign = 'center';
+      g.fillText('丟 10 次後出現', W/2, H/2);
+      return;
+    }
+    // 誤差棒 + 點
+    data.forEach(d => {
+      const x = toX(d.x), y = toY(d.mean);
+      if (d.std > 0) {
+        g.strokeStyle = color; g.lineWidth = 1;
+        g.beginPath();
+        g.moveTo(x, toY(d.mean - d.std));
+        g.lineTo(x, toY(d.mean + d.std));
+        g.stroke();
+        g.beginPath(); g.moveTo(x - 3, toY(d.mean - d.std)); g.lineTo(x + 3, toY(d.mean - d.std)); g.stroke();
+        g.beginPath(); g.moveTo(x - 3, toY(d.mean + d.std)); g.lineTo(x + 3, toY(d.mean + d.std)); g.stroke();
+      }
+      g.beginPath(); g.arc(x, y, 4, 0, Math.PI*2);
+      g.fillStyle = color; g.fill();
+      g.strokeStyle = 'white'; g.lineWidth = 1.5; g.stroke();
+    });
+  }
+
+  function updateScans() {
+    // 只取「丟 10 次」的紀錄
+    const multi = runs.filter(r => !r.single);
+
+    // Scan A：不同 A，相同 cg/v（取最常見的 cg, v 組合）
+    function groupBy(fixedKeys, varKey) {
+      const groups = {};
+      multi.forEach(r => {
+        const key = fixedKeys.map(k => r[k].toFixed(2)).join('|');
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(r);
+      });
+      // 選有最多點的那組
+      let best = [];
+      Object.values(groups).forEach(arr => {
+        if (arr.length > best.length) best = arr;
+      });
+      return best.map(r => ({ x: r[varKey], mean: r.mean, std: r.std }))
+        .sort((a, b) => a.x - b.x);
+    }
+
+    drawScan(document.getElementById('scan-A'), groupBy(['cg', 'v'], 'A'), 'A (cm²)', 50, 300, 13, '#2563eb');
+    drawScan(document.getElementById('scan-cg'), groupBy(['A', 'v'], 'cg'), 'x_cg', 0.15, 0.75, 13, '#f59e0b');
+    drawScan(document.getElementById('scan-v'), groupBy(['A', 'cg'], 'v'), 'v (m/s)', 3, 12, 13, '#059669');
+  }
+
+  // 初始繪製
+  drawFlight(180, 0.35, 7, 0);
+  updateScans();
+  window.addEventListener('resize', updateScans);
+})();
+</script>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

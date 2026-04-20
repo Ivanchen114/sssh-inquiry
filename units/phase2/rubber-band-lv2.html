@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase2/rubber-band-lv2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>橡皮筋動力罐 Lv2 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="橡皮筋動力罐 Lv2 規劃研究：把 lv1 的飽和模型搬到真實教室，設計可重現的變因控制實驗。">
+  <meta property="og:title" content="橡皮筋動力罐 Lv2 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="橡皮筋動力罐 Lv2 規劃研究：把 lv1 的飽和模型搬到真實教室，設計可重現的變因控制實驗。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/rubber-band-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>橡皮筋動力罐</span><span>›</span>
+      <span style="color:var(--phase2)">Lv2 規劃研究</span>
+    </div>
+    <h1>🥫 橡皮筋動力罐 · Lv2 規劃研究</h1>
+    <p class="subtitle">把 lv1 的飽和模型搬到真實教室——從直覺到可重現的變因控制實驗</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">變因掃描 × 擬合</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標（規劃研究精雕）</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能把 lv1 的飽和模型轉成可驗證的研究問題（含預測）</li>
+      <li>能完成六格設計鷹架：假設 / 變因 / 工具 / 重複次數 / 操作一致性 / 擬合計畫</li>
+      <li>能用三輪迭代（校準 → 初掃 → 補強）累積可信數據</li>
+      <li>能做殘差分析判斷擬合好壞，並用不確定度論證「有/無顯著差異」</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>選題×假設</button>
+    <button class="step-tab"><span class="step-num">2</span>設計鷹架</button>
+    <button class="step-tab"><span class="step-num">3</span>執行×迭代</button>
+    <button class="step-tab"><span class="step-num">4</span>分析×擬合</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：選題×假設 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">從 lv1 的飽和模型出發，選一個值得驗證或延伸的研究問題。</div>
+
+      <!-- lv1 回顧：飽和模型 -->
+      <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#0369a1;margin-bottom:6px;">🔄 lv1 學到的飽和模型</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+          推出距離 $D$ 對轉圈數 $n$ 的關係：$D(n) = D_\infty \cdot (1 - e^{-n/\tau})$
+          <ul style="padding-left:18px;margin:6px 0;">
+            <li>$D_\infty$：推出距離的物理極限（橡皮筋儲能上限 + 摩擦損耗決定）</li>
+            <li>$\tau$：達到 63% 極限所需的圈數（反映儲能效率）</li>
+          </ul>
+          <strong>lv1 只改了一個變因（轉圈數）。lv2 要問：其他變因如何改變 $D_\infty$ 或 $\tau$？</strong>
+        </div>
+      </div>
+
+      <!-- 研究問題選單 -->
+      <div style="background:white;border:2px solid var(--phase2);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:12px;">
+          🎯 五個候選研究問題（三個驗證型、兩個延伸型）
+        </div>
+
+        <div style="display:grid;gap:10px;">
+          <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:12.5px;color:#166534;">Q1（驗證型）：橡皮筋<strong>條數</strong>如何影響 $D_\infty$？</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：條數越多 → 總儲能上限越高 → $D_\infty$ 越大。預期線性或次線性。</div>
+          </div>
+          <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:12.5px;color:#166534;">Q2（驗證型）：<strong>罐子重量</strong>如何影響推出距離和回滾距離的<strong>差距</strong>？</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：重罐摩擦力大 → 損耗多 → 推出 − 回滾 差距變大。</div>
+          </div>
+          <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:12.5px;color:#166534;">Q3（驗證型）：<strong>橡皮筋「粗細」</strong>是否改變 $\tau$？</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：粗橡皮筋彈性限度高 → 線性區長 → $\tau$ 變大。</div>
+          </div>
+          <div style="background:#fef3c7;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:12.5px;color:#92400e;">Q4（延伸型）：<strong>地面材質</strong>如何影響飽和模型？</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">改變摩擦係數 → 只影響 $D_\infty$？還是連 $\tau$ 都變？這是 lv1 沒碰過的延伸。</div>
+          </div>
+          <div style="background:#fef3c7;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;font-size:12.5px;color:#92400e;">Q5（延伸型）：同總長度下，橡皮筋<strong>「串聯 vs 並聯」</strong>哪個推得更遠？</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">串聯 = 彈性係數變小但形變量變大；並聯 = 彈性係數變大但形變量變小。是等效還是有差？</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:12px;color:#991b1b;margin-bottom:4px;">⚠️ 為什麼要從 lv1 模型出發提問？</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          從「條數變多會怎樣」直接開做，你只會得到「變多一點」這種結論。但從「$D_\infty$ 或 $\tau$ 如何改變」出發，你的數據會回答一個<strong>更深的問題</strong>——變因影響的是「儲能上限」還是「儲能效率」？這才是規劃研究的重點。
+        </div>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 選一個研究問題（或自訂），寫下你的假設與初步預測</div>
+        <textarea class="think-input" data-key="rubber-band-lv2-q" rows="4" placeholder="我選：Q1（橡皮筋條數 vs D∞）&#10;假設：條數越多，D∞ 越大，因為總儲能上限是每條橡皮筋儲能的加總。&#10;初步預測：1 條 D∞ ≈ 170 cm；2 條 D∞ ≈ 300 cm（不完全加倍，因為罐子重量沒變，摩擦損耗一樣）。"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：設計鷹架 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">用六格設計清單把研究問題轉成可執行的實驗計畫。</div>
+
+      <!-- 六格設計表 -->
+      <div style="background:white;border:2px solid var(--phase2);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:12px;">
+          📋 六格設計清單（每格都要填滿才叫「計畫」）
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">① 假設</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+              從 lv1 模型推出的預測：如「條數 × 2 → $D_\infty$ × 1.8」（不是 ×2，因為摩擦不變）
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">② 變因拆解</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+              操縱變因 / 應變變因 / <strong>所有控制變因</strong>（列 5 個以上，含「怎麼控制」）
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">③ 工具 × 精度</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+              距離（捲尺 ±1 cm）、圈數（目視計數誤差約 ±1 圈）、重量（電子秤 ±0.1 g）
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">④ 重複次數</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+              每個水準至少 <strong>5 次</strong>；若 std/mean &gt; 20%，再補測到 8–10 次
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">⑤ 操作一致性</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+              動力罐不是「推」的——放手瞬間的穩定度決定一切。見下方策略卡。
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">⑥ 擬合計畫</div>
+            <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+              每個水準都要<strong>掃一條飽和曲線</strong>（不同圈數），讀出 $D_\infty$ 和 $\tau$ 再比較
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 操作一致性策略 -->
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#92400e;margin-bottom:10px;">
+          🎛️ 操作一致性策略（動力罐最難控的地方）
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:12px;color:var(--text-secondary);line-height:1.7;">
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">🔢 圈數計數</div>
+            由同一人數、同一手、同一方向、同速度（約 1 秒 1 圈）。每次數完立刻確認。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">✋ 放手穩定</div>
+            雙手從兩側同時放開（不要單手推）。放前罐子底部貼地，不離地。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">📍 起點校準</div>
+            地上貼膠帶當起點線。每次罐子前緣對齊膠帶。測距從膠帶到罐子停止時的前緣。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">⏱️ 橡皮筋休息</div>
+            每次測完讓橡皮筋放鬆 30 秒以上。連續測試會讓它溫度上升、彈性改變。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">🧭 地面均勻</div>
+            同一條直線、同一材質、同樣乾淨。掃過灰塵或水痕後要重測。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">🎯 先校準再正式</div>
+            正式掃之前先測同一條件 10 次，看 std/mean。如果 &gt; 20% 先調程序再開始掃描。
+          </div>
+        </div>
+      </div>
+
+      <!-- 擬合模型選擇 -->
+      <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:10px;">
+          📐 擬合模型選擇（依應變變因形狀）
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="font-size:11.5px;width:100%;">
+            <thead>
+              <tr style="background:#ede9fe;">
+                <th style="padding:6px;text-align:left;">數據形狀</th>
+                <th style="padding:6px;text-align:left;">合適模型</th>
+                <th style="padding:6px;text-align:left;">可讀出的物理參數</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:6px;">先快後慢 → 逼近水平線</td><td style="padding:6px;"><strong>飽和 $y = A(1-e^{-x/\tau})$</strong></td><td style="padding:6px;">$A$（上限）、$\tau$（速率常數）</td></tr>
+              <tr><td style="padding:6px;">直線</td><td style="padding:6px;">線性 $y = kx + b$</td><td style="padding:6px;">$k$（靈敏度）、$b$（截距是否為 0）</td></tr>
+              <tr><td style="padding:6px;">倒 U 形（有最佳值）</td><td style="padding:6px;">二次 $y = ax^2 + bx + c$</td><td style="padding:6px;">$-b/2a$（最佳值位置）</td></tr>
+              <tr><td style="padding:6px;">緩升的弧線（無上限）</td><td style="padding:6px;">冪次 $y = ax^n$</td><td style="padding:6px;">$n$（冪指數）</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="background:white;border-radius:6px;padding:10px;margin-top:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
+          <strong>⚠️ 選擇原則</strong>：別只看 R²，要問「$x \to \infty$ 的行為合理嗎？」飽和模型有極限、冪次模型無極限——物理上哪個成立？
+        </div>
+      </div>
+
+      <!-- 同儕互評 -->
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">
+          🗣️ 同儕互評清單
+        </div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.9;">
+          交換計畫書，檢查五件事：<br>
+          ① <strong>可重現性</strong>：我照做能得到一樣結果嗎？哪一步不清楚？<br>
+          ② <strong>控制變因</strong>：有沒有漏？哪個最可能影響結果？<br>
+          ③ <strong>水準密度</strong>：掃描範圍夠廣嗎？能看到飽和點嗎？<br>
+          ④ <strong>擬合計畫</strong>：預期形狀是什麼？準備用哪個模型？備案是什麼？<br>
+          ⑤ <strong>假設可證偽</strong>：如果結果反過來，該假設會失效嗎？
+        </div>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用六格格式寫下你的設計（每格至少 1 句）</div>
+        <textarea class="think-input" data-key="rubber-band-lv2-design" rows="8" placeholder="① 假設：&#10;② 變因拆解：操縱＝___；應變＝___；控制＝___、___、___...&#10;③ 工具×精度：&#10;④ 重複次數：&#10;⑤ 操作一致性：&#10;⑥ 擬合計畫：掃 ___ 的 5 個水準，每個水準掃 5-6 個圈數，擬合飽和模型讀出 D∞ 和 τ"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：執行×迭代 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">不要一次跑完——用三輪迭代累積可信數據。</div>
+
+      <!-- 三輪迭代 -->
+      <div style="display:grid;gap:12px;margin-bottom:16px;">
+        <div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:8px;padding:14px 18px;">
+          <div style="font-weight:700;font-size:14px;color:#92400e;margin-bottom:6px;">
+            ⚡ 第一輪：校準（15 分鐘）
+          </div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            固定一組條件（如 2 條橡皮筋、15 圈）重複測 <strong>10 次</strong>。目的：量出「在我們的操作下，std/mean 多大？」<br>
+            <strong>通過標準</strong>：std/mean ≤ 20%。不通過 → 檢查操作一致性（放手、起點線、地面），調完再校準。
+          </div>
+        </div>
+        <div style="background:#dbeafe;border:2px solid #3b82f6;border-radius:8px;padding:14px 18px;">
+          <div style="font-weight:700;font-size:14px;color:#1e40af;margin-bottom:6px;">
+            🔍 第二輪：初掃（30 分鐘）
+          </div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            每個水準測 <strong>3 次</strong>，掃完 5 個水準。畫出平均值散佈圖，看形狀——真的是飽和嗎？還是單調？還是倒 U？<br>
+            <strong>做對了嗎？</strong>如果曲線和預期形狀不符，別慌，先確認是：(a) 預測錯（改假設）、(b) 數據不夠（繼續補測）、(c) 有隱藏變因（回頭檢查控制）。
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border:2px solid #16a34a;border-radius:8px;padding:14px 18px;">
+          <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:6px;">
+            🎯 第三輪：補強（30 分鐘）
+          </div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            針對<strong>形狀關鍵點</strong>補測：飽和曲線的「轉折點」和「逼近上限」處各加測到 5–8 次。不確定度小了，擬合才準。<br>
+            <strong>總時間控管</strong>：全部實驗別超過 2 節課。數據多不如數據準。
+          </div>
+        </div>
+      </div>
+
+      <!-- 異常值 SOP -->
+      <div style="background:white;border:1.5px dashed #ef4444;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#b91c1c;margin-bottom:10px;">
+          🚨 異常值處理 SOP
+        </div>
+        <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.9;">
+          看到一筆明顯偏離（遠超 ±2 std）的數據？<strong>不要直接刪。</strong> 問三個問題：<br>
+          ① 有沒有<strong>明確的操作失誤</strong>？（如罐子滑脫、碰到障礙物、橡皮筋斷）→ 有 → 標記重測。<br>
+          ② 橡皮筋<strong>物理上</strong>是否累積疲勞？→ 換新條再測，看還會不會出現。<br>
+          ③ 以上都沒有 → <strong>保留</strong>，在報告中註記「有離群值，原因不明」。<br>
+          <strong style="color:#b91c1c;">沒原因的異常值通常是訊號不是雜訊</strong>——它可能指向你還沒發現的物理機制。
+        </div>
+      </div>
+
+      <!-- 小組分工 -->
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:8px;">🤝 小組分工建議（3–4 人組）</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:var(--text-secondary);">
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <strong style="color:var(--phase2);">🔧 操作員</strong>：數圈數、放手。唯一碰罐子的人，確保「手感」一致。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <strong style="color:var(--phase2);">📝 記錄員</strong>：即時記數據、計算 mean/std、即時判斷要不要補測。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <strong style="color:var(--phase2);">🔍 品管員</strong>：檢查控制變因有沒有跑掉（地面、橡皮筋溫度、起點線）。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px;">
+            <strong style="color:var(--phase2);">📊 分析員</strong>：每 10 次後即時畫散佈圖，判斷「形狀夠清楚了沒」。
+          </div>
+        </div>
+      </div>
+
+      <!-- 數據表範本 -->
+      <div style="background:var(--bg);border-radius:6px;padding:14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:12px;margin-bottom:10px;">📋 數據記錄表（範本）</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">操縱變因：___________；固定其他變因：轉圈數 = ___、罐子重量 = ___、地面 = ___</div>
+        <div style="overflow-x:auto;">
+          <table style="font-size:11px;width:100%;">
+            <thead>
+              <tr style="background:var(--phase2);color:white;">
+                <th style="padding:6px;">水準</th>
+                <th style="padding:6px;">①</th>
+                <th style="padding:6px;">②</th>
+                <th style="padding:6px;">③</th>
+                <th style="padding:6px;">④</th>
+                <th style="padding:6px;">⑤</th>
+                <th style="padding:6px;">平均</th>
+                <th style="padding:6px;">std</th>
+                <th style="padding:6px;">std/mean</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:6px;background:white;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td></tr>
+              <tr><td style="padding:6px;background:white;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td></tr>
+              <tr><td style="padding:6px;background:white;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td></tr>
+              <tr><td style="padding:6px;background:white;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td></tr>
+              <tr><td style="padding:6px;background:white;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td><td style="padding:6px;">___</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 第一輪校準結果：你的 std/mean 是多少？有通過 ≤ 20% 的標準嗎？如果沒過，你做了什麼調整？</div>
+        <textarea class="think-input" data-key="rubber-band-lv2-calib" rows="3" placeholder="校準組條件：___&#10;10 次數據：___&#10;mean = ___ cm，std = ___ cm，std/mean = ___%&#10;調整：___"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：分析×擬合 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">擬合飽和模型、做殘差分析、用不確定度論證結論。</div>
+
+      <!-- 擬合步驟 -->
+      <div style="background:white;border:2px solid var(--phase2);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:12px;">
+          📐 擬合四步驟
+        </div>
+        <div style="display:grid;gap:10px;">
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <strong style="color:var(--text-primary);">1. 畫散佈圖（含誤差棒）</strong>：X 軸 = 操縱變因；Y 軸 = 平均值；誤差棒 = ± std/√n
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <strong style="color:var(--text-primary);">2. 選模型</strong>：對照 Step 2 的模型選擇表，依形狀選。比較線性 vs 飽和 vs 冪次的 R²。
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <strong style="color:var(--text-primary);">3. 殘差分析</strong>：計算每點的殘差 = 實測 − 擬合。畫殘差圖——如果殘差隨機分佈 → 模型合適；如果有系統性弧形 → 模型形狀錯了。
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <strong style="color:var(--text-primary);">4. 讀參數</strong>：從擬合結果讀出 $D_\infty$、$\tau$ 等；和 Step 1 的假設比較。
+          </div>
+        </div>
+      </div>
+
+      <!-- 殘差分析解讀 -->
+      <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:10px;">
+          🔬 殘差圖怎麼看？
+        </div>
+        <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.9;">
+          <strong style="color:#16a34a;">✓ 好的擬合</strong>：殘差像雜訊，在 0 上下隨機散佈，無明顯趨勢。<br>
+          <strong style="color:#dc2626;">✗ 形狀錯了</strong>：殘差呈 U 形或倒 U 形——表示真實曲線比擬合模型更彎。<br>
+          <strong style="color:#dc2626;">✗ 邊界問題</strong>：殘差在一端變大（例如高圈數處）——表示模型只在某範圍內有效。<br>
+          <strong style="color:#dc2626;">✗ 離群值</strong>：單點殘差特別大——回頭檢查那筆數據。
+        </div>
+      </div>
+
+      <!-- 顯著差異判定 -->
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#166534;margin-bottom:8px;">
+          📊 有無「顯著差異」的判定
+        </div>
+        <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.9;">
+          兩組不同水準的平均值比較，看誤差棒是否重疊：<br>
+          <strong style="color:#dc2626;">不重疊</strong> → 有顯著差異，變因確實有影響。<br>
+          <strong style="color:#92400e;">重疊一部分</strong> → 差異不顯著，可能需要更多數據。<br>
+          <strong style="color:#64748b;">完全重疊</strong> → 沒有差異，接受虛無假設。<br>
+          <strong>⚠️ 重要</strong>：「沒有顯著差異」也是有效結論，但必須明確說明。
+        </div>
+      </div>
+
+      <!-- AI 檢核站 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#1e40af;margin-bottom:8px;">
+          🤖 AI 檢核站（分析完成後使用）
+        </div>
+        <div style="font-size:12.5px;color:#1e3a8a;line-height:1.8;margin-bottom:10px;">
+          把你的擬合結果交給 AI 檢查推理——不是讓它代寫結論。
+        </div>
+        <div style="background:white;border:1px dashed #93c5fd;border-radius:6px;padding:10px 14px;font-size:11.5px;color:#1e3a8a;line-height:1.8;">
+          <strong>📝 AI prompt 範本：</strong><br>
+          「我研究 ___（操縱變因）對橡皮筋動力罐推出距離的影響。假設：___。數據（水準 vs 平均±std）：___。擬合飽和模型得 $D_\infty$ = ___、$\tau$ = ___，R² = ___。殘差分佈：___。請幫我檢查：(1) 擬合參數的物理意義合理嗎？(2) R² 高不代表模型對，還有哪些檢驗要做？(3) 我的假設通過驗證了嗎？為什麼？」
+        </div>
+        <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是老闆。它提出問題，你決定要不要改。</p>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用 CER 格式寫下你的結論（含擬合參數與不確定度）</div>
+        <textarea class="think-input" data-key="rubber-band-lv2-conclusion" rows="5" placeholder="主張（Claim）：___&#10;證據（Evidence）：擬合得 D∞ = ___ ± ___，τ = ___ ± ___，R² = ___。不同水準的誤差棒（是/否）重疊。&#10;推理（Reasoning）：從 lv1 的飽和模型出發，我的假設預測 ___，實際結果 ___。這（支持/反對）假設，因為 ___。"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="research-plan.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          📋 <strong style="color:var(--text-primary);">填寫研究規劃表</strong>
+        </a>
+        <a href="../phase3/rubber-band-lv3.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          橡皮筋 Lv3 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>主軸：<strong>規劃研究精雕</strong>——從 lv1 模型延伸出可驗證假設，完整設計鷹架</li>
+              <li>論證建模 / 發現問題 是 checkpoint（在研究問題和結論處點到為止）</li>
+              <li>核心技能：六格設計表、三輪迭代、殘差分析、不確定度</li>
+              <li>重點：讓學生體會「操作一致性」比「數據量」更重要</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">最有價值的片段：（1）六格設計表、（2）第一輪校準的 std/mean 結果、（3）擬合結果與殘差圖、（4）AI 檢核前後你怎麼修改結論。建議把這四個貼進歷程檔。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ 反思錨點：計畫 vs 實際最大的落差在哪？你是「改了計畫」還是「調整了假設」？（2-3 句就好）
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 延伸練習：挑毛病</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小志的計畫：「橡皮筋條數對推出距離的影響。1、2、3 條各測 3 次，30 圈。」列出至少 5 個問題。
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              （1）水準太少（只 3 個），看不到飽和趨勢；（2）每水準只 3 次，不確定度過大；（3）直接測 30 圈，可能已超過彈性極限，看不到線性區；（4）沒說明條數怎麼「並聯」或「串聯」；（5）沒控制橡皮筋品牌/批號；（6）沒測不同圈數 → 沒辦法擬合飽和曲線 → 沒辦法比較 $D_\infty$；（7）沒做校準，不知道 std/mean。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../phase1/rubber-band-lv1.html">← 橡皮筋動力罐 Lv1 論證建模</a>
+      <a href="../phase3/rubber-band-lv3.html">橡皮筋動力罐 Lv3 發現問題 →</a>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

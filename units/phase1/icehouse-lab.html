@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/icehouse-lab">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>虛擬實驗室 · 鹽冰降溫模擬器 · 探究與實作</title>
+  <meta name="description" content="鹽冰降溫模擬器，模擬不同鹽類與濃度的降溫曲線。">
+  <meta property="og:title" content="虛擬實驗室 · 鹽冰降溫模擬器 · 探究與實作">
+  <meta property="og:description" content="鹽冰降溫模擬器，模擬不同鹽類與濃度的降溫曲線。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/icehouse-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .sim-panel { background: linear-gradient(135deg,#0f4c75,#1b6ca8); border-radius: 12px; padding: 20px; color: white; margin-bottom: 20px; }
+    .sim-ctrl { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; }
+    .sim-btn { background: #38bdf8; color: #0c4a6e; border: none; padding: 8px 18px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .sim-btn:hover { opacity: 0.9; }
+    .sim-btn-clear { background: rgba(255,255,255,0.15); color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>冰屋模組</span><span>›</span>
+      <span style="color:var(--phase1)">虛擬實驗室</span>
+    </div>
+    <h1>🧊 鹽冰降溫模擬器</h1>
+    <p class="subtitle">調整鹽冰比例，觀察降溫曲線——找出最低溫的配方</p>
+  </div>
+  <div class="page-body">
+
+    <div class="sim-panel">
+      <div style="font-size:16px;font-weight:700;margin-bottom:14px;">🔬 鹽冰降溫實驗</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="sim-ctrl">
+          <label style="font-size:12px;opacity:0.85;">鹽的質量比（鹽/冰）</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="salt-ratio" min="0" max="40" value="10" step="2" style="flex:1;accent-color:#38bdf8;" oninput="document.getElementById('salt-val').textContent=this.value+'%'">
+            <span id="salt-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:40px;text-align:right;">10%</span>
+          </div>
+        </div>
+        <div class="sim-ctrl">
+          <label style="font-size:12px;opacity:0.85;">冰的初始溫度</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="ice-temp" min="-10" max="0" value="0" step="1" style="flex:1;accent-color:#38bdf8;" oninput="document.getElementById('ice-val').textContent=this.value+'°C'">
+            <span id="ice-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:50px;text-align:right;">0°C</span>
+          </div>
+        </div>
+        <div class="sim-ctrl">
+          <label style="font-size:12px;opacity:0.85;">環境溫度</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="env-temp" min="15" max="35" value="25" step="1" style="flex:1;accent-color:#38bdf8;" oninput="document.getElementById('env-val').textContent=this.value+'°C'">
+            <span id="env-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:50px;text-align:right;">25°C</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <button class="sim-btn" onclick="runCoolingSim()">🧊 開始降溫</button>
+        <button class="sim-btn-clear" onclick="clearCooling()">清除曲線</button>
+      </div>
+      <canvas id="cooling-canvas" width="680" height="320" style="width:100%;background:#0f172a;border-radius:8px;"></canvas>
+      <div id="cooling-result" style="font-family:'DM Mono',monospace;font-size:13px;opacity:0.85;margin-top:8px;min-height:20px;"></div>
+
+      <div style="margin-top:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄</div>
+        <table id="cooling-table" style="width:100%;font-size:12px;background:rgba(255,255,255,0.05);border-radius:6px;">
+          <thead><tr style="color:#7dd3fc;">
+            <th style="padding:8px;">鹽比 (%)</th><th style="padding:8px;">最低溫 (°C)</th><th style="padding:8px;">達最低溫時間 (min)</th><th style="padding:8px;">15min 後溫度 (°C)</th>
+          </tr></thead>
+          <tbody id="cooling-data"></tbody>
+        </table>
+        <button onclick="exportCoolingData()" style="margin-top:8px;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;">📋 複製數據</button>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:8px;font-size:13px;margin-bottom:20px;">
+      <div class="q-item">Q1：鹽比 0% 時最低溫是幾度？加鹽後為什麼溫度能降到 0°C 以下？</div>
+      <div class="q-item">Q2：鹽比越高溫度越低嗎？有沒有一個「最佳鹽比」？大約是多少？</div>
+      <div class="q-item">Q3：降溫曲線的形狀（先快後慢）和什麼物理原理有關？</div>
+    </div>
+
+    <div class="info-box yellow">
+      <strong>💡 模擬器的物理模型：</strong>加鹽會降低冰的熔點（凝固點下降），NaCl 的理論最低共晶溫度約 $-21.1°C$（鹽比 23.3%）。超過此比例，多餘的鹽不再溶解，溫度不會更低。降溫速率服從牛頓冷卻定律的改良版。
+    </div>
+
+    <div class="unit-nav">
+      <a href="icehouse-lv1.html">← 回到冰屋 Lv1</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('cooling-canvas');
+  const ctx = canvas.getContext('2d');
+  let curves = [];
+  let dataRows = [];
+
+  function drawAxes(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const pad = {top:20,right:20,bottom:40,left:55};
+    const pw = canvas.width-pad.left-pad.right;
+    const ph = canvas.height-pad.top-pad.bottom;
+
+    // 網格
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 0.5;
+    for(let i=0;i<=6;i++){
+      const x = pad.left + (i/6)*pw;
+      ctx.beginPath(); ctx.moveTo(x,pad.top); ctx.lineTo(x,canvas.height-pad.bottom); ctx.stroke();
+    }
+    for(let i=0;i<=5;i++){
+      const y = pad.top + (i/5)*ph;
+      ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(canvas.width-pad.right,y); ctx.stroke();
+    }
+
+    // 0°C 線
+    const y0 = pad.top + ((25-0)/50)*ph; // range: -25 to 25
+    ctx.strokeStyle = '#475569'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pad.left,y0); ctx.lineTo(canvas.width-pad.right,y0); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 軸
+    ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad.left,canvas.height-pad.bottom); ctx.lineTo(canvas.width-pad.right,canvas.height-pad.bottom); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left,canvas.height-pad.bottom); ctx.stroke();
+
+    // 刻度
+    ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    for(let i=0;i<=6;i++){
+      const t = i*5;
+      ctx.fillText(t+'min', pad.left+(i/6)*pw, canvas.height-pad.bottom+14);
+    }
+    ctx.textAlign = 'right';
+    for(let i=0;i<=5;i++){
+      const temp = 25 - i*10;
+      const y = pad.top + (i/5)*ph;
+      ctx.fillText(temp+'°C', pad.left-6, y+4);
+    }
+
+    return {pad, pw, ph};
+  }
+
+  function simulate(saltPct, iceTemp, envTemp){
+    // 凝固點下降：ΔT ≈ 1.86 × 2 × (saltPct/58.44*1000/1000) 簡化
+    // 最低共晶溫度 -21.1°C at 23.3%
+    let minTemp;
+    if(saltPct <= 23.3){
+      minTemp = -0.906 * saltPct; // 簡化線性近似
+    } else {
+      minTemp = -21.1; // 超過共晶點不再更低
+    }
+    minTemp = Math.max(minTemp, -21.1);
+    minTemp += iceTemp * 0.3; // 冰的初始溫度影響
+
+    const points = [];
+    const dt = 0.1; // 分鐘
+    let T = envTemp; // 水的初始溫度（假設水在室溫）
+    const target = minTemp;
+    const k = 0.15 + saltPct * 0.005; // 降溫速率
+    const kWarm = 0.02; // 回溫速率
+
+    let phase = 'cooling'; // cooling → warming
+    let tSwitch = 8 + (23.3 - Math.abs(saltPct - 23.3))*0.1;
+
+    for(let t=0; t<=30; t+=dt){
+      if(t < tSwitch){
+        T = target + (envTemp - target) * Math.exp(-k * t);
+      } else {
+        const Tmin = target + (envTemp - target) * Math.exp(-k * tSwitch);
+        T = envTemp - (envTemp - Tmin) * Math.exp(-kWarm * (t - tSwitch));
+      }
+      points.push({t, T});
+    }
+    return points;
+  }
+
+  function drawCurve(points, color, layout){
+    const {pad,pw,ph} = layout;
+    ctx.strokeStyle = color; ctx.lineWidth = 2;
+    ctx.beginPath();
+    points.forEach((p,i) => {
+      const x = pad.left + (p.t/30)*pw;
+      const y = pad.top + ((25-p.T)/50)*ph;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+  }
+
+  const colors = ['#38bdf8','#f59e0b','#a78bfa','#34d399','#f87171','#fb923c','#818cf8'];
+
+  window.runCoolingSim = function(){
+    const saltPct = parseFloat(document.getElementById('salt-ratio').value);
+    const iceTemp = parseFloat(document.getElementById('ice-temp').value);
+    const envTemp = parseFloat(document.getElementById('env-temp').value);
+
+    const points = simulate(saltPct, iceTemp, envTemp);
+    const color = colors[curves.length % colors.length];
+    curves.push({points, color, salt: saltPct});
+
+    const layout = drawAxes();
+    curves.forEach(c => drawCurve(c.points, c.color, layout));
+
+    // 找最低溫
+    let minT = Infinity, minTime = 0, t15 = 0;
+    points.forEach(p => {
+      if(p.T < minT){ minT = p.T; minTime = p.t; }
+      if(Math.abs(p.t - 15) < 0.05) t15 = p.T;
+    });
+
+    document.getElementById('cooling-result').textContent =
+      `鹽比 ${saltPct}% | 最低溫 ${minT.toFixed(1)}°C（${minTime.toFixed(1)} min）| 15min 後 ${t15.toFixed(1)}°C`;
+
+    // 圖例
+    ctx.fillStyle = color; ctx.font = '11px sans-serif';
+    const ly = 30 + (curves.length-1)*16;
+    ctx.fillRect(canvas.width-120, ly-6, 12, 3);
+    ctx.fillText(`${saltPct}%`, canvas.width-100, ly);
+
+    // 數據表
+    dataRows.push({salt: saltPct, min: minT.toFixed(1), time: minTime.toFixed(1), t15: t15.toFixed(1)});
+    updateTable();
+  };
+
+  window.clearCooling = function(){
+    curves = []; dataRows = [];
+    drawAxes();
+    document.getElementById('cooling-result').textContent = '';
+    document.getElementById('cooling-data').innerHTML = '';
+  };
+
+  function updateTable(){
+    const tbody = document.getElementById('cooling-data');
+    tbody.innerHTML = '';
+    dataRows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td style="padding:6px 8px;text-align:center;">${r.salt}%</td>
+        <td style="padding:6px 8px;text-align:center;color:#7dd3fc;">${r.min}°C</td>
+        <td style="padding:6px 8px;text-align:center;">${r.time} min</td>
+        <td style="padding:6px 8px;text-align:center;">${r.t15}°C</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.exportCoolingData = function(){
+    let txt = '鹽比(%)\t最低溫(°C)\t達最低溫時間(min)\t15min後溫度(°C)\n';
+    dataRows.forEach(r => { txt += `${r.salt}\t${r.min}\t${r.time}\t${r.t15}\n`; });
+    navigator.clipboard.writeText(txt).then(()=>{
+      const btn = event.target;
+      btn.textContent = '✅ 已複製！';
+      setTimeout(()=> btn.textContent = '📋 複製數據', 1500);
+    });
+  };
+
+  drawAxes();
+})();
+</script>
+</body>
+</html>

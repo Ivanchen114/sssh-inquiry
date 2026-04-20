@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/spring-lv1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>彈簧 Lv1 · 虎克定律虛擬實驗室 · 探究與實作</title>
+  <meta name="description" content="彈簧 Lv1 論證建模：虎克定律虛擬實驗室，探究彈力與伸長量的線性關係，計算彈性係數 k。">
+  <meta property="og:title" content="彈簧 Lv1 · 虎克定律虛擬實驗室 · 探究與實作">
+  <meta property="og:description" content="彈簧 Lv1 論證建模：虎克定律虛擬實驗室，探究彈力與伸長量的線性關係，計算彈性係數 k。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/spring-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .lab-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 700px) {
+      .lab-wrap { grid-template-columns: 1fr; }
+    }
+    .spring-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .weight-btn {
+      width: 100%;
+      padding: 8px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .weight-btn:hover { border-color: var(--phase2); background: #f0fdf4; }
+    .weight-btn.active { border-color: var(--phase2); background: #d1fae5; color: #065f46; }
+    .weight-btn.done { border-color: #6ee7b7; background: #ecfdf5; }
+    .weight-btn.done::after { content: ' ✓'; color: #059669; }
+
+    .spring-canvas-wrap {
+      position: relative;
+      width: 180px;
+      height: 320px;
+      margin: 0 auto;
+    }
+    #springCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+
+    .record-btn {
+      width: 100%;
+      padding: 9px;
+      background: var(--phase2);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .record-btn:hover { opacity: 0.88; }
+    .record-btn:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+
+    .data-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #dataTable { font-size: 12px; width: 100%; }
+    #dataTable th { background: var(--phase2); color: white; padding: 6px 8px; }
+    #dataTable td { padding: 5px 8px; text-align: center; }
+    #dataTable tr:nth-child(even) { background: var(--bg); }
+
+    #graphCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+      width: 100%;
+    }
+    .insight-box {
+      background: #f0fdf4;
+      border: 1px solid #6ee7b7;
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+    .noise-display {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span>彈簧</span>
+      <span>›</span>
+      <span style="color:var(--phase2)">Lv1 論證建模</span>
+    </div>
+    <h1>🌀 彈簧 · Lv1 論證建模</h1>
+    <p class="subtitle">虎克定律虛擬實驗室——彈力 F 和伸長量 x 是什麼關係？你來發現。</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">3 節課</span>
+      <span class="tag">線性關係 + 擬合</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從數據中辨識趨勢與規律（例如：從 F vs x 圖判斷線性關係）</li>
+      <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：從 F vs x 圖中發現線性關係並求斜率）</li>
+      <li>能用「主張—證據—推理」的架構進行科學論證</li>
+      <li>能評估模型的適用範圍與限制</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>預測</button>
+    <button class="step-tab"><span class="step-num">2</span>認識裝置</button>
+    <button class="step-tab"><span class="step-num">3</span>數據分析</button>
+    <button class="step-tab"><span class="step-num">4</span>延伸與反思</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">在操作虛擬彈簧之前，先用直覺回答三個預測題。</div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>如果掛的重量加倍（100 gw → 200 gw），彈簧伸長量也會剛好加倍嗎？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>「力」和「伸長量」的圖，你猜會是直線還是曲線？如果是直線，經過原點嗎？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P3：</strong>如果一直加重量，彈簧會一直等比例伸長嗎？有沒有極限？
+      </div>
+
+      <!-- Layer 2: 預測記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測寫下來（P1–P3），實驗完回來對照。</div>
+        <textarea class="think-input" data-key="spring-lv1-predict" placeholder="P1：我覺得加倍重量，伸長量會…&#10;P2：我猜圖形是…&#10;P3：我認為極限…" style="min-height:80px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Interactive: Hooke's law prediction -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 根據直覺，當重量加倍時，伸長量會怎樣？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 也加倍（線性關係）</button>
+          <button class="think-opt" data-val="b">B. 加倍多一點（比例關係不確定）</button>
+          <button class="think-opt" data-val="c">C. 加倍少一點（遞減效應）</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          很多人的直覺是線性關係——力加倍、伸長也加倍。但這個直覺對不對？等下用數據來驗證！有趣的是：即使很多情況下直覺是對的，極端條件下往往會失效。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：認識裝置 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">認識虎克定律和實驗任務。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">彈簧的基本行為</div>
+          彈簧受力時會伸長——掛越重的砝碼，伸得越多。但「多多少」？是等比例增加，還是越來越難拉開？
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:13px;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">今天的任務</div>
+          <div style="color:var(--text-secondary);line-height:1.8;">力 F 和伸長量 x 之間是什麼數學關係？你能從數據中找出來嗎？</div>
+        </div>
+      </div>
+
+      <div class="info-box yellow">
+        💡 <strong>你的任務</strong>：選擇不同重量的砝碼掛在彈簧下，記錄每次的伸長量（至少 5 種重量，每種記錄 3 次）。完成後，畫出 F vs x 圖——觀察它的形狀，找出力和伸長量之間的數學關係。
+      </div>
+
+      <div style="margin-top:16px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">
+          <span style="background:var(--bg);border:1px solid var(--border);padding:4px 10px;border-radius:4px;">彈簧原長 $L_0 = 8.0$ cm</span>
+          <span style="background:var(--bg);border:1px solid var(--border);padding:4px 10px;border-radius:4px;">伸長量 $x = $ 目前長度 $- L_0$</span>
+          <span style="background:var(--bg);border:1px solid var(--border);padding:4px 10px;border-radius:4px;">$F = $ 砝碼重量（gw）$\times g$</span>
+        </div>
+      </div>
+
+      <!-- Interactive: Hooke's law concept -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：如果 F 和 x 是正比關係，圖形應該長什麼樣？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>正比關係的圖是一條過原點的直線。因為當力 $F = 0$ 時，彈簧沒有伸長 $x = 0$。如果你畫的圖不過原點，可能是原長測量有誤。做完實驗後，回來看你的圖是不是真的是直線——也許你會發現更複雜的關係！</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：數據分析（核心任務）═══ -->
+    <div class="step-panel">
+      <div class="step-action">操作虛擬彈簧，記錄數據，畫 F vs x 圖，找出彈力常數 k。</div>
+
+
+    <!-- 主實驗區 -->
+    <div class="lab-wrap">
+      <!-- 左：彈簧模擬器 -->
+      <div class="spring-panel">
+        <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;">選擇砝碼重量：</div>
+        <div id="weightBtns" style="width:100%;display:flex;flex-direction:column;gap:6px;">
+          <button class="weight-btn" data-mass="50">50 gw（= 0.49 N）</button>
+          <button class="weight-btn" data-mass="100">100 gw（= 0.98 N）</button>
+          <button class="weight-btn" data-mass="150">150 gw（= 1.47 N）</button>
+          <button class="weight-btn" data-mass="200">200 gw（= 1.96 N）</button>
+          <button class="weight-btn" data-mass="250">250 gw（= 2.45 N）</button>
+          <button class="weight-btn" data-mass="300">300 gw（= 2.94 N）</button>
+        </div>
+
+        <div class="spring-canvas-wrap">
+          <canvas id="springCanvas" width="180" height="320"></canvas>
+        </div>
+
+        <div id="lengthDisplay" style="font-size:14px;font-weight:700;color:var(--phase2);text-align:center;">
+          選擇砝碼開始
+        </div>
+        <div class="noise-display" id="noiseHint"></div>
+
+        <button class="record-btn" id="recordBtn" disabled>📝 記錄此次測量</button>
+        <div style="font-size:11px;color:var(--text-muted);text-align:center;" id="trialCount"></div>
+        <button id="resetBtn" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;font-size:12px;color:var(--text-secondary);">🔄 重置全部數據</button>
+      </div>
+
+      <!-- 右：數據表 + 圖 -->
+      <div class="data-panel">
+        <div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄表</div>
+          <div style="overflow-x:auto;">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th>砝碼 (gw)</th>
+                  <th>F (N)</th>
+                  <th>第 1 次 x (cm)</th>
+                  <th>第 2 次 x (cm)</th>
+                  <th>第 3 次 x (cm)</th>
+                  <th>平均 x̄ (cm)</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 📈 散佈圖 + 趨勢線選擇 -->
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <div style="font-weight:700;font-size:13px;">📈 F vs x 散佈圖</div>
+          </div>
+          <div id="trendControls" style="display:flex;align-items:center;gap:5px;margin-bottom:8px;font-size:11px;color:var(--text-secondary);flex-wrap:wrap;">
+            趨勢線：
+            <button class="trend-btn active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+            <button class="trend-btn" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+            <button class="trend-btn" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+            <button class="trend-btn" data-trend="poly" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">多項式</button>
+          </div>
+          <canvas id="graphCanvas" height="220"></canvas>
+          <div id="fitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+        </div>
+
+        <!-- 💭 模型選擇與論證 -->
+        <div style="background:var(--bg);border-radius:6px;padding:12px 14px;">
+          <div style="font-weight:700;font-size:12px;margin-bottom:8px;color:var(--text-secondary);">💭 模型選擇與論證：</div>
+          <div style="display:grid;gap:7px;font-size:12px;color:var(--text-secondary);">
+            <div class="q-item">Q1：選<strong>線性</strong>趨勢線。截距代表「力 = 0 時的伸長量」——物理上沒掛砝碼時，彈簧伸長量應該是多少？你的截距合理嗎？</div>
+            <div class="q-item">Q2：斜率的單位是什麼？它代表什麼物理意義？（提示：「每多 1 N 的力，彈簧多伸長多少」）如果換更硬的彈簧，斜率會怎麼變？</div>
+            <div class="q-item">Q3：試試<strong>多項式</strong>趨勢線——R² 可能更高，但物理上「力和伸長量是二次方關係」講得通嗎？R² 高就代表模型好嗎？</div>
+            <div class="q-item">Q4：用「主張—理由—證據」論證：力和彈簧伸長量之間是什麼關係？你選擇哪條趨勢線，為什麼？</div>
+          </div>
+
+          <div class="think-block record" style="margin-top:12px;">
+            <div class="think-prompt">✏️ 用「主張—理由—證據」論證你選的模型</div>
+            <textarea class="think-input" data-key="spring-lv1-model" placeholder="例如：我選線性模型。&#10;理由：R² = 0.998，而且截距接近 0，符合「不施力就不伸長」的物理意義。&#10;證據：冪次模型的指數 n ≈ 1.0，本質上就是線性…" style="min-height:80px;"></textarea>
+            <div class="think-status"></div>
+          </div>
+
+          <!-- Interactive: 模型選擇 -->
+          <div class="think-block choice" data-answer="b">
+            <div class="think-prompt">🎯 哪個說法最準確描述 F 和 x 的關係？</div>
+            <div class="think-options">
+              <button class="think-opt" data-val="a">A. F 和 x 成正比，但只在小形變範圍內</button>
+              <button class="think-opt" data-val="b">B. F 和 x 成正比——通過原點的直線，斜率就是彈簧的「硬度」</button>
+              <button class="think-opt" data-val="c">C. F 和 x 的關係是冪次的，不是線性</button>
+            </div>
+            <div class="think-feedback" style="display:none;">
+              從你的數據來看，F 和 x 確實成正比——通過原點的直線。斜率的單位是 N/m，代表「讓彈簧多伸長 1 m 需要多少 N 的力」，就是彈簧的硬度指標。不過 A 也有道理：真實彈簧在極端拉伸下會偏離線性——這是 Lv2 可以探究的問題。
+            </div>
+          </div>
+
+          <!-- Interactive: 測量噪聲 -->
+          <div class="think-block reveal">
+            <div class="think-prompt">🤔 想一想：為什麼同一個重量測 3 次，伸長量 x 每次都略有不同？</div>
+            <button class="think-toggle">想好了？點擊看提示 →</button>
+            <div class="think-hidden">
+              <p>虛擬實驗特意加入了噪聲（±0.3 cm），模擬真實測量的分散：彈簧不是完美的、砝碼位置略有偏差、摩擦不同…這就是「測量不確定度」。你的三次數據越接近，代表實驗重複性越好。</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="step-footer">
+      <button class="step-btn" data-step="prev">← 上一步</button>
+      <div class="step-dots">
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot current"></span>
+        <span class="step-dot"></span>
+      </div>
+      <button class="step-btn primary" data-step="next">下一步 →</button>
+    </div>
+    </div>
+
+    <!-- ═══ Step 4：延伸與反思 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">回頭對照預測，思考誤差來源，並找出一個你自己的研究問題。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回 P1–P3 的預測，和你的實驗結果比較——對了幾題？差在哪裡？</p>
+
+      <!-- Interactive: F-x relationship reasoning -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你測得的 k 值是多少？F vs x 圖呈現直線嗎？</div>
+        <textarea class="think-input" data-key="spring-lv1-result" placeholder="例如：我測得 k ≈ 10.5 N/m，圖呈現直線，與理論值 10 N/m 接近…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:6px;">除了我們實驗的幾種砝碼，還有其他不同重量的選擇嗎？會怎麼改變 k 值嗎？</div>
+      <div class="q-item" style="margin-bottom:6px;">真實的彈簧在極端條件下（很輕的重量或很重的重量）還會維持直線關係嗎？</div>
+      <div class="q-item" style="margin-bottom:16px;">溫度改變會影響彈力常數 k 嗎？為什麼？</div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">做完實驗，一定有什麼讓你意外的結果。試著把它變成一個可以做實驗回答的問題：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「橡皮筋被反覆拉伸 50 次後，k 值會改變嗎？改變多少？」← 有操縱變因、可量化、教室裡做得到。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">寫下你的探究問題（要包含操縱變因和應變變因，而且在教室裡做得到）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="spring-lv1-my-question" rows="3" placeholder="例：橡皮筋和彈簧的彈性係數會隨溫度改變嗎？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/spring-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          彈簧 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生透過虛擬實驗體驗虎克定律的線性關係</li>
+              <li>練習從散佈圖中看出規律、用直線擬合求物理參數</li>
+              <li>認識測量噪聲對結論的影響</li>
+              <li>準備進入 Lv2 的真實實驗設計</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              虛擬實驗自動加入少量噪聲（± 0.3 cm），模擬真實測量的分散。學生會發現：即使按同一個砝碼，每次的伸長量都略有不同。這正是後續不確定度課程的好預熱。
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">你的 F-x 散佈圖、k 值計算、以及「預測 vs 實測」的對照分析，展示了「從數據中建立模型」的能力。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：你<em>之前</em>的預測 vs 實際結果差在哪？（有具體的「之前 vs 之後」對比，比寫一百句「我學到很多」更有說服力。）
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 原來前人也發現過——虎克定律</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">你從數據中發現 F 和 x 呈直線關係。17 世紀的物理學家虎克（Robert Hooke）也發現了同樣的事，後人把它稱為<strong>虎克定律</strong>：</p>
+          <div style="text-align:center;padding:14px;font-family:'DM Mono',monospace;font-size:16px;color:var(--text-primary);background:white;border-radius:6px;margin:10px 0;">
+            $F = kx$
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            其中 $k$ 是<strong>彈力常數</strong>（又叫彈性係數），單位 N/m，就是你圖上的斜率。$k$ 越大代表彈簧越「硬」。試試看——你的斜率就是你這條彈簧的 $k$ 值，跟 350 年前虎克做的是同一件事。
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（為下一級暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            以下是一份實驗計畫，<strong>但有好幾個問題</strong>。你能找到幾個？
+          </p>
+          <div style="background:white;border-radius:6px;padding:12px 16px;font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.8;">
+            小華想研究「彈簧長度對彈力常數 k 的影響」。他的計畫：拿兩條不同長度的彈簧，各掛 200g 砝碼一次，量伸長量，算 k 值來比較。
+          </div>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              可能的問題：只有 2 個水準（不夠）、只量 1 次（沒有重複）、兩條彈簧可能材質不同（沒控制）、只掛一種砝碼無法確認線性關係。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/spring-lv2.html">彈簧 Lv2 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+// ─── 實驗參數 ───
+const K_TRUE = 10.0;     // N/m (真實彈力常數)
+const L0_CM  = 8.0;      // cm (原長)
+const NOISE  = 0.3;      // cm (測量噪聲 ±)
+
+// 存每個重量的測量記錄 { mass: [x1, x2, x3] }
+const records = {};
+let currentMass = null;
+let currentX    = null;  // 此次顯示的帶噪聲值
+
+// ─── UI 元素 ───
+const springCanvas = document.getElementById('springCanvas');
+const sCtx = springCanvas.getContext('2d');
+const graphCanvas  = document.getElementById('graphCanvas');
+const gCtx = graphCanvas.getContext('2d');
+const tableBody    = document.getElementById('tableBody');
+const recordBtn    = document.getElementById('recordBtn');
+const lengthDisplay = document.getElementById('lengthDisplay');
+const noiseHint    = document.getElementById('noiseHint');
+const trialCount   = document.getElementById('trialCount');
+
+// ─── 阻尼震盪動畫系統 ───
+let animId = null;        // requestAnimationFrame ID
+let animStartTime = null;
+let animTargetX = 0;      // 目標伸長量 (cm)
+let animPrevX = 0;        // 動畫起始伸長量 (cm)
+let displayX = 0;         // 當前繪製伸長量 (cm)
+let isSettled = false;     // 已靜止
+
+// 阻尼震盪參數
+const OMEGA = 8;          // 角頻率 (rad/s) — 控制震盪快慢
+const GAMMA = 2.2;        // 阻尼係數 — 控制衰減速度
+
+function animateSpring(timestamp) {
+  if (!animStartTime) animStartTime = timestamp;
+  const t = (timestamp - animStartTime) / 1000; // 秒
+
+  const delta = animPrevX - animTargetX; // 初始偏移量
+  // 欠阻尼簡諧運動: x(t) = x_eq + A * e^(-γt) * cos(ωt)
+  const envelope = Math.exp(-GAMMA * t);
+  const osc = envelope * Math.cos(OMEGA * t);
+  displayX = animTargetX - delta * osc;
+  // 修正：delta 取反方向（從0跳到目標，過衝後回來）
+  displayX = animTargetX + (animPrevX - animTargetX) * envelope * Math.cos(OMEGA * t);
+
+  drawSpringFrame(displayX);
+
+  // 判斷是否已收斂
+  if (envelope < 0.005) {
+    displayX = animTargetX;
+    isSettled = true;
+    drawSpringFrame(displayX);
+    animId = null;
+    return;
+  }
+
+  animId = requestAnimationFrame(animateSpring);
+}
+
+function startOscillation(targetCm) {
+  if (animId) cancelAnimationFrame(animId);
+  animPrevX = displayX;     // 從當前位置開始
+  animTargetX = targetCm;
+  animStartTime = null;
+  isSettled = false;
+  animId = requestAnimationFrame(animateSpring);
+}
+
+// ─── 彈簧繪製（單幀）───
+function drawSpringFrame(extensionCm) {
+  const W = springCanvas.width;
+  const H = springCanvas.height;
+  sCtx.clearRect(0, 0, W, H);
+
+  const L0_px = 30;
+  const springPx = L0_px + extensionCm * 5.5;
+  const startY = 30;
+  const bobY   = startY + springPx;
+  const cx     = W / 2;
+
+  // 固定支架
+  sCtx.fillStyle = '#64748b';
+  sCtx.fillRect(20, 10, W - 40, 8);
+  sCtx.fillRect(cx - 3, 18, 6, 12);
+
+  // 彈簧（鋸齒）
+  const coils = 10;
+  const coilH = springPx / coils;
+  const amp   = 12;
+  sCtx.beginPath();
+  sCtx.moveTo(cx, startY);
+  for (let i = 0; i <= coils; i++) {
+    const y = startY + i * coilH;
+    const dir = (i % 2 === 0) ? 1 : -1;
+    if (i < coils) {
+      sCtx.lineTo(cx + dir * amp, y + coilH * 0.5);
+      sCtx.lineTo(cx, y + coilH);
+    }
+  }
+  sCtx.strokeStyle = '#2563eb';
+  sCtx.lineWidth = 2;
+  sCtx.stroke();
+
+  // 砝碼
+  if (currentMass && extensionCm > 0) {
+    const bw = 50, bh = 28;
+    sCtx.fillStyle = '#e2e8f0';
+    sCtx.strokeStyle = '#94a3b8';
+    sCtx.lineWidth = 1.5;
+    sCtx.fillRect(cx - bw/2, bobY, bw, bh);
+    sCtx.strokeRect(cx - bw/2, bobY, bw, bh);
+    sCtx.fillStyle = '#475569';
+    sCtx.font = 'bold 11px sans-serif';
+    sCtx.textAlign = 'center';
+    sCtx.fillText(currentMass + ' gw', cx, bobY + 17);
+  }
+
+  // 尺規
+  const rulerX = cx + 35;
+  sCtx.strokeStyle = '#94a3b8';
+  sCtx.lineWidth = 1;
+  sCtx.beginPath();
+  sCtx.moveTo(rulerX, startY);
+  sCtx.lineTo(rulerX, startY + 200);
+  sCtx.stroke();
+  for (let cm = 0; cm <= 20; cm += 2) {
+    const ry = startY + cm * 5.5;
+    if (ry > startY + 205) break;
+    const tick = cm % 10 === 0 ? 8 : 4;
+    sCtx.beginPath();
+    sCtx.moveTo(rulerX, ry);
+    sCtx.lineTo(rulerX + tick, ry);
+    sCtx.stroke();
+    if (cm % 10 === 0) {
+      sCtx.fillStyle = '#64748b';
+      sCtx.font = '9px sans-serif';
+      sCtx.fillText(cm + 'cm', rulerX + 11, ry + 3);
+    }
+  }
+
+  // 伸長量標示（只在靜止時顯示精確數字）
+  if (extensionCm > 0.5) {
+    const showX = isSettled ? currentX : extensionCm;
+    sCtx.strokeStyle = '#059669';
+    sCtx.fillStyle = '#059669';
+    sCtx.lineWidth = 1.5;
+    sCtx.setLineDash([3,2]);
+    sCtx.beginPath();
+    sCtx.moveTo(cx - 25, startY + L0_px);
+    sCtx.lineTo(cx - 25, bobY);
+    sCtx.stroke();
+    sCtx.setLineDash([]);
+    sCtx.font = 'bold 10px sans-serif';
+    sCtx.textAlign = 'center';
+    if (isSettled) {
+      sCtx.fillText('x = ' + showX.toFixed(1) + ' cm', cx - 25, startY + L0_px + (bobY - startY - L0_px) * 0.5);
+    } else {
+      sCtx.fillStyle = '#9ca3af';
+      sCtx.fillText('震盪中…', cx - 25, startY + L0_px + (bobY - startY - L0_px) * 0.5);
+    }
+  }
+}
+
+// 初始繪製（無砝碼）
+function drawEmpty() {
+  displayX = 0; isSettled = true;
+  if (animId) { cancelAnimationFrame(animId); animId = null; }
+  const W = springCanvas.width, H = springCanvas.height, cx = W/2, startY = 30;
+  sCtx.clearRect(0, 0, W, H);
+  sCtx.fillStyle = '#64748b';
+  sCtx.fillRect(20, 10, W - 40, 8);
+  sCtx.fillRect(cx - 3, 18, 6, 12);
+  const coils = 10, coilH = 3, amp = 12;
+  sCtx.beginPath();
+  sCtx.moveTo(cx, startY);
+  for (let i = 0; i <= coils; i++) {
+    const y = startY + i * coilH;
+    const dir = (i % 2 === 0) ? 1 : -1;
+    if (i < coils) {
+      sCtx.lineTo(cx + dir * amp, y + coilH * 0.5);
+      sCtx.lineTo(cx, y + coilH);
+    }
+  }
+  sCtx.strokeStyle = '#2563eb';
+  sCtx.lineWidth = 2;
+  sCtx.stroke();
+}
+drawEmpty();
+
+// ─── 砝碼按鈕 ───
+document.querySelectorAll('.weight-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mass = parseInt(btn.dataset.mass);
+    currentMass = mass;
+
+    // 加隨機噪聲
+    const trueX = mass * 0.00981 / K_TRUE * 100; // cm
+    currentX = trueX + (Math.random() - 0.5) * 2 * NOISE;
+    currentX = Math.max(0.1, +currentX.toFixed(1));
+
+    // 更新UI
+    document.querySelectorAll('.weight-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    noiseHint.textContent = `（砝碼下垂震盪中…靜止後可記錄）`;
+    lengthDisplay.textContent = `震盪中…`;
+    recordBtn.disabled = true; // 震盪中不可記錄
+
+    const trials = (records[mass] || []).length;
+    trialCount.textContent = `此重量已記錄 ${trials}/3 次`;
+
+    // 啟動阻尼震盪動畫
+    startOscillation(currentX);
+
+    // 等震盪結束後才允許記錄
+    function checkSettled() {
+      if (isSettled) {
+        const totalLen = L0_CM + currentX;
+        lengthDisplay.textContent = `總長度 = ${totalLen.toFixed(1)} cm`;
+        noiseHint.textContent = `（每次按下按鈕會有小誤差，模擬真實測量）`;
+        recordBtn.disabled = (trials >= 3);
+        return;
+      }
+      requestAnimationFrame(checkSettled);
+    }
+    checkSettled();
+  });
+});
+
+// ─── 記錄按鈕 ───
+recordBtn.addEventListener('click', () => {
+  if (currentMass === null || currentX === null) return;
+  if (!records[currentMass]) records[currentMass] = [];
+  if (records[currentMass].length >= 3) return;
+
+  records[currentMass].push(currentX);
+  const trials = records[currentMass].length;
+  trialCount.textContent = `此重量已記錄 ${trials}/3 次`;
+
+  // 標記已完成
+  if (trials >= 3) {
+    recordBtn.disabled = true;
+    document.querySelector(`.weight-btn[data-mass="${currentMass}"]`).classList.add('done');
+  }
+
+  updateTable();
+  updateGraph();
+
+  // 刷新噪聲 + 再次小震盪（模擬「拿起再放回」）
+  if (trials < 3) {
+    const trueX = currentMass * 0.00981 / K_TRUE * 100;
+    currentX = trueX + (Math.random() - 0.5) * 2 * NOISE;
+    currentX = Math.max(0.1, +currentX.toFixed(1));
+    noiseHint.textContent = `（重新測量中…）`;
+    lengthDisplay.textContent = `震盪中…`;
+    recordBtn.disabled = true;
+    startOscillation(currentX);
+    function checkSettled2() {
+      if (isSettled) {
+        const totalLen = L0_CM + currentX;
+        lengthDisplay.textContent = `總長度 = ${totalLen.toFixed(1)} cm`;
+        noiseHint.textContent = `（每次按下按鈕會有小誤差，模擬真實測量）`;
+        recordBtn.disabled = false;
+        return;
+      }
+      requestAnimationFrame(checkSettled2);
+    }
+    checkSettled2();
+  }
+});
+
+// ─── 重置 ───
+document.getElementById('resetBtn').addEventListener('click', () => {
+  Object.keys(records).forEach(k => delete records[k]);
+  currentMass = null; currentX = null;
+  document.querySelectorAll('.weight-btn').forEach(b => {
+    b.classList.remove('active','done');
+  });
+  recordBtn.disabled = true;
+  lengthDisplay.textContent = '選擇砝碼開始';
+  noiseHint.textContent = '';
+  trialCount.textContent = '';
+  tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>';
+  document.getElementById('fitInfo').style.display = 'none';
+  drawEmpty();
+  gCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+  drawGraphEmpty();
+});
+
+// ─── 更新表格 ───
+function updateTable() {
+  const masses = [50, 100, 150, 200, 250, 300].filter(m => records[m] && records[m].length > 0);
+  if (masses.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>';
+    return;
+  }
+  tableBody.innerHTML = masses.map(m => {
+    const xs = records[m];
+    const F  = (m * 0.00981).toFixed(2);
+    const cells = [0,1,2].map(i => xs[i] !== undefined ? `<td>${xs[i].toFixed(1)}</td>` : '<td style="color:var(--text-muted)">—</td>');
+    const avg = xs.length === 3 ? `<td style="color:var(--phase2);font-weight:700;">${(xs.reduce((a,b)=>a+b,0)/3).toFixed(1)}</td>` : '<td style="color:var(--text-muted)">—</td>';
+    return `<tr><td><strong>${m}</strong></td><td>${F}</td>${cells.join('')}${avg}</tr>`;
+  }).join('');
+}
+
+// ─── 畫圖 ───
+// ─── 趨勢線引擎 ───
+let trendType = 'none';
+
+document.getElementById('trendControls').addEventListener('click', e => {
+  const btn = e.target.closest('.trend-btn');
+  if (!btn) return;
+  trendType = btn.dataset.trend;
+  document.querySelectorAll('.trend-btn').forEach(b => {
+    const active = b === btn;
+    b.style.background = active ? '#059669' : 'var(--bg)';
+    b.style.color = active ? 'white' : 'inherit';
+  });
+  updateGraph();
+});
+
+function computeFit(x, y, type) {
+  const n = x.length;
+  const meanY = y.reduce((a,b)=>a+b,0)/n;
+  const SS_tot = y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+  if (type === 'linear') {
+    const sx=x.reduce((a,b)=>a+b,0), sy=y.reduce((a,b)=>a+b,0);
+    const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0), sx2=x.reduce((s,xi)=>s+xi*xi,0);
+    const a=(n*sxy-sx*sy)/(n*sx2-sx*sx), b=(sy-a*sx)/n;
+    const pred=xi=>a*xi+b;
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return{type,a,b,R2,pred,
+      info:`方程式：F = ${a.toFixed(2)}·x ${b>=0?'+':'−'} ${Math.abs(b).toFixed(3)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(4)} N${Math.abs(b)>0.05?' ⚠️':' ✓'}<br>斜率 = ${a.toFixed(2)} N/m`};
+  }
+  if (type === 'power') {
+    const lx=x.map(Math.log), ly=y.map(Math.log);
+    const slx=lx.reduce((a,b)=>a+b,0), sly=ly.reduce((a,b)=>a+b,0);
+    const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0), slx2=lx.reduce((s,v)=>s+v*v,0);
+    const nn=(n*slxy-slx*sly)/(n*slx2-slx*slx);
+    const a=Math.exp((sly-nn*slx)/n);
+    const pred=xi=>a*Math.pow(xi,nn);
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return{type,a,n:nn,R2,pred,
+      info:`方程式：F = ${a.toFixed(3)}·x^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-1)<0.1?' (≈1，接近線性)':''}`};
+  }
+  if (type === 'poly') {
+    const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
+    const syp=p=>x.reduce((s,xi,i)=>s+Math.pow(xi,p)*y[i],0);
+    const A=[[n,sp(1),sp(2),syp(0)],[sp(1),sp(2),sp(3),syp(1)],[sp(2),sp(3),sp(4),syp(2)]];
+    for(let col=0;col<3;col++){let mr=col;for(let r=col+1;r<3;r++)if(Math.abs(A[r][col])>Math.abs(A[mr][col]))mr=r;[A[col],A[mr]]=[A[mr],A[col]];for(let r=col+1;r<3;r++){const f=A[r][col]/A[col][col];for(let j=col;j<=3;j++)A[r][j]-=f*A[col][j];}}
+    const c=[0,0,0];for(let i=2;i>=0;i--){c[i]=A[i][3];for(let j=i+1;j<3;j++)c[i]-=A[i][j]*c[j];c[i]/=A[i][i];}
+    const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
+    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+    const R2=SS_tot>0?1-SS_res/SS_tot:0;
+    return{type,c,R2,pred,
+      info:`方程式：F = ${c[2].toFixed(1)}x² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(2)}x ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(3)}<br>R² = ${R2.toFixed(4)}`};
+  }
+  return null;
+}
+
+function drawGraphEmpty() {
+  const W=graphCanvas.width, H=graphCanvas.height;
+  gCtx.clearRect(0,0,W,H);
+  const pad={l:48,r:20,t:18,b:40};
+  gCtx.strokeStyle='#e2e8f0';
+  gCtx.strokeRect(pad.l,pad.t,W-pad.l-pad.r,H-pad.t-pad.b);
+  gCtx.fillStyle='#cbd5e1'; gCtx.font='12px sans-serif'; gCtx.textAlign='center';
+  gCtx.fillText('等待數據…',W/2,H/2);
+}
+drawGraphEmpty();
+
+function updateGraph() {
+  const masses = [50,100,150,200,250,300].filter(m => records[m] && records[m].length === 3);
+  const parent = graphCanvas.parentElement;
+  const W = (parent ? parent.clientWidth : 0) || graphCanvas.width || 400;
+  graphCanvas.width = W; graphCanvas.height = 220;
+  const H = 220, pad = {l:48, r:20, t:18, b:40};
+  gCtx.clearRect(0,0,W,H);
+
+  const pts = masses.map(m => ({
+    F: m * 0.00981,
+    x: records[m].reduce((a,b)=>a+b,0)/3 / 100
+  }));
+  if (pts.length < 2) { drawGraphEmpty(); return; }
+
+  const xArr = pts.map(p=>p.x), yArr = pts.map(p=>p.F);
+  const xMax = Math.max(...xArr)*1.15, yMax = Math.max(...yArr)*1.15;
+  function toX(v){return pad.l+(v/xMax)*(W-pad.l-pad.r);}
+  function toY(v){return H-pad.b-(v/yMax)*(H-pad.t-pad.b);}
+
+  // 格線
+  gCtx.strokeStyle='#f1f5f9'; gCtx.lineWidth=1;
+  for(let i=1;i<=4;i++){const gx=pad.l+i/4*(W-pad.l-pad.r),gy=H-pad.b-i/4*(H-pad.t-pad.b);gCtx.beginPath();gCtx.moveTo(gx,pad.t);gCtx.lineTo(gx,H-pad.b);gCtx.stroke();gCtx.beginPath();gCtx.moveTo(pad.l,gy);gCtx.lineTo(W-pad.r,gy);gCtx.stroke();}
+  // 軸
+  gCtx.strokeStyle='#94a3b8';gCtx.lineWidth=1.5;gCtx.beginPath();gCtx.moveTo(pad.l,pad.t);gCtx.lineTo(pad.l,H-pad.b);gCtx.lineTo(W-pad.r,H-pad.b);gCtx.stroke();
+  // 軸標籤
+  gCtx.fillStyle='#64748b';gCtx.font='11px sans-serif';gCtx.textAlign='center';
+  gCtx.fillText('伸長量 x (m)',W/2,H-4);
+  gCtx.save();gCtx.translate(12,H/2);gCtx.rotate(-Math.PI/2);gCtx.fillText('力 F (N)',0,0);gCtx.restore();
+  // 刻度
+  for(let i=0;i<=4;i++){const xv=xMax*i/4,yv=yMax*i/4;gCtx.fillStyle='#94a3b8';gCtx.font='10px sans-serif';gCtx.textAlign='center';gCtx.fillText(xv.toFixed(3),toX(xv),H-pad.b+13);gCtx.textAlign='right';gCtx.fillText(yv.toFixed(1),pad.l-4,toY(yv)+4);}
+
+  // 趨勢線
+  const fitInfo = document.getElementById('fitInfo');
+  if (trendType !== 'none' && pts.length >= 3) {
+    const fit = computeFit(xArr, yArr, trendType);
+    if (fit) {
+      gCtx.strokeStyle='#059669';gCtx.lineWidth=2;gCtx.setLineDash([5,3]);gCtx.beginPath();
+      const steps=60;
+      for(let i=0;i<=steps;i++){const xv=xMax*i/steps,yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?gCtx.moveTo(cx,cy):gCtx.lineTo(cx,cy);}
+      gCtx.stroke();gCtx.setLineDash([]);
+      gCtx.fillStyle='#059669';gCtx.font='bold 10px sans-serif';gCtx.textAlign='left';
+      gCtx.fillText(`R²=${fit.R2.toFixed(3)}`,toX(xMax*0.55),toY(yMax*0.85));
+      fitInfo.style.display='block'; fitInfo.innerHTML=fit.info;
+    }
+  } else { fitInfo.style.display='none'; }
+
+  // 數據點
+  pts.forEach(p=>{gCtx.beginPath();gCtx.arc(toX(p.x),toY(p.F),5,0,Math.PI*2);gCtx.fillStyle='#2563eb';gCtx.fill();gCtx.strokeStyle='white';gCtx.lineWidth=1.5;gCtx.stroke();});
+}
+</script>
+</body>
+</html>

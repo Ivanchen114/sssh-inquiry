@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase2/buoyancy-lv2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>浮力：鐵達尼號 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="浮力 Lv2 規劃研究：以鐵達尼號為情境，設計船體浮力的變因實驗。">
+  <meta property="og:title" content="浮力：鐵達尼號 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="浮力 Lv2 規劃研究：以鐵達尼號為情境，設計船體浮力的變因實驗。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/buoyancy-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span>主題·浮力</span><span>›</span><span style="color:var(--phase2)">Lv2 規劃研究</span>
+      <span>›</span>
+      <span>浮力：鐵達尼號</span>
+    </div>
+    <h1>🚢 規劃研究：鐵達尼號</h1>
+    <p class="subtitle">用鋁箔紙做一艘船——浮起來，還要載最多貨</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag express">表達分享</span>
+      <span class="tag">W7–8 · 4 節課</span>
+      <span class="tag">工程挑戰競賽</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從現象或理論出發，提出可驗證的研究問題（例如：容器形狀如何影響最大載重？）</li>
+      <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：控制鋁箔面積與重心位置）</li>
+      <li>能有系統地蒐集數據，並判斷數據的可靠性（逐次加砝碼，記錄傾斜或沉沒時間點）</li>
+      <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>核心概念</button>
+    <button class="step-tab"><span class="step-num">2</span>設計計畫</button>
+    <button class="step-tab"><span class="step-num">3</span>建造與測試</button>
+    <button class="step-tab"><span class="step-num">4</span>分析與發表</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- STEP 1: 核心概念 -->
+    <div class="step-panel active">
+      <div class="step-action">了解浮力原理和鐵達尼號挑戰的設計要素。</div>
+
+      <div class="section-title">核心概念：為什麼鐵會浮？</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div class="card">
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;">阿基米德原理</div>
+          <div style="font-family:'DM Mono',monospace;font-size:15px;text-align:center;padding:12px;background:var(--bg);border-radius:4px;margin-bottom:10px;color:var(--phase2);">$F_b = \rho Vg$</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">物體受到的浮力 = 它排開的水的重量。<br>鐵本身密度 > 水，但做成空心船後，整體平均密度 < 水，所以浮。</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;">最大載重理論計算</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.7;">當船即將沉沒時，船和貨物的總重 = 浮力最大值。</p>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--bg);padding:10px;border-radius:4px;margin-top:8px;line-height:1.8;color:var(--text-secondary);">
+            最大排水量 = 船內空間體積<br>
+            最大浮力 = ρ水 × V × g<br>
+            最大載重 = 最大浮力 − 船重<br>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:12px;">🔍 設計前的思考：哪些因素影響載重？</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+          <div>
+            <div style="font-weight:600;color:var(--phase2);margin-bottom:6px;">可以設計的因素：</div>
+            <ul style="list-style:none;padding:0;color:var(--text-secondary);">
+              <li style="padding:3px 0;">📐 船的底面積（大 → 排水體積大）</li>
+              <li style="padding:3px 0;">📏 船壁高度（高 → 排水體積大）</li>
+              <li style="padding:3px 0;">🔷 船型（矩形 / 橢圓 / V 形）</li>
+              <li style="padding:3px 0;">⚖️ 如何分配砝碼位置（穩定性）</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-weight:600;color:var(--phase3);margin-bottom:6px;">要注意的風險：</div>
+            <ul style="list-style:none;padding:0;color:var(--text-secondary);">
+              <li style="padding:3px 0;">💧 船壁太薄→水從側面滲入</li>
+              <li style="padding:3px 0;">⚠️ 重心太高→傾覆翻船</li>
+              <li style="padding:3px 0;">🚢 船底破洞（鋁箔折疊不密）</li>
+              <li style="padding:3px 0;">📉 計算錯誤→理論 vs 實際差很多</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Layer 3: 浮力與密度選擇題 -->
+        <div class="think-block choice" data-answer="a">
+          <div class="think-prompt">🎯 暖身題：鐵的密度是 7.8 g/cm³，水是 1 g/cm³。鐵塊怎樣才能浮起來？</div>
+          <div class="think-options">
+            <button class="think-opt" data-val="a">A. 把鐵做成空心船，讓整體平均密度 < 水</button>
+            <button class="think-opt" data-val="b">B. 把鐵加熱到 100°C，密度會變小</button>
+            <button class="think-opt" data-val="c">C. 把鐵放在鹽水裡，鹽水密度更大會浮起來</button>
+          </div>
+          <div class="think-feedback" style="display:none;">
+            A 對。物質會不會浮是看「整體的平均密度」，不是材料本身。空心船 = (鐵的質量 + 空氣) ÷ (整個船的體積)，結果 < 1 g/cm³，所以浮。B 加熱密度幾乎不變；C 雖然鹽水密度大但不是解決問題的關鍵。
+          </div>
+        </div>
+
+        <!-- Layer 2: 核心概念記錄 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 用自己的話解釋：「為什麼一條鐵可以沉，但同樣的鐵做成船卻能浮？」</div>
+          <textarea class="think-input" data-key="buoyancy-lv2-concept" placeholder="例如：因為鐵船內有空氣，船的總質量÷總體積的結果小於1 g/cm³，所以浮…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: 設計計畫 -->
+    <div class="step-panel">
+      <div class="step-action">完成設計計畫表並進行理論載重計算。</div>
+
+      <div class="section-title">設計計畫與理論計算</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">各組在正式建造前，先完成設計計畫表。用阿基米德原理計算你的船能載多重：</p>
+
+      <div style="background:var(--bg);border-radius:6px;padding:14px;font-size:13px;margin-bottom:14px;">
+        <div style="font-weight:700;margin-bottom:10px;">📋 設計計畫表</div>
+        <div style="display:grid;gap:8px;color:var(--text-secondary);">
+          <div>1. 船型選擇（矩形 / 其他）：_________，選擇原因：_________</div>
+          <div>2. 預計底面積：________ cm²，船壁高：________ cm</div>
+          <div>3. 理論排水體積：________ cm³　(= 底面積 × 船壁高)</div>
+          <div>4. 理論最大浮力：________ g　(= 排水體積 × 1 g/cm³)</div>
+          <div>5. 估計船重：________ g　（根據鋁箔面積估算）</div>
+          <div>6. <strong>預測最大載重：________ g</strong></div>
+        </div>
+      </div>
+
+      <div class="section-title">課堂討論</div>
+      <div style="display:grid;gap:8px;margin-bottom:20px;">
+        <div class="q-item phase2">Q1：你的設計想要最大化哪個量？底面積還是高度？兩者的 tradeoff 是什麼？</div>
+        <div class="q-item phase2">Q2：你預測最大載重是多少克？計算過程寫出來。</div>
+      </div>
+
+      <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#92400e;font-size:12px;margin-bottom:6px;">💡 設計邏輯提示</div>
+        <div style="font-size:11px;color:#78350f;line-height:1.7;">
+          底面積大 → 排水量大 → 浮力大，但造成材料用量多（船重↑）。船壁高 → 排水量大，但重心↑、翻覆風險↑。沒有絕對最優解，只有「根據你的假設最合理的選擇」。你的計算越清楚，即使失敗了也能分析原因。
+        </div>
+
+        <!-- Layer 1: 設計tradeoff想一想 -->
+        <div class="think-block reveal">
+          <div class="think-prompt">🤔 想一想：如果你想最大化載重，你的船應該是「底面積大、牆矮」還是「底面積小、牆高」？各有什麼優缺點？</div>
+          <button class="think-toggle">想好了？點擊看提示 →</button>
+          <div class="think-hidden">
+            <p><strong>底面積大、牆矮：</strong>排水體積 = 底面積 × 牆高，增大面積能增加排水量（↑浮力），但材料用量多（↑船重），還要檢查：穩定性好嗎？<br><strong>底面積小、牆高：</strong>排水量也能增加，但重心變高，容易傾覆翻船。<br>沒有絕對答案，取決於「你如何評估风險」和「材料的限制」。寫計畫時說明你的選擇邏輯比結果好看更重要。</p>
+          </div>
+        </div>
+
+        <!-- Layer 2: 設計決策記錄 -->
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 你決定選的船型是什麼？為什麼這樣設計能最大化載重？</div>
+          <textarea class="think-input" data-key="buoyancy-lv2-design" placeholder="例如：矩形船，長 15 cm、寬 10 cm、牆高 8 cm。因為矩形容易製作，底面積夠大能排水多，高度適中不容易翻…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 建造與測試 -->
+    <div class="step-panel">
+      <div class="step-action">按照規則和檢查清單進行建造和測試。</div>
+
+      <div class="section-title">建造與測試</div>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🏗️ 競賽規則</div>
+        <p style="font-size:12px;color:#1e3a8a;line-height:1.8;margin-bottom:8px;">
+          <strong>材料限制：</strong>20 cm × 30 cm 鋁箔紙一張（不可撕破）、一張 A4 紙（可折疊但不可撕）<br>
+          <strong>測試方法：</strong>砝碼每個 10g，每次加一個，船沉了即停<br>
+          <strong>記錄：</strong>最終載重（克）
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;">
+          <div style="font-weight:700;color:#92400e;font-size:12px;margin-bottom:6px;">⚡ 先跑一次再改</div>
+          <div style="font-size:11px;color:#78350f;line-height:1.7;">
+            計畫寫完別急著做完整實驗。花 10 分鐘用最粗糙的方式先試一次（只測 2-3 個砝碼），確認你的操作流程跑得通、數據量得到。發現問題回來改計畫。
+          </div>
+        </div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:12px;margin-bottom:6px;">🤝 小組分工提示</div>
+          <div style="font-size:11px;color:#1e3a8a;line-height:1.7;">
+            建議分三個角色：<strong>操作員</strong>（動手做）、<strong>記錄員</strong>（即時記數據）、<strong>品管員</strong>（檢查控制變因）。每次換砝碼時輪換。
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;border-top:3px solid var(--phase2);">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📊 建造檢查清單</div>
+        <ul style="font-size:12px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+          <li>☐ 船底有沒有漏洞？（輕輕按壓，檢查鋁箔有沒有破）</li>
+          <li>☐ 船壁折疊有沒有密？（側邊有沒有縫隙）</li>
+          <li>☐ 重心位置合理嗎？（砝碼放在中央，觀察是否平衡）</li>
+          <li>☐ 首次加砝碼時船是否明顯下沉？（正常，說明浮力在運作）</li>
+        </ul>
+      </div>
+
+      <!-- Layer 1: 失敗模式診斷 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：如果你的船在加到 150g 時突然傾斜翻覆（而非沉沒），這代表什麼？和「加到 80g 才沉沒」的失敗模式有什麼不同？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p><strong>傾斜翻覆：</strong>代表重心位置設計不夠好——砝碼放在邊緣，重力超過浮力復原力矩。解決方式：把砝碼放更靠中央，或降低砝碼放的高度。<br><strong>直接沉沒：</strong>代表排水體積/浮力不夠，得設計更深的船。<br>兩種失敗模式暗示不同的改進方向。測試時要觀察「怎麼沉的」，不只看「載重多少」。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 建造困難記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 建造過程中，你遇到什麼最大的問題？（例如：鋁箔怎麼折才不會破、邊角怎麼密合…）</div>
+        <textarea class="think-input" data-key="buoyancy-lv2-build" placeholder="例如：最難的是底部邊角容易漏水。我用膠帶補強所有的邊角，才勉強防住…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 分析與發表 -->
+    <div class="step-panel">
+      <div class="step-action">分析實驗結果，比較預測與實際，進行深層思考。</div>
+
+      <div class="section-title">實驗結果與分析</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">競賽完成後，各組填寫結果表，分析實際成績與理論預測的差距：</p>
+
+      <table style="margin-bottom:14px;">
+        <thead><tr><th>組別</th><th>預測載重 (g)</th><th>實際載重 (g)</th><th>偏差 (%)</th><th>失敗原因（如有）</th></tr></thead>
+        <tbody>
+          <tr><td>第一組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>第二組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>第三組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>第四組</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-title">課堂討論（Q3–Q5）</div>
+      <div style="display:grid;gap:8px;margin-bottom:20px;">
+        <div class="q-item phase2">Q3：實際載重 vs 理論預測，差距多少？差距的主要原因是什麼？</div>
+        <div class="q-item phase2">Q4：哪組的船最有效率（載重/船重比最高）？他們的設計有什麼特別之處？</div>
+        <div class="q-item phase2">Q5：如果可以重做，你會改變設計的哪個部分？為什麼？</div>
+      </div>
+
+      <div class="section-title">延伸思考</div>
+      <div class="card" style="margin-bottom:20px;">
+        <ol style="padding-left:18px;font-size:13px;color:var(--text-secondary);line-height:2.2;">
+          <li>真正的鐵達尼號排水量是 52,310 噸——它為什麼沉？（提示：船體進水後排水量減少）</li>
+          <li>潛水艇如何在水中沉浮？它的工作原理與浮力的關係是什麼？</li>
+          <li>如果把這個實驗改到鹽水中進行，相同的船能承載更多還是更少的重量？如何計算？</li>
+        </ol>
+      </div>
+
+      <!-- Layer 3: 預測 vs 實際判斷題 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 你預測最大載重 200g，實際只有 120g。理論值和實際值差了 40%。這代表什麼？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 你的設計失敗了，因為沒達到預期</button>
+          <button class="think-opt" data-val="b">B. 設計和計算過程需要檢查，才能分析差距的原因</button>
+          <button class="think-opt" data-val="c">C. 實驗誤差太大，結果沒有參考價值</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 最重要。差 40% 是個訊號，提示你去檢查：測量排水體積時準不準？砝碼放的位置有沒有偏離中央（影響穩定性）？鋁箔有沒有微漏（排水量減少）？船重估計有沒有誤？哪怕失敗，也是有價值的失敗——只要你能找出原因。
+        </div>
+      </div>
+
+      <!-- Layer 2: 結論與反思 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 比較你的「預測最大載重」和「實際載重」，分析差距的可能原因（至少 2 個）。</div>
+        <textarea class="think-input" data-key="buoyancy-lv2-analysis" placeholder="例如：預測 200g 實際 120g。可能原因：(1)鋁箔底部微漏，有水進入，排水量減少；(2)砝碼堆放時容易滑向邊緣，增加傾覆風險…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- POST-CLASS: AI checkpoint, portfolio tips, reflection, teacher notes -->
+    <div class="collapsible" style="margin-top:32px;">
+      <div class="collapsible-header">📋 課後與教學資源<span class="toggle-icon">▶</span></div>
+      <div class="collapsible-body">
+
+        <div class="section-title">🤖 AI 檢核站</div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <p style="font-size:13px;color:#1e3a8a;line-height:1.8;margin-bottom:10px;">完成你的實驗計畫後，把計畫交給 AI（ChatGPT、Perplexity 等），請它幫你找漏洞：</p>
+          <div style="display:grid;gap:6px;font-size:12px;color:#1e3a8a;margin-bottom:10px;">
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「我的控制變因有沒有遺漏？」</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「這個實驗設計有什麼潛在問題？」</div>
+            <div style="background:white;border-radius:4px;padding:8px 12px;">「你覺得我的數據量夠嗎？需要幾組重複？」</div>
+          </div>
+          <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px;color:#1e3a8a;">
+            <strong>💬 複製貼上範本：</strong>「我正在設計一個實驗，研究問題是＿＿。操縱變因是＿＿（水準：＿＿），應變變因是＿＿，控制變因有＿＿。請幫我檢查：(1) 控制變因有沒有遺漏 (2) 實驗步驟有沒有潛在問題 (3) 數據量夠不夠」<br>
+            <span style="font-size:10px;color:#60a5fa;">給 AI 越多上下文，它的回饋越有用。空白處填入你自己的內容再送出。</span>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是代筆人。它指出問題，你決定要不要改、怎麼改。</p>
+        </div>
+
+        <div class="section-title">📂 學習歷程提示</div>
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">投入作品集的最佳素材</div>
+          <p style="font-size:13px;color:#6d28d9;margin-bottom:10px;">設計草圖 + 理論計算 + 實測照片 + 「預測 vs 實際」反思 + 同儕互評回饋。特別是失敗後如何修改設計——這展現了工程思維和溝通能力。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你原本的實驗計畫和實際做的有什麼不同？改了什麼？為什麼改？<br>
+            <span style="font-size:11px;color:#8b5cf6;">「計畫 vs 實際」的落差本身就是最好的反思素材——改得好代表你在成長。</span>
+          </div>
+        </div>
+
+        <div class="section-title">👩‍🏫 教學目標 × 學習目標</div>
+        <div class="card">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📌 教學目標（教師視角）</div>
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin-bottom:16px;">
+          </ul>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🎯 學習目標</div>
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>能從現象或理論出發，提出可驗證的研究問題（例如：容器形狀如何影響最大載重？）</li>
+            <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：控制鋁箔面積、材料限制、重心位置）</li>
+            <li>能有系統地蒐集數據，並判斷數據的可靠性（逐次加砝碼，記錄何時船開始傾斜或沉沒）</li>
+            <li>能用圖表呈現結果，並以數據為基礎進行分析與發表（比較預測最大載重與實際值，分析失敗原因）</li>
+          </ul>
+        </div>
+
+        <div class="section-title">👩‍🏫 課綱指標 × 課堂節奏</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">對應課綱指標</div>
+          <div class="ind-tags" style="margin-bottom:10px;">
+            <span class="ind-tag p">P1 察覺問題</span>
+            <span class="ind-tag p">P3 建立假設</span>
+            <span class="ind-tag r">R1 設計實驗</span>
+            <span class="ind-tag r">R2 控制變因</span>
+            <span class="ind-tag a">A1 整理數據</span>
+          </div>
+          <p style="margin-bottom:10px;font-size:12.5px;">這是「規劃研究站」的壓軸模組。前兩個模組（彈簧、線性化）讓學生學會分析數據，這裡讓他們把知識用在工程設計上，從「科學家角色」過渡到「工程師角色」。</p>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">⏱ 課堂節奏（W7–W8 共 4 節）</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);">
+            <strong>W7 第一節：</strong>浮力概念建立，計算最大載重理論值。<br>
+            <strong>W7 第二節：</strong>各組設計船型草圖、討論策略。<br>
+            <strong>W8 第一節：</strong>建造 + 測試（允許一次修改）。<br>
+            <strong>W8 第二節：</strong>正式競賽 + 各組分析為何成功/失敗。
+          </p>
+        </div>
+
+        <div class="section-title">👩‍🏫 討論引導問題</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">課堂深化提問</div>
+          <ul style="padding-left:18px;line-height:2;font-size:12.5px;color:var(--text-secondary);margin-bottom:12px;">
+            <li>「同樣面積的鋁箔，不同形狀的船為什麼載重差很多？什麼形狀的截面積最大？」</li>
+            <li>「你的船在加到多少克後開始傾斜？傾斜和沉沒是兩個不同的失敗模式——你有辦法預防傾斜嗎？」</li>
+            <li>「有組的預測值和實際值非常接近——這代表什麼？（阿基米德原理確實有效，前提是測量準確）」</li>
+          </ul>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">同儕評估探究歷程說明</div>
+            <p style="font-size:12.5px;color:var(--text-secondary);">重點不是誰的船最重，而是誰的「設計—預測—執行—分析」流程最完整。建議讓學生根據研究過程（而非結果）互評。</p>
+          </div>
+        </div>
+
+        <div class="section-title">📊 數據分析指引</div>
+        <div class="card" style="border-top:3px solid var(--phase1);margin-bottom:16px;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">理論 vs 實際——差多少？為什麼？</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-bottom:10px;">
+            <div style="background:var(--bg);border-radius:6px;padding:12px;">
+              <div style="font-weight:700;color:var(--phase1);margin-bottom:4px;">計算效率</div>
+              <div style="color:var(--text-secondary);line-height:1.8;">
+                效率 = 實際載重 ÷ 理論最大載重 × 100%<br>
+                每組的效率差多少？差異來自哪裡？<br>
+                <strong>量化</strong>「設計好壞」，而非只看結果。
+              </div>
+            </div>
+            <div style="background:var(--bg);border-radius:6px;padding:12px;">
+              <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">失敗模式分析</div>
+              <div style="color:var(--text-secondary);line-height:1.8;">
+                船是怎麼沉的？水從邊緣滲入？重心偏移翻覆？底部破裂？<br>
+                不同失敗模式對應不同的設計改進方向。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">🗣️ 同儕互評</div>
+        <div class="card" style="border-top:3px solid var(--express);">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px;">互評研究歷程，不只看載重</div>
+          <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">重點不是誰的船最重，而是誰的「設計→預測→執行→分析」歷程最完整：</p>
+          <div style="display:grid;gap:8px;">
+            <div class="q-item phase2"><strong>① 設計邏輯：</strong>為什麼選這個形狀？有理論計算支持嗎？</div>
+            <div class="q-item phase2"><strong>② 預測 vs 結果：</strong>理論計算和實際載重差多少？差距的原因分析合理嗎？</div>
+            <div class="q-item phase2"><strong>③ 失敗分析：</strong>失敗的原因有被正確辨識出來嗎？修改方案合理嗎？</div>
+            <div class="q-item phase2"><strong>④ 一個建議：</strong>如果再做一次，你會給他們什麼建議？</div>
+            <div class="q-item phase2">⑤ <strong>研究問題：</strong>從失敗經驗中，這組能提出一個「可以用實驗回答的問題」嗎？如果還不行，幫他們想一個。</div>
+          </div>
+        </div>
+
+        <div class="unit-nav">
+          <a href="../phase1/buoyancy-lv1.html">← 浮力 Lv1 論證建模</a>
+          <a href="../phase3/buoyancy-lv3.html">浮力 Lv3 發現問題 →</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

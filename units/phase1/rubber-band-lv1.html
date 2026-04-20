@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/rubber-band-lv1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>橡皮筋動力罐 Lv1 · 論證建模 · 探究與實作</title>
+  <meta name="description" content="橡皮筋動力罐 Lv1 論證建模：從數據發現飽和曲線，用 CER 論證為何橡皮筋不是理想彈簧。">
+  <meta property="og:title" content="橡皮筋動力罐 Lv1 · 論證建模 · 探究與實作">
+  <meta property="og:description" content="橡皮筋動力罐 Lv1 論證建模：從數據發現飽和曲線，用 CER 論證為何橡皮筋不是理想彈簧。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/rubber-band-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>橡皮筋動力罐</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>🥫 橡皮筋動力罐 · Lv1 論證建模</h1>
+    <p class="subtitle">橡皮筋不是理想彈簧——用數據建立「飽和模型」並論證為什麼</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">2 節課</span>
+      <span class="tag">飽和曲線 + CER</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標（論證建模精雕）</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從數據形狀選出合適的經驗模型（線性 / 冪次 / <strong>飽和模型</strong>），並用 R² 與殘差判斷</li>
+      <li>能用「主張—證據—推理」的 CER 架構論證：為什麼橡皮筋會出現飽和？</li>
+      <li>能辨識「理想彈簧模型 $E_p = \tfrac{1}{2}kx^2$」在橡皮筋上的失效邊界</li>
+      <li>能從「推出距離 vs 回滾距離」的差距估算摩擦損耗比</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>情境×預測</button>
+    <button class="step-tab"><span class="step-num">2</span>橡皮筋不是彈簧</button>
+    <button class="step-tab"><span class="step-num">3</span>建立飽和模型</button>
+    <button class="step-tab"><span class="step-num">4</span>CER 論證</button>
+    <button class="step-tab"><span class="step-num">5</span>反思×延伸</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：情境×預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">在看任何數據之前，先用你對生活的直覺回答三個預測題。</div>
+
+      <div style="background:#fef3c7;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;">
+        <div style="font-weight:700;font-size:13px;color:#92400e;margin-bottom:6px;">🏁 工程情境：動力罐競賽</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          你的隊伍要打造一台<strong>跑最遠的橡皮筋動力罐</strong>。你知道：橡皮筋轉越多圈，儲存的能量越多，罐子應該跑越遠。比賽前夕，你用<strong>不同的轉圈數</strong>做了幾組測試——結果出乎意料。在看數據之前，先寫下你的預測。
+        </div>
+      </div>
+
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>橡皮筋轉越多圈，你覺得罐子推出去的距離會<strong>一直增加</strong>嗎？還是到某個程度就<strong>不再增加</strong>？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>推出距離和回滾距離，你覺得哪個比較長？為什麼？
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>如果轉的圈數「加倍」（例如從 10 圈變 20 圈），推出距離會「加倍」嗎？用一句話說明你的邏輯。
+      </div>
+
+      <p style="font-size:12px;color:var(--text-muted);margin-top:14px;font-style:italic;">把預測寫下來。活動結束後回來對照。</p>
+
+      <!-- Layer 3: 預測概念題 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 暖身題：根據常識，下列哪個敘述最可能是真的？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 轉圈數和推出距離完全成正比（直線關係）</button>
+          <button class="think-opt" data-val="b">B. 轉圈數越多就越好，沒有上限</button>
+          <button class="think-opt" data-val="c">C. 一開始效果很好，但到某個點後增加越來越慢</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          許多物理與生物現象都會出現「報酬遞減」——這稱為<strong>飽和現象</strong>。加肥料、打電池、健身練肌肉都有這個特性。你馬上就會在數據裡看到：橡皮筋也一樣。
+        </div>
+      </div>
+
+      <!-- Layer 2: 預測記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 把你的三個預測（P1、P2、P3）簡短寫下，稍後回來對照。</div>
+        <textarea class="think-input" data-key="rubber-band-lv1-predict" placeholder="P1: 橡皮筋轉越多圈…&#10;P2: 推出距離 vs 回滾距離…&#10;P3: 加倍轉圈數，距離會…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：橡皮筋不是彈簧 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">認識一個常被誤解的事實：橡皮筋不是彈簧，也不遵守胡克定律。</div>
+
+      <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#991b1b;margin-bottom:6px;">⚠️ 常見迷思</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          課本教過理想彈簧的公式：$E_p = \tfrac{1}{2}kx^2$，力與形變量成正比。於是很多人會假設：「橡皮筋也是一樣吧？轉越多圈能量越多，所以距離應該跟圈數的平方成正比。」<br>
+          <strong>這個假設會失敗。</strong>而失敗的原因，正是這堂課要建立的模型。
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="background:white;border:1px solid var(--border);border-radius:6px;padding:14px;">
+          <div style="font-weight:700;color:var(--phase1);margin-bottom:8px;font-size:13px;">理想彈簧（課本版）</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.9;">
+            <li>力 $F = kx$（線性）</li>
+            <li>能量 $E_p = \tfrac{1}{2}kx^2$</li>
+            <li>形變量可以無限增加</li>
+            <li>釋放能量 = 儲存能量（無損耗）</li>
+          </ul>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:6px;padding:14px;">
+          <div style="font-weight:700;color:var(--phase3);margin-bottom:8px;font-size:13px;">真實橡皮筋</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.9;">
+            <li>力與形變量<strong>非線性</strong>關係</li>
+            <li>三段式行為：線性區 → 非線性區 → 塑性區</li>
+            <li>有「彈性極限」，超過就永久變形</li>
+            <li>釋放能量 &lt; 儲存能量（內部摩擦生熱）</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 應力應變三段示意 -->
+      <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#0369a1;margin-bottom:8px;">📐 橡皮筋的應力—應變三段行為</div>
+        <canvas id="stressStrainCanvas" width="400" height="180" style="width:100%;background:white;border-radius:6px;"></canvas>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;margin-top:8px;">
+          <strong>① 線性區</strong>（形變小）：類似彈簧，每轉一圈儲存的能量差不多。<br>
+          <strong>② 非線性區</strong>（形變中等）：每多轉一圈，橡皮筋內部分子鏈開始對齊，儲能效率下降。<br>
+          <strong>③ 塑性區</strong>（形變大）：橡皮筋進入塑性變形，多餘的能量轉成熱，而非彈性位能。繼續轉 → 幾乎沒有回報。
+        </div>
+      </div>
+
+      <div style="background:#f0f9f4;border:1px solid #86efac;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#15803d;margin-bottom:6px;">🔬 運作流程（動力罐如何工作）</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.9;">
+          ① 轉動罐子 → 橡皮筋纏繞 → 累積彈性位能<br>
+          ② 放在地上 → 橡皮筋放開 → 推動罐子（彈性位能 → 動能）<br>
+          ③ 罐子滑行 → 摩擦消耗動能 → 罐子停止<br>
+          ④ 橡皮筋剩餘能量 → 罐子回滾 → 再被摩擦消耗停下<br>
+          <strong>關鍵：推出距離 + 回滾距離 ≠ 總能量</strong>（有一部分變熱散失）
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <a href="rubber-band-lab.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
+          ⚙️ <span><strong style="color:var(--text-primary);">虛擬實驗室</strong>：調整扭轉圈數和橡皮筋條數，觀察罐子滾出的距離</span> <span style="margin-left:auto;">→</span>
+        </a>
+      </div>
+
+      <!-- Layer 1: 概念釐清 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼「轉圈數加倍，推出距離卻沒加倍」？（先自己想再點開）</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p><strong>兩個原因同時作用：</strong>（1）橡皮筋進入<strong>非線性/塑性區</strong>後，每多轉一圈儲存的能量越來越少，不再是 $\tfrac{1}{2}kx^2$ 的二次關係；（2）儲存的能量中，有一部分會在鬆開時轉成熱（內部摩擦），沒變成推動能。所以即使你「轉加倍」，也不會「推加倍」。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：建立飽和模型 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">用數據比較三種模型：線性、冪次、飽和模型——哪個最合理？</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">下表是同一個橡皮筋動力罐，轉不同圈數時的推出距離和回滾距離（每組重複 3 次）：</p>
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table style="font-size:11px;">
+          <thead>
+            <tr style="background:var(--phase1);color:white;">
+              <th style="padding:8px;">轉圈數</th>
+              <th style="padding:8px;">推出距離①(cm)</th>
+              <th style="padding:8px;">推出距離②(cm)</th>
+              <th style="padding:8px;">推出距離③(cm)</th>
+              <th style="padding:8px;">推出平均(cm)</th>
+              <th style="padding:8px;">回滾距離(cm)</th>
+              <th style="padding:8px;">推出−回滾(cm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:8px;background:var(--bg);">5</td><td style="padding:8px;">38</td><td style="padding:8px;">42</td><td style="padding:8px;">40</td><td style="padding:8px;color:var(--phase1);font-weight:600;">40.0</td><td style="padding:8px;">32</td><td style="padding:8px;color:var(--text-muted);">8</td></tr>
+            <tr><td style="padding:8px;background:var(--bg);">10</td><td style="padding:8px;">85</td><td style="padding:8px;">78</td><td style="padding:8px;">82</td><td style="padding:8px;color:var(--phase1);font-weight:600;">81.7</td><td style="padding:8px;">68</td><td style="padding:8px;color:var(--text-muted);">13.7</td></tr>
+            <tr><td style="padding:8px;background:var(--bg);">15</td><td style="padding:8px;">118</td><td style="padding:8px;">125</td><td style="padding:8px;">120</td><td style="padding:8px;color:var(--phase1);font-weight:600;">121.0</td><td style="padding:8px;">95</td><td style="padding:8px;color:var(--text-muted);">26.0</td></tr>
+            <tr><td style="padding:8px;background:var(--bg);">20</td><td style="padding:8px;">142</td><td style="padding:8px;">138</td><td style="padding:8px;">145</td><td style="padding:8px;color:var(--phase1);font-weight:600;">141.7</td><td style="padding:8px;">108</td><td style="padding:8px;color:var(--text-muted);">33.7</td></tr>
+            <tr><td style="padding:8px;background:var(--bg);">25</td><td style="padding:8px;">155</td><td style="padding:8px;">150</td><td style="padding:8px;">158</td><td style="padding:8px;color:var(--phase1);font-weight:600;">154.3</td><td style="padding:8px;">112</td><td style="padding:8px;color:var(--text-muted);">42.3</td></tr>
+            <tr><td style="padding:8px;background:var(--bg);">30</td><td style="padding:8px;">160</td><td style="padding:8px;">156</td><td style="padding:8px;">162</td><td style="padding:8px;color:var(--phase1);font-weight:600;">159.3</td><td style="padding:8px;">115</td><td style="padding:8px;color:var(--text-muted);">44.3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 散佈圖 + 趨勢線 -->
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+          <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">📈 轉圈數 vs 推出距離</span>
+          <div id="trendControls" style="display:flex;align-items:center;gap:5px;margin-left:auto;font-size:11px;color:var(--text-secondary);">
+            模型：
+            <button class="trend-btn active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+            <button class="trend-btn" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+            <button class="trend-btn" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+            <button class="trend-btn" data-trend="sat" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">飽和</button>
+          </div>
+        </div>
+        <canvas id="rbGraphCanvas" width="400" height="240" style="width:100%;border:1px solid #e2e8f0;border-radius:6px;background:#fafbfc;"></canvas>
+        <div id="fitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+      </div>
+
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:12px;color:#92400e;margin-bottom:6px;">🧠 三個模型的長相</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
+          <div><strong style="color:var(--phase1);">線性 $y = ax + b$</strong><br>直線。每多轉一圈，距離增加一樣多。</div>
+          <div><strong style="color:var(--phase1);">冪次 $y = ax^n$</strong><br>$n&lt;1$ 時是緩升的弧線；$n=1$ 退化成線性。</div>
+          <div><strong style="color:var(--phase1);">飽和 $y = D_\infty(1 - e^{-x/\tau})$</strong><br>初期快、逐漸逼近水平線 $D_\infty$（極限值）。</div>
+        </div>
+      </div>
+
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <div class="q-item">
+          <strong>Q1：</strong>切到<strong>線性</strong>模型。看截距 $b$——物理上這代表「轉 0 圈的推出距離」。你的截距是 0 嗎？若不是，這代表線性模型在哪個區域最不準？
+        </div>
+        <div class="q-item">
+          <strong>Q2：</strong>切到<strong>冪次</strong>模型。看指數 $n$——你預期 $n$ 是多少？實際上 $n$ 是大於 1 還是小於 1？這告訴你什麼？
+        </div>
+        <div class="q-item">
+          <strong>Q3：</strong>切到<strong>飽和</strong>模型。讀取 $D_\infty$（推出距離上限）——大約是多少 cm？$\tau$（時間常數）代表什麼？
+        </div>
+        <div class="q-item">
+          <strong>Q4：</strong>三個模型的 R² 都不低，為什麼<strong>飽和模型物理上最合理</strong>？從物理機制（不是從 R²）出發論證。
+        </div>
+      </div>
+
+      <!-- Layer 2: 模型選擇記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你選的模型、R²、與一句理由（從物理機制出發）</div>
+        <textarea class="think-input" data-key="rubber-band-lv1-model" placeholder="我選：飽和模型&#10;R² = …&#10;D∞ ≈ … cm&#10;理由：橡皮筋有彈性極限，超過就…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 模型選擇概念題 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 以下三個理由，哪個<strong>不是</strong>選飽和模型的好理由？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 飽和模型有物理極限 $D_\infty$，對應橡皮筋的彈性上限</button>
+          <button class="think-opt" data-val="b">B. 飽和模型的初期行為（線性增加）和橡皮筋線性區一致</button>
+          <button class="think-opt" data-val="c">C. 飽和模型的 R² 最高，所以最好</button>
+          <button class="think-opt" data-val="d">D. 線性模型預測「轉 1000 圈距離也會增加 1000 倍」，物理不合理</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          R² 高不代表模型好——只代表擬合誤差小。三個模型在這個範圍內 R² 都不低，但只有飽和模型能<strong>預測超出數據範圍</strong>的行為（$x \to \infty$ 時 $y \to D_\infty$）。這叫「外推能力」，是判斷模型好壞的關鍵。
+        </div>
+      </div>
+
+      <div class="collapsible teacher-toggle">
+        <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            Lv1 的核心是用「飽和曲線」建立經驗模型，並論證它比線性或冪次模型更合理。學生常陷入「R² 比誰高」的迷思——要引導他們看<strong>物理機制</strong>和<strong>外推行為</strong>。<br><br>
+            範圍內所有三個模型 R² 都可能超過 0.95，但：線性模型截距偏離 0 且超過 30 圈後嚴重偏差；冪次模型在 $x \to \infty$ 時無上限，違反彈性極限；只有飽和模型的 $D_\infty$ 對應「橡皮筋進入塑性區、不再有額外能量輸出」的物理事實。<br><br>
+            Q4 是<strong>CER 的預演</strong>——下一步會正式做 CER。
+          </p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：CER 論證 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">用「主張—證據—推理」架構論證兩個關鍵問題。這是論證建模的核心。</div>
+
+      <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:6px;">📣 CER 論證框架</div>
+        <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.9;">
+          <strong>Claim（主張）</strong>：你認為答案是什麼？用一句肯定句。<br>
+          <strong>Evidence（證據）</strong>：從數據或觀察中引用<strong>具體數字或圖形特徵</strong>。不能只說「數據顯示」。<br>
+          <strong>Reasoning（推理）</strong>：為什麼這個證據能支持這個主張？需要引用物理原理或模型。
+        </div>
+      </div>
+
+      <!-- CER 任務 1：為什麼飽和 -->
+      <div style="background:white;border:2px solid var(--phase1);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase1);margin-bottom:10px;">
+          🎯 CER 任務 1：為什麼會出現飽和現象？
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          已知：5→10 圈增加 41.7 cm，但 25→30 圈只增加 5 cm。論證為什麼會這樣。
+        </p>
+        <div class="think-block record" style="margin:0;">
+          <div class="think-prompt">✏️ 請用 CER 格式寫下你的論證（建議 4-6 句）</div>
+          <textarea class="think-input" data-key="rubber-band-lv1-cer1" rows="5" placeholder="主張（Claim）：橡皮筋動力罐的推出距離會隨轉圈數增加而飽和。&#10;證據（Evidence）：從 5→10 圈，距離增加 41.7 cm；但從 25→30 圈，只增加 5 cm。飽和模型的 D∞ ≈ 170 cm。&#10;推理（Reasoning）：橡皮筋進入塑性變形區後……"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- CER 任務 2：能量去哪了 -->
+      <div style="background:white;border:2px solid var(--phase2);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:10px;">
+          🎯 CER 任務 2：推出距離 &gt; 回滾距離，能量去哪了？
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          看表格最後一欄「推出−回滾」：5 圈時只差 8 cm，30 圈時差 44.3 cm。為什麼差距會越來越大？
+        </p>
+
+        <!-- 能量流向示意圖 -->
+        <div style="background:var(--bg);border-radius:6px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;">🔄 能量流向（以 30 圈為例）</div>
+          <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
+            <strong>儲存能量 $E_{儲}$</strong>（橡皮筋纏 30 圈）<br>
+            　↓ 推出階段（動能 → 摩擦生熱）<br>
+            推出滑行 ≈ 159 cm（動能的 $E_1$ 被地面摩擦消耗）<br>
+            　↓ 橡皮筋鬆回一部分（剩餘位能轉動能）<br>
+            回滾滑行 ≈ 115 cm（動能的 $E_2$ 被摩擦消耗）<br>
+            <strong>總摩擦損耗 ∝ 159 + 115 = 274 cm 的滑行距離</strong><br>
+            <strong>另外還有：橡皮筋內部摩擦生熱</strong>（儲存時和釋放時都有，不可逆）
+          </div>
+        </div>
+
+        <div class="think-block record" style="margin:0;">
+          <div class="think-prompt">✏️ 請用 CER 格式論證「為什麼高圈數時推出-回滾差距變大」</div>
+          <textarea class="think-input" data-key="rubber-band-lv1-cer2" rows="5" placeholder="主張：…&#10;證據：…&#10;推理：…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- CER 品質自檢 -->
+      <div class="collapsible think-first">
+        <div class="collapsible-header">🔎 CER 品質自檢清單（寫完對照）<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+            □ <strong>Claim</strong> 是明確的肯定句，不是疑問句或猶豫語句<br>
+            □ <strong>Evidence</strong> 有<strong>具體數字</strong>（圈數、距離、R²、$D_\infty$ 等），不只是「數據顯示」<br>
+            □ <strong>Reasoning</strong> 引用物理原理（塑性變形、摩擦生熱、能量守恆），而不只是重述現象<br>
+            □ 三者<strong>邏輯串連</strong>：證據真的能推出主張？推理真的能解釋為什麼證據支持主張？<br>
+            □ 沒有「循環論證」：例如「因為飽和所以飽和」，要能解釋<strong>背後機制</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 5：反思×延伸 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">對照預測、延伸思考、寫下你自己想探究的問題（Lv2 會精雕這部分）。</div>
+
+      <!-- 發現問題 checkpoint -->
+      <div style="background:var(--bg);border-left:4px solid var(--phase3);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:6px;">🔍 發現問題 checkpoint（Phase 3 會精雕）</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          好的研究問題要：有<strong>操縱變因</strong>、<strong>應變變因可量化</strong>、<strong>教室做得到</strong>、<strong>你真的好奇</strong>。下面先練習寫一個，Phase 3 會有完整的鷹架。
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">先翻回 P1–P3 的預測，和你做完的模型分析對照——差多少？差在哪裡？</p>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 12px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:8px;">如果換<strong>粗一點</strong>或<strong>多條並聯</strong>的橡皮筋，$D_\infty$ 會變大還是變小？$\tau$ 呢？</div>
+      <div class="q-item" style="margin-bottom:8px;">罐子重量會影響飽和點嗎？試著預測重罐 vs 輕罐的飽和曲線。</div>
+      <div class="q-item" style="margin-bottom:8px;">推出/回滾距離的「比值」有規律嗎？轉越多圈，比值會變大還是變小？為什麼？</div>
+      <div class="q-item" style="margin-bottom:16px;">如果在光滑冰面上（幾乎無摩擦），飽和現象會消失嗎？還是仍然存在？（提示：飽和有兩個來源）</div>
+
+      <!-- 規劃研究 checkpoint -->
+      <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:6px;">📋 規劃研究 checkpoint（Phase 2 會精雕）</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          要驗證你的探究問題，最少需要：操縱變因的<strong>3 種水準</strong>、每種水準<strong>重複 3 次以上</strong>、控制其他變因、記錄成績時註明「從哪量到哪」。
+        </div>
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫一個你想探究的問題（用「如果改變 ___，___ 會怎樣？」句型）</div>
+        <textarea class="think-input" data-key="rubber-band-lv1-my-question" rows="3" placeholder="例：如果改變橡皮筋條數（1、2、3 條），D∞ 會怎樣變化？"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 1: 預測對照 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 回頭看第 1 步的預測（P1–P3）。哪個你猜對了？哪個猜錯了？錯的原因是什麼？</div>
+        <button class="think-toggle">想好了？點擊看反思方向 →</button>
+        <div class="think-hidden">
+          <p><strong>常見發現：</strong>大多數人預測「加倍圈數就加倍距離」（P3），實驗結果推翻了這個線性直覺。預測錯不丟臉——<strong>認出自己的直覺在哪裡失效，並能說出為什麼，才是科學思維</strong>。Lv2 會帶你把這個疑問轉成精密實驗設計，Lv3 會帶你自己發現新問題。</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/rubber-band-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          橡皮筋 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>主軸：<strong>論證建模精雕</strong>——從多模型比較中選出最合理的經驗模型，並用 CER 論證</li>
+              <li>發現問題 / 規劃研究 是 checkpoint（在第 5 步出現，不展開精雕）</li>
+              <li>核心觀念：橡皮筋 ≠ 理想彈簧，有彈性極限；飽和模型的 $D_\infty$ 對應物理極限</li>
+              <li>R² 高不代表模型好——要看物理機制和外推能力</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">「從三個模型中選出最合理的一個，並用 CER 論證」是本課最值得收錄的片段。建議把你的 Step 3 模型選擇記錄 + Step 4 兩個 CER 貼進歷程檔。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ 反思錨點：你從「R² 高就是好」到「物理機制更重要」的轉變是哪一刻？（2-3 句就好）
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 延伸閱讀：橡皮的非線性彈性</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">
+            理想彈簧的 $E_p = \tfrac{1}{2}kx^2$ 適用於<strong>小形變</strong>、<strong>金屬晶格</strong>等條件。橡皮筋是高分子材料（聚異戊二烯或合成橡膠），分子鏈結構使它：
+          </p>
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:1.9;">
+            <li>小形變時：分子鏈伸直，近似線性（胡克定律成立）</li>
+            <li>中等形變時：分子鏈開始重排對齊，出現非線性剛化</li>
+            <li>大形變時：部分分子鏈斷裂或永久重排，進入<strong>塑性變形</strong>（不可逆），能量轉熱</li>
+          </ul>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;margin-top:8px;">
+            所以飽和曲線不是「橡皮筋壞掉」，而是「儲能機制從彈性轉為熱耗散」。這在材料科學中有嚴謹的應力—應變曲線描述。
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小志想研究「橡皮筋圈數對滾動距離的影響」。他的計畫：纏 5、10、15 圈，各放一次，量滾了多遠。<strong>有什麼問題？至少列出 4 個。</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              （1）只各做 1 次，無法估算誤差；（2）沒說明轉圈方向是否一致；（3）沒說明放手前如何固定；（4）沒控制地面材質；（5）沒說明距離從哪量到哪；（6）圈數範圍太窄（到 15 圈還看不到飽和）；（7）沒紀錄回滾距離，無法檢驗能量守恆。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/rubber-band-lv2.html">橡皮筋動力罐 Lv2 規劃研究 →</a>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+<script>
+// ─── 橡皮筋動力罐：應力應變示意圖 ───
+(function(){
+  const cvs = document.getElementById('stressStrainCanvas');
+  if(!cvs) return;
+  function draw(){
+    const parent = cvs.parentElement;
+    const W = (parent?parent.clientWidth-36:0) || 400;
+    cvs.width = W; cvs.height = 180;
+    const H = 180, pad = {l:44,r:20,t:16,b:30};
+    const ctx = cvs.getContext('2d');
+    ctx.clearRect(0,0,W,H);
+    // 軸
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+    // 標籤
+    ctx.fillStyle = '#64748b'; ctx.font = '11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('形變量（轉圈數）', W/2, H-6);
+    ctx.save(); ctx.translate(12, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('作用力 / 儲存能量', 0, 0); ctx.restore();
+    // 三段曲線：線性 → 非線性剛化 → 塑性平坦
+    const pts = [];
+    const xmax = 30;
+    for(let i=0;i<=100;i++){
+      const x = xmax * i/100;
+      let y;
+      if(x<10) y = 1.2*x;            // 線性區
+      else if(x<22) y = 12 + 2.2*(x-10) + 0.05*(x-10)*(x-10); // 非線性區（漸增）
+      else y = 12 + 2.2*12 + 0.05*144 + 0.4*(x-22);  // 塑性區（增速驟降）
+      pts.push({x, y});
+    }
+    const ymax = 60;
+    function toX(v){ return pad.l + v/xmax * (W-pad.l-pad.r); }
+    function toY(v){ return H-pad.b - v/ymax * (H-pad.t-pad.b); }
+    // 三段著色區
+    const regions = [
+      {start:0, end:10, color:'rgba(59,130,246,0.12)', label:'① 線性區'},
+      {start:10, end:22, color:'rgba(234,179,8,0.12)', label:'② 非線性區'},
+      {start:22, end:30, color:'rgba(239,68,68,0.12)', label:'③ 塑性區'}
+    ];
+    regions.forEach(r=>{
+      ctx.fillStyle = r.color;
+      ctx.fillRect(toX(r.start), pad.t, toX(r.end)-toX(r.start), H-pad.t-pad.b);
+      ctx.fillStyle = '#334155'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(r.label, (toX(r.start)+toX(r.end))/2, pad.t+14);
+    });
+    // 曲線
+    ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    pts.forEach((p,i)=>{ const cx=toX(p.x), cy=toY(p.y); i===0?ctx.moveTo(cx,cy):ctx.lineTo(cx,cy); });
+    ctx.stroke();
+  }
+  draw();
+  window.addEventListener('resize', draw);
+})();
+
+// ─── 橡皮筋動力罐：散佈圖 + 趨勢線引擎 ───
+(function(){
+  const DATA = [
+    {turns:5, vals:[38,42,40]},
+    {turns:10, vals:[85,78,82]},
+    {turns:15, vals:[118,125,120]},
+    {turns:20, vals:[142,138,145]},
+    {turns:25, vals:[155,150,158]},
+    {turns:30, vals:[160,156,162]}
+  ];
+  const pts = DATA.map(d=>({x:d.turns, y:d.vals.reduce((a,b)=>a+b,0)/3}));
+
+  const canvas = document.getElementById('rbGraphCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let trendType = 'none';
+
+  document.getElementById('trendControls').addEventListener('click', e=>{
+    const btn = e.target.closest('.trend-btn');
+    if(!btn) return;
+    trendType = btn.dataset.trend;
+    document.querySelectorAll('#trendControls .trend-btn').forEach(b=>{
+      const active = b===btn;
+      b.style.background = active?'#059669':'var(--bg)';
+      b.style.color = active?'white':'inherit';
+    });
+    drawGraph();
+  });
+
+  function computeFit(x,y,type){
+    const n=x.length;
+    const meanY=y.reduce((a,b)=>a+b,0)/n;
+    const SS_tot=y.reduce((s,yi)=>s+(yi-meanY)**2,0);
+    if(type==='linear'){
+      const sx=x.reduce((a,b)=>a+b,0),sy=y.reduce((a,b)=>a+b,0);
+      const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0),sx2=x.reduce((s,xi)=>s+xi*xi,0);
+      const a=(n*sxy-sx*sy)/(n*sx2-sx*sx),b=(sy-a*sx)/n;
+      const pred=xi=>a*xi+b;
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`模型：距離 = ${a.toFixed(2)}·圈數 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>R² = ${R2.toFixed(4)}<br>截距 b = ${b.toFixed(1)} cm${Math.abs(b)>10?' ⚠️ 偏離 0 太多':' ✓'}<br>斜率 a = ${a.toFixed(2)} cm/圈`};
+    }
+    if(type==='power'){
+      const lx=x.map(Math.log),ly=y.map(Math.log);
+      const slx=lx.reduce((a,b)=>a+b,0),sly=ly.reduce((a,b)=>a+b,0);
+      const slxy=lx.reduce((s,v,i)=>s+v*ly[i],0),slx2=lx.reduce((s,v)=>s+v*v,0);
+      const nn=(n*slxy-slx*sly)/(n*slx2-slx*slx);
+      const a=Math.exp((sly-nn*slx)/n);
+      const pred=xi=>a*Math.pow(xi,nn);
+      const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
+      const R2=SS_tot>0?1-SS_res/SS_tot:0;
+      return{R2,pred,info:`模型：距離 = ${a.toFixed(2)}·圈數^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${nn<1?' (n<1 → 增速遞減，但 x→∞ 仍無上限)':''}`};
+    }
+    if(type==='sat'){
+      // 飽和模型：y = D∞ (1 - exp(-x/τ))；grid search on (D∞, τ)
+      let best = {err: Infinity};
+      for(let D = 140; D <= 220; D += 1){
+        for(let tau = 3; tau <= 30; tau += 0.5){
+          let err = 0;
+          for(let i=0;i<n;i++){
+            const yp = D*(1 - Math.exp(-x[i]/tau));
+            err += (y[i]-yp)**2;
+          }
+          if(err < best.err) best = {err, D, tau};
+        }
+      }
+      const {D, tau} = best;
+      const pred = xi => D*(1 - Math.exp(-xi/tau));
+      const SS_res = x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2, 0);
+      const R2 = SS_tot>0 ? 1 - SS_res/SS_tot : 0;
+      return {R2, pred, info: `模型：距離 = D∞ × (1 − e^(−圈數 / τ))<br>R² = ${R2.toFixed(4)}<br>D∞ = ${D.toFixed(0)} cm（推出距離上限）<br>τ = ${tau.toFixed(1)} 圈（時間常數）<br>✓ 有物理極限，不會無限增加`};
+    }
+    return null;
+  }
+
+  function drawGraph(){
+    const parent=canvas.parentElement;
+    const W=(parent?parent.clientWidth-24:0)||400;
+    canvas.width=W;canvas.height=240;
+    const H=240,pad={l:50,r:20,t:18,b:40};
+    ctx.clearRect(0,0,W,H);
+
+    const xArr=pts.map(p=>p.x),yArr=pts.map(p=>p.y);
+    const xMax=35,yMax=200;
+    function toX(v){return pad.l+(v/xMax)*(W-pad.l-pad.r);}
+    function toY(v){return H-pad.b-(v/yMax)*(H-pad.t-pad.b);}
+
+    // 格線
+    ctx.strokeStyle='#f1f5f9';ctx.lineWidth=1;
+    for(let i=1;i<=4;i++){const gx=pad.l+i/4*(W-pad.l-pad.r),gy=H-pad.b-i/4*(H-pad.t-pad.b);ctx.beginPath();ctx.moveTo(gx,pad.t);ctx.lineTo(gx,H-pad.b);ctx.stroke();ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(W-pad.r,gy);ctx.stroke();}
+    // 軸
+    ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();
+    // 軸標籤
+    ctx.fillStyle='#64748b';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('轉圈數',W/2,H-4);
+    ctx.save();ctx.translate(12,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('推出距離 (cm)',0,0);ctx.restore();
+    // 刻度
+    for(let i=0;i<=5;i++){const xv=7*i,yv=yMax*i/5;ctx.fillStyle='#94a3b8';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(xv,toX(xv),H-pad.b+13);ctx.textAlign='right';ctx.fillText(yv.toFixed(0),pad.l-4,toY(yv)+4);}
+
+    // 趨勢線
+    const fitInfo=document.getElementById('fitInfo');
+    if(trendType!=='none'){
+      const fit=computeFit(xArr,yArr,trendType);
+      if(fit){
+        ctx.strokeStyle='#059669';ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.beginPath();
+        for(let i=0;i<=80;i++){const xv=xMax*i/80;if(xv<=0&&trendType==='power')continue;const yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?ctx.moveTo(cx,cy):ctx.lineTo(cx,cy);}
+        ctx.stroke();ctx.setLineDash([]);
+        // 飽和模型：畫 D∞ 水平虛線
+        if(trendType==='sat' && fit.info){
+          const Dmatch = fit.info.match(/D∞ = (\d+)/);
+          if(Dmatch){
+            const D = parseFloat(Dmatch[1]);
+            ctx.strokeStyle='#ef4444';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+            ctx.beginPath();ctx.moveTo(pad.l,toY(D));ctx.lineTo(W-pad.r,toY(D));ctx.stroke();ctx.setLineDash([]);
+            ctx.fillStyle='#ef4444';ctx.font='bold 10px sans-serif';ctx.textAlign='right';
+            ctx.fillText('D∞ = '+D+' cm', W-pad.r-4, toY(D)-4);
+          }
+        }
+        ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
+        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.6),toY(yMax*0.85));
+        fitInfo.style.display='block';fitInfo.innerHTML=fit.info;
+      }
+    } else {fitInfo.style.display='none';}
+
+    // 數據點
+    pts.forEach(p=>{ctx.beginPath();ctx.arc(toX(p.x),toY(p.y),5,0,Math.PI*2);ctx.fillStyle='#2563eb';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=1.5;ctx.stroke();});
+  }
+  drawGraph();
+  window.addEventListener('resize', drawGraph);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase3/diffraction-lv3">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNA 繞射 Lv3 · 發現問題 · 探究與實作</title>
+  <meta name="description" content="DNA 繞射 Lv3 發現問題：用光探測微觀結構的進階挑戰。">
+  <meta property="og:title" content="DNA 繞射 Lv3 · 發現問題 · 探究與實作">
+  <meta property="og:description" content="DNA 繞射 Lv3 發現問題：用光探測微觀結構的進階挑戰。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/diffraction-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·DNA繞射</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>🔬 DNA 繞射模組 · Lv3 發現問題</h1>
+    <p class="subtitle">「用光看見結構」挑戰賽——反推未知狹縫的特徵，然後提出新問題</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">競賽 · 自主探究</span>
+    </div>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
+    <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
+    <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
+    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 1: 挑戰規則                            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel active">
+      <div class="step-action">
+        了解挑戰規則、材料與學習目標。
+      </div>
+
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🏆 挑戰規則</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">器材</div>
+            紅色雷射筆（λ = 650 nm）×1、光學台架、尺、白紙螢幕、未知結構樣本（老師提供）
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">任務</div>
+            測量繞射圖案，用 $\Delta y_0 = kL\lambda/a$（k = 2）反推未知結構的特徵尺寸。
+          </div>
+        </div>
+        <div style="background:var(--bg);padding:10px 12px;border-radius:6px;margin-bottom:12px;font-size:13px;color:var(--text-secondary);">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">未知結構可能是</div>
+          不同寬度的狹縫（0.05–0.2 mm）、雙狹縫（狹縫間距不同）、圓孔、甚至一根頭髮 (直徑 50–100 μm)
+        </div>
+        <div class="info-box orange">
+          ⚠️ <strong>你的任務</strong>：像 Rosalind Franklin 一樣，用光學圖案「看見」看不見的結構。勝負判定：推算值與實際值誤差最小的組獲勝。
+        </div>
+      </div>
+
+      <div class="section-title">學習目標</div>
+      <div class="card" style="margin-bottom:16px;">
+        <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+          <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：環境光對測量精度的影響有多大？）</li>
+          <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：雙狹縫間距（0.2mm vs 0.4mm vs 0.6mm）如何影響干涉條紋間距？）</li>
+          <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「繞射的物理原理是什麼？」是查書題，應改成「波長（紅光 vs 綠光）如何影響繞射圖案的大小？」）</li>
+          <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+        </ul>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 2: 製作與測試                          -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="step-action">
+        搭建光學系統、測量繞射圖案、反推未知結構的尺寸。
+      </div>
+
+      <div class="section-title">測量方案</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:10px;">Step 1 · 光學搭建</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">用光學台架固定雷射、未知結構、螢幕。調整位置和角度讓繞射圖案清晰。測量並記錄 L（狹縫到螢幕的距離）。</p>
+
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:10px;margin-top:14px;">Step 2 · 測量 Δy₀</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">在螢幕上用尺測量中央亮紋寬度（從左邊暗紋到右邊暗紋的距離）。做 3 次，取平均。</p>
+
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:10px;margin-top:14px;">Step 3 · 反推結構尺寸</div>
+        <p style="font-size:12px;color:var(--text-secondary);">用 a = 2Lλ / Δy₀ 計算未知結構的寬度（或特徵尺寸）。</p>
+      </div>
+
+      <div class="collapsible think-first">
+        <div class="collapsible-header">🧠 反推策略提示：先自己想，再點開<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+            <p><strong>關鍵反演公式：</strong>從 $\Delta y_0 = 2L\lambda/a$，反推得 $a = 2L\lambda / \Delta y_0$</p>
+            <p><strong>Step 1：</strong>精確測量 L（狹縫到螢幕距離）。用測量工具確認，記錄單位。</p>
+            <p><strong>Step 2：</strong>在暗室中觀察繞射圖，準確找出中央亮紋左右邊界。邊界是「最後看得見亮」的地方。</p>
+            <p><strong>Step 3：</strong>用直尺量 Δy₀（從左暗紋到右暗紋）。做 3 次測量，計算平均值和標準差。</p>
+            <p><strong>Step 4：</strong>代入公式。注意量綱一致（都用 mm 或都用 m）。</p>
+            <p><strong>Step 5：</strong>核對結果是否合理。例如狹縫應該是 0.01–0.2 mm；頭髮直徑應該是 0.05–0.1 mm。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">競賽流程與數據表</div>
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 1 · 測量與計算（50 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">各組領取一個未知樣本 → 搭建光學系統 → 測量 L 和 Δy₀（3 次） → 計算平均值 → 代入公式反推特徵尺寸 → 老師檢查計算。</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 2 · 揭曉與比對（25 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">各組報告推算值 → 老師揭曉實際值 → 計算誤差 → 排名（誤差最小 = 冠軍）→ 討論為什麼有偏差。</p>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;margin-bottom:20px;">
+        <table>
+          <thead><tr><th>組別</th><th>未知結構</th><th>L (cm)</th><th>測量 Δy₀ (mm)</th><th>推算特徵尺寸 (mm)</th><th>實際尺寸 (mm)</th><th>誤差 (%)</th></tr></thead>
+          <tbody>
+            <tr><td>第 1 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>第 2 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>第 3 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>…</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- ════════════════════════════════════ -->
+    <!-- 發現問題鷹架：直覺對照站 -->
+    <!-- ════════════════════════════════════ -->
+    <section class="step-card" style="border-left:4px solid #16a34a;background:#f0fdf4;">
+      <div class="step-title" style="color:#166534;">🔍 直覺對照站：從落差中挖問題</div>
+      <div class="step-action">科學提問常從「我以為會這樣，結果不是」的直覺落差開始。不用公式、不用模型——先誠實面對你自己的直覺。</div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">💭 Step 1：實作前的直覺預期</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          回到你動手之前——那時你心裡以為結果會怎樣？用白話寫，不要背公式。
+        </div>
+        <textarea placeholder="我做之前以為會 ___，因為 ___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">👀 Step 2：實作時的觀察</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          實際做下去、或看同學做，你觀察到什麼？特別是<strong>預期外的</strong>結果、驚訝、卡關、意外。
+        </div>
+        <div style="background:#fef3c7;border:1px solid #fbbf24;padding:10px;border-radius:6px;font-size:12px;color:#78350f;margin-bottom:10px;">
+          💡 這個模組可以留意：縫寬、縫到屏距離、光波長對亮紋寬度的影響；亮紋邊緣的清晰度；手切縫的毛邊造成的雜訊
+        </div>
+        <textarea placeholder="我看到 ___，其中最讓我意外的是 ___" style="width:100%;min-height:70px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">⚖️ Step 3：落差盤點</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          你的直覺預期和實際觀察差在哪？往哪個方向偏？偏多還偏少？可以從「方向、大小、時機」三個角度想。
+        </div>
+        <textarea placeholder="預期：___&#10;實際：___&#10;落差：___（方向/大小/時機）" style="width:100%;min-height:80px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">❓ Step 4：把落差變問題</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          從落差最讓你困惑的地方，用句型生出一個可探究的問題：<br>
+          · 「改變 ___，___ 會怎麼變？」<br>
+          · 「什麼條件下 ___ 會反轉？」<br>
+          · 「___ 和 ___ 哪個影響比較大？」
+        </div>
+        <textarea placeholder="我的探究問題：___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div style="background:#dcfce7;border:1px solid #16a34a;padding:12px;border-radius:8px;font-size:13px;color:#14532d;">
+        <strong>👉 承接下一步：</strong>這個從落差長出來的問題，就是你接下來要自己規劃研究、自己建模、自己解釋的起點。發現問題不需要公式——只需要誠實的直覺 + 敏銳的觀察。
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 3: 從競賽到問題                         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="step-action">
+        從競賽中的觀察反思，轉化為可探究的科學問題。
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">💭 賽後反思：你在競賽中遇到什麼困難？</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">不管誰贏了，每組都有寶貴的觀察。那些「不完美」就是問題的起點。</p>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item phase3">
+            <strong>Step 1 · 記錄觀察（15 分鐘）</strong>：寫下 3 個你在競賽中注意到的現象或困難
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 2 · 轉化為問題（15 分鐘）</strong>：用「如果改變___，___會怎樣？」的句型，從觀察轉化為至少 3 個可探究的問題
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 3 · 判斷問題品質（15 分鐘）</strong>：用「好問題的特徵」篩選，保留最有價值的 1–2 個
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">什麼是「好問題」？什麼不是？</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="collapsible think-first">
+          <div class="collapsible-header">🧠 看範例，區分好問題和需改進的問題<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <div style="font-size:13px;color:var(--text-secondary);line-height:2.2;">
+              <div style="margin-bottom:16px;padding:12px;background:var(--bg);border-radius:6px;">
+                <div style="font-weight:700;color:var(--text-muted);margin-bottom:8px;">❌ 需改進的問題</div>
+                <p style="margin-bottom:8px;"><strong>「繞射是什麼？」</strong><br>→ 這是「查書題」，不是「可做實驗回答的問題」</p>
+                <p style="margin-bottom:8px;"><strong>「雷射很亮，我眼睛刺痛。」</strong><br>→ 這是「觀察或陳述」，不是「問題」。改成：「雷射的亮度（強度）會影響測量精度嗎？」</p>
+                <p><strong>「為什麼繞射會發生？」</strong><br>→ 太寬泛，可能涉及深層波動理論。改成：「狹縫寬度在什麼範圍內，繞射現象才明顯可見？」</p>
+              </div>
+
+              <div style="margin-bottom:16px;padding:12px;background:var(--bg);border-radius:6px;">
+                <div style="font-weight:700;color:#15803d;margin-bottom:8px;">✅ 好問題的特徵</div>
+                <p style="margin-bottom:8px;"><strong>「雙狹縫的間距（0.2 mm vs 0.4 mm vs 0.6 mm）如何影響干涉條紋的間距？」</strong><br>→ 有明確的操縱變因、可測量的反應變因、能在教室裡做</p>
+                <p style="margin-bottom:8px;"><strong>「用繞射法量頭髮粗細，不同人的測量結果一致嗎？或者同一個人直髮 vs 捲髮的結果不同嗎？」</strong><br>→ 把「生物學」和「物理測量」結合，很有創意</p>
+                <p><strong>「環境光（明室 vs 暗室）對繞射圖案清晰度和測量精度的影響是什麼？」</strong><br>→ 實用、可控制、有明確的預期結論</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 1: 測量精度的困難 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：在你反推特徵尺寸的過程中，誤差最可能來自哪一步？是測 L？還是測 Δy₀？還是公式計算？</div>
+        <button class="think-toggle">想好了？點擊看分析 →</button>
+        <div class="think-hidden">
+          <p><strong>誤差來源分析：</strong>① 測 L 的誤差（±0.1cm 級別）→ 可探究「L 的測量方式（單點 vs 多點平均）對推算精度的影響」<br>② 測 Δy₀ 的誤差（邊界難判定）→ 可探究「環境光線對邊界識別和測量精度的影響」<br>③ 公式計算（量綱單位）→ 可探究「用不同量綱單位計算是否得到一致結果」</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 問題記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你在測量或計算時最遇到困難的地方，以及你想深入探究的問題</div>
+        <textarea class="think-input" data-key="diffraction-lv3-q1" placeholder="例如：我發現邊暗紋的邊界很模糊，很難準確測量。我想探究「亮度如何影響測量精度」…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 操縱變因辨識 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 「環境光對測量精度的影響」這個問題中，操縱變因是什麼？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 繞射圖案的亮度</button>
+          <button class="think-opt" data-val="b">B. 環境光的明暗（你故意改變的）</button>
+          <button class="think-opt" data-val="c">C. 測量精度</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 對！操縱變因是「你故意改變」的因素——在這裡是「環境光的明暗」（從暗室到普通亮度）。A 是結果，C 是應變變因（你量出來的）。</div>
+      </div>
+
+      <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:22px;">💡</span>
+        <div>
+          <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+          <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  STEP 4: 後續探究                            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="step-action">
+        規劃並執行自主探究，深化你的科學問題。
+      </div>
+
+      <div class="section-title">後續探究（節 3–4，自由選題）</div>
+      <div class="card" style="margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">賽後反思中，你選出了最好的 1–2 個問題。現在你可以自主規劃一個小型探究：</p>
+        <div style="display:grid;gap:10px;">
+          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
+            <div style="font-weight:700;margin-bottom:6px;">選項 A · 「雙狹縫干涉」探究</div>
+            <p>用雙狹縫代替單狹縫，測量干涉條紋間距如何隨狹縫間距、光波長變化。</p>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
+            <div style="font-weight:700;margin-bottom:6px;">選項 B · 「環境與精度」探究</div>
+            <p>固定樣本和 L，在不同環境光條件下重複測量 Δy₀，比較數據的重複性。</p>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
+            <div style="font-weight:700;margin-bottom:6px;">選項 C · 「波長效應」探究</div>
+            <p>用紅雷射（650 nm）和綠雷射（532 nm）照同一個狹縫，比較 Δy₀ 的變化。</p>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text-secondary);">
+            <div style="font-weight:700;margin-bottom:6px;">選項 D · 自主設計</div>
+            <p>提出你自己的研究問題（需通過老師審查），自行規劃實驗。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;background:#f9fafb;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:10px;">你的探究計畫</div>
+        <div style="display:grid;gap:12px;font-size:12px;color:var(--text-secondary);">
+          <div>
+            <strong>研究問題：</strong>
+            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
+          </div>
+          <div>
+            <strong>預測：</strong>
+            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
+          </div>
+          <div>
+            <strong>操縱變因 / 測量反應變因 / 控制變因：</strong>
+            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
+          </div>
+          <div>
+            <strong>預期的數據蒐集與分析方法：</strong>
+            <p style="border-bottom:1px solid var(--border);padding:8px 0;color:var(--text-muted);">___________________________________________</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
+          <div style="background:white;border-radius:6px;padding:10px 12px;">
+            <div style="font-weight:700;margin-bottom:4px;">📐 規劃階段</div>
+            把你的任務限制告訴 AI（材料、規則、目標），請它幫你發想設計方案。記得截圖保存對話——展示你怎麼提問比 AI 給了什麼答案更重要。
+          </div>
+          <div style="background:white;border-radius:6px;padding:10px 12px;">
+            <div style="font-weight:700;margin-bottom:4px;">📝 反思階段</div>
+            活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+          </div>
+        </div>
+        <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ 規劃時 AI 是設計夥伴；反思時 AI 是文字編輯。兩個階段都是你在主導。</p>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!--  POST-CLASS                                  -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="post-class">
+      <button class="post-class-toggle">📌 教師備註與課程資源</button>
+      <div class="post-class-body" style="display:none;">
+
+        <div class="section-title">教學目標</div>
+        <div class="card" style="margin-bottom:16px;">
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>透過「用光反推結構」的競賽，讓學生整合 Lv1–2 的知識，體驗 Franklin 探究 DNA 的思維模式</li>
+            <li>在失敗和成功中自然產生「為什麼」的疑問，引導學生提出高品質的科學問題</li>
+            <li>培養學生從「被動學習」向「自主探究」的轉變</li>
+          </ul>
+        </div>
+
+        <div class="section-title">教師備註</div>
+        <div class="card" style="margin-bottom:16px;">
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li><strong>競賽公平性：</strong>確保所有組的 L 相同、雷射波長相同，只有樣本不同。</li>
+            <li><strong>樣本準備：</strong>可用單狹縫（0.05, 0.1, 0.15 mm）、頭髮（量好直徑 ≈ 70 μm）、細金屬絲等，包裝隱藏實際尺寸。</li>
+            <li><strong>激光安全：</strong>開賽前重申「不對眼睛、不掃過人」。配備激光安全眼鏡。</li>
+            <li><strong>「好問題」教學：</strong>第二節可讓全班評選最有趣的 2–3 個問題，為後續探究討論。</li>
+            <li><strong>分化教學：</strong>進度快的組可同時進行節 3–4 的探究；進度慢的組可與老師個別指導。</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 學習歷程提示 -->
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">保留：(1) 競賽的測量單、計算過程；(2) 「好問題」篩選過程（什麼是好問題的判定依據）；(3) 後續探究的完整計畫與執行報告。這套材料展現了你「從實踐中發現問題、提出假設、自主設計後續探究」的完整科學思維歷程——正是 Rosalind Franklin 做科研的方式。</p>
+      <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+        ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+        你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+        <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「第一次船壁做 3cm 太矮改成 5cm」才有說服力。</span>
+      </div>
+    </div>
+
+    <!-- 單元導航 -->
+    <div class="unit-nav">
+      <a href="../phase2/diffraction-lv2.html">← DNA 繞射 Lv2 規劃研究</a>
+      <a href="../../index.html">回到課程總覽 →</a>
+    </div>
+
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

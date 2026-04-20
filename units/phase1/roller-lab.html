@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/roller-lab">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>虛擬實驗室 · 翻滾仔滾動模擬器 · 探究與實作</title>
+  <meta name="description" content="翻滾仔滾動模擬器，調整坡度與裝置參數觀察滾動行為。">
+  <meta property="og:title" content="虛擬實驗室 · 翻滾仔滾動模擬器 · 探究與實作">
+  <meta property="og:description" content="翻滾仔滾動模擬器，調整坡度與裝置參數觀察滾動行為。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/roller-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>翻滾仔模組</span><span>›</span>
+      <span style="color:var(--phase1)">虛擬實驗室</span>
+    </div>
+    <h1>⚙️ 翻滾仔滾動模擬器</h1>
+    <p class="subtitle">調整齒軌間距與坡度，觀察翻滾仔的滾動速度與距離</p>
+  </div>
+  <div class="page-body">
+
+    <div style="background:linear-gradient(135deg,#b45309,#d97706);border-radius:12px;padding:20px;color:white;margin-bottom:20px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:14px;">🔬 齒軌翻滾裝置模擬器</div>
+      <p style="font-size:12px;opacity:0.85;margin-bottom:14px;">翻滾仔（遠哲科學教育基金會設計）在齒軌上以位能轉動能的方式滾動。坡度越陡、齒軌越密，滾動行為不同。末速約為 $v = \sqrt{10gh/7}$。</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">坡度角度 (°)</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="r-angle" min="5" max="45" value="15" step="5" style="flex:1;accent-color:#fbbf24;" oninput="document.getElementById('r-angle-val').textContent=this.value+'°'">
+            <span id="r-angle-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:35px;text-align:right;">15°</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">軌道長度 (cm)</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="r-length" min="30" max="100" value="60" step="10" style="flex:1;accent-color:#fbbf24;" oninput="document.getElementById('r-length-val').textContent=this.value+'cm'">
+            <span id="r-length-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:50px;text-align:right;">60cm</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
+          <label style="font-size:12px;opacity:0.85;">翻滾仔質量 (g)</label>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <input type="range" id="r-mass" min="10" max="50" value="20" step="5" style="flex:1;accent-color:#fbbf24;" oninput="document.getElementById('r-mass-val').textContent=this.value+'g'">
+            <span id="r-mass-val" style="font-family:'DM Mono',monospace;font-size:14px;min-width:35px;text-align:right;">20g</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:14px;">
+        <button onclick="rollRoller()" style="background:#fbbf24;color:#78350f;border:none;padding:8px 18px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;">⚙️ 釋放！</button>
+        <button onclick="clearRoller()" style="background:rgba(255,255,255,0.15);color:white;border:none;padding:8px 14px;border-radius:6px;font-size:12px;cursor:pointer;">清除數據</button>
+      </div>
+
+      <canvas id="roller-canvas" width="680" height="250" style="width:100%;background:#1c1917;border-radius:8px;margin-bottom:10px;"></canvas>
+      <div id="roller-result" style="font-family:'DM Mono',monospace;font-size:13px;opacity:0.85;min-height:20px;"></div>
+
+      <div style="margin-top:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄</div>
+        <table style="width:100%;font-size:12px;background:rgba(255,255,255,0.05);border-radius:6px;">
+          <thead><tr style="color:#fcd34d;">
+            <th style="padding:8px;">角度</th><th style="padding:8px;">長度(cm)</th><th style="padding:8px;">質量(g)</th><th style="padding:8px;">末速(m/s)</th><th style="padding:8px;">滾動時間(s)</th>
+          </tr></thead>
+          <tbody id="roller-data"></tbody>
+        </table>
+        <button onclick="exportRollerData()" style="margin-top:8px;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;">📋 複製數據</button>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:8px;font-size:13px;margin-bottom:20px;">
+      <div class="q-item">Q1：坡度越陡，末速越快——這和什麼物理原理有關？</div>
+      <div class="q-item">Q2：改變質量對末速有影響嗎？如果沒有，為什麼？（提示：能量守恆）</div>
+      <div class="q-item">Q3：真實的翻滾仔末速會比模擬值小——能量損失去哪了？</div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="roller-lv1.html">← 回到翻滾仔 Lv1</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('roller-canvas');
+  const ctx = canvas.getContext('2d');
+  let dataRows = [];
+
+  function drawScene(angle){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const rad = angle * Math.PI / 180;
+    // 斜面
+    const x1 = 60, y1 = 60;
+    const x2 = 60 + 400 * Math.cos(rad);
+    const y2 = 60 + 400 * Math.sin(rad);
+    ctx.strokeStyle = '#78716c'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    // 齒軌紋路
+    ctx.strokeStyle = '#a8a29e'; ctx.lineWidth = 1;
+    for(let i=0;i<20;i++){
+      const t = i/20;
+      const gx = x1 + t*(x2-x1);
+      const gy = y1 + t*(y2-y1);
+      const nx = -Math.sin(rad)*4;
+      const ny = Math.cos(rad)*4;
+      ctx.beginPath(); ctx.moveTo(gx+nx,gy+ny); ctx.lineTo(gx-nx,gy-ny); ctx.stroke();
+    }
+    // 地面
+    ctx.strokeStyle = '#44403c'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x2,y2); ctx.lineTo(canvas.width-20,y2); ctx.stroke();
+    return {x1,y1,x2,y2};
+  }
+
+  window.rollRoller = function(){
+    const angle = parseInt(document.getElementById('r-angle').value);
+    const length = parseInt(document.getElementById('r-length').value) / 100; // m
+    const mass = parseInt(document.getElementById('r-mass').value) / 1000; // kg
+
+    const g = 9.8;
+    const rad = angle * Math.PI / 180;
+    const h = length * Math.sin(rad);
+    // 翻滾仔有轉動慣量：v = √(2gh/(1+I/mr²)) ≈ √(10gh/7) for sphere
+    const v = Math.sqrt(10*g*h/7);
+    const noise = 0.95 + Math.random()*0.1;
+    const vFinal = v * noise;
+    const t = 2*length / (vFinal); // 近似平均速度法
+
+    const scene = drawScene(angle);
+    // 畫翻滾仔在底部
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath(); ctx.arc(scene.x2+20, scene.y2-8, 8, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#78350f'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    document.getElementById('roller-result').textContent =
+      `角度 ${angle}° | 長度 ${(length*100).toFixed(0)}cm | 高度差 ${(h*100).toFixed(1)}cm | 末速 ${vFinal.toFixed(2)} m/s | 時間 ${t.toFixed(2)}s`;
+
+    dataRows.push({angle, length:(length*100).toFixed(0), mass:(mass*1000).toFixed(0), v:vFinal.toFixed(2), t:t.toFixed(2)});
+    const tbody = document.getElementById('roller-data');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td style="padding:6px 8px;text-align:center;">${angle}°</td>
+      <td style="padding:6px 8px;text-align:center;">${(length*100).toFixed(0)}</td>
+      <td style="padding:6px 8px;text-align:center;">${(mass*1000).toFixed(0)}</td>
+      <td style="padding:6px 8px;text-align:center;color:#fcd34d;">${vFinal.toFixed(2)}</td>
+      <td style="padding:6px 8px;text-align:center;">${t.toFixed(2)}</td>`;
+    tbody.appendChild(tr);
+  };
+
+  window.clearRoller = function(){
+    dataRows = [];
+    drawScene(15);
+    document.getElementById('roller-result').textContent = '';
+    document.getElementById('roller-data').innerHTML = '';
+  };
+
+  window.exportRollerData = function(){
+    let txt = '角度(°)\t長度(cm)\t質量(g)\t末速(m/s)\t時間(s)\n';
+    dataRows.forEach(r => { txt += `${r.angle}\t${r.length}\t${r.mass}\t${r.v}\t${r.t}\n`; });
+    navigator.clipboard.writeText(txt).then(()=>{
+      const btn = event.target; btn.textContent='✅ 已複製！';
+      setTimeout(()=>btn.textContent='📋 複製數據',1500);
+    });
+  };
+
+  drawScene(15);
+})();
+</script>
+</body>
+</html>

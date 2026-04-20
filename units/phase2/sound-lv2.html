@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase2/sound-lv2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>聲音 Lv2 · 聲音變因實驗 · 探究與實作</title>
+  <meta name="description" content="聲音 Lv2 規劃研究：設計聲音變因實驗，系統化探究影響聲音特性的因素。">
+  <meta property="og:title" content="聲音 Lv2 · 聲音變因實驗 · 探究與實作">
+  <meta property="og:description" content="聲音 Lv2 規劃研究：設計聲音變因實驗，系統化探究影響聲音特性的因素。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/sound-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·聲音</span><span>›</span>
+      <span style="color:var(--phase2)">Lv2 規劃研究</span>
+    </div>
+    <h1>🔊 聲音模組 · Lv2 規劃研究</h1>
+    <p class="subtitle">什麼影響聲音？你來設計實驗、你來回答。</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">變因設計</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從現象或理論出發，提出可驗證的研究問題（例如：弦的長度如何影響頻率？）</li>
+      <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：用頻譜 app 量化聲音特徵）</li>
+      <li>能有系統地蒐集數據，並判斷數據的可靠性（控制環境噪音、app 取樣率）</li>
+      <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+    </ul>
+  </div>
+
+  <!-- Step Navigation -->
+  <nav class="step-nav">
+    <button class="step-tab active" data-step="0">1. 選題</button>
+    <button class="step-tab" data-step="1">2. 設計實驗</button>
+    <button class="step-tab" data-step="2">3. 執行與數據</button>
+    <button class="step-tab" data-step="3">4. 分析與發表</button>
+  </nav>
+
+  <div class="page-body">
+    <!-- Step 1: 選題 -->
+    <div class="step-panel active">
+      <div class="step-action">從下列研究問題中選一個，或自己設計一個新的問題。</div>
+
+      <div class="section-title">可能的研究問題</div>
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">弦的長度如何影響頻率？</div>
+          <div style="font-size:12px;color:var(--text-muted);">操縱：弦長（10, 20, 30, 40, 50 cm）　應變：頻率（Hz）</div>
+        </div>
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">容器開口大小如何影響共鳴頻率？</div>
+          <div style="font-size:12px;color:var(--text-muted);">操縱：瓶口直徑　應變：共鳴頻率（吹氣聽到的主要音高）</div>
+        </div>
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">水位高度如何影響敲擊杯子的音高？</div>
+          <div style="font-size:12px;color:var(--text-muted);">操縱：水位（0, 2, 4, 6, 8 cm）　應變：頻率（Hz）</div>
+        </div>
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">距離如何影響接收到的音量（dB）？</div>
+          <div style="font-size:12px;color:var(--text-muted);">操縱：距離（20, 50, 100, 150, 200 cm）　應變：分貝值</div>
+        </div>
+        <div class="q-item phase2">
+          <div style="font-weight:700;font-size:13px;">你自己想到的問題：___________</div>
+          <div style="font-size:12px;color:var(--text-muted);">操縱：___　應變：___</div>
+        </div>
+      </div>
+
+      <!-- Layer 3: 聲音變因選擇題 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 暖身題：如果你想研究「弦的長度如何影響頻率」，下列哪個測量方式最準確？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 用耳朵聽，覺得高音就是高頻率，低音就是低頻率</button>
+          <button class="think-opt" data-val="b">B. 用手機的分貝計 app 量 dB 值，對比大小</button>
+          <button class="think-opt" data-val="c">C. 用頻譜分析 app（如 Spectroid），直接讀出主頻率的 Hz 值</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          C 最好。頻率是客觀的物理量（Hz），要用 app 直接測量。A 太主觀；B 量的是音量（dB），不是頻率。選對測量工具，數據才有效。
+        </div>
+      </div>
+
+      <!-- Layer 2: 選題記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你要研究哪個聲音變因？為什麼選這個而不是其他的？</div>
+        <textarea class="think-input" data-key="sound-lv2-choice" placeholder="例如：選『弦長』，因為我想驗證音樂課學的『弦短=高音』是否量化後也成立…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: 設計實驗 -->
+    <div class="step-panel">
+      <div class="step-action">設計你的實驗計畫、同儕互評、諮詢 AI，最後填寫研究規劃表。</div>
+
+      <div style="background:var(--bg);border-radius:6px;padding:14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:12px;margin-bottom:10px;">📝 實驗計畫表</div>
+        <div style="display:grid;gap:8px;font-size:12px;color:var(--text-secondary);">
+          <div>1. 研究問題：___________</div>
+          <div>2. 操縱變因：___________ 　水準（至少 5 個）：___________</div>
+          <div>3. 控制變因（至少 3 個）：___________</div>
+          <div>4. 應變變因：___________　　測量工具：___________</div>
+          <div>5. 每個水準重複次數：___________ 次</div>
+          <div>6. 預測：我認為___________，因為___________</div>
+        </div>
+      </div>
+
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;margin-bottom:14px;">
+        📱 推薦 app：Spectroid（頻譜分析）、Physics Toolbox（分貝計）、Tuner（音高偵測）。全部免費。
+      </div>
+
+      <!-- 同儕互評 -->
+      <div class="section-title">同儕互評</div>
+      <div class="card" style="border-top:3px solid var(--express);margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">🗣️ 交換實驗計畫，互相檢查</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">拿到另一組的計畫書後，回答以下問題：</p>
+        <div style="display:grid;gap:8px;font-size:12px;">
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">① 可重現性：</strong>我照你的步驟做，能得到一樣的結果嗎？測量距離、角度、環境寫清楚了嗎？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">② 控制變因：</strong>聲源的音量、環境的安靜程度、手機放的位置——有控制嗎？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">③ 數據品質：</strong>5 個水準 × 3 次重複，足夠看出趨勢嗎？變化量大於誤差嗎？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">④ 一個建議：</strong>如果你能改一個地方讓實驗更好，你會改什麼？</div>
+          <div class="q-item phase2"><strong style="color:var(--text-primary);">⑤ 研究問題：</strong>這組的研究問題夠明確嗎？能不能再縮小範圍，讓問題更聚焦？（例如：「聲音有什麼特性」→「瓶中水量如何影響吹奏頻率」）</div>
+        </div>
+      </div>
+
+      <!-- AI 檢核 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 檢核站</div>
+        <p style="font-size:13px;color:#1e3a8a;line-height:1.8;margin-bottom:10px;">完成你的實驗計畫後，把計畫交給 AI（ChatGPT、Perplexity 等），請它幫你找漏洞：</p>
+        <div style="display:grid;gap:6px;font-size:12px;color:#1e3a8a;">
+          <div style="background:white;border-radius:4px;padding:8px 12px;">「我的控制變因有沒有遺漏？」</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">「這個實驗設計有什麼潛在問題？」</div>
+          <div style="background:white;border-radius:4px;padding:8px 12px;">「你覺得我的數據量夠嗎？需要幾組重複？」</div>
+        </div>
+        <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px;color:#1e3a8a;">
+          <strong>💬 複製貼上範本：</strong>「我正在設計一個實驗，研究問題是＿＿。操縱變因是＿＿（水準：＿＿），應變變因是＿＿，控制變因有＿＿。請幫我檢查：(1) 控制變因有沒有遺漏 (2) 實驗步驟有沒有潛在問題 (3) 數據量夠不夠」<br>
+          <span style="font-size:10px;color:#60a5fa;">給 AI 越多上下文，它的回饋越有用。空白處填入你自己的內容再送出。</span>
+        </div>
+        <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是代筆人。它指出問題，你決定要不要改、怎麼改。</p>
+      </div>
+
+      <!-- Layer 1: 環境控制想一想 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：聲音實驗最容易出錯的地方是「環境噪音」。你怎麼控制教室的背景噪音，才能確保量到的是你的聲源、不是外面的機車聲？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>可能的控制方式：<strong>選擇安靜的時間</strong>（早自習？午休？）、<strong>關上門窗</strong>、<strong>團隊專注力</strong>（同學安靜）、<strong>多次重複</strong>（如果有一次被噪音干擾，平均後影響較小）。計畫裡要寫明「背景噪音 < 50 dB」之類的標準，或「每次量測前檢查分貝計讀數不超過 X」。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 互評記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 同儕互評後，對方指出什麼問題最重要？你怎麼改的？</div>
+        <textarea class="think-input" data-key="sound-lv2-peer" placeholder="例如：同學說『你沒寫手機放的位置』，我加上『手機距聲源 10 cm，置於聲源正下方 30 度角』…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- 研究規劃表連結 -->
+      <div style="background:var(--bg);border:1.5px solid var(--phase2);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:22px;">📋</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);">填寫研究規劃表</div>
+          <div style="font-size:12px;color:var(--text-secondary);">用六步流程把你的想法變成可執行的實驗計畫 → <a href="research-plan.html" style="color:var(--phase2);font-weight:600;">開始填寫</a></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 執行與數據 -->
+    <div class="step-panel">
+      <div class="step-action">收集實驗數據。先跑一次試驗確認流程，再進行完整實驗。</div>
+
+      <div class="section-title">數據收集</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">執行你的實驗計畫，收集至少 5 個水準的數據，每個水準至少重複 3 次。</p>
+
+      <!-- 快速驗證 -->
+      <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;color:#92400e;font-size:12px;margin-bottom:6px;">⚡ 先跑一次再改</div>
+        <div style="font-size:11px;color:#78350f;line-height:1.7;">
+          計畫寫完別急著做完整實驗。花 10 分鐘用最粗糙的方式先試一次（只測 2 個水準、不用重複），確認你的操作流程跑得通、數據量得到。發現問題回來改計畫，比做完才發現便宜一百倍。
+        </div>
+      </div>
+
+      <!-- 小組分工 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;color:#1e40af;font-size:12px;margin-bottom:6px;">🤝 小組分工提示</div>
+        <div style="font-size:11px;color:#1e3a8a;line-height:1.7;">
+          建議分三個角色：<strong>操作員</strong>（動手做）、<strong>記錄員</strong>（即時記數據）、<strong>品管員</strong>（檢查控制變因有沒有跑掉）。每次換水準時輪換。互評時先聽完對方說完，再給建議。
+        </div>
+      </div>
+
+      <!-- Layer 1: 數據異常判斷 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你量弦長 10 cm 時三次的頻率分別是 440 Hz、438 Hz、520 Hz。520 那次差很多。你要不要刪掉？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>先檢查：那一次有沒有環境噪音干擾（隔壁同學在說話？）？app 有沒有出現過故障或讀到了不同的聲源？弦有沒有抖動？如果能找到明確原因（例如「那時候空調突然開了」），可以標記失效、重新測。但如果找不出原因，還是<strong>保留這個數據</strong>，在報告裡記載「有一筆離群值」。保留它比隱瞞更誠實。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 執行困難記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 執行實驗時遇到什麼最大的困難？怎麼解決的？</div>
+        <textarea class="think-input" data-key="sound-lv2-difficulty" placeholder="例如：最難的是『保持弦的張力』，因為手會抖。我用膠帶固定一端，用螺旋夾固定另一端，才能穩定…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: 分析與發表 -->
+    <div class="step-panel">
+      <div class="step-action">分析數據、畫圖、回答討論問題、準備發表。</div>
+
+      <div class="section-title">數據分析指引</div>
+      <div class="card" style="border-top:3px solid var(--phase1);margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📊 從數據到結論——不要只看平均值</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;color:var(--phase1);margin-bottom:4px;">散佈圖 + 趨勢線</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">
+              X 軸 = 操縱變因，Y 軸 = 應變變因。<br>
+              嘗試線性趨勢線和冪次趨勢線，比較 R²。<br>
+              R² 越接近 1，模型越好。
+            </div>
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:12px;">
+            <div style="font-weight:700;color:var(--phase2);margin-bottom:4px;">不確定度與異常值</div>
+            <div style="color:var(--text-secondary);line-height:1.8;">
+              每個水準重複 3+ 次，算標準差。<br>
+              某次量測明顯偏離？先記錄、不刪除。<br>
+              在報告中說明為什麼你認為它是異常值。
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+          💡 聲音實驗常見陷阱：環境噪音、app 取樣率、距離沒固定。分析時要說明這些對數據的影響。
+        </div>
+      </div>
+
+      <!-- 數據判讀提示 -->
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:8px;">📈 數據會說話——但你要會聽</div>
+        <div style="font-size:12px;color:#14532d;line-height:1.8;">
+          收完數據別急著寫結論，先問自己三個問題：<br>
+          <strong>① 趨勢</strong>：散佈圖的點大致往哪走？上升？下降？先升後降？沒有趨勢？<br>
+          <strong>② 離散</strong>：點是緊貼趨勢線，還是散得很開？散開代表不確定度大，結論要保守。<br>
+          <strong>③ 意外</strong>：有沒有哪個點特別「跳出來」？它可能是操作失誤，也可能是最有趣的發現。<br>
+          <span style="font-size:11px;color:#15803d;">能回答這三題，你就有資格寫結論了。不確定怎麼畫圖？→ <a href="../../tools/excel.html" style="color:#166534;font-weight:600;">Excel 工具箱</a></span>
+        </div>
+      </div>
+
+      <!-- 討論問題 -->
+      <div class="section-title">討論問題</div>
+      <div style="display:grid;gap:8px;margin-bottom:16px;">
+        <div class="q-item phase2"><div style="font-size:13px;font-weight:600;">Q1：你的操縱變因和應變變因之間是什麼關係？（線性？反比？）</div></div>
+        <div class="q-item phase2"><div style="font-size:13px;font-weight:600;">Q2：你控制變因的策略成功嗎？有什麼沒控制好的？</div></div>
+        <div class="q-item phase2"><div style="font-size:13px;font-weight:600;">Q3：你的結果和預測一致嗎？不一致的原因可能是什麼？</div></div>
+      </div>
+
+      <!-- Layer 3: 關係判斷題 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 你的數據：弦長 50 cm 時 110 Hz、25 cm 時 220 Hz、12.5 cm 時 440 Hz。請問操縱變因與應變變因的關係是？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 線性關係（弦長越短，頻率越高）</button>
+          <button class="think-opt" data-val="b">B. 無規律關係</button>
+          <button class="think-opt" data-val="c">C. 反比關係（弦長 × 頻率 = 常數；或頻率 ∝ 1/弦長）</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          C 對。注意到：50 × 110 = 5500，25 × 220 = 5500，12.5 × 440 = 5500。乘積都是常數，代表反比關係。如果你的數據呈現這種模式，試著用 Excel 畫「1/弦長 vs 頻率」的圖，應該會變成直線。
+        </div>
+      </div>
+
+      <!-- Layer 2: 結論記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用 1-2 句話總結你的發現。包括「操縱變因名稱」、「應變變因名稱」和「兩者的關係」。</div>
+        <textarea class="think-input" data-key="sound-lv2-conclusion" placeholder="例如：我的實驗顯示，弦長和頻率呈反比關係，符合音樂物理的預期。弦越短，發出的聲音頻率越高…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Post-class Section -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 檢核、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body">
+        <!-- 學習目標 -->
+        <div style="margin-bottom:20px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">🎯 學習目標</div>
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>能從現象或理論出發，提出可驗證的研究問題</li>
+            <li>能設計含操縱變因、控制變因與應變變因的實驗計畫</li>
+            <li>能有系統地蒐集數據，並判斷數據的可靠性</li>
+            <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+          </ul>
+        </div>
+
+        <!-- 教學目標 -->
+        <div style="margin-bottom:20px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">📌 教學目標（教師視角）</div>
+          <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>讓學生從觀察揚聲器/樂器出發，自選一個變因設計實驗</li>
+            <li>練習「用 app 測量聲音數據」作為量化工具</li>
+            <li>建立「觀察 → 變因 → 實驗 → 數據 → 結論」的完整經驗</li>
+          </ul>
+        </div>
+
+        <!-- 學習歷程提示 -->
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">你的「實驗計畫表」、「預測 vs 結果比較」和同儕互評回饋，是規劃研究與溝通能力的最佳證據。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你原本的實驗計畫和實際做的有什麼不同？改了什麼？為什麼改？<br>
+            <span style="font-size:11px;color:#8b5cf6;">「計畫 vs 實際」的落差本身就是最好的反思素材——改得好代表你在成長。</span>
+          </div>
+        </div>
+
+        <!-- 單元導航 -->
+        <div class="unit-nav">
+          <a href="../phase1/sound-lv1.html">← 聲音 Lv1</a>
+          <a href="../phase3/sound-lv3.html">聲音 Lv3 發現問題 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/sound-lab">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>橡皮筋頻率實驗室 · 探究與實作</title>
+  <meta name="description" content="聲音頻率虛擬實驗室，探索不同頻率聲波的波形與聽覺感受。">
+  <meta property="og:title" content="橡皮筋頻率實驗室 · 探究與實作">
+  <meta property="og:description" content="聲音頻率虛擬實驗室，探索不同頻率聲波的波形與聽覺感受。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/sound-lab.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <style>
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-panel: #111827;
+      --bg-surface: #1e293b;
+      --border-dim: #334155;
+      --text-primary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-bright: #f8fafc;
+      --phosphor: #22d3ee;
+      --amber: #fbbf24;
+      --neon-green: #4ade80;
+      --neon-red: #f87171;
+      --accent: #6366f1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 16px;
+      line-height: 1.6;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border-dim);
+      background: var(--bg-panel);
+      color: var(--phosphor);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+    .back-link:hover {
+      border-color: var(--phosphor);
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+
+    .lab-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 24px;
+      background: linear-gradient(135deg, #111827 0%, #1e293b 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border-dim);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+    }
+    .lab-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-bright);
+      text-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+      margin-bottom: 8px;
+    }
+    .lab-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Mode selector */
+    .mode-selector {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .mode-btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      border: 2px solid var(--border-dim);
+      background: var(--bg-panel);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-muted);
+    }
+    .mode-btn:hover {
+      border-color: var(--phosphor);
+      color: var(--text-primary);
+    }
+    .mode-btn.active {
+      background: rgba(34, 211, 238, 0.1);
+      border-color: var(--phosphor);
+      color: var(--phosphor);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+    }
+
+    /* Main layout */
+    .lab-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 1024px) {
+      .lab-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Canvas area */
+    .canvas-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+    .canvas-panel canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Control panel */
+    .control-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .control-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .control-section label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .param-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .param-btn {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-dim);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .param-btn:hover {
+      border-color: var(--amber);
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.2);
+    }
+    .param-btn.active {
+      background: rgba(251, 191, 36, 0.15);
+      border-color: var(--amber);
+      color: var(--amber);
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+    }
+
+    .frequency-display {
+      background: rgba(34, 211, 238, 0.05);
+      border: 2px solid var(--phosphor);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .frequency-display .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .frequency-display .value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--phosphor);
+      text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+      font-family: 'Courier New', monospace;
+    }
+    .frequency-display .unit {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .pluck-button {
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, #22d3ee 0%, #4ade80 100%);
+      color: var(--bg-dark);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pluck-button:hover:not(:disabled) {
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+      transform: translateY(-2px);
+    }
+    .pluck-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .record-button {
+      padding: 12px;
+      border-radius: 8px;
+      border: 2px solid var(--amber);
+      background: transparent;
+      color: var(--amber);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .record-button:hover:not(:disabled) {
+      background: rgba(251, 191, 36, 0.15);
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+    }
+    .record-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Data table */
+    .data-section {
+      margin-top: 24px;
+    }
+    .data-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .data-table th {
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid var(--border-dim);
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--phosphor);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .data-table td {
+      border: 1px solid var(--border-dim);
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 13px;
+      background: rgba(30, 41, 59, 0.5);
+    }
+    .data-table td.label {
+      text-align: left;
+      color: var(--amber);
+      font-weight: 600;
+    }
+    .data-table td.avg {
+      background: rgba(74, 222, 128, 0.08);
+      color: var(--neon-green);
+      font-weight: 600;
+    }
+
+    /* Plot container */
+    .plot-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-dim);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .plot-container canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .plot-empty {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* Vibration animation */
+    @keyframes vibrate {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+    }
+    .vibrating {
+      animation: vibrate 0.08s ease-in-out 4;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .lab-header h1 {
+        font-size: 20px;
+      }
+      .frequency-display .value {
+        font-size: 28px;
+      }
+      .param-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<a href="sound-lv1.html" class="back-link">← 返回聲音 Lv1</a>
+
+<div class="lab-header">
+  <h1>🎸 橡皮筋頻率實驗室</h1>
+  <p>撥弦測頻率——探索長度與張力對聲音的影響</p>
+</div>
+
+<div class="mode-selector">
+  <button class="mode-btn active" data-mode="A">
+    模式 A：長度 vs 頻率
+  </button>
+  <button class="mode-btn" data-mode="B">
+    模式 B：張力 vs 頻率
+  </button>
+</div>
+
+<div class="lab-container">
+  <div class="canvas-panel">
+    <canvas id="setupCanvas" width="320" height="400"></canvas>
+  </div>
+
+  <div class="control-panel">
+    <div class="control-section" id="paramSection">
+      <label>參數選擇</label>
+      <div class="param-buttons" id="paramButtons"></div>
+    </div>
+
+    <div class="frequency-display">
+      <div class="label">目前頻率</div>
+      <div class="value" id="freqDisplay">--- Hz</div>
+      <div class="unit">Hz (赫茲)</div>
+    </div>
+
+    <button class="pluck-button" id="pluckBtn">🎵 撥弦</button>
+    <button class="record-button" id="recordBtn" disabled>✓ 記錄測量</button>
+
+    <div class="control-section">
+      <label>試次</label>
+      <div style="font-size: 13px; color: var(--text-muted); text-align: center;">
+        <span id="trialCount">0</span> / 3
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="data-section">
+  <h3>📊 實驗數據</h3>
+  <div style="overflow-x: auto;">
+    <table class="data-table" id="dataTable">
+      <thead>
+        <tr>
+          <th>參數</th>
+          <th>試次 1</th>
+          <th>試次 2</th>
+          <th>試次 3</th>
+          <th>平均值</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+  </div>
+
+  <div class="plot-container">
+    <canvas id="plotCanvas" width="600" height="280"></canvas>
+  </div>
+</div>
+
+<script>
+  // ============ Constants ============
+  const MODE_A = 'A';  // Length vs Frequency
+  const MODE_B = 'B';  // Tension vs Frequency
+
+  const LENGTHS = [10, 15, 20, 25, 30];  // cm
+  const WEIGHTS = [50, 100, 150, 200, 250];  // grams
+  const BASE_FREQ_AT_30CM = 220;  // Hz
+
+  // ============ State ============
+  let currentMode = MODE_A;
+  let currentParam = LENGTHS[LENGTHS.length - 1];  // Start at 30cm
+  let measurements = {};  // {paramValue: [freq1, freq2, freq3]}
+  let lastFrequency = null;
+  let isVibrating = false;
+
+  // ============ Web Audio — 撥弦發聲 ============
+  let audioCtx = null;
+
+  function ensureAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  /**
+   * 播放一個「彈撥」音：sawtooth 波 + 快速指數衰減
+   * @param {number} freq  頻率 Hz
+   * @param {number} dur   衰減秒數（預設 0.6s）
+   */
+  function playPluck(freq, dur = 0.6) {
+    const ctx = ensureAudioCtx();
+    const now = ctx.currentTime;
+
+    // Oscillator — sawtooth 比較像橡皮筋的泛音豐富音色
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(freq, now);
+
+    // Gain envelope — 快速衰減模擬彈撥
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+
+    // 低通濾波讓音色柔和一點，不會太刺耳
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(Math.min(freq * 4, 4000), now);
+    filter.frequency.exponentialRampToValueAtTime(Math.min(freq * 1.5, 1500), now + dur * 0.5);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + dur + 0.05);
+  }
+
+  // ============ DOM Elements ============
+  const modeButtons = document.querySelectorAll('.mode-btn');
+  const paramButtons = document.getElementById('paramButtons');
+  const pluckBtn = document.getElementById('pluckBtn');
+  const recordBtn = document.getElementById('recordBtn');
+  const freqDisplay = document.getElementById('freqDisplay');
+  const trialCountSpan = document.getElementById('trialCount');
+  const setupCanvas = document.getElementById('setupCanvas');
+  const plotCanvas = document.getElementById('plotCanvas');
+  const tableBody = document.getElementById('tableBody');
+
+  const setupCtx = setupCanvas.getContext('2d');
+  const plotCtx = plotCanvas.getContext('2d');
+
+  // ============ Physics Calculations ============
+  function calculateFrequency(param) {
+    if (currentMode === MODE_A) {
+      // f = (1/2L) * sqrt(T/μ)
+      // Since T and μ are constant: f ∝ 1/L
+      const lengthCm = param;
+      const ratio = 30 / lengthCm;
+      return BASE_FREQ_AT_30CM * ratio;
+    } else {
+      // f ∝ sqrt(T)
+      // Assume tension = weight * g, so f ∝ sqrt(weight)
+      const weightGm = param;
+      const ratio = Math.sqrt(weightGm / 250);
+      return BASE_FREQ_AT_30CM * ratio;
+    }
+  }
+
+  function addMeasurementNoise(freq) {
+    // ±3% random noise
+    const noise = (Math.random() - 0.5) * 0.06 * freq;
+    return Math.round((freq + noise) * 10) / 10;
+  }
+
+  // ============ UI Updates ============
+  function updateModeButtons() {
+    modeButtons.forEach(btn => {
+      const isActive = btn.dataset.mode === currentMode;
+      btn.classList.toggle('active', isActive);
+    });
+  }
+
+  function updateParamButtons() {
+    paramButtons.innerHTML = '';
+    const params = currentMode === MODE_A ? LENGTHS : WEIGHTS;
+    const unit = currentMode === MODE_A ? ' cm' : ' g';
+
+    params.forEach(param => {
+      const btn = document.createElement('button');
+      btn.className = 'param-btn';
+      btn.textContent = param + unit;
+      btn.dataset.param = param;
+      if (param === currentParam) {
+        btn.classList.add('active');
+      }
+      btn.addEventListener('click', () => selectParameter(param));
+      paramButtons.appendChild(btn);
+    });
+  }
+
+  function selectParameter(param) {
+    currentParam = param;
+    updateParamButtons();
+    updateTrialCount();
+    drawSetup();
+  }
+
+  function updateTrialCount() {
+    const count = (measurements[currentParam] || []).length;
+    trialCountSpan.textContent = count;
+    recordBtn.disabled = lastFrequency === null;
+  }
+
+  function drawSetup() {
+    setupCtx.fillStyle = '#0a0e1a';
+    setupCtx.fillRect(0, 0, setupCanvas.width, setupCanvas.height);
+
+    setupCtx.strokeStyle = '#334155';
+    setupCtx.lineWidth = 1;
+    setupCtx.strokeRect(1, 1, setupCanvas.width - 2, setupCanvas.height - 2);
+
+    if (currentMode === MODE_A) {
+      drawModeA();
+    } else {
+      drawModeB();
+    }
+  }
+
+  function drawModeA() {
+    const boxX = 60, boxY = 150, boxW = 200, boxH = 80;
+
+    // Draw box
+    setupCtx.strokeStyle = '#22d3ee';
+    setupCtx.lineWidth = 2;
+    setupCtx.strokeRect(boxX, boxY, boxW, boxH);
+
+    // Draw rubber band
+    setupCtx.strokeStyle = '#fbbf24';
+    setupCtx.lineWidth = 4;
+    setupCtx.beginPath();
+    setupCtx.moveTo(boxX, boxY + boxH/2);
+    setupCtx.lineTo(boxX + boxW, boxY + boxH/2);
+    setupCtx.stroke();
+
+    // Draw finger position (shows active length)
+    const fingerX = boxX + (currentParam / 30) * boxW;
+    setupCtx.fillStyle = '#4ade80';
+    setupCtx.beginPath();
+    setupCtx.arc(fingerX, boxY + boxH/2 - 15, 6, 0, Math.PI * 2);
+    setupCtx.fill();
+
+    // Label
+    setupCtx.fillStyle = '#e2e8f0';
+    setupCtx.font = '13px sans-serif';
+    setupCtx.textAlign = 'center';
+    setupCtx.fillText(`有效長度: ${currentParam} cm`, setupCanvas.width / 2, 80);
+    setupCtx.fillText(`頻率 ≈ ${Math.round(calculateFrequency(currentParam))} Hz`, setupCanvas.width / 2, 280);
+  }
+
+  function drawModeB() {
+    const stringX = 160, topY = 80, bottomY = 300;
+    const stringW = 8;
+
+    // Draw fixed point
+    setupCtx.fillStyle = '#22d3ee';
+    setupCtx.fillRect(stringX - stringW/2, topY - 10, stringW, 20);
+
+    // Draw string
+    setupCtx.strokeStyle = '#fbbf24';
+    setupCtx.lineWidth = 6;
+    setupCtx.beginPath();
+    setupCtx.moveTo(stringX, topY);
+    setupCtx.lineTo(stringX, bottomY);
+    setupCtx.stroke();
+
+    // Draw weight
+    const weightHeight = 30;
+    setupCtx.fillStyle = '#f87171';
+    setupCtx.fillRect(stringX - 20, bottomY, 40, weightHeight);
+    setupCtx.strokeStyle = '#e2e8f0';
+    setupCtx.lineWidth = 1;
+    setupCtx.strokeRect(stringX - 20, bottomY, 40, weightHeight);
+
+    // Label
+    setupCtx.fillStyle = '#e2e8f0';
+    setupCtx.font = '13px sans-serif';
+    setupCtx.textAlign = 'center';
+    setupCtx.fillText(`張力: ${currentParam} g`, setupCanvas.width / 2, 50);
+    setupCtx.fillText(`頻率 ≈ ${Math.round(calculateFrequency(currentParam))} Hz`, setupCanvas.width / 2, 360);
+  }
+
+  function displayFrequency(freq) {
+    lastFrequency = freq;
+    freqDisplay.textContent = freq.toFixed(1) + ' Hz';
+    updateTrialCount();
+  }
+
+  function recordMeasurement() {
+    if (lastFrequency === null) return;
+
+    if (!measurements[currentParam]) {
+      measurements[currentParam] = [];
+    }
+
+    if (measurements[currentParam].length < 3) {
+      measurements[currentParam].push(lastFrequency);
+      lastFrequency = null;
+      freqDisplay.textContent = '--- Hz';
+      updateTrialCount();
+      updateDataTable();
+      drawPlot();
+    }
+  }
+
+  function updateDataTable() {
+    const params = currentMode === MODE_A ? LENGTHS : WEIGHTS;
+    tableBody.innerHTML = '';
+
+    params.forEach(param => {
+      const row = document.createElement('tr');
+      const data = measurements[param] || [];
+
+      let avgText = '—';
+      if (data.length === 3) {
+        const avg = (data[0] + data[1] + data[2]) / 3;
+        avgText = avg.toFixed(1);
+      }
+
+      row.innerHTML = `
+        <td class="label">${param}</td>
+        <td>${data[0] ? data[0].toFixed(1) : '—'}</td>
+        <td>${data[1] ? data[1].toFixed(1) : '—'}</td>
+        <td>${data[2] ? data[2].toFixed(1) : '—'}</td>
+        <td class="avg">${avgText}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  function drawPlot() {
+    const params = currentMode === MODE_A ? LENGTHS : WEIGHTS;
+    const padding = 50;
+    const width = plotCanvas.width - padding * 2;
+    const height = plotCanvas.height - padding * 2;
+
+    // Clear
+    plotCtx.fillStyle = '#1e293b';
+    plotCtx.fillRect(0, 0, plotCanvas.width, plotCanvas.height);
+
+    // Grid
+    plotCtx.strokeStyle = '#334155';
+    plotCtx.lineWidth = 1;
+    plotCtx.setLineDash([4, 4]);
+
+    const gridLines = 5;
+    for (let i = 0; i <= gridLines; i++) {
+      const x = padding + (i / gridLines) * width;
+      const y = padding + (i / gridLines) * height;
+      plotCtx.beginPath();
+      plotCtx.moveTo(x, padding);
+      plotCtx.lineTo(x, padding + height);
+      plotCtx.stroke();
+      plotCtx.beginPath();
+      plotCtx.moveTo(padding, y);
+      plotCtx.lineTo(padding + width, y);
+      plotCtx.stroke();
+    }
+    plotCtx.setLineDash([]);
+
+    // Axes
+    plotCtx.strokeStyle = '#22d3ee';
+    plotCtx.lineWidth = 2;
+    plotCtx.beginPath();
+    plotCtx.moveTo(padding, padding + height);
+    plotCtx.lineTo(padding, padding);
+    plotCtx.lineTo(padding + width, padding);
+    plotCtx.stroke();
+
+    // Axis labels
+    plotCtx.fillStyle = '#e2e8f0';
+    plotCtx.font = '11px sans-serif';
+    plotCtx.textAlign = 'center';
+    plotCtx.fillText(currentMode === MODE_A ? '長度 (cm)' : '張力 (g)', padding + width / 2, plotCanvas.height - 10);
+
+    plotCtx.save();
+    plotCtx.translate(15, padding + height / 2);
+    plotCtx.rotate(-Math.PI / 2);
+    plotCtx.fillText('頻率 (Hz)', 0, 0);
+    plotCtx.restore();
+
+    // Plot data points
+    const hasData = Object.keys(measurements).some(key => measurements[key].length > 0);
+    if (!hasData) {
+      plotCtx.fillStyle = '#94a3b8';
+      plotCtx.font = '13px sans-serif';
+      plotCtx.textAlign = 'center';
+      plotCtx.fillText('等待測量數據...', padding + width / 2, padding + height / 2);
+      return;
+    }
+
+    // Find scale
+    let minParam = Math.min(...params);
+    let maxParam = Math.max(...params);
+    let minFreq = 0;
+    let maxFreq = 0;
+
+    Object.keys(measurements).forEach(param => {
+      measurements[param].forEach(freq => {
+        maxFreq = Math.max(maxFreq, freq);
+      });
+    });
+    maxFreq = Math.max(maxFreq, BASE_FREQ_AT_30CM * 3);
+
+    // Draw theoretical curve
+    plotCtx.strokeStyle = 'rgba(34, 211, 238, 0.3)';
+    plotCtx.lineWidth = 2;
+    plotCtx.setLineDash([4, 4]);
+    plotCtx.beginPath();
+    let first = true;
+    for (let p = minParam; p <= maxParam; p += (maxParam - minParam) / 50) {
+      const freq = calculateFrequency(p);
+      const x = padding + ((p - minParam) / (maxParam - minParam)) * width;
+      const y = padding + height - ((freq - minFreq) / (maxFreq - minFreq)) * height;
+      if (first) {
+        plotCtx.moveTo(x, y);
+        first = false;
+      } else {
+        plotCtx.lineTo(x, y);
+      }
+    }
+    plotCtx.stroke();
+    plotCtx.setLineDash([]);
+
+    // Draw data points
+    plotCtx.fillStyle = '#fbbf24';
+    params.forEach(param => {
+      const data = measurements[param] || [];
+      if (data.length > 0) {
+        const avg = data.reduce((a, b) => a + b) / data.length;
+        const x = padding + ((param - minParam) / (maxParam - minParam)) * width;
+        const y = padding + height - ((avg - minFreq) / (maxFreq - minFreq)) * height;
+
+        plotCtx.beginPath();
+        plotCtx.arc(x, y, 5, 0, Math.PI * 2);
+        plotCtx.fill();
+
+        // Draw individual points
+        plotCtx.fillStyle = 'rgba(251, 191, 36, 0.5)';
+        data.forEach((freq, idx) => {
+          const offset = (idx - 1) * 15;
+          const px = x + offset;
+          plotCtx.beginPath();
+          plotCtx.arc(px, y, 2, 0, Math.PI * 2);
+          plotCtx.fill();
+        });
+        plotCtx.fillStyle = '#fbbf24';
+      }
+    });
+
+    // Scale labels
+    plotCtx.fillStyle = '#94a3b8';
+    plotCtx.font = '10px sans-serif';
+    plotCtx.textAlign = 'right';
+    for (let i = 0; i <= gridLines; i++) {
+      const param = minParam + (i / gridLines) * (maxParam - minParam);
+      const x = padding + (i / gridLines) * width;
+      plotCtx.fillText(Math.round(param), x - 5, padding + height + 15);
+    }
+    plotCtx.textAlign = 'right';
+    for (let i = 0; i <= gridLines; i++) {
+      const freq = (i / gridLines) * maxFreq;
+      const y = padding + height - (i / gridLines) * height;
+      plotCtx.fillText(Math.round(freq), padding - 10, y + 3);
+    }
+  }
+
+  // ============ Event Handlers ============
+  modeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentMode = btn.dataset.mode;
+      currentParam = currentMode === MODE_A ? 30 : 250;
+      measurements = {};
+      lastFrequency = null;
+      freqDisplay.textContent = '--- Hz';
+      updateModeButtons();
+      updateParamButtons();
+      updateTrialCount();
+      updateDataTable();
+      drawSetup();
+      drawPlot();
+    });
+  });
+
+  pluckBtn.addEventListener('click', () => {
+    if (isVibrating) return;
+    isVibrating = true;
+    pluckBtn.disabled = true;
+
+    // 計算真實頻率（用於發聲）
+    const freq = calculateFrequency(currentParam);
+
+    // 🔊 發出對應頻率的聲音
+    playPluck(freq, 0.55);
+
+    // Animate vibration
+    setupCanvas.classList.add('vibrating');
+
+    // 400ms 後顯示帶雜訊的測量值
+    setTimeout(() => {
+      setupCanvas.classList.remove('vibrating');
+      const noisyFreq = addMeasurementNoise(freq);
+      displayFrequency(noisyFreq);
+      isVibrating = false;
+      pluckBtn.disabled = false;
+    }, 400);
+  });
+
+  recordBtn.addEventListener('click', recordMeasurement);
+
+  // ============ Initialize ============
+  updateModeButtons();
+  updateParamButtons();
+  updateTrialCount();
+  updateDataTable();
+  drawSetup();
+  drawPlot();
+</script>
+
+</body>
+</html>

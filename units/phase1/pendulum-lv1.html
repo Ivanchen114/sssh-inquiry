@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/pendulum-lv1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🕰️ 單擺 Lv1 · 數據發現重力加速度 · 探究與實作</title>
+  <meta name="description" content="單擺 Lv1 論證建模：透過虛擬實驗測量不同擺長的週期，利用 T² vs L 線性回歸計算重力加速度。">
+  <meta property="og:title" content="單擺 Lv1 · 數據發現重力加速度 · 探究與實作">
+  <meta property="og:description" content="單擺 Lv1 論證建模：透過虛擬實驗測量不同擺長的週期，利用 T² vs L 線性回歸計算重力加速度。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/pendulum-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .lab-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 700px) {
+      .lab-wrap { grid-template-columns: 1fr; }
+    }
+    .pendulum-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .length-btn {
+      width: 100%;
+      padding: 8px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .length-btn:hover { border-color: var(--phase1); background: #f0fdf4; }
+    .length-btn.active { border-color: var(--phase1); background: #d1fae5; color: #065f46; }
+    .length-btn.done { border-color: #6ee7b7; background: #ecfdf5; }
+    .length-btn.done::after { content: ' ✓'; color: #059669; }
+
+    .pendulum-canvas-wrap {
+      position: relative;
+      width: 180px;
+      height: 320px;
+      margin: 0 auto;
+    }
+    #pendulumCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+
+    .record-btn {
+      width: 100%;
+      padding: 9px;
+      background: var(--phase1);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .record-btn:hover { opacity: 0.88; }
+    .record-btn:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+
+    .data-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #dataTable { font-size: 12px; width: 100%; }
+    #dataTable th { background: var(--phase1); color: white; padding: 6px 8px; }
+    #dataTable td { padding: 5px 8px; text-align: center; }
+    #dataTable tr:nth-child(even) { background: var(--bg); }
+
+    #graphCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+      width: 100%;
+    }
+    .insight-box {
+      background: #f0fdf4;
+      border: 1px solid #6ee7b7;
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+    .noise-display {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a>
+      <span>›</span>
+      <span>單擺</span>
+      <span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>🕰️ 單擺 · Lv1 論證建模</h1>
+    <p class="subtitle">用數據「發現」重力加速度。從量測到模型的完整探究迴圈。</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag inquiry-structured">結構式探究</span>
+      <span class="tag">4 節課</span>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:10px;line-height:1.7;">
+      在這個 Lv，<strong style="color:var(--text-primary);">問題和方法都由老師定好</strong>，你的任務是<strong style="color:var(--phase1);">把數據跑出來、論證你看到的規律</strong>。
+      這是進入探究的第一步——先學會「如何論證」，下一 Lv 再學「如何規劃」。
+    </p>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標（這個 Lv 你要學會）</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能用「主張—證據—推理（CER）」的架構，對<strong>別人給你的數據</strong>進行科學論證</li>
+      <li>能辨識數據中的趨勢，並以<strong>數學模型</strong>（線性、冪次、多項式）描述 T 與 L 的關係</li>
+      <li>能評估模型的適用範圍與限制，分辨「R² 高」和「物理上合理」的差別</li>
+      <li>能把<strong>直覺預測</strong>和<strong>結構化假設</strong>放在一起比較，看出兩者的差別</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 📐 量測準則（獨立參考，不占一階段） ═══ -->
+  <div class="measurement-note">
+    <div class="mn-title"><span>📐</span><span>量測準則（全程可隨時翻回來查）</span></div>
+    <ul>
+      <li><strong>計時</strong>：測 10 個週期，再除以 10（相對誤差降為 1/10）</li>
+      <li><strong>重複</strong>：每種擺長至少測 <code>3</code> 次，取平均</li>
+      <li><strong>控制變因</strong>：擺角固定在 <code>≤ 15°</code>；質量不變；同一顆擺錘</li>
+      <li><strong>不確定度</strong>：人為反應時間約 <code>±0.1–0.2 s</code>，分散到 10 個週期後 <code>≈ ±0.02 s</code></li>
+    </ul>
+  </div>
+
+  <!-- ═══ 四階段探究導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ 階段一：發現問題（老師提供情境+問題；學生寫直覺預測） ═══ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">老師給你一個情境和問題，你先用直覺猜答案</div>
+        <p class="stage-desc">這個 Lv 老師已經把「要研究什麼」定好了。你的工作是——在看任何數據之前，把你的<strong>直覺預測</strong>寫下來。4 節課後回來對照，你就會親眼看到「直覺 vs 數據」的落差。</p>
+        <span class="who-bar teacher">🔒 情境與問題：老師提供</span>
+        <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
+      </div>
+
+      <!-- 🔒 老師提供：情境 + 研究問題（合併成一塊） -->
+      <div class="teacher-block">
+        <div class="tb-title">📖 今天的課堂</div>
+        <p>從老式擺鐘、盪鞦韆到地震儀，背後都是<strong>同一條規律</strong>。1656 年 Huygens 做出擺鐘時，就是靠這條規律把時間誤差從一天 15 分鐘砍到 10 秒——關鍵不是更精巧的齒輪，而是他發現了<strong>週期和繩長的數學關係</strong>。</p>
+        <p>今天你要走同一段路：用虛擬實驗測不同繩長的週期，從數據挖出 T 和 L 的關係。<strong>不用先背公式，看你能不能從圖裡直接看出模型。</strong></p>
+      </div>
+
+      <div class="teacher-block">
+        <div class="tb-title">🎯 今天要回答的研究問題</div>
+        <p><strong>Q1：</strong>單擺的<strong>振幅</strong>會不會影響週期？</p>
+        <p><strong>Q2：</strong>單擺的<strong>擺長 L</strong> 和<strong>週期 T</strong> 之間，是什麼數學關係？</p>
+        <p style="color:var(--text-muted);font-size:12px;margin-top:4px;">（答案藏在數據裡。老師不會直接告訴你。）</p>
+      </div>
+
+      <!-- ✏️ 學生填寫：直覺預測 -->
+      <div class="student-block">
+        <div class="sb-title">💭 在看任何數據之前，用直覺回答三個預測題</div>
+        <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.8;">
+          <strong>寫得粗糙沒關係</strong>——這是「直覺預測」，不是「結構化假設」（那是下一階段老師會示範的）。先把你當下的想法寫下來，4 節課後回來對照。
+        </p>
+        <div class="q-item" style="margin-bottom:6px;">
+          <strong>P1：</strong>擺得比較高（大振幅），週期會比較長、比較短、還是一樣？
+        </div>
+        <div class="q-item" style="margin-bottom:6px;">
+          <strong>P2：</strong>擺錘從彈珠換成鉛球（質量 ×50），週期會怎麼變？
+        </div>
+        <div class="q-item" style="margin-bottom:10px;">
+          <strong>P3：</strong>繩子越長，擺動越___（快/慢）？
+        </div>
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 寫下你的三個預測（一句話一個即可）</div>
+          <textarea class="think-input" data-key="pendulum-lv1-predict" placeholder="例如：P1 預計會一樣快，因為…&#10;P2 預計質量不影響…&#10;P3 預計越…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ 階段二：規劃研究（老師全部示範；學生對照自己的預測） ═══ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">看老師怎麼把「直覺」升級成「結構化假設」和「實驗計畫」</div>
+        <p class="stage-desc">下一 Lv 你就要自己寫假設和設計實驗了。這個 Lv 先看老師示範——重點是<strong>結構化假設</strong>（有變因、有方向、有量化關係）和你剛剛寫的<strong>直覺預測</strong>差在哪。</p>
+        <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
+      </div>
+
+      <!-- 🔒 老師提供：結構化假設 vs 你的直覺預測 -->
+      <div class="teacher-block">
+        <div class="tb-title">🧪 把直覺升級成「結構化假設」</div>
+        <p style="margin-bottom:10px;">結構化假設 = <strong>操縱變因 → 應變變因</strong>的可檢驗命題，要寫清楚<strong>方向</strong>和（能寫就寫）<strong>量化關係</strong>。下面三條是老師從你的 P1–P3 升級而來的範例：</p>
+
+        <div class="hypothesis-box">
+          <span class="hb-label">假設 H1（對應你的 P1）</span>
+          <div class="hb-content">若振幅 θ 在小角度範圍內改變，則週期 T <strong>幾乎不變</strong>。</div>
+        </div>
+        <div class="hypothesis-box">
+          <span class="hb-label">假設 H2（對應你的 P2）</span>
+          <div class="hb-content">若擺錘質量 m 改變（其他變因固定），則週期 T <strong>不變</strong>。</div>
+        </div>
+        <div class="hypothesis-box">
+          <span class="hb-label">假設 H3（對應你的 P3）</span>
+          <div class="hb-content">若擺長 L 增加，則週期 T <strong>增加</strong>，且兩者關係為 <strong>T² ∝ L</strong>（不是 T ∝ L）。</div>
+        </div>
+
+        <p style="font-size:12.5px;color:var(--text-muted);margin-top:12px;line-height:1.8;">
+          💡 <strong>注意看差別</strong>：你的預測只是<em>方向性猜測</em>，假設則把<em>變因、方向、量化關係</em>寫清楚。至於「為什麼是這個關係」的理論機制，<strong>Lv3 再來補</strong>——那時候你已經學過 SHM 和牛頓第二定律，工具才夠。
+        </p>
+      </div>
+
+      <!-- 🔒 老師提供：實驗計畫 -->
+      <div class="teacher-block">
+        <div class="tb-title">📋 實驗計畫（兩個活動）</div>
+        <p><strong>活動一（檢驗 H1）：</strong>固定 L=60cm、m 不變，取兩個振幅（5° 和 20°），各測 3 次週期。比較兩組平均 T 的差距是否大於誤差範圍。</p>
+        <p><strong>活動二（檢驗 H3）：</strong>固定 θ≤15°、m 不變，取 6 種擺長（10–60 cm，每 10 cm 一組），各測 3 次。畫 T-L 和 T²-L 兩張圖，比較哪個模型更合理。</p>
+        <p style="color:var(--text-muted);font-size:12px;margin-top:6px;">📐 量測準則詳見頁首參考區塊。</p>
+      </div>
+
+      <!-- Interactive: 觀念題（仍保留） -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 先確認一個關鍵名詞：週期 $T$ 是指什麼時間？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 從最高點到最低點的時間</button>
+          <button class="think-opt" data-val="b">B. 完成一次完整來回的時間</button>
+          <button class="think-opt" data-val="c">C. 10 個往返花的時間</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          正確！週期 $T$ 是一個完整循環——從某個位置出發，經過來回，回到同一位置的時間。計時 10 個週期再除以 10 可以提升精度。
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <a href="uncertainty.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
+          📊 <span><strong style="color:var(--text-primary);">延伸閱讀</strong>：不確定度如何影響結論</span> <span style="margin-left:auto;">→</span>
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ 階段三：執行與分析（學生跑數據、做計算、看圖形） ═══ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">按老師的計畫跑完數據、算平均、畫圖</div>
+        <p class="stage-desc">這個階段完全是你的操作。執行完<strong>活動一</strong>（振幅組）和<strong>活動二</strong>（擺長組），把你<strong>觀察到的趨勢</strong>記下來——<strong>論證先不寫</strong>，那是下一階段的事。</p>
+        <span class="who-bar student">✏️ 本階段由你執行</span>
+      </div>
+
+      <!-- 活動一：振幅數據（老師給） → 學生算平均 -->
+      <p style="font-size:13px;color:var(--text-secondary);margin:18px 0 8px;font-weight:700;">活動一、振幅組的數據（~15 分鐘）</p>
+      <div class="teacher-block">
+        <div class="tb-title">📊 老師給你的量測記錄（擺長皆 60 cm）</div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr><th>條件</th><th>初始角度</th><th>量測 1 (s)</th><th>量測 2 (s)</th><th>量測 3 (s)</th><th>平均 T (s)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>組別 A</strong></td><td>5°（小振幅）</td><td>1.55</td><td>1.56</td><td>1.54</td><td style="color:var(--text-muted);">?</td></tr>
+              <tr><td><strong>組別 B</strong></td><td>20°（大振幅）</td><td>1.57</td><td>1.59</td><td>1.56</td><td style="color:var(--text-muted);">?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="student-block">
+        <div class="sb-title">🧮 請你算出兩組的平均 T 並記下差距</div>
+        <div class="q-item" style="margin-bottom:6px;">Q1：A 組平均 T = ？ s；B 組平均 T = ？ s</div>
+        <div class="q-item" style="margin-bottom:6px;">Q2：兩組差距 ΔT = ？ s</div>
+        <div class="q-item" style="margin-bottom:10px;">Q3：對照頁首量測準則——你的計時不確定度約 ±? s？差距 ΔT 比不確定度大還小？</div>
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 先把計算結果記下來（下一階段才寫論證）</div>
+          <textarea class="think-input" data-key="pendulum-lv1-amp-compute" placeholder="A 組平均 T ≈ __ s&#10;B 組平均 T ≈ __ s&#10;差距 ΔT ≈ __ s&#10;我判斷計時不確定度約 ±__ s&#10;→ ΔT (比不確定度大／比不確定度小／差不多)"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- Interactive: Uncertainty reasoning -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：計時 10 個週期 vs 計時 1 個週期，哪個方法的不確定度較小？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>計時 1 個週期時，你的反應時間誤差（約 ±0.1–0.2 秒）相對較大。計時 10 個週期後除以 10，誤差被分散到 10 個週期，所以相對不確定度變成 1/10。這就是為什麼科學上常「重複多次再平均」。</p>
+        </div>
+      </div>
+
+      <!-- 活動二：虛擬擺 -->
+      <p style="font-size:13px;color:var(--text-secondary);margin:22px 0 8px;font-weight:700;">活動二、擺長組——用虛擬單擺收集數據（25–35 分鐘）</p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">按老師的計畫測 6 種擺長（10–60 cm），每種至少 3 次。收集完後切換到 T² vs L，試不同趨勢線，觀察<strong>截距</strong>和<strong>R²</strong>。</p>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:12px;line-height:1.8;">
+        <strong style="color:var(--text-secondary);">觀察任務</strong>：比較 T vs L 和 T² vs L 兩張圖、比較線性／冪次／多項式三條趨勢線。記下<strong style="color:var(--text-secondary);">截距各是多少、R² 各是多少</strong>——論證留到下一階段。
+      </p>
+
+    <!-- 主實驗區 -->
+    <div class="lab-wrap">
+      <!-- 左：單擺模擬器 + 碼錶 -->
+      <div class="pendulum-panel">
+        <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;">① 選擇擺長：</div>
+        <div id="lengthBtns" style="width:100%;display:flex;flex-direction:column;gap:6px;">
+          <button class="length-btn" data-length="0.10">10 cm</button>
+          <button class="length-btn" data-length="0.20">20 cm</button>
+          <button class="length-btn" data-length="0.30">30 cm</button>
+          <button class="length-btn" data-length="0.40">40 cm</button>
+          <button class="length-btn" data-length="0.50">50 cm</button>
+          <button class="length-btn" data-length="0.60">60 cm</button>
+        </div>
+
+        <div class="pendulum-canvas-wrap">
+          <canvas id="pendulumCanvas" width="180" height="260"></canvas>
+        </div>
+
+        <!-- 碼錶 UI -->
+        <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin:8px 0 4px;">② 碼錶計時：</div>
+        <div id="stopwatchDisplay" style="font-family:'DM Mono',monospace;font-size:22px;font-weight:700;color:var(--text-primary);text-align:center;padding:6px 0;">
+          0.00 s
+        </div>
+        <div id="swingCount" style="font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:6px;">
+          選擇擺長後，擺錘開始擺動
+        </div>
+        <button id="stopwatchBtn" disabled style="width:100%;padding:10px;border:none;border-radius:8px;background:#16a34a;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;">
+          ⏱ 開始計時
+        </button>
+
+        <div id="measureResult" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#15803d;line-height:1.6;">
+        </div>
+
+        <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin:10px 0 4px;">③ 記錄數據：</div>
+        <button class="record-btn" id="recordBtn" disabled>📝 記錄此次測量</button>
+        <div style="font-size:11px;color:var(--text-muted);text-align:center;" id="trialCount"></div>
+        <button id="resetBtn" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;font-size:12px;color:var(--text-secondary);">🔄 重置全部數據</button>
+      </div>
+
+      <!-- 右：數據表 + 圖 -->
+      <div class="data-panel">
+        <div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄表</div>
+          <div style="overflow-x:auto;">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th>擺長 L (m)</th>
+                  <th>T₁ (s)</th>
+                  <th>T₂ (s)</th>
+                  <th>T₃ (s)</th>
+                  <th>平均 T̄ (s)</th>
+                  <th>T̄² (s²)</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 📈 散佈圖：雙模式切換 + 趨勢線選擇 -->
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <div style="font-weight:700;font-size:13px;">📈 散佈圖</div>
+            <div id="graphToggles" style="margin-left:auto;display:flex;gap:4px;">
+              <button class="graph-toggle active" data-mode="T_vs_L" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--phase1);color:white;font-size:11px;cursor:pointer;font-family:inherit;font-weight:600;">T vs L</button>
+              <button class="graph-toggle" data-mode="T2_vs_L" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text-secondary);font-size:11px;cursor:pointer;font-family:inherit;">T² vs L</button>
+            </div>
+          </div>
+          <div id="trendControls" style="display:flex;align-items:center;gap:5px;margin-bottom:8px;font-size:11px;color:var(--text-secondary);flex-wrap:wrap;">
+            趨勢線：
+            <button class="trend-btn active" data-trend="none" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">無</button>
+            <button class="trend-btn" data-trend="linear" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">線性</button>
+            <button class="trend-btn" data-trend="power" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">冪次</button>
+            <button class="trend-btn" data-trend="poly" style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg);font-size:11px;cursor:pointer;font-family:inherit;">多項式</button>
+          </div>
+          <canvas id="graphCanvas" height="220"></canvas>
+          <div id="fitInfo" style="display:none;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:12px;color:#15803d;line-height:1.6;font-family:'DM Mono',monospace;"></div>
+        </div>
+
+        <!-- 🔍 觀察記錄：只記下你看到的數字，論證留到下一階段 -->
+        <div class="student-block phase3" style="margin-top:6px;">
+          <div class="sb-title">🔍 把你觀察到的數字記下來（先不下結論）</div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.8;">
+            切換兩種圖、三條趨勢線，分別看<strong>截距</strong>和<strong>R²</strong>。數字會自動顯示在圖表下方——請手動抄進下面框。
+          </p>
+          <div class="think-block record">
+            <div class="think-prompt">✏️ 觀察記錄（數字填空，不寫推論）</div>
+            <textarea class="think-input" data-key="pendulum-lv1-obs" placeholder="T vs L（線性）：截距 ≈ __ s，R² = __&#10;T² vs L（線性）：截距 ≈ __ s²，R² = __&#10;T vs L（冪次）：指數 n ≈ __，R² = __&#10;T vs L（多項式）：R² = __" style="min-height:110px;"></textarea>
+            <div class="think-status"></div>
+          </div>
+        </div>
+
+        <!-- Interactive: 測量噪聲 -->
+        <div class="think-block reveal" style="margin-top:10px;">
+          <div class="think-prompt">🤔 想一想：為什麼同一個擺長測 3 次，週期 T 每次都略有不同？</div>
+          <button class="think-toggle">想好了？點擊看提示 →</button>
+          <div class="think-hidden">
+            <p>虛擬實驗特意加入了噪聲（±0.03s），模擬真實測量的分散：你的計時反應有誤差、擺角不完全相同、空氣阻力…這就是「測量不確定度」。你的三次數據越接近，代表實驗重複性越好。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ 階段四：論證與反思（這 Lv 的主戲：寫 CER + 對照預測） ═══ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">用 CER 框架寫兩個論證，然後回頭對照你的預測</div>
+        <p class="stage-desc">
+          這個 Lv 的<strong style="color:var(--phase1);">主戲在這一階段</strong>——<strong>「論證建模」</strong>的核心能力。
+          你要針對「振幅」和「T²–L 模型」各寫一份 CER 論證，再回去對照最初的直覺預測，評估模型限制。
+        </p>
+        <span class="who-bar student">✏️ 本階段全部由你填寫</span>
+      </div>
+
+      <!-- 論證 1：振幅影響週期嗎？ -->
+      <div class="student-block">
+        <div class="sb-title">🧠 論證一：振幅到底影不影響週期？</div>
+        <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.75;">
+          回到階段三<strong>活動一</strong>的 A/B 兩組數據。用 CER 把你的結論寫完整。
+        </p>
+
+        <div class="think-block record cer-claim">
+          <div class="think-prompt">主張（Claim）</div>
+          <textarea class="think-input" data-key="pendulum-lv1-cer-claim" placeholder="一句話下結論：在 5°–20° 的範圍內，振幅_______週期。"></textarea>
+          <div class="think-status"></div>
+        </div>
+
+        <div class="think-block record cer-evidence">
+          <div class="think-prompt">證據（Evidence）</div>
+          <textarea class="think-input" data-key="pendulum-lv1-cer-evidence" placeholder="A 組平均 T = ___ s、B 組平均 T = ___ s、差距 ΔT = ___ s；計時不確定度 ±___ s。"></textarea>
+          <div class="think-status"></div>
+        </div>
+
+        <div class="think-block record cer-reasoning">
+          <div class="think-prompt">理由（Reasoning）</div>
+          <textarea class="think-input" data-key="pendulum-lv1-cer-reasoning" placeholder="兩組差距 ___ s，計時不確定度 ±___ s。因為差距（小於／大於）不確定度，所以這差距（沒有／有）統計意義——因此主張成立／不成立。"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- 論證 2：T-L 關係到底是什麼模型？ -->
+      <div class="student-block">
+        <div class="sb-title">🧠 論證二：擺長和週期是什麼關係？選哪個模型最合理？</div>
+        <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.75;">
+          回到階段三<strong>活動二</strong>的觀察記錄。物理合理性比 R² 更重要——<strong>L = 0 時 T 應該是什麼？</strong>
+        </p>
+
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 用 CER 論證你選的模型（截距、R²、物理意義都要講）</div>
+          <textarea class="think-input" data-key="pendulum-lv1-model" placeholder="主張：我選 ____ 模型。&#10;證據：T vs L 線性截距 = __ s；T² vs L 線性截距 = __ s²，R² = __。&#10;理由：L = 0（沒有擺繩）時 T 物理上應該 = __。因此 ____ 模型的截距才合理；R² 只是輔助，因為多項式可以靠加項數拉高 R² 卻失去物理意義。" style="min-height:110px;"></textarea>
+          <div class="think-status"></div>
+        </div>
+
+        <!-- 觀念題：模型選擇 -->
+        <div class="think-block choice" data-answer="c">
+          <div class="think-prompt">🎯 小檢查：哪個模型最能描述「擺長如何影響週期」？</div>
+          <div class="think-options">
+            <button class="think-opt" data-val="a">A. T vs L 多項式模型：R² 最高，擬合最好</button>
+            <button class="think-opt" data-val="b">B. T vs L 冪次模型：曲線通過原點，比線性合理</button>
+            <button class="think-opt" data-val="c">C. T² vs L 線性模型：通過原點的直線，物理意義最清楚</button>
+          </div>
+          <div class="think-feedback" style="display:none;">
+            R² 高不代表模型好——多項式永遠可以靠加項數把 R² 衝高，但物理上毫無意義。好的模型要先通過「物理合理性」的檢驗：T² vs L 的線性模型截距接近 0，符合「L=0 → T=0」的邊界條件。R² 只是「確認」你的物理判斷沒錯。這條斜率藏著重要訊息——課後延伸會告訴你，前人怎麼用它算出重力加速度。
+          </div>
+        </div>
+      </div>
+
+      <!-- 對照最初預測 + 評估限制 -->
+      <div class="student-block">
+        <div class="sb-title">🔁 回頭對照：你的直覺 vs 實際數據</div>
+        <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.75;">
+          翻回階段一，你寫過 P1/P2/P3 三個預測。跟實驗結果對照——猜錯的題目，<strong>通常才是這門課真正送你的禮物</strong>。
+        </p>
+        <div class="q-item" style="margin-bottom:6px;">你的 P1/P2/P3 對了幾個？哪一題最意外？</div>
+        <div class="q-item" style="margin-bottom:6px;">你的「直覺預測」和老師階段二示範的「結構化假設」差在哪裡？</div>
+        <div class="q-item" style="margin-bottom:10px;">T² vs L 的截距實際上不是 0 —— 可能的誤差來源有哪些？</div>
+
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 反思記錄</div>
+          <textarea class="think-input" data-key="pendulum-lv1-reflection" rows="5" placeholder="例：&#10;P1 對、P2 對、P3 錯——我以為繩越長擺越快，其實越長週期越長。&#10;我的預測只是「方向」，老師的假設把「量化關係 T² ∝ L」也寫出來了。&#10;T² vs L 截距 ≈ 0.05 s²，可能因為計時反應慢、擺錘大小、空氣阻力…"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- 寫一個自己的問題（Lv2 暖身） -->
+      <div class="student-block phase2">
+        <div class="sb-title">🎯 給下一 Lv 暖身：寫一個你自己的研究問題</div>
+        <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 6px;line-height:1.75;">
+          下一 Lv 老師不會再給你問題——你要自己提。試著把實驗中讓你意外的地方變成一個<strong>可檢驗的問題</strong>（要有操縱變因、應變變因、教室做得到）。
+        </p>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+          範例：「擺線材質（棉線 vs 釣魚線）會影響擺動衰減的速度嗎？」
+        </div>
+        <div class="think-block record">
+          <div class="think-prompt">✏️ 你的探究問題</div>
+          <textarea class="think-input" data-key="pendulum-lv1-my-question" rows="3" placeholder="例：擺角從 5° 增加到 30°，週期偏差會到多少？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 原來前人也發現過——單擺公式</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">你從數據中發現 T² 和 L 成正比。17 世紀的物理學家也發現了同樣的事，並推導出公式：</p>
+          <div style="text-align:center;padding:12px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text-primary);background:white;border-radius:6px;margin:8px 0;">
+            $T = 2\pi\sqrt{L/g}$ → 兩邊平方 → $T^2 = \frac{4\pi^2}{g} \times L$
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            斜率 = $\frac{4\pi^2}{g}$，所以 $g = \frac{4\pi^2}{\text{斜率}} \approx \frac{39.48}{\text{斜率}}$。試試看用你的斜率算出 g 值，跟標準值 9.81 m/s² 比較——這就是你從數據中「測量」了地球的重力加速度。
+          </p>
+        </div>
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>讓學生完成第一個完整探究迴圈：觀察→量測→分析→建模→論證</li>
+              <li>透過「振幅不影響週期」建立第一個「論證」經驗</li>
+              <li>用不確定度科學比較兩組數據，體會數字背後的意義</li>
+              <li>從 T² vs L 線性化，建立第一個數學模型並推導物理量</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              4 節課的節奏：<br>
+              節 1：結構化假設示範 + 振幅活動（重點：建立「週期」直覺，首次論證；SHM 理論延後到 Lv3）<br>
+              節 2：不確定度實驗（端點 vs 中間計時）<br>
+              節 3：T vs L 量測（6 種擺長各 3 次）→ Excel 輸入與計算<br>
+              節 4：T² vs L 畫圖 → 求 g → 各組 5 分鐘口頭發表
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">你的不確定度計算、T² vs L 的 Excel 圖、以及 g 值計算過程，都是「從數據中發現物理規律」的好證據。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：你<em>之前</em>的預測 vs 實際結果差在哪？（有具體的「之前 vs 之後」對比，比寫一百句「我學到很多」更有說服力。）
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（為下一級暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            以下是一份實驗計畫，<strong>但有好幾個問題</strong>。你能找到幾個？
+          </p>
+          <div style="background:white;border-radius:6px;padding:12px 16px;font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.8;">
+            小明想研究「擺錘質量對週期的影響」。他的計畫：用同一條繩子（50cm），掛 50g、100g、150g 的擺錘各擺 1 次，用手機計時，記錄每次的週期。
+          </div>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              可能的問題：只量 1 次（沒有重複）、計時方式精度不夠、沒說明擺角要固定多少度、沒有控制擺角這個變因。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="uncertainty.html">← 測量基礎：不確定度</a>
+      <a href="../phase1/spring-lv1.html">下一站：彈簧 Lv1 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+<script>
+// ─── 實驗參數 ───
+const G_TRUE = 9.81;      // m/s² (真實重力加速度)
+// (測量誤差由學生碼錶操作自然產生)
+
+// 存每個擺長的測量記錄 { length: [T1, T2, T3] }
+const records = {};
+let currentLength = null;
+let currentT = null;      // 此次顯示的帶噪聲週期
+
+// ─── UI 元素 ───
+const pendulumCanvas = document.getElementById('pendulumCanvas');
+const pCtx = pendulumCanvas.getContext('2d');
+const graphCanvas = document.getElementById('graphCanvas');
+const gCtx = graphCanvas.getContext('2d');
+const tableBody = document.getElementById('tableBody');
+const recordBtn = document.getElementById('recordBtn');
+// periodDisplay 和 noiseHint 已由碼錶 UI 取代
+const trialCount = document.getElementById('trialCount');
+
+// ─── 等幅擺動動畫系統 ───
+let animId = null;
+let animStartTime = null;
+const THETA_0 = 0.22;     // 擺幅 (rad, ~12.6°)
+let displayTheta = 0;
+let prevTheta = 0;         // 上一幀角度，用於偵測過零點
+
+// 碼錶系統
+let swTimerOn = false;     // 碼錶是否在計時
+let swStartMs = 0;         // 碼錶開始時間 (ms)
+let swSwings = 0;          // 偵測到的完整擺動次數
+let swHalfCross = 0;       // 過零次數（2次 = 1個完整週期）
+let measuredT = null;      // 最後算出的 T 值
+
+function getOmega(lengthM) {
+  return Math.sqrt(G_TRUE / lengthM);
+}
+
+function animatePendulum(timestamp, lengthM) {
+  if (!animStartTime) animStartTime = timestamp;
+  const t = (timestamp - animStartTime) / 1000;
+  const omega = getOmega(lengthM);
+
+  prevTheta = displayTheta;
+  displayTheta = THETA_0 * Math.cos(omega * t);
+
+  // 偵測過零點（θ 從正變負或從負變正）
+  if (swTimerOn && prevTheta * displayTheta < 0) {
+    swHalfCross++;
+    if (swHalfCross % 2 === 0) {
+      swSwings = swHalfCross / 2;
+      swingCountEl.textContent = `已擺動 ${swSwings} 次`;
+    }
+  }
+
+  // 更新碼錶顯示
+  if (swTimerOn) {
+    const elapsed = (performance.now() - swStartMs) / 1000;
+    stopwatchDisplay.textContent = elapsed.toFixed(2) + ' s';
+  }
+
+  drawPendulumFrame(displayTheta, lengthM);
+  animId = requestAnimationFrame(ts => animatePendulum(ts, lengthM));
+}
+
+function startSwing(lengthM) {
+  if (animId) cancelAnimationFrame(animId);
+  animStartTime = null;
+  displayTheta = 0;
+  prevTheta = 0;
+  animId = requestAnimationFrame(ts => animatePendulum(ts, lengthM));
+}
+
+function stopSwing() {
+  if (animId) { cancelAnimationFrame(animId); animId = null; }
+}
+
+// ─── 單擺繪製（單幀）───
+function drawPendulumFrame(theta, lengthM) {
+  const W = pendulumCanvas.width;
+  const H = pendulumCanvas.height;
+  pCtx.clearRect(0, 0, W, H);
+
+  // 固定支架 + 樞紐
+  const pivotX = W / 2;
+  const pivotY = 30;
+
+  pCtx.fillStyle = '#64748b';
+  pCtx.fillRect(20, 10, W - 40, 8);
+  pCtx.beginPath();
+  pCtx.arc(pivotX, pivotY, 6, 0, Math.PI * 2);
+  pCtx.fill();
+
+  // 計算擺錘位置
+  const stringPx = lengthM * 200; // 將擺長轉換為像素 (0.1m ~ 20px, 0.6m ~ 120px)
+  const bobX = pivotX + stringPx * Math.sin(theta);
+  const bobY = pivotY + stringPx * Math.cos(theta);
+
+  // 擺線
+  pCtx.strokeStyle = '#475569';
+  pCtx.lineWidth = 1.5;
+  pCtx.beginPath();
+  pCtx.moveTo(pivotX, pivotY);
+  pCtx.lineTo(bobX, bobY);
+  pCtx.stroke();
+
+  // 擺錘（圓形）
+  pCtx.fillStyle = '#2563eb';
+  pCtx.strokeStyle = '#1e40af';
+  pCtx.lineWidth = 1;
+  pCtx.beginPath();
+  pCtx.arc(bobX, bobY, 8, 0, Math.PI * 2);
+  pCtx.fill();
+  pCtx.stroke();
+
+  // 角度與位置標示
+  if (theta !== 0) {
+    const thetaDeg = (theta * 180 / Math.PI).toFixed(1);
+    pCtx.fillStyle = '#059669';
+    pCtx.font = 'bold 10px sans-serif';
+    pCtx.textAlign = 'center';
+    pCtx.fillText(`θ = ${thetaDeg}°`, bobX, bobY - 14);
+  }
+
+}
+
+
+// 初始繪製（靜止）
+function drawEmpty() {
+  displayTheta = 0;
+  if (animId) { cancelAnimationFrame(animId); animId = null; }
+  const W = pendulumCanvas.width;
+  const H = pendulumCanvas.height;
+  const pivotX = W / 2;
+  const pivotY = 30;
+
+  pCtx.clearRect(0, 0, W, H);
+
+  // 固定支架
+  pCtx.fillStyle = '#64748b';
+  pCtx.fillRect(20, 10, W - 40, 8);
+  pCtx.beginPath();
+  pCtx.arc(pivotX, pivotY, 6, 0, Math.PI * 2);
+  pCtx.fill();
+
+  // 垂直擺線 (靜止)
+  pCtx.strokeStyle = '#475569';
+  pCtx.lineWidth = 1.5;
+  pCtx.beginPath();
+  pCtx.moveTo(pivotX, pivotY);
+  pCtx.lineTo(pivotX, pivotY + 120);
+  pCtx.stroke();
+
+  // 擺錘
+  pCtx.fillStyle = '#2563eb';
+  pCtx.strokeStyle = '#1e40af';
+  pCtx.lineWidth = 1;
+  pCtx.beginPath();
+  pCtx.arc(pivotX, pivotY + 120, 8, 0, Math.PI * 2);
+  pCtx.fill();
+  pCtx.stroke();
+}
+drawEmpty();
+
+// ─── UI 元素 ───
+const stopwatchDisplay = document.getElementById('stopwatchDisplay');
+const swingCountEl = document.getElementById('swingCount');
+const stopwatchBtn = document.getElementById('stopwatchBtn');
+const measureResult = document.getElementById('measureResult');
+
+// ─── 擺長按鈕 ───
+document.querySelectorAll('.length-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const length = parseFloat(btn.dataset.length);
+    currentLength = length;
+    currentT = null;
+    measuredT = null;
+
+    // 重置碼錶
+    swTimerOn = false;
+    swSwings = 0;
+    swHalfCross = 0;
+    stopwatchDisplay.textContent = '0.00 s';
+    swingCountEl.textContent = '擺錘擺動中 — 按下方碼錶開始計時';
+    stopwatchBtn.disabled = false;
+    stopwatchBtn.textContent = '⏱ 開始計時';
+    stopwatchBtn.style.background = '#16a34a';
+    measureResult.style.display = 'none';
+    recordBtn.disabled = true;
+
+    document.querySelectorAll('.length-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const trials = (records[length] || []).length;
+    trialCount.textContent = trials > 0 ? `此擺長已記錄 ${trials}/3 次` : '';
+
+    // 啟動等幅擺動
+    startSwing(length);
+  });
+});
+
+// ─── 碼錶按鈕 ───
+stopwatchBtn.addEventListener('click', () => {
+  if (!currentLength) return;
+
+  if (!swTimerOn) {
+    // 開始計時
+    swTimerOn = true;
+    swSwings = 0;
+    swHalfCross = 0;
+    swStartMs = performance.now();
+    stopwatchBtn.textContent = '⏹ 停止計時';
+    stopwatchBtn.style.background = '#dc2626';
+    swingCountEl.textContent = '計時中… 數到 10 次擺動再停';
+    measureResult.style.display = 'none';
+    recordBtn.disabled = true;
+  } else {
+    // 停止計時
+    swTimerOn = false;
+    const elapsed = (performance.now() - swStartMs) / 1000;
+
+    if (swSwings < 1) {
+      swingCountEl.textContent = '擺動次數不夠！至少等 1 次完整擺動再停止';
+      stopwatchBtn.textContent = '⏱ 重新計時';
+      stopwatchBtn.style.background = '#16a34a';
+      return;
+    }
+
+    // 計算週期
+    measuredT = +(elapsed / swSwings).toFixed(3);
+    currentT = +measuredT.toFixed(2);
+
+    stopwatchDisplay.textContent = elapsed.toFixed(2) + ' s';
+    swingCountEl.textContent = `共 ${swSwings} 次擺動`;
+    measureResult.innerHTML =
+      `<strong>計算：</strong>${elapsed.toFixed(2)} s ÷ ${swSwings} 次 = <strong style="font-size:14px;color:#065f46;">T = ${currentT.toFixed(2)} s</strong>`;
+    measureResult.style.display = 'block';
+
+    const trials = (records[currentLength] || []).length;
+    recordBtn.disabled = (trials >= 3);
+
+    stopwatchBtn.textContent = '⏱ 重新計時';
+    stopwatchBtn.style.background = '#16a34a';
+  }
+});
+
+// ─── 記錄按鈕 ───
+recordBtn.addEventListener('click', () => {
+  if (currentLength === null || currentT === null) return;
+  if (!records[currentLength]) records[currentLength] = [];
+  if (records[currentLength].length >= 3) return;
+
+  records[currentLength].push(currentT);
+  const trials = records[currentLength].length;
+  trialCount.textContent = `此擺長已記錄 ${trials}/3 次`;
+
+  if (trials >= 3) {
+    recordBtn.disabled = true;
+    document.querySelector(`.length-btn[data-length="${currentLength.toFixed(2)}"]`).classList.add('done');
+  }
+
+  updateTable();
+  updateGraph();
+
+  // 重置碼錶讓學生再測下一次
+  measuredT = null;
+  currentT = null;
+  stopwatchDisplay.textContent = '0.00 s';
+  swingCountEl.textContent = '按碼錶開始下一次測量';
+  measureResult.style.display = 'none';
+  recordBtn.disabled = true;
+  stopwatchBtn.textContent = '⏱ 開始計時';
+  stopwatchBtn.style.background = '#16a34a';
+});
+
+// ─── 重置 ───
+document.getElementById('resetBtn').addEventListener('click', () => {
+  Object.keys(records).forEach(k => delete records[k]);
+  currentLength = null;
+  currentT = null;
+  document.querySelectorAll('.length-btn').forEach(b => {
+    b.classList.remove('active', 'done');
+  });
+  recordBtn.disabled = true;
+  stopwatchDisplay.textContent = '0.00 s';
+  swingCountEl.textContent = '選擇擺長後，擺錘開始擺動';
+  measureResult.style.display = 'none';
+  stopwatchBtn.disabled = true;
+  stopwatchBtn.textContent = '⏱ 開始計時';
+  stopwatchBtn.style.background = '#16a34a';
+  trialCount.textContent = '';
+  tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>';
+  document.getElementById('fitInfo').style.display = 'none';
+  drawEmpty();
+  gCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+  drawGraphEmpty();
+});
+
+// ─── 更新表格 ───
+function updateTable() {
+  const lengths = [0.10, 0.20, 0.30, 0.40, 0.50, 0.60].filter(L => records[L] && records[L].length > 0);
+  if (lengths.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>';
+    return;
+  }
+  tableBody.innerHTML = lengths.map(L => {
+    const Ts = records[L];
+    const cells = [0, 1, 2].map(i => Ts[i] !== undefined ? `<td>${Ts[i].toFixed(2)}</td>` : '<td style="color:var(--text-muted)">—</td>');
+    const avg = Ts.length === 3 ? `<td style="color:var(--phase1);font-weight:700;">${(Ts.reduce((a, b) => a + b, 0) / 3).toFixed(2)}</td>` : '<td style="color:var(--text-muted)">—</td>';
+    const T_sq = Ts.length === 3 ? `<td style="color:var(--phase2);font-weight:700;">${Math.pow(Ts.reduce((a, b) => a + b, 0) / 3, 2).toFixed(3)}</td>` : '<td style="color:var(--text-muted)">—</td>';
+    return `<tr><td><strong>${L.toFixed(2)}</strong></td>${cells.join('')}${avg}${T_sq}</tr>`;
+  }).join('');
+}
+
+// ─── 圖表引擎：雙模式 + 趨勢線 ───
+let graphMode = 'T_vs_L';   // 'T_vs_L' or 'T2_vs_L'
+let trendType = 'none';      // 'none','linear','power','poly'
+
+// 切換圖模式
+document.getElementById('graphToggles').addEventListener('click', e => {
+  const btn = e.target.closest('.graph-toggle');
+  if (!btn) return;
+  graphMode = btn.dataset.mode;
+  document.querySelectorAll('.graph-toggle').forEach(b => {
+    const active = b === btn;
+    b.style.background = active ? 'var(--phase1)' : 'var(--bg)';
+    b.style.color = active ? 'white' : 'var(--text-secondary)';
+    b.style.fontWeight = active ? '600' : '400';
+  });
+  updateGraph();
+});
+
+// 切換趨勢線
+document.getElementById('trendControls').addEventListener('click', e => {
+  const btn = e.target.closest('.trend-btn');
+  if (!btn) return;
+  trendType = btn.dataset.trend;
+  document.querySelectorAll('.trend-btn').forEach(b => {
+    const active = b === btn;
+    b.style.background = active ? '#059669' : 'var(--bg)';
+    b.style.color = active ? 'white' : 'inherit';
+  });
+  updateGraph();
+});
+
+// ─── 趨勢線計算 ───
+function computeFit(x, y, type) {
+  const n = x.length;
+  const meanY = y.reduce((a, b) => a + b, 0) / n;
+  const SS_tot = y.reduce((s, yi) => s + (yi - meanY) ** 2, 0);
+
+  if (type === 'linear') {
+    const sx = x.reduce((a, b) => a + b, 0);
+    const sy = y.reduce((a, b) => a + b, 0);
+    const sxy = x.reduce((s, xi, i) => s + xi * y[i], 0);
+    const sx2 = x.reduce((s, xi) => s + xi * xi, 0);
+    const a = (n * sxy - sx * sy) / (n * sx2 - sx * sx);
+    const b = (sy - a * sx) / n;
+    const pred = xi => a * xi + b;
+    const SS_res = x.reduce((s, xi, i) => s + (y[i] - pred(xi)) ** 2, 0);
+    const R2 = SS_tot > 0 ? 1 - SS_res / SS_tot : 0;
+    return { type, a, b, R2, pred,
+      label: `y = ${a.toFixed(3)}x ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(3)}`,
+      info: `方程式：T${graphMode === 'T2_vs_L' ? '²' : ''} = ${a.toFixed(3)}·L ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(3)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(4)} ${graphMode === 'T2_vs_L' ? 's²' : 's'}${Math.abs(b) > 0.02 ? ' ⚠️' : ' ✓'}`
+    };
+  }
+
+  if (type === 'power') {
+    const lx = x.map(Math.log), ly = y.map(Math.log);
+    const slx = lx.reduce((a, b) => a + b, 0);
+    const sly = ly.reduce((a, b) => a + b, 0);
+    const slxy = lx.reduce((s, v, i) => s + v * ly[i], 0);
+    const slx2 = lx.reduce((s, v) => s + v * v, 0);
+    const nn = (n * slxy - slx * sly) / (n * slx2 - slx * slx);
+    const a = Math.exp((sly - nn * slx) / n);
+    const pred = xi => a * Math.pow(xi, nn);
+    const SS_res = x.reduce((s, xi, i) => s + (y[i] - pred(xi)) ** 2, 0);
+    const R2 = SS_tot > 0 ? 1 - SS_res / SS_tot : 0;
+    return { type, a, n: nn, R2, pred,
+      label: `y = ${a.toFixed(3)}·x^${nn.toFixed(2)}`,
+      info: `方程式：T${graphMode === 'T2_vs_L' ? '²' : ''} = ${a.toFixed(3)}·L^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}`
+    };
+  }
+
+  if (type === 'poly') {
+    const sp = p => x.reduce((s, xi) => s + Math.pow(xi, p), 0);
+    const syp = p => x.reduce((s, xi, i) => s + Math.pow(xi, p) * y[i], 0);
+    // 3×4 augmented matrix for c0 + c1·x + c2·x²
+    const A = [
+      [n,    sp(1), sp(2), syp(0)],
+      [sp(1),sp(2), sp(3), syp(1)],
+      [sp(2),sp(3), sp(4), syp(2)]
+    ];
+    // Gaussian elimination
+    for (let col = 0; col < 3; col++) {
+      let mr = col;
+      for (let r = col + 1; r < 3; r++) if (Math.abs(A[r][col]) > Math.abs(A[mr][col])) mr = r;
+      [A[col], A[mr]] = [A[mr], A[col]];
+      for (let r = col + 1; r < 3; r++) {
+        const f = A[r][col] / A[col][col];
+        for (let j = col; j <= 3; j++) A[r][j] -= f * A[col][j];
+      }
+    }
+    const c = [0, 0, 0];
+    for (let i = 2; i >= 0; i--) {
+      c[i] = A[i][3];
+      for (let j = i + 1; j < 3; j++) c[i] -= A[i][j] * c[j];
+      c[i] /= A[i][i];
+    }
+    const pred = xi => c[0] + c[1] * xi + c[2] * xi * xi;
+    const SS_res = x.reduce((s, xi, i) => s + (y[i] - pred(xi)) ** 2, 0);
+    const R2 = SS_tot > 0 ? 1 - SS_res / SS_tot : 0;
+    const yVar = graphMode === 'T2_vs_L' ? 'T²' : 'T';
+    return { type, c, R2, pred,
+      label: `y = ${c[2].toFixed(2)}x² ${c[1] >= 0 ? '+' : '−'} ${Math.abs(c[1]).toFixed(2)}x ${c[0] >= 0 ? '+' : '−'} ${Math.abs(c[0]).toFixed(3)}`,
+      info: `方程式：${yVar} = ${c[2].toFixed(2)}L² ${c[1] >= 0 ? '+' : '−'} ${Math.abs(c[1]).toFixed(2)}L ${c[0] >= 0 ? '+' : '−'} ${Math.abs(c[0]).toFixed(3)}<br>R² = ${R2.toFixed(4)}`
+    };
+  }
+  return null;
+}
+
+// ─── 畫圖 ───
+function drawGraphEmpty() {
+  const W = graphCanvas.width;
+  const H = graphCanvas.height;
+  gCtx.clearRect(0, 0, W, H);
+  const pad = { l: 48, r: 20, t: 18, b: 40 };
+  gCtx.strokeStyle = '#e2e8f0';
+  gCtx.strokeRect(pad.l, pad.t, W - pad.l - pad.r, H - pad.t - pad.b);
+  gCtx.fillStyle = '#cbd5e1';
+  gCtx.font = '12px sans-serif';
+  gCtx.textAlign = 'center';
+  gCtx.fillText('等待數據…', W / 2, H / 2);
+}
+drawGraphEmpty();
+
+function updateGraph() {
+  const lengths = [0.10, 0.20, 0.30, 0.40, 0.50, 0.60].filter(L => records[L] && records[L].length === 3);
+
+  const parent = graphCanvas.parentElement;
+  const W = (parent ? parent.clientWidth : 0) || graphCanvas.width || 400;
+  graphCanvas.width = W;
+  graphCanvas.height = 220;
+  const H = 220;
+  const pad = { l: 48, r: 20, t: 18, b: 40 };
+  gCtx.clearRect(0, 0, W, H);
+
+  const pts = lengths.map(L => {
+    const T = records[L].reduce((a, b) => a + b, 0) / 3;
+    return { L, T, T_sq: T * T };
+  });
+
+  if (pts.length < 2) { drawGraphEmpty(); return; }
+
+  // 根據模式決定 Y 軸
+  const xArr = pts.map(p => p.L);
+  const yArr = graphMode === 'T_vs_L' ? pts.map(p => p.T) : pts.map(p => p.T_sq);
+  const yLabel = graphMode === 'T_vs_L' ? 'T (s)' : 'T² (s²)';
+
+  const xMax = Math.max(...xArr) * 1.15;
+  const yMax = Math.max(...yArr) * 1.15;
+
+  function toX(v) { return pad.l + (v / xMax) * (W - pad.l - pad.r); }
+  function toY(v) { return H - pad.b - (v / yMax) * (H - pad.t - pad.b); }
+
+  // 格線
+  gCtx.strokeStyle = '#f1f5f9'; gCtx.lineWidth = 1;
+  for (let i = 1; i <= 4; i++) {
+    const gx = pad.l + (i / 4) * (W - pad.l - pad.r);
+    const gy = H - pad.b - (i / 4) * (H - pad.t - pad.b);
+    gCtx.beginPath(); gCtx.moveTo(gx, pad.t); gCtx.lineTo(gx, H - pad.b); gCtx.stroke();
+    gCtx.beginPath(); gCtx.moveTo(pad.l, gy); gCtx.lineTo(W - pad.r, gy); gCtx.stroke();
+  }
+
+  // 軸
+  gCtx.strokeStyle = '#94a3b8'; gCtx.lineWidth = 1.5;
+  gCtx.beginPath(); gCtx.moveTo(pad.l, pad.t); gCtx.lineTo(pad.l, H - pad.b); gCtx.lineTo(W - pad.r, H - pad.b); gCtx.stroke();
+
+  // 軸標籤
+  gCtx.fillStyle = '#64748b'; gCtx.font = '11px sans-serif'; gCtx.textAlign = 'center';
+  gCtx.fillText('擺長 L (m)', W / 2, H - 4);
+  gCtx.save(); gCtx.translate(12, H / 2); gCtx.rotate(-Math.PI / 2);
+  gCtx.fillText(yLabel, 0, 0); gCtx.restore();
+
+  // 刻度
+  for (let i = 0; i <= 4; i++) {
+    const xv = xMax * i / 4, yv = yMax * i / 4;
+    gCtx.fillStyle = '#94a3b8'; gCtx.font = '10px sans-serif';
+    gCtx.textAlign = 'center'; gCtx.fillText(xv.toFixed(2), toX(xv), H - pad.b + 13);
+    gCtx.textAlign = 'right';  gCtx.fillText(yv.toFixed(2), pad.l - 4, toY(yv) + 4);
+  }
+
+  // 趨勢線
+  const fitInfo = document.getElementById('fitInfo');
+  if (trendType !== 'none' && pts.length >= 3) {
+    const fit = computeFit(xArr, yArr, trendType);
+    if (fit) {
+      // 畫趨勢線曲線
+      gCtx.strokeStyle = '#059669'; gCtx.lineWidth = 2; gCtx.setLineDash([5, 3]);
+      gCtx.beginPath();
+      const steps = 60;
+      for (let i = 0; i <= steps; i++) {
+        const xv = (xMax * i) / steps;
+        const yv = fit.pred(xv);
+        if (yv < 0) continue;
+        const cx = toX(xv), cy = toY(yv);
+        i === 0 ? gCtx.moveTo(cx, cy) : gCtx.lineTo(cx, cy);
+      }
+      gCtx.stroke(); gCtx.setLineDash([]);
+
+      // 標示
+      gCtx.fillStyle = '#059669'; gCtx.font = 'bold 10px sans-serif'; gCtx.textAlign = 'left';
+      gCtx.fillText(`R²=${fit.R2.toFixed(3)}`, toX(xMax * 0.55), toY(yMax * 0.85));
+
+      fitInfo.style.display = 'block';
+      fitInfo.innerHTML = fit.info;
+    }
+  } else {
+    fitInfo.style.display = 'none';
+  }
+
+  // 數據點（畫在趨勢線上面）
+  pts.forEach((p, i) => {
+    const yv = graphMode === 'T_vs_L' ? p.T : p.T_sq;
+    gCtx.beginPath(); gCtx.arc(toX(p.L), toY(yv), 5, 0, Math.PI * 2);
+    gCtx.fillStyle = '#2563eb'; gCtx.fill();
+    gCtx.strokeStyle = 'white'; gCtx.lineWidth = 1.5; gCtx.stroke();
+  });
+
+  // labData 匯出
+  const slopeOri = pts.reduce((s, p) => s + p.L * p.T_sq, 0) / pts.reduce((s, p) => s + p.L * p.L, 0);
+  window.labData = {
+    type: 'pendulum', records,
+    slopes: { T2_vs_L: slopeOri },
+    g_calculated: (4 * Math.PI * Math.PI) / slopeOri,
+    g_error_percent: Math.abs((4 * Math.PI * Math.PI) / slopeOri - G_TRUE) / G_TRUE * 100
+  };
+}
+</script>
+</body>
+</html>

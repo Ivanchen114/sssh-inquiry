@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase1/buoyancy-lv1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>浮力 Lv1 · 木板載重極限 · 探究與實作</title>
+  <meta name="description" content="浮力 Lv1 論證建模：從鐵達尼號情境出發，操縱木板截面積與載重，量下沉深度，推導阿基米德原理。">
+  <meta property="og:title" content="浮力 Lv1 · 木板載重極限 · 探究與實作">
+  <meta property="og:description" content="浮力 Lv1 論證建模：從鐵達尼號情境出發，操縱木板截面積與載重，量下沉深度，推導阿基米德原理。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase1/buoyancy-lv1.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+  <style>
+    .lab-wrap {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 820px) {
+      .lab-wrap { grid-template-columns: 1fr; }
+    }
+    .ctrl-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ctrl-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .area-btn, .weight-btn {
+      padding: 7px 8px;
+      border: 2px solid var(--border);
+      border-radius: 5px;
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .area-btn:hover, .weight-btn:hover {
+      border-color: var(--phase1);
+      background: #f0fdf4;
+    }
+    .area-btn.active, .weight-btn.active {
+      border-color: var(--phase1);
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .area-btn-group { display: flex; flex-direction: column; gap: 4px; }
+    .weight-btn-group { display: flex; gap: 4px; }
+    .weight-btn { flex: 1; text-align: center; font-size: 12px; padding: 7px 4px; }
+
+    .stage-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #buoyancyCanvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+      display: block;
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+      margin: 0 auto;
+      cursor: crosshair;
+      touch-action: manipulation;
+    }
+    .status-box {
+      background: var(--bg);
+      border-radius: 5px;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    .warning-banner {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #b91c1c;
+      border-radius: 5px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      display: none;
+    }
+    .warning-banner.show { display: block; }
+
+    .record-btn {
+      flex: 1;
+      padding: 9px;
+      background: var(--phase1);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      font-family: inherit;
+    }
+    .record-btn:hover { opacity: 0.88; }
+    .record-btn:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
+    .reset-btn {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-family: inherit;
+    }
+
+    .data-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #dataTable { font-size: 12px; width: 100%; border-collapse: collapse; }
+    #dataTable th {
+      background: var(--phase1);
+      color: white;
+      padding: 6px 8px;
+      font-weight: 700;
+    }
+    #dataTable td { padding: 5px 8px; text-align: center; }
+    #dataTable tr:nth-child(even) { background: var(--bg); }
+
+    .graph-canvas {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+      width: 100%;
+      height: 200px;
+      display: block;
+    }
+    .graph-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 640px) {
+      .graph-grid { grid-template-columns: 1fr; }
+    }
+
+    .scenario-box {
+      background: linear-gradient(135deg, #0c4a6e 0%, #1e293b 100%);
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+    }
+    .scenario-box .title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #7dd3fc;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .scenario-box p {
+      font-size: 13px;
+      line-height: 1.9;
+      margin: 0 0 10px;
+    }
+    .scenario-box .hint {
+      font-size: 11.5px;
+      color: #94a3b8;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·浮力</span><span>›</span>
+      <span style="color:var(--phase1)">Lv1 論證建模</span>
+    </div>
+    <h1>🚢 浮力 · Lv1 論證建模</h1>
+    <p class="subtitle">Jack 為什麼上不去木板？從鐵達尼場景推導阿基米德原理</p>
+    <div class="meta-tags">
+      <span class="tag phase1">論證建模</span>
+      <span class="tag">3 節課</span>
+      <span class="tag">截面積 × 載重 → 下沉深度</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase1);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能設計控制變因的實驗（固定一個變因，改變另一個，觀察應變變因）</li>
+      <li>能從數據中辨識 h ∝ 1/A（固定 m）和 h ∝ m（固定 A）兩條線性關係</li>
+      <li>能從兩條線性關係綜合推導出阿基米德公式 F<sub>浮</sub> = ρ<sub>水</sub>·V<sub>排開</sub>·g</li>
+      <li>能用「主張—證據—推理」論證，並辨識力矩對穩定性的影響</li>
+    </ul>
+  </div>
+
+  <!-- ═══ 步驟導航列 ═══ -->
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>情境 × 預測</button>
+    <button class="step-tab"><span class="step-num">2</span>認識變因</button>
+    <button class="step-tab"><span class="step-num">3</span>實驗 × 論證</button>
+    <button class="step-tab"><span class="step-num">4</span>回到鐵達尼</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：情境 × 預測 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">先看情境、短暫討論、再做三個預測——實驗完回來對照。</div>
+
+      <!-- 情境框 -->
+      <div class="scenario-box">
+        <div class="title">🎬 情境：鐵達尼號最後一幕</div>
+        <p>巨輪沉沒後，Rose 爬上一塊漂浮的木板得救。但 Jack 試了兩次都爬不上去——木板明顯承不住兩個人的重量。</p>
+        <p style="color:#fde68a;font-weight:600;">這塊木板「能載一個人、不能載兩個人」的界線在哪裡？什麼因素決定了這條界線？</p>
+        <div class="hint">課堂會先短暫討論：木板大小、厚度、Jack 的位置⋯⋯哪個最關鍵？老師聽完同學的疑問後，會把焦點收到三個變因：<strong>截面積、載重、下沉深度</strong>。</div>
+      </div>
+
+      <!-- 預測題 -->
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P1：</strong>如果這塊木板「面積變兩倍、厚度減半」（體積保持不變），能載的重量會<strong>變大、變小、還是一樣</strong>？為什麼？
+      </div>
+      <div class="q-item" style="margin-bottom:8px;">
+        <strong>P2：</strong>如果 Jack 平貼在木板<strong>正中央</strong> vs 坐在木板<strong>邊角</strong>，結果會一樣嗎？哪種比較容易翻？
+      </div>
+      <div class="q-item">
+        <strong>P3：</strong>同一塊木板、只疊重量、不翻覆的前提下，載多重時會「剛好完全浸到水面下」？
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你的三個預測（P1–P3），實驗後回來對照。</div>
+        <textarea class="think-input" data-key="buoyancy-lv1-predict" placeholder="P1：載重會⋯⋯因為⋯⋯&#10;P2：正中央 vs 邊角⋯⋯&#10;P3：剛好全入水時的載重 ≈ ___ g" style="min-height:90px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 快速直覺題：Jack 上不去的主因是什麼？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 水太冷，Jack 體力不夠</button>
+          <button class="think-opt" data-val="b">B. 木板表面太滑</button>
+          <button class="think-opt" data-val="c">C. 木板的浮力不夠承受更多重量</button>
+          <button class="think-opt" data-val="d">D. Jack 的密度比 Rose 大</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          C。今天實驗要驗證：浮力極限取決於「排開水的體積」——而這又受木板形狀（截面積、厚度）控制。Jack 不是「太重」，是「木板已經快排滿水」。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：認識變因 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">理解變因定義與控制方法，準備做實驗。</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px;">今天的任務</div>
+          操縱兩個變因（截面積 A、載重 m），測一個應變變因（下沉深度 h），找出它們的數學關係——<strong>然後把兩條關係湊成一條公式</strong>。
+        </div>
+        <div style="background:var(--bg);border-radius:6px;padding:12px;font-size:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">變因表</div>
+          <div style="color:var(--text-secondary);line-height:1.8;">
+            操縱變因 1：<strong>A</strong> 截面積 (cm²)<br>
+            操縱變因 2：<strong>m</strong> 載重 (g)<br>
+            應變變因：<strong>h</strong> 下沉深度 (cm)<br>
+            控制變因：木塊體積 200 cm³、水密度、溫度
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box blue" style="margin-bottom:14px;">
+        💡 <strong>今天要自己推出來的東西</strong><br>
+        我們不會先給你阿基米德的公式。你的任務是：從實驗數據中「發現」<code>h = m / (ρ<sub>水</sub>·A)</code>，再改寫成 <code>F<sub>浮</sub> = ρ<sub>水</sub>·V<sub>排開</sub>·g</code>。
+      </div>
+
+      <div class="info-box" style="background:#fffbeb;border-color:#fde68a;margin-bottom:14px;">
+        ⚠️ <strong>關於翻覆：這是力矩的問題</strong><br>
+        木板翻覆不是因為「太重」，而是<strong>重心偏離浮心</strong>。載重放木板的哪裡，會決定翻不翻。虛擬實驗讓你自己選擇砝碼位置，親身體會力矩。<br>
+        （真實實驗室用黏土而不是砝碼，就是因為黏土可貼平分布、不易翻覆——但這也讓學生感受不到力矩的存在。）
+      </div>
+
+      <div style="margin-top:14px;">
+        <a href="buoyancy-lab.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
+          🔬 <span><strong style="color:var(--text-primary);">外部虛擬實驗室</strong>：更完整的浮力操作場景</span> <span style="margin-left:auto;">→</span>
+        </a>
+      </div>
+
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼船要造得「寬扁」而不是「細長」？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>寬扁船的水線面（碰水那一圈）大，稍微傾斜時傾斜那側迅速增加浮力 → 強復原力矩 → 穩。細長船的水線面小，傾斜後復原力矩弱 → 易翻。這就是為什麼獨木舟會翻，郵輪不會。物理量叫 GM（metacentric height），>0 才穩。</p>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：實驗 × 論證 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">① 選截面積 → ② 選砝碼，點木板放置 → ③ 量下沉深度 → ④ 記錄並分析。</div>
+
+      <!-- 主實驗區 -->
+      <div class="lab-wrap">
+        <!-- 左：控制面板 -->
+        <div class="ctrl-panel">
+          <div>
+            <div class="ctrl-label">① 截面積 A（體積固定 200 cm³）</div>
+            <div class="area-btn-group" id="areaBtns">
+              <button class="area-btn" data-area="50">A = 50 cm²（細長，厚 4 cm）</button>
+              <button class="area-btn active" data-area="100">A = 100 cm²（厚 2 cm）</button>
+              <button class="area-btn" data-area="200">A = 200 cm²（厚 1 cm）</button>
+              <button class="area-btn" data-area="400">A = 400 cm²（扁平，厚 0.5 cm）</button>
+            </div>
+          </div>
+          <div>
+            <div class="ctrl-label">② 砝碼（點木板放置）</div>
+            <div class="weight-btn-group" id="weightBtns">
+              <button class="weight-btn active" data-weight="20">20 g</button>
+              <button class="weight-btn" data-weight="50">50 g</button>
+              <button class="weight-btn" data-weight="100">100 g</button>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.6;background:var(--bg);border-radius:5px;padding:8px 10px;">
+            💡 提示：<br>
+            • 點木板任何位置 → 砝碼疊在那裡<br>
+            • 放中央最穩，靠邊會翻<br>
+            • 換截面積會清空砝碼
+          </div>
+        </div>
+
+        <!-- 右：水槽舞台 -->
+        <div class="stage-panel">
+          <canvas id="buoyancyCanvas" width="480" height="340"></canvas>
+          <div class="warning-banner" id="warningBanner"></div>
+          <div class="status-box" id="statusBox">
+            選 A 和砝碼，點木板開始實驗。
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="record-btn" id="recordBtn">📝 記錄此組</button>
+            <button class="reset-btn" id="clearWeightsBtn">🔄 清砝碼</button>
+          </div>
+          <button class="reset-btn" id="resetAllBtn" style="width:100%;">🗑️ 清空所有記錄</button>
+        </div>
+      </div>
+
+      <!-- 資料區 -->
+      <div class="data-panel">
+        <!-- 表格 -->
+        <div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 記錄表</div>
+          <div style="overflow-x:auto;">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th>組</th>
+                  <th>A (cm²)</th>
+                  <th>m<sub>載</sub> (g)</th>
+                  <th>h (cm)</th>
+                  <th>1/A</th>
+                  <th>備註</th>
+                </tr>
+              </thead>
+              <tbody id="dataTableBody">
+                <tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 兩張圖 -->
+        <div class="graph-grid">
+          <div>
+            <div style="font-weight:700;font-size:12px;margin-bottom:6px;">📈 固定 m，h vs 1/A</div>
+            <canvas class="graph-canvas" id="graphA"></canvas>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">只取載重 = <strong id="fixedM">—</strong> g 的組；過原點，斜率 k₁ = (m<sub>木</sub>+m<sub>載</sub>)/ρ<sub>水</sub></div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:12px;margin-bottom:6px;">📈 固定 A，h vs m<sub>載</sub></div>
+            <canvas class="graph-canvas" id="graphM"></canvas>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">只取截面積 = <strong id="fixedA">—</strong> cm² 的組；<strong>不</strong>過原點，斜率 k₂ = 1/(ρ·A)，截距 b = m<sub>木</sub>/(ρ·A)</div>
+          </div>
+        </div>
+
+        <!-- 模型論證 -->
+        <div style="background:var(--bg);border-radius:6px;padding:12px 14px;">
+          <div style="font-weight:700;font-size:12px;margin-bottom:8px;color:var(--text-secondary);">💭 模型選擇與論證</div>
+          <div style="display:grid;gap:7px;font-size:12px;color:var(--text-secondary);">
+            <div class="q-item">Q1：<strong>圖 1</strong>過原點嗎？從斜率 k₁ 推回 ρ<sub>水</sub> = (m<sub>木</sub>+m<sub>載</sub>)/k₁，你算出多少？</div>
+            <div class="q-item">Q2：<strong>圖 2</strong>為什麼「不」過原點？截距 b 代表什麼物理意義？（提示：當 m<sub>載</sub>=0 時，木塊自己也有重量）</div>
+            <div class="q-item">Q3：用圖 2 的截距反推木塊質量 <code>m<sub>木</sub> = b · ρ<sub>水</sub> · A</code>，對得上標示的 120 g 嗎？</div>
+            <div class="q-item">Q4：把 <code>m<sub>總</sub> = ρ<sub>水</sub>·A·h</code> 兩邊乘 g → <code>m<sub>總</sub>·g = ρ<sub>水</sub>·g·(A·h) = ρ<sub>水</sub>·g·V<sub>排開</sub></code>。左邊是什麼？右邊是什麼？這就是阿基米德。</div>
+          </div>
+
+          <div class="think-block record" style="margin-top:12px;">
+            <div class="think-prompt">✏️ 用「主張—理由—證據」寫下你推導出的浮力公式</div>
+            <textarea class="think-input" data-key="buoyancy-lv1-model" placeholder="主張：F_浮 = ρ_水 · V_排開 · g&#10;理由：h 正比於 m_總、反比於 A → m_總 = ρ_水·A·h → 兩邊乘 g 即得&#10;證據：&#10;  ・圖 1 斜率 k₁ ≈ ___ → ρ_水 = m_總/k₁ ≈ ___ g/cm³&#10;  ・圖 2 截距 b ≈ ___ → m_木 = b·ρ·A ≈ ___ g（應接近 120 g）" style="min-height:110px;"></textarea>
+            <div class="think-status"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：回到鐵達尼 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">用你推導的公式回頭分析 Jack 的困境。</div>
+
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">先翻回 Step 1 的預測——你當時猜的 vs 實際數據，哪題準？哪題偏差最大？為什麼？</p>
+
+      <div class="think-block reveal">
+        <div class="think-prompt">🎬 算算看：Jack 到底能不能上去？</div>
+        <button class="think-toggle">想好了？點擊看分析 →</button>
+        <div class="think-hidden">
+          <p><strong>假設電影中的木板</strong>：長 2 m × 寬 1 m × 厚 0.08 m。</p>
+          <ul style="font-size:13px;line-height:1.9;padding-left:18px;">
+            <li>木板體積 V = 0.16 m³，ρ<sub>木</sub> ≈ 600 kg/m³ → 木板質量 96 kg</li>
+            <li>最大浮力（整塊完全浸沒時）F<sub>浮,max</sub> = ρ<sub>水</sub>·V·g = 1000 × 0.16 × g ≈ 1568 N</li>
+            <li>換算質量極限：160 kg。扣掉木板自重 96 kg → <strong>剩 64 kg 額外承載</strong></li>
+            <li>Rose ≈ 55 kg → 還剩 9 kg 額度。Jack ≈ 80 kg 加上去 → <strong>必沉</strong></li>
+          </ul>
+          <p>結論：Jack 的直覺沒錯——純體積就承不住。再加上若兩人都靠一側，力矩失衡會提前翻覆。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">延伸爭議：有流體動力學家分析，若 Rose 把漂浮夾克塞到木板底下增加排水體積，理論上兩人可以一起活下來——但這是後見之明，1912 年的他們沒時間做阿基米德。</p>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;">延伸思考</div>
+      <div class="q-item" style="margin-bottom:6px;">潛水艇如何控制浮沉？它改變的是 A、m、還是別的變因？</div>
+      <div class="q-item" style="margin-bottom:6px;">冰山露出水面只約 1/10——用你推的公式推算，冰的密度是多少？</div>
+      <div class="q-item" style="margin-bottom:16px;">船艙設計為什麼要分艙（watertight compartments）？這跟你今天的實驗有什麼關係？</div>
+
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">寫一個你自己的探究問題</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">用「如果改變___，___會怎樣？」：</p>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+        範例：「如果水換成鹽水（密度 1.03 g/cm³），同一塊木板的載重極限會變多少？」← 有操縱變因、可量化、教室做得到。
+      </div>
+
+      <div class="think-block record">
+        <div class="think-prompt">寫下你的探究問題（含操縱變因與應變變因）</div>
+        <div class="think-body">
+          <textarea class="think-input" data-key="buoyancy-lv1-my-question" rows="3" placeholder="例：如果木板改用密度更小的桐木（ρ ≈ 0.3 g/cm³），載重極限會變多少？"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <a href="../phase2/argument-model.html" style="flex:1;display:block;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+          🔍 <strong style="color:var(--text-primary);">填寫論證建模工具</strong>
+        </a>
+        <a href="../phase2/buoyancy-lv2.html" style="flex:1;display:block;padding:12px 16px;background:var(--text-primary);border:1px solid var(--text-primary);border-radius:8px;font-size:12px;color:white;text-align:center;font-weight:600;">
+          浮力 Lv2 →
+        </a>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" disabled>完成</button>
+      </div>
+    </div>
+
+    <!-- ═══ 課後資源（摺疊）═══ -->
+    <div class="post-class">
+      <div class="post-class-toggle">
+        <h3>課後資源</h3>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="post-class-body">
+
+        <div class="collapsible teacher-toggle" style="margin-top:12px;">
+          <div class="collapsible-header">📌 教學目標（教師視角）<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>鐵達尼情境是「發現問題」的素材，老師聚焦問題後導入「論證建模」</li>
+              <li>讓學生親身實作「控制變因」：固定 m 變 A、固定 A 變 m</li>
+              <li>從 h ∝ 1/A 和 h ∝ m 兩條線性關係「自行拼出」阿基米德公式</li>
+              <li>力矩概念透過「砝碼放置位置」自然浮現，不需要先講理論</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">👩‍🏫 教師備註：實體 vs 虛擬<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              實體實驗室通常用<strong>黏土</strong>代替砝碼——黏土可貼平木板、不易翻覆，學生容易聚焦「截面積 × 載重 → 下沉深度」。虛擬實驗刻意保留「砝碼會翻覆」的情境，讓學生能主動探索力矩。建議課堂流程：<br>
+              ・節 1 鐵達尼影片 + 討論 + 虛擬探索（固定 m 變 A）<br>
+              ・節 2 實體實驗（用黏土驗證、記錄真實數據）<br>
+              ・節 3 論證寫作 + Jack 計算
+            </p>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:var(--text-secondary);">你的兩條線性圖和「從 m = ρ·A·h 改寫到 F<sub>浮</sub> = ρ·V·g」的推導是好素材。展現你如何從數據自行推出原理，而不是被動接收公式。</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            ✍️ 反思錨點：你<em>之前</em>的預測 vs 實際結果差在哪？為什麼？
+          </p>
+        </div>
+
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 原來前人也發現過——阿基米德原理</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">你從數據中拼出 <code>m = ρ<sub>水</sub>·A·h</code>，這其實就是阿基米德兩千多年前發現的公式：</p>
+          <div style="text-align:center;padding:14px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text-primary);background:white;border-radius:6px;margin:10px 0;">
+            $F_{\text{浮力}} = \rho_{\text{水}} \times V_{\text{排開}} \times g$
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            A·h 就是排開水的體積 V<sub>排開</sub>。阿基米德泡了好幾年的澡才想出來，你一節課就自行推出了——歡迎來到科學。
+          </p>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
+          <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:8px;">🔍 挑毛病練習（Lv2 暖身）</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
+            小美想研究「船壁高度對載重極限的影響」。她的計畫：用同一張珍珠板做 3 cm 和 5 cm 兩種船壁的船，各放砝碼到沉為止，比較誰載比較重。<strong>有什麼問題？</strong>
+          </p>
+          <div class="collapsible" style="margin:0;">
+            <div class="collapsible-header" style="font-size:12px;color:var(--text-muted);padding:6px 0;">
+              💡 參考答案<span class="toggle-icon">▶</span>
+            </div>
+            <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
+              只有 2 個水準（看不出趨勢）、沒有重複（每組只做 1 次）、船壁高度改變時底面積可能也變了（沒控制）、沒說明砝碼怎麼放（力矩影響）。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../../index.html">← 課程總覽</a>
+      <a href="../phase2/buoyancy-lv2.html">浮力 Lv2 規劃研究 →</a>
+    </div>
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+<script>
+// ═══════════════════════════════════════════════════
+// 浮力 Lv1 虛擬實驗：截面積 × 載重 → 下沉深度 + 力矩
+// ═══════════════════════════════════════════════════
+
+// ── 常數 ──
+const RHO_WATER = 1.0;           // g/cm³
+const WOOD_RHO = 0.6;            // g/cm³
+const WOOD_VOLUME = 200;         // cm³（固定）
+const WOOD_MASS = WOOD_RHO * WOOD_VOLUME; // 120 g
+const WEIGHT_DENSITY = 7.87;     // g/cm³（鐵塊）
+const NOISE_RATIO = 0.015;       // ±1.5% 測量誤差
+
+// ── 畫布佈局 ──
+// canvas 480×340；水槽 x:[40,440]、水面 y=220、槽底 y=310
+const TANK = { x0: 40, x1: 440, topY: 60, waterY: 220, bottomY: 310 };
+const BLOCK_CX = (TANK.x0 + TANK.x1) / 2; // 木塊中心 x = 240
+const SCALE = 14; // px per cm（A=400→L=20cm→280px，能裝下）
+
+// ── 狀態 ──
+let currentArea = 100;
+let currentWeight = 20;
+let weights = [];      // [{x: cm from left edge of block, mass: g}]
+let records = [];      // [{id, area, mass, depth, sunk, tipped, note}]
+let recordCounter = 0;
+
+// ── DOM ──
+const canvas = document.getElementById('buoyancyCanvas');
+const ctx = canvas.getContext('2d');
+const graphA = document.getElementById('graphA');
+const graphM = document.getElementById('graphM');
+const statusBox = document.getElementById('statusBox');
+const warningBanner = document.getElementById('warningBanner');
+const recordBtn = document.getElementById('recordBtn');
+const tableBody = document.getElementById('dataTableBody');
+
+// ═══════════════════════════════════════════════════
+// 物理計算
+// ═══════════════════════════════════════════════════
+function computeState() {
+  const A = currentArea;
+  const L = Math.sqrt(A);                // 正方形底邊長 (cm)
+  const h_wood = WOOD_VOLUME / A;        // 木塊厚度 (cm)
+  const weights_mass = weights.reduce((s, w) => s + w.mass, 0);
+  const totalMass = WOOD_MASS + weights_mass;
+
+  // 下沉深度
+  const requiredDepth = totalMass / (RHO_WATER * A);
+  const sunk = requiredDepth > h_wood;
+  const actualDepth = Math.min(requiredDepth, h_wood);
+
+  // 重心（木塊左邊緣起算水平；木塊底起算垂直）
+  // 木塊質心：水平 L/2、垂直 h_wood/2
+  let sumMx = WOOD_MASS * (L / 2);
+  let sumMy = WOOD_MASS * (h_wood / 2);
+
+  // 砝碼：按 x 分 bin（0.5 cm 精度）疊加
+  const bins = {};
+  weights.forEach(w => {
+    const key = (Math.round(w.x * 2) / 2).toString();
+    if (!bins[key]) bins[key] = [];
+    bins[key].push(w);
+  });
+  Object.keys(bins).forEach(key => {
+    const binList = bins[key];
+    const x_cm = parseFloat(key);
+    let stackBottom = h_wood;
+    binList.forEach(w => {
+      const edge = Math.cbrt(w.mass / WEIGHT_DENSITY); // 立方體邊長 cm
+      const y_center = stackBottom + edge / 2;
+      sumMx += w.mass * x_cm;
+      sumMy += w.mass * y_center;
+      stackBottom += edge;
+    });
+  });
+
+  const xG_abs = sumMx / totalMass;            // 從木塊左邊緣
+  const xG_rel = xG_abs - L / 2;                // 相對木塊中心
+  const yG = sumMy / totalMass;                 // 從木塊底
+
+  // 浮心：浸水部分的質心 = actualDepth/2
+  const yB = actualDepth / 2;
+
+  // 穩心計算（GM = BM - BG）
+  const I = (L * L * L * L) / 12;               // 水線面二次矩
+  const V_sub = A * actualDepth;
+  const BM = V_sub > 0 ? I / V_sub : 0;
+  const BG = yG - yB;                            // G 在 B 上方 BG 高度
+  const GM = BM - BG;
+
+  // 穩定判定
+  const unstableByGM = !sunk && GM <= 0;
+  const unstableByOffset = !sunk && Math.abs(xG_rel) > L / 2; // 重心越出底面外
+  const tipped = unstableByGM || unstableByOffset;
+
+  // 傾角
+  let tiltAngle = 0;
+  if (sunk) {
+    tiltAngle = 0;
+  } else if (tipped) {
+    const sign = xG_rel === 0 ? 1 : Math.sign(xG_rel);
+    tiltAngle = sign * Math.PI / 7; // ±25°
+  } else if (Math.abs(xG_rel) > 0.01 && GM > 0) {
+    const tanTheta = xG_rel / GM;
+    tiltAngle = Math.atan(tanTheta);
+    const cap = Math.PI / 15; // ±12°
+    tiltAngle = Math.max(-cap, Math.min(cap, tiltAngle));
+  }
+
+  return {
+    A, L, h_wood, totalMass, weights_mass,
+    requiredDepth, actualDepth, sunk, tipped,
+    xG_rel, yG, yB, BM, BG, GM, tiltAngle
+  };
+}
+
+// ═══════════════════════════════════════════════════
+// 渲染
+// ═══════════════════════════════════════════════════
+function draw() {
+  const s = computeState();
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // 水槽邊界
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(TANK.x0, TANK.topY, TANK.x1 - TANK.x0, TANK.bottomY - TANK.topY);
+
+  // 水
+  ctx.fillStyle = 'rgba(59, 130, 246, 0.55)';
+  ctx.fillRect(TANK.x0, TANK.waterY, TANK.x1 - TANK.x0, TANK.bottomY - TANK.waterY);
+
+  // 水面線
+  ctx.strokeStyle = '#0ea5e9';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  ctx.moveTo(TANK.x0, TANK.waterY);
+  ctx.lineTo(TANK.x1, TANK.waterY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 左側尺規
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1;
+  const ruleX = TANK.x0 - 12;
+  for (let cm = 0; cm <= 6; cm++) {
+    const y = TANK.waterY + cm * SCALE;
+    if (y > TANK.bottomY) break;
+    ctx.beginPath();
+    ctx.moveTo(ruleX, y);
+    ctx.lineTo(ruleX + (cm % 2 === 0 ? 8 : 4), y);
+    ctx.stroke();
+    if (cm % 2 === 0) {
+      ctx.fillStyle = '#64748b';
+      ctx.font = '9px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(cm + 'cm', ruleX - 2, y + 3);
+    }
+  }
+
+  // 木塊 + 砝碼
+  const blockW = s.L * SCALE;
+  const blockH = s.h_wood * SCALE;
+  const blockBottomY = TANK.waterY + s.actualDepth * SCALE;
+  const blockTopY = blockBottomY - blockH;
+  const blockLeftX = BLOCK_CX - blockW / 2;
+
+  if (s.sunk) {
+    // 完全沉沒：木塊靜置於槽底
+    const sunkTopY = TANK.bottomY - blockH - 2;
+    drawBlock(blockLeftX, sunkTopY, blockW, blockH);
+    drawWeights(blockLeftX, sunkTopY);
+  } else {
+    // 浮動：以浮心為支點旋轉
+    const pivotX = BLOCK_CX;
+    const pivotY = TANK.waterY + (s.actualDepth * SCALE) / 2;
+
+    ctx.save();
+    ctx.translate(pivotX, pivotY);
+    ctx.rotate(s.tiltAngle);
+    ctx.translate(-pivotX, -pivotY);
+
+    drawBlock(blockLeftX, blockTopY, blockW, blockH);
+    drawWeights(blockLeftX, blockTopY);
+
+    ctx.restore();
+  }
+
+  // 下沉深度標示（不旋轉）
+  if (!s.sunk && s.actualDepth > 0.05) {
+    ctx.strokeStyle = '#16a34a';
+    ctx.lineWidth = 1.5;
+    const arrowX = TANK.x1 + 10;
+    ctx.beginPath();
+    ctx.moveTo(arrowX, TANK.waterY);
+    ctx.lineTo(arrowX, blockBottomY);
+    ctx.stroke();
+    [TANK.waterY, blockBottomY].forEach(y => {
+      ctx.beginPath();
+      ctx.moveTo(arrowX - 3, y);
+      ctx.lineTo(arrowX + 3, y);
+      ctx.stroke();
+    });
+    ctx.fillStyle = '#16a34a';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.save();
+    ctx.translate(arrowX + 6, (TANK.waterY + blockBottomY) / 2);
+    ctx.rotate(Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText('h=' + s.actualDepth.toFixed(2) + 'cm', 0, 3);
+    ctx.restore();
+  }
+
+  // 翻覆/沉沒覆蓋提示
+  if (s.tipped) {
+    ctx.fillStyle = 'rgba(220, 38, 38, 0.85)';
+    ctx.font = 'bold 15px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('⚠️ 翻覆中', BLOCK_CX, 95);
+    ctx.font = '10px sans-serif';
+    ctx.fillText('重心偏離浮心 → 力矩失衡', BLOCK_CX, 110);
+  }
+  if (s.sunk) {
+    ctx.fillStyle = 'rgba(220, 38, 38, 0.85)';
+    ctx.font = 'bold 15px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('💧 完全沉沒', BLOCK_CX, 95);
+    ctx.font = '10px sans-serif';
+    ctx.fillText('載重超過浮力極限', BLOCK_CX, 110);
+  }
+}
+
+function drawBlock(x, y, w, h) {
+  ctx.fillStyle = '#a16207';
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = '#451a03';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(x, y, w, h);
+  // 木紋
+  ctx.strokeStyle = 'rgba(69, 26, 3, 0.2)';
+  ctx.lineWidth = 0.8;
+  for (let i = 1; i < 5; i++) {
+    ctx.beginPath();
+    ctx.moveTo(x + w * i / 5, y);
+    ctx.lineTo(x + w * i / 5, y + h);
+    ctx.stroke();
+  }
+}
+
+function drawWeights(blockLeftX, blockTopY) {
+  const bins = {};
+  weights.forEach(w => {
+    const key = (Math.round(w.x * 2) / 2).toString();
+    if (!bins[key]) bins[key] = [];
+    bins[key].push(w);
+  });
+  Object.keys(bins).forEach(key => {
+    const binList = bins[key];
+    const x_cm = parseFloat(key);
+    let stackY = blockTopY;
+    binList.forEach(w => {
+      const size = Math.cbrt(w.mass / WEIGHT_DENSITY) * SCALE;
+      const wX = blockLeftX + x_cm * SCALE - size / 2;
+      const wY = stackY - size;
+
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(wX, wY, size, size);
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(wX, wY, size, size);
+      ctx.fillStyle = '#fde68a';
+      ctx.font = 'bold ' + Math.max(9, Math.round(size * 0.38)) + 'px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(w.mass, wX + size / 2, wY + size / 2);
+
+      stackY = wY;
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// 互動
+// ═══════════════════════════════════════════════════
+function handlePlaceWeight(clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width / rect.width;
+  const sy = canvas.height / rect.height;
+  const cx = (clientX - rect.left) * sx;
+  const cy = (clientY - rect.top) * sy;
+
+  const s = computeState();
+  const blockW = s.L * SCALE;
+  const blockLeftX = BLOCK_CX - blockW / 2;
+  const blockRightX = BLOCK_CX + blockW / 2;
+
+  // 只檢查 x 範圍（容錯）+ y 在水槽上半
+  if (cx >= blockLeftX && cx <= blockRightX && cy < TANK.bottomY - 10) {
+    const xOnBlock = (cx - blockLeftX) / SCALE;
+    weights.push({ x: xOnBlock, mass: currentWeight });
+    updateAll();
+  }
+}
+
+canvas.addEventListener('click', e => handlePlaceWeight(e.clientX, e.clientY));
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if (e.touches.length > 0) {
+    handlePlaceWeight(e.touches[0].clientX, e.touches[0].clientY);
+  }
+}, { passive: false });
+
+// 截面積按鈕
+document.querySelectorAll('.area-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentArea = parseFloat(btn.dataset.area);
+    document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    weights = []; // 換截面積清空
+    updateAll();
+  });
+});
+
+// 砝碼按鈕
+document.querySelectorAll('.weight-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentWeight = parseFloat(btn.dataset.weight);
+    document.querySelectorAll('.weight-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// 清砝碼
+document.getElementById('clearWeightsBtn').addEventListener('click', () => {
+  weights = [];
+  updateAll();
+});
+
+// 記錄
+recordBtn.addEventListener('click', () => {
+  const s = computeState();
+  recordCounter++;
+  const noisyDepth = s.actualDepth * (1 + (Math.random() - 0.5) * 2 * NOISE_RATIO);
+  let note;
+  if (s.sunk) note = '沉沒';
+  else if (s.tipped) note = '翻覆';
+  else note = '穩定';
+  records.push({
+    id: recordCounter,
+    area: s.A,
+    mass: Math.round(s.weights_mass),
+    depth: parseFloat(noisyDepth.toFixed(2)),
+    sunk: s.sunk,
+    tipped: s.tipped,
+    note
+  });
+  window.labData = records;
+  updateTable();
+  updateGraphs();
+});
+
+// 清空所有記錄
+document.getElementById('resetAllBtn').addEventListener('click', () => {
+  if (records.length > 0 && !confirm('清空所有記錄？（不影響畫面上的木塊/砝碼）')) return;
+  records = [];
+  recordCounter = 0;
+  updateTable();
+  updateGraphs();
+});
+
+// ═══════════════════════════════════════════════════
+// 狀態更新
+// ═══════════════════════════════════════════════════
+function updateAll() {
+  draw();
+  updateStatus();
+}
+
+function updateStatus() {
+  const s = computeState();
+  let html = '';
+  html += `木塊：A = <strong>${s.A} cm²</strong>、厚 ${s.h_wood.toFixed(2)} cm、質量 <strong>${WOOD_MASS} g</strong>（ρ=0.6, V=200）<br>`;
+  html += `載重：<strong>${Math.round(s.weights_mass)} g</strong>（${weights.length} 顆砝碼）<br>`;
+  if (s.sunk) {
+    html += `<span style="color:#b91c1c;font-weight:700;">💧 完全沉沒（需要 ${s.requiredDepth.toFixed(2)} cm 深，木塊僅 ${s.h_wood.toFixed(2)} cm）</span>`;
+  } else if (s.tipped) {
+    html += `<span style="color:#b91c1c;font-weight:700;">⚠️ 翻覆（重心偏離中心 ${s.xG_rel.toFixed(2)} cm、GM = ${s.GM.toFixed(2)} cm）</span>`;
+  } else {
+    html += `下沉深度 h = <strong style="color:#16a34a;">${s.actualDepth.toFixed(2)} cm</strong>`;
+    if (Math.abs(s.xG_rel) > 0.05) {
+      html += `　｜傾角 ${(s.tiltAngle * 180 / Math.PI).toFixed(1)}°（GM=${s.GM.toFixed(2)}）`;
+    }
+  }
+  statusBox.innerHTML = html;
+
+  warningBanner.classList.toggle('show', s.tipped || s.sunk);
+  if (s.tipped) warningBanner.textContent = '⚠️ 翻覆：把砝碼移向中央、或換更大的截面積';
+  else if (s.sunk) warningBanner.textContent = '💧 沉沒：換更大的截面積、或減少載重';
+}
+
+function updateTable() {
+  if (records.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted);font-style:italic;padding:12px;">← 開始記錄數據後出現</td></tr>';
+    return;
+  }
+  tableBody.innerHTML = records.map(r => {
+    const noteColor = r.sunk || r.tipped ? '#b91c1c' : '#16a34a';
+    const depthCell = r.sunk || r.tipped ? '—' : r.depth.toFixed(2);
+    const invA = (1 / r.area).toFixed(4);
+    return `<tr>
+      <td>${r.id}</td>
+      <td>${r.area}</td>
+      <td>${r.mass}</td>
+      <td><strong>${depthCell}</strong></td>
+      <td>${invA}</td>
+      <td style="color:${noteColor};font-weight:600;">${r.note}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// 圖表
+// ═══════════════════════════════════════════════════
+function updateGraphs() {
+  const valid = records.filter(r => !r.sunk && !r.tipped);
+
+  // 左：固定 m 看 h vs 1/A
+  const massFreq = {};
+  valid.forEach(r => { massFreq[r.mass] = (massFreq[r.mass] || 0) + 1; });
+  let fixedM = null;
+  Object.keys(massFreq).forEach(k => {
+    if (fixedM === null || massFreq[k] > massFreq[fixedM]) fixedM = k;
+  });
+  document.getElementById('fixedM').textContent = fixedM !== null ? fixedM : '—';
+  // 圖 1：x = 1/A, y = h。過原點（因為 h = m_總/(ρ·A)，1/A=0 時 h=0）
+  const leftData = fixedM !== null
+    ? valid.filter(r => r.mass == fixedM).map(r => ({ x: 1 / r.area, y: r.depth }))
+    : [];
+  drawScatter(graphA, leftData, '1/A (1/cm²)', 'h (cm)', '#059669', 'm_載', true);
+
+  // 右：固定 A 看 h vs m_載（有截距，因為 h = m_木/(ρA) + m_載/(ρA)）
+  const areaFreq = {};
+  valid.forEach(r => { areaFreq[r.area] = (areaFreq[r.area] || 0) + 1; });
+  let fixedA = null;
+  Object.keys(areaFreq).forEach(k => {
+    if (fixedA === null || areaFreq[k] > areaFreq[fixedA]) fixedA = k;
+  });
+  document.getElementById('fixedA').textContent = fixedA !== null ? fixedA : '—';
+  const rightData = fixedA !== null
+    ? valid.filter(r => r.area == fixedA).map(r => ({ x: r.mass, y: r.depth }))
+    : [];
+  drawScatter(graphM, rightData, 'm_載 (g)', 'h (cm)', '#2563eb', 'A', false);
+}
+
+function drawScatter(cvs, data, xLabel, yLabel, color, fixedWhich, fitThroughOrigin) {
+  const parent = cvs.parentElement;
+  const W = parent.clientWidth || 300;
+  cvs.width = W;
+  const H = cvs.height = 200;
+  const g = cvs.getContext('2d');
+  g.clearRect(0, 0, W, H);
+
+  const pad = { l: 45, r: 12, t: 14, b: 34 };
+
+  g.strokeStyle = '#cbd5e1';
+  g.lineWidth = 1;
+  g.strokeRect(pad.l, pad.t, W - pad.l - pad.r, H - pad.t - pad.b);
+
+  if (data.length === 0) {
+    g.fillStyle = '#94a3b8';
+    g.font = '11px sans-serif';
+    g.textAlign = 'center';
+    g.fillText('等待數據（需要有固定 ' + fixedWhich + ' 的多組記錄）', W / 2, H / 2);
+    return;
+  }
+
+  const xs = data.map(d => d.x);
+  const ys = data.map(d => d.y);
+  const xMax = Math.max(...xs, 0.001) * 1.15;
+  const yMax = Math.max(...ys, 0.1) * 1.2;
+  const toX = v => pad.l + (v / xMax) * (W - pad.l - pad.r);
+  const toY = v => H - pad.b - (v / yMax) * (H - pad.t - pad.b);
+
+  // 格線
+  g.strokeStyle = '#f1f5f9';
+  for (let i = 1; i <= 4; i++) {
+    const gx = pad.l + i / 4 * (W - pad.l - pad.r);
+    g.beginPath(); g.moveTo(gx, pad.t); g.lineTo(gx, H - pad.b); g.stroke();
+    const gy = H - pad.b - i / 4 * (H - pad.t - pad.b);
+    g.beginPath(); g.moveTo(pad.l, gy); g.lineTo(W - pad.r, gy); g.stroke();
+  }
+
+  // 刻度
+  g.fillStyle = '#64748b';
+  g.font = '9px sans-serif';
+  g.textAlign = 'center';
+  for (let i = 0; i <= 4; i++) {
+    const v = xMax * i / 4;
+    g.fillText(v < 0.01 ? v.toExponential(1) : v.toPrecision(2), toX(v), H - pad.b + 12);
+  }
+  g.textAlign = 'right';
+  for (let i = 0; i <= 4; i++) {
+    g.fillText((yMax * i / 4).toFixed(1), pad.l - 3, toY(yMax * i / 4) + 3);
+  }
+
+  // 軸標
+  g.fillStyle = '#475569';
+  g.font = '10px sans-serif';
+  g.textAlign = 'center';
+  g.fillText(xLabel, W / 2, H - 4);
+  g.save();
+  g.translate(10, H / 2);
+  g.rotate(-Math.PI / 2);
+  g.fillText(yLabel, 0, 0);
+  g.restore();
+
+  // 線性擬合：過原點 y=kx 或 有截距 y=kx+b
+  if (data.length >= 2) {
+    let k = 0, b = 0, fitOK = false;
+
+    if (fitThroughOrigin) {
+      let sxy = 0, sxx = 0;
+      xs.forEach((xi, i) => { sxy += xi * ys[i]; sxx += xi * xi; });
+      if (sxx > 0) { k = sxy / sxx; b = 0; fitOK = true; }
+    } else {
+      const n = xs.length;
+      const meanX = xs.reduce((a, v) => a + v, 0) / n;
+      const meanY = ys.reduce((a, v) => a + v, 0) / n;
+      let sxy = 0, sxx = 0;
+      xs.forEach((xi, i) => {
+        sxy += (xi - meanX) * (ys[i] - meanY);
+        sxx += (xi - meanX) ** 2;
+      });
+      if (sxx > 0) { k = sxy / sxx; b = meanY - k * meanX; fitOK = true; }
+    }
+
+    if (fitOK) {
+      g.strokeStyle = color;
+      g.lineWidth = 2;
+      g.setLineDash([5, 3]);
+      g.beginPath();
+      const yAt0 = k * 0 + b;
+      const yAtMax = k * xMax + b;
+      g.moveTo(toX(0), toY(yAt0));
+      g.lineTo(toX(xMax), toY(yAtMax));
+      g.stroke();
+      g.setLineDash([]);
+
+      const meanY2 = ys.reduce((a, v) => a + v, 0) / ys.length;
+      const SS_tot = ys.reduce((s, yi) => s + (yi - meanY2) ** 2, 0);
+      const SS_res = data.reduce((s, d) => s + (d.y - (k * d.x + b)) ** 2, 0);
+      const R2 = SS_tot > 0 ? 1 - SS_res / SS_tot : 0;
+      g.fillStyle = color;
+      g.font = 'bold 10px sans-serif';
+      g.textAlign = 'right';
+      const label = fitThroughOrigin
+        ? ('k=' + k.toPrecision(3) + '  R²=' + R2.toFixed(3))
+        : ('k=' + k.toPrecision(3) + '  b=' + b.toPrecision(3) + '  R²=' + R2.toFixed(3));
+      g.fillText(label, W - pad.r - 2, pad.t + 12);
+    }
+  }
+
+  // 散點
+  data.forEach(d => {
+    g.beginPath();
+    g.arc(toX(d.x), toY(d.y), 4, 0, Math.PI * 2);
+    g.fillStyle = color;
+    g.fill();
+    g.strokeStyle = 'white';
+    g.lineWidth = 1.5;
+    g.stroke();
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// 初始化
+// ═══════════════════════════════════════════════════
+updateAll();
+updateTable();
+updateGraphs();
+
+window.addEventListener('resize', () => { updateGraphs(); });
+</script>
+</body>
+</html>

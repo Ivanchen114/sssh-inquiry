@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase3/roller-lv3">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>翻滾仔 Lv3 · 競速競賽 · 探究與實作</title>
+  <meta name="description" content="翻滾仔 Lv3 發現問題：競速競賽，優化滾動裝置追求最快速度。">
+  <meta property="og:title" content="翻滾仔 Lv3 · 競速競賽 · 探究與實作">
+  <meta property="og:description" content="翻滾仔 Lv3 發現問題：競速競賽，優化滾動裝置追求最快速度。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/roller-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·翻滾仔</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>🎡 翻滾仔模組 · Lv3 發現問題</h1>
+    <p class="subtitle">比快？比慢？改造你的翻滾仔來贏得比賽。</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">競賽 + 自主探究</span>
+    </div>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
+    <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
+    <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
+    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ STEP 1：挑戰規則 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">讀懂競賽規則、材料限制和得分策略。</div>
+
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🏆 挑戰規則</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">材料限制</div>
+            吸管 × 4、竹籤 × 4、黏土 20g、方格紙 1 張。<br>可自由設計手臂長度、黏土位置、輪子形狀。
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">勝負判定</div>
+            統一使用同一條齒軌（角度固定）。<br><strong>比慢</strong>：翻滾時間最長的組獲勝。<br>每組測 3 次取平均。
+          </div>
+        </div>
+        <div class="info-box blue">
+          💡 想想 Lv1 學到的：$I = mr^2$。要「比慢」的話，你會把黏土放在靠近軸心還是遠離軸心的地方？手臂做長一點有幫助嗎？
+        </div>
+      </div>
+
+      <div class="collapsible think-first">
+        <div class="collapsible-header">🧠 比慢策略：先自己想，再點開看<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            <p><strong>增大轉動慣量</strong>：把黏土盡量放在手臂末端（r 大 → I 大）、手臂盡量做長。</p>
+            <p><strong>增加摩擦</strong>：在輪子接觸齒軌的部分加粗糙材質？讓軸心和支撐點之間摩擦更大？</p>
+            <p><strong>調整重心</strong>：讓重心盡量靠近軸心，翻滾時力矩小 → 角加速度小 → 更慢。</p>
+            <p>⚠️ 小心：手臂太長可能不穩定（左右晃、卡在齒軌上）——穩定性也是要考慮的。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2：製作與測試 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">進行改造、測試並記錄你的設計與數據。</div>
+
+      <div class="section-title" style="color:var(--phase3);">競賽流程</div>
+
+      <div class="card" style="border-left:3px solid var(--phase3);margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 1 · 製作與測試（50 分鐘）</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">先用標準設計（手臂 8cm、黏土在末端）測一次基準時間 → 討論改造策略 → 改造 → 反覆測試並記錄數據 → 鎖定最佳設計。</p>
+      </div>
+
+      <div class="card" style="border-left:3px solid var(--phase3);margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 2 · 正式比賽（25 分鐘）</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">每組上場：翻滾仔放在齒軌頂端 → 放手計時 → 測 3 次取平均。全班記錄。</p>
+      </div>
+
+      <div class="section-title">競賽數據記錄表</div>
+      <div style="overflow-x:auto;margin-bottom:20px;">
+        <table>
+          <thead><tr><th>組別</th><th>改造策略</th><th>時間① (秒)</th><th>時間② (秒)</th><th>時間③ (秒)</th><th>平均 (秒)</th><th>vs 基準</th></tr></thead>
+          <tbody>
+            <tr><td>基準（標準設計）</td><td>—</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td>—</td></tr>
+            <tr><td>第 1 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>第 2 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>…</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- 發現問題鷹架：直覺對照站 -->
+    <!-- ════════════════════════════════════ -->
+    <section class="step-card" style="border-left:4px solid #16a34a;background:#f0fdf4;">
+      <div class="step-title" style="color:#166534;">🔍 直覺對照站：從落差中挖問題</div>
+      <div class="step-action">科學提問常從「我以為會這樣，結果不是」的直覺落差開始。不用公式、不用模型——先誠實面對你自己的直覺。</div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">💭 Step 1：實作前的直覺預期</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          回到你動手之前——那時你心裡以為結果會怎樣？用白話寫，不要背公式。
+        </div>
+        <textarea placeholder="我做之前以為會 ___，因為 ___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">👀 Step 2：實作時的觀察</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          實際做下去、或看同學做，你觀察到什麼？特別是<strong>預期外的</strong>結果、驚訝、卡關、意外。
+        </div>
+        <div style="background:#fef3c7;border:1px solid #fbbf24;padding:10px;border-radius:6px;font-size:12px;color:#78350f;margin-bottom:10px;">
+          💡 這個模組可以留意：斜坡角度、裝置重量、輪胎材質對下滑速度的影響；齒軌打滑 vs 正常滾動；釋放瞬間是否真的從靜止開始
+        </div>
+        <textarea placeholder="我看到 ___，其中最讓我意外的是 ___" style="width:100%;min-height:70px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">⚖️ Step 3：落差盤點</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          你的直覺預期和實際觀察差在哪？往哪個方向偏？偏多還偏少？可以從「方向、大小、時機」三個角度想。
+        </div>
+        <textarea placeholder="預期：___&#10;實際：___&#10;落差：___（方向/大小/時機）" style="width:100%;min-height:80px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">❓ Step 4：把落差變問題</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          從落差最讓你困惑的地方，用句型生出一個可探究的問題：<br>
+          · 「改變 ___，___ 會怎麼變？」<br>
+          · 「什麼條件下 ___ 會反轉？」<br>
+          · 「___ 和 ___ 哪個影響比較大？」
+        </div>
+        <textarea placeholder="我的探究問題：___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div style="background:#dcfce7;border:1px solid #16a34a;padding:12px;border-radius:8px;font-size:13px;color:#14532d;">
+        <strong>👉 承接下一步：</strong>這個從落差長出來的問題，就是你接下來要自己規劃研究、自己建模、自己解釋的起點。發現問題不需要公式——只需要誠實的直覺 + 敏銳的觀察。
+      </div>
+    </section>
+
+    <!-- ═══ STEP 3：從競賽到問題 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">分析結果、反思改造、提出可探究的科學問題。</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">💭 賽後反思</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">比較各組的改造策略和結果，找出值得深入探究的問題。</p>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item phase3">
+            <strong>Step 1 · 記錄觀察</strong>：寫下 3 個你在製作或比賽中注意到的現象（例如：「手臂做到 15cm 反而更快了因為一直卡住」「黏土放在不同側翻滾會偏」「齒軌濕掉後翻滾變慢很多」）
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 2 · 轉化為問題</strong>：用「如果改變___，___會怎樣？」提出至少 3 個問題
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 3 · 篩選品質</strong>：四條件檢查。選出 1 個最想探究的。
+          </div>
+        </div>
+      </div>
+
+      <div class="collapsible think-first">
+        <div class="collapsible-header">🔍 好問題 vs 需要改進的問題（先自己想，再點開對照）<span class="toggle-icon">▶</span></div>
+        <div class="collapsible-body">
+          <div style="overflow-x:auto;">
+            <table style="font-size:12px;">
+              <thead><tr><th>❌ 需要改進</th><th>問題出在哪</th><th>✅ 好的探究問題</th></tr></thead>
+              <tbody>
+                <tr><td>「翻滾仔為什麼會翻？」</td><td style="color:var(--text-muted);">查書題 / Lv1 已學</td><td>「手臂長度（5cm vs 8cm vs 11cm vs 14cm）如何影響翻滾仔的翻滾時間？」</td></tr>
+                <tr><td>「怎樣改造比較好？」</td><td style="color:var(--text-muted);">不可量化</td><td>「齒距（0.5cm vs 1cm vs 1.5cm vs 2cm）如何影響翻滾速度？」</td></tr>
+                <tr><td>「黏土多一點比較慢」</td><td style="color:var(--text-muted);">沒有量化驗證</td><td>「黏土質量不變，但兩側質量分佈不均（6:4 vs 7:3 vs 8:2）如何影響翻滾穩定性？」</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12px;color:#92400e;margin-top:10px;">→ <a href="../../tools/good-question.html" style="color:#92400e;font-weight:700;">工具箱：什麼是好的探究問題</a></p>
+        </div>
+      </div>
+
+      <!-- Layer 1: 轉動慣量與穩定性 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：為什麼有的組「比慢」成功了，但有的組的改造版本反而更快或翻滾不穩？是材料問題還是設計問題？</div>
+        <button class="think-toggle">想好了？點擊看分析 →</button>
+        <div class="think-hidden">
+          <p><strong>常見發現：</strong>增加轉動慣量（I = mr²）理論上會減速，但實務上如果手臂做太長會卡住齒軌（摩擦力突然增大），反而不穩定。同樣，黏土放太邊邊會讓左右兩側不平衡，導致翻滾時歪斜。這就是「理論 vs 實作」的落差，也是最好的問題起點。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 改造過程記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你在競賽中最意外的發現，以及你想深入探究的問題</div>
+        <textarea class="think-input" data-key="roller-lv3-q1" placeholder="例如：我發現手臂做到 14cm 後反而更快，可能是因為卡住了。我想探究「手臂長度與穩定性的關係」…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 變因設計 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 如果要探究「手臂長度對翻滾時間」，下列哪個設計最好？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 只改手臂長度，讓其他所有東西（黏土、齒軌、位置）都隨著變</button>
+          <button class="think-opt" data-val="b">B. 只改手臂長度，黏土質量和放置位置保持不變（控制變因）</button>
+          <button class="think-opt" data-val="c">C. 同時改手臂長度和黏土質量，看有什麼效果</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 對！這叫「一次改一個變因」。只改手臂長度，其他都控制住，才能看出手臂長度的「真實影響」。</div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4：後續探究 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">規劃、執行並報告你的自主探究研究。</div>
+
+      <div class="section-title" style="color:var(--phase3);">後續探究（節 3–4）</div>
+      <div class="card" style="margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">選定問題後，規劃一個小型研究：</p>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📋 實驗計畫（操縱/控制/應變/水準/重複次數）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🔬 執行實驗、收集數據</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📊 畫圖、找趨勢、寫結論</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🎤 口頭報告：問題 → 設計 → 數據 → 結論 → 新問題</div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ POST-CLASS ═══ -->
+    <div class="post-class">
+      <button class="post-class-toggle">📌 課後資源與教師備註</button>
+      <div class="post-class-body" style="display:none;">
+
+        <div class="collapsible open">
+          <div class="collapsible-header">🎯 學習目標<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+              <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：手臂長度為何影響翻滾穩定性？）</li>
+              <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：手臂長度（5cm vs 8cm vs 11cm）如何影響翻滾時間？）</li>
+              <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「轉動慣量與長度的關係如何量化？」vs「怎樣改造比較好？」）</li>
+              <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              翻滾仔競賽的優勢是學生有直觀的 feedback（翻滾快慢立刻看到），而且製作過程中會自然遇到「理論 vs 實作」的落差。常見的意外發現：「手臂做太長反而不穩定一直卡住」「黏土兩側不平衡會偏轉」「齒軌邊角磨損後翻滾行為改變」——這些矛盾就是最好的問題素材。<br><br>
+              「比慢」和「比快」可以分兩輪，讓學生體會同一個裝置要「最佳化」不同目標時，策略完全不同。這正好呼應 I = mr² 的雙面性。<br><br>
+              本活動改編自遠哲科學教育基金會「翻滾吧！阿信」科學競賽。
+            </p>
+          </div>
+        </div>
+
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">💡</span>
+          <div>
+            <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+            <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+          </div>
+        </div>
+
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📐 規劃階段</div>
+              把你的任務限制告訴 AI（材料、規則、目標），請它幫你發想設計方案。記得截圖保存對話——展示你怎麼提問比 AI 給了什麼答案更重要。
+            </div>
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📝 反思階段</div>
+              活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+            </div>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ 規劃時 AI 是設計夥伴；反思時 AI 是文字編輯。兩個階段都是你在主導。</p>
+        </div>
+
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">好素材：改造前後數據對比 + 競賽記錄表 + 賽後觀察 + 你提出的問題。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+            <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「第一次船壁做 3cm 太矮改成 5cm」才有說服力。</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../phase2/roller-lv2.html">← 翻滾仔 Lv2</a>
+      <a href="../../index.html">回到課程總覽 →</a>
+    </div>
+
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

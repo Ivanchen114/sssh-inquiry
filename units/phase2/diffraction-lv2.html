@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase2/diffraction-lv2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNA 繞射 Lv2 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="DNA 繞射 Lv2 規劃研究：設計光學繞射實驗方案。">
+  <meta property="og:title" content="DNA 繞射 Lv2 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="DNA 繞射 Lv2 規劃研究：設計光學繞射實驗方案。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/diffraction-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·DNA繞射</span><span>›</span>
+      <span style="color:var(--phase2)">Lv2 規劃研究</span>
+    </div>
+    <h1>🔬 DNA 繞射模組 · Lv2 規劃研究</h1>
+    <p class="subtitle">自己動手用雷射和狹縫做繞射實驗——數據真的和公式一樣完美嗎？</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">實驗設計 · 數據蒐集</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從現象或理論出發，提出可驗證的研究問題（例如：狹縫寬度如何影響亮紋寬度？）</li>
+      <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：控制螢幕距離與雷射波長）</li>
+      <li>能有系統地蒐集數據，並判斷數據的可靠性（用直尺或相機軟體測量）</li>
+      <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>選題</button>
+    <button class="step-tab"><span class="step-num">2</span>設計實驗</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與數據</button>
+    <button class="step-tab"><span class="step-num">4</span>分析與發表</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- STEP 1: 選題 -->
+    <div class="step-panel active" data-step="0">
+      <div class="step-action" style="background:var(--bg);border-left:4px solid var(--phase2);padding:16px 20px;margin-bottom:20px;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:8px;">📖 Rosalind Franklin 的實驗室故事</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">1952 年，Franklin 在實驗室裡一次次調整 X 射線的角度和曝光時間，拍下了數百張繞射圖。她的工作告訴我們一個重要的道理：要「看見」微觀結構，關鍵在於選對實驗條件——光源波長、樣品到偵測器的距離、樣品的取向⋯⋯</p>
+        <p style="font-size:13px;color:var(--text-secondary);">在 Lv1，我們驗證了「乾淨的、理想的」繞射數據。但如果你自己動手用雷射和狹縫做，數據會一樣漂亮嗎？什麼因素會影響測量品質？今天就來探索。</p>
+      </div>
+
+      <div class="section-title">可能的變因</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div class="card">
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:10px;">光學系統的變因</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:2;">
+            <li>狹縫寬度 a（0.05–0.2 mm）</li>
+            <li>螢幕距離 L（30–250 cm）</li>
+            <li>雷射波長（紅 650 nm vs 綠 532 nm）</li>
+            <li>狹縫類型（單狹縫 vs 雙狹縫 vs 圓孔）</li>
+            <li>光源強度（電池電壓）</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:10px;">測量與環境的變因</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:2;">
+            <li>環境光（全暗室 vs 昏暗 vs 明亮）</li>
+            <li>測量工具（直尺、遊標卡尺、相機+軟體）</li>
+            <li>螢幕材質（白紙、描圖紙、毛玻璃）</li>
+            <li>測量位置（中央亮紋邊界定義）</li>
+            <li>重複次數（單次 vs 多次平均）</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border-left:4px solid var(--phase2);padding:16px 20px;margin-bottom:20px;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:10px;">🎯 現在，選擇你要研究的主題</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">從上面的變因表中選一個你感興趣的，設定操縱變因、測量反應變因、控制變因。例如：</p>
+        <div style="display:grid;gap:8px;font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
+          <div class="q-item phase2"><strong>例 1：</strong>「狹縫寬度對中央亮紋寬度的影響」</div>
+          <div class="q-item phase2"><strong>例 2：</strong>「螢幕距離對繞射圖大小的影響」</div>
+          <div class="q-item phase2"><strong>例 3：</strong>「環境光對測量精度的影響」</div>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);font-weight:600;">把你的選擇寫下來，在 Step 2 填寫實驗設計單。</p>
+      </div>
+
+      <!-- Layer 2: 選題與預測 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你選擇研究哪個變因？寫下你的理由和預測。</div>
+        <textarea class="think-input" data-key="diffraction-lv2-topic" placeholder="例如：我選狹縫寬度，因為 Lv1 的公式 a 在分母，我預測 a 越小，中央亮紋寬度 Δy₀ 越大…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Step Footer -->
+      <div class="step-footer" style="display:flex;align-items:center;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);">
+        <button class="step-btn" data-step="prev" disabled style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;cursor:not-allowed;color:var(--text-muted);background:var(--bg);">← 上一步</button>
+        <div class="step-dots" style="display:flex;gap:6px;">
+          <span class="step-dot current" style="width:8px;height:8px;border-radius:50%;background:var(--phase2);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" style="padding:8px 16px;border:none;border-radius:6px;background:var(--phase2);color:white;cursor:pointer;font-weight:600;">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: 設計實驗 -->
+    <div class="step-panel" data-step="1">
+      <div class="step-action" style="background:var(--bg);border-left:4px solid var(--phase2);padding:16px 20px;margin-bottom:20px;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:8px;">📋 填寫實驗設計單</div>
+        <p style="font-size:13px;color:var(--text-secondary);">清楚描述你的實驗計畫。把變因、預測和控制條件都寫下來。</p>
+      </div>
+
+      <!-- 實驗設計單範例 -->
+      <div class="section-title">實驗設計單（範例）</div>
+      <div class="card" style="margin-bottom:20px;background:var(--bg);">
+        <div style="display:grid;gap:12px;font-size:13px;color:var(--text-secondary);">
+          <div>
+            <strong>研究主題：</strong><span style="border-bottom:1px solid var(--border);padding-bottom:4px;display:inline-block;width:70%;color:var(--text-muted);">狹縫寬度對中央亮紋寬度的影響</span>
+          </div>
+          <div>
+            <strong>操縱變因：</strong><span style="color:var(--text-muted);">狹縫寬 $a$（0.05, 0.10, 0.15, 0.20 mm）</span>
+          </div>
+          <div>
+            <strong>測量反應變因：</strong><span style="color:var(--text-muted);">中央亮紋寬度 $\Delta y_0$（mm）</span>
+          </div>
+          <div>
+            <strong>控制變因：</strong><span style="color:var(--text-muted);">$L = 100$ cm、$\lambda = 650$ nm、環境：暗室、螢幕：白紙、測量工具：直尺 ±1 mm</span>
+          </div>
+          <div>
+            <strong>預測：</strong><span style="color:var(--text-muted);">$a$ 越小，$\Delta y_0$ 越大（成反比）</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 激光安全 -->
+      <div class="section-title">⚠️ 激光安全提醒</div>
+      <div class="card" style="margin-bottom:20px;border-left:4px solid #dc2626;background:#fef2f2;">
+        <p style="font-size:13px;color:#991b1b;margin-bottom:12px;font-weight:600;">在動手之前，務必遵守這些安全規則：</p>
+        <div style="display:grid;gap:8px;">
+          <div class="q-item phase2" style="background:white;">雷射<strong>不對人眼</strong>——任何時候都不能往眼睛照</div>
+          <div class="q-item phase2" style="background:white;">不<strong>掃過人體</strong>——光束路徑清晰，沒有人會被意外照到</div>
+          <div class="q-item phase2" style="background:white;">不對<strong>鏡面反射</strong>——反射的光束可能更危險</div>
+          <div class="q-item phase2" style="background:white;"><strong>使用前檢查</strong>——確認光學台、透鏡、光欄等都裝好了</div>
+        </div>
+      </div>
+
+      <!-- 同儕互評 -->
+      <div class="section-title">同儕互評</div>
+      <div class="card" style="margin-bottom:20px;background:#f9fafb;">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">聽完每組的計畫介紹後，用以下準則評分（1–5 分）：</p>
+        <div style="display:grid;gap:10px;">
+          <div class="q-item phase2"><strong>實驗設計清晰度：</strong>變因列表、控制變因有沒有說清楚？</div>
+          <div class="q-item phase2"><strong>變因的適切性：</strong>選擇的操縱變因合理嗎？有沒有遺漏重要控制條件？</div>
+          <div class="q-item phase2"><strong>預測合理性：</strong>根據 Lv1 的公式，預測有沒有根據？</div>
+          <div class="q-item phase2"><strong>實行可行性：</strong>這個計畫在教室用現有儀器真的做得到嗎？</div>
+        </div>
+      </div>
+
+      <!-- Layer 1: 變因控制挑戰 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：做繞射實驗時，最難控制的變因是什麼？列出至少 2 個。</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>光學實驗的難點：<strong>環境光</strong>（影響亮紋對比）、<strong>螢幕距離 L</strong>（要精確量測且固定）、<strong>狹縫與雷射對齊</strong>（角度偏差影響結果）、<strong>測量邊界</strong>（亮紋邊界模糊難以精確判定）、<strong>光源穩定性</strong>（雷射點可能抖動）。你的計畫裡怎麼控制這些？</p>
+        </div>
+      </div>
+
+      <!-- Layer 3: 公式理解 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 Lv1 學過 $\Delta y_0 = \frac{2L\lambda}{a}$。若你改變「狹縫寬度 a」為操縱變因，固定 L 和 $\lambda$，結果會如何？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. a 越大，$\Delta y_0$ 越大（正比）</button>
+          <button class="think-opt" data-val="b">B. a 和 $\Delta y_0$ 沒有關係</button>
+          <button class="think-opt" data-val="c">C. a 越大，$\Delta y_0$ 越小（反比）</button>
+          <button class="think-opt" data-val="d">D. $\Delta y_0$ 保持不變</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          公式裡 a 在分母，所以 a 增大時，$\Delta y_0$ 減小（反比）。你的預測應該這樣寫：「狹縫越寬，亮紋越窄」。做完實驗後，你的數據應該呈現這條反比曲線。
+        </div>
+      </div>
+
+      <!-- Step Footer -->
+      <div class="step-footer" style="display:flex;align-items:center;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);">
+        <button class="step-btn" data-step="prev" style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:white;color:var(--text-secondary);font-weight:600;">← 上一步</button>
+        <div class="step-dots" style="display:flex;gap:6px;">
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot current" style="width:8px;height:8px;border-radius:50%;background:var(--phase2);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" style="padding:8px 16px;border:none;border-radius:6px;background:var(--phase2);color:white;cursor:pointer;font-weight:600;">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 執行與數據 -->
+    <div class="step-panel" data-step="2">
+      <div class="step-action" style="background:var(--bg);border-left:4px solid var(--phase2);padding:16px 20px;margin-bottom:20px;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:8px;">🧪 四節課實驗流程</div>
+        <p style="font-size:13px;color:var(--text-secondary);">按照時程搭建、測量、記錄。</p>
+      </div>
+
+      <!-- 實驗節奏 -->
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <div class="card" style="border-left:3px solid var(--phase2);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:4px;">節 1 · 選題與實驗計畫（50 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">各組選定一個研究主題（例如：「狹縫寬度對 Δy₀ 的影響」或「環境光對測量精度的影響」），列出操縱變因、測量反應變因、控制變因。填寫實驗設計單。</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--phase2);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:4px;">節 2–3 · 實驗執行（100 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">各組搭建光學系統、進行測量、記錄原始數據。⚠️ <strong>激光安全提醒</strong>：雷射不對人眼、不掃過人、不對鏡面反射。使用前進行安全檢查。</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--phase2);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:4px;">節 4 · 數據分析與發表（50 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">繪製圖表、計算相關係數、驗證 Δy₀ = kLλ/a。討論誤差來源、改進方案。各組 3 分鐘發表。</p>
+        </div>
+      </div>
+
+      <!-- 「你遇到了什麼困難？」框 -->
+      <div class="section-title">🤔 你在實驗中遇到了什麼困難？</div>
+      <div style="border-left:4px solid var(--phase2);background:#f0fdf4;border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:20px;">
+        <p style="font-size:13px;color:#166534;margin-bottom:12px;">實驗很少一帆風順。整理你遇到的問題：</p>
+        <div style="display:grid;gap:8px;">
+          <div class="q-item phase2"><strong>例 1：</strong>「每次測量亮紋邊界，尺子的精度不夠，讀數不一定。怎麼改？」</div>
+          <div class="q-item phase2"><strong>例 2：</strong>「環境光太亮，亮紋看不清楚，$\Delta y_0$ 量不準。」</div>
+          <div class="q-item phase2"><strong>例 3：</strong>「雷射光會抖動，不同時間測同一個狹縫，$\Delta y_0$ 有波動。」</div>
+        </div>
+        <p style="font-size:12px;color:#15803d;margin-top:12px;">把這些記錄下來，它們就是 Lv3 進一步探究的種子。</p>
+      </div>
+
+      <!-- Layer 2: 計畫反思 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 同儕互評後，對方給你哪個最重要的修正建議？你怎麼改的？</div>
+        <textarea class="think-input" data-key="diffraction-lv2-feedback" placeholder="例如：同組說環境光很重要，我們決定在昏暗教室做實驗，並額外用黑布遮光…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 1: 實驗困難反思 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：測量「亮紋寬度」時最常出現哪些誤差源？怎樣可以減小？</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>光學測量的誤差源：<strong>亮紋邊界模糊</strong>（環境光亮、對比不足）→用黑布遮光；<strong>尺子精度不足</strong>（±1 mm）→用相機拍照後在電腦軟體測量、或用遊標卡尺；<strong>光源漂移</strong>（雷射點位置不穩）→固定設置、每次重新對位前檢查；<strong>螢幕角度偏斜</strong>→螢幕要垂直光軸。每個誤差源都要在計畫裡寫明「怎麼控制」。</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 實驗執行記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 實驗時最大的困難和你的解決方案是什麼？</div>
+        <textarea class="think-input" data-key="diffraction-lv2-challenge" placeholder="例如：最難的是精確測量亮紋邊界。我們用相機+尺子標記、再用畫圖軟體量，精度提升到 ±0.5 mm…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- 快速驗證 + 團隊提示 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;">
+          <div style="font-weight:700;color:#92400e;font-size:12px;margin-bottom:6px;">⚡ 先跑一次再改</div>
+          <div style="font-size:11px;color:#78350f;line-height:1.7;">
+            計畫寫完別急著做完整實驗。花 10 分鐘用最粗糙的方式先試一次（只測 2 個水準、不用重複），確認你的操作流程跑得通、數據量得到。發現問題回來改計畫，比做完才發現便宜一百倍。
+          </div>
+        </div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:12px;margin-bottom:6px;">🤝 小組分工提示</div>
+          <div style="font-size:11px;color:#1e3a8a;line-height:1.7;">
+            建議分三個角色：<strong>操作員</strong>（動手做）、<strong>記錄員</strong>（即時記數據）、<strong>品管員</strong>（檢查控制變因有沒有跑掉）。每次換水準時輪換。互評時先聽完對方說完，再給建議。
+          </div>
+        </div>
+      </div>
+
+      <!-- Step Footer -->
+      <div class="step-footer" style="display:flex;align-items:center;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);">
+        <button class="step-btn" data-step="prev" style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:white;color:var(--text-secondary);font-weight:600;">← 上一步</button>
+        <div class="step-dots" style="display:flex;gap:6px;">
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot current" style="width:8px;height:8px;border-radius:50%;background:var(--phase2);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" style="padding:8px 16px;border:none;border-radius:6px;background:var(--phase2);color:white;cursor:pointer;font-weight:600;">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: 分析與發表 -->
+    <div class="step-panel" data-step="3">
+      <div class="step-action" style="background:var(--bg);border-left:4px solid var(--phase2);padding:16px 20px;margin-bottom:20px;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:8px;">📊 數據分析與發表</div>
+        <p style="font-size:13px;color:var(--text-secondary);">把數據轉化成圖表和故事。</p>
+      </div>
+
+      <!-- 數據分析指引 -->
+      <div class="section-title">數據分析指引</div>
+      <div class="card" style="margin-bottom:20px;">
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:10px;">Step 1 · 列表與檢查</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">把原始數據列表。計算平均值、標準差。檢查有沒有異常值（是測量誤差還是真實現象？）</p>
+
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:10px;margin-top:14px;">Step 2 · 繪製圖表</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">如果操縱變因是 $a$，畫「$a$ vs $\Delta y_0$」散佈圖。加上趨勢線（線性 or 反比）。</p>
+
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:10px;margin-top:14px;">Step 3 · 驗證公式</div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">用你的數據反推 $k$ 值（或檢驗線性關係）。比對 Lv1 理論值（$k \approx 2$）。</p>
+
+        <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:10px;margin-top:14px;">Step 4 · 誤差分析</div>
+        <p style="font-size:12px;color:var(--text-secondary);">計算相對誤差 = |實驗值 − 理論值| / 理論值 × 100%。討論誤差來源（精度、技能、環境）。</p>
+      </div>
+
+      <!-- Layer 3: 公式驗證選擇題 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 你測得狹縫寬 0.1 mm、距離 100 cm 時，中央亮紋寬度 Δy₀ = 13 mm（紅光 λ=650 nm）。用公式計算理論值約 13 mm。你的結論是？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 完全相符，我的實驗完美</button>
+          <button class="think-opt" data-val="b">B. 相符，但應計算相對誤差看是否在合理範圍內（通常 <20% 可接受）</button>
+          <button class="think-opt" data-val="c">C. 實驗有問題，因為理論和實驗總是有偏差</button>
+          <button class="think-opt" data-val="d">D. 量測工具精度不足，結果不可靠</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          正確！相符≠完美，要算相對誤差看有沒有在誤差限內。13 mm 和 13 mm 相符率 100%，可是如果是 13.5 mm，誤差才 3.8%，也很好。誤差在 10–20% 對光學實驗是合理的（環境光、測量精度有限）。
+        </div>
+      </div>
+
+      <!-- Layer 2: 結論撰寫 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用 2–3 句寫出你的實驗結論（操縱變因、結果、與公式的吻合度）。</div>
+        <textarea class="think-input" data-key="diffraction-lv2-conclusion" placeholder="例如：我測得狹縫寬度越小，中央亮紋寬度越大，呈反比關係，與公式 Δy₀=2Lλ/a 吻合…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- 數據判讀提示 -->
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 18px;margin-bottom:20px;">
+        <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:8px;">📈 數據會說話——但你要會聽</div>
+        <div style="font-size:12px;color:#14532d;line-height:1.8;">
+          收完數據別急著寫結論，先問自己三個問題：<br>
+          <strong>① 趨勢</strong>：散佈圖的點大致往哪走？上升？下降？先升後降？沒有趨勢？<br>
+          <strong>② 離散</strong>：點是緊貼趨勢線，還是散得很開？散開代表不確定度大，結論要保守。<br>
+          <strong>③ 意外</strong>：有沒有哪個點特別「跳出來」？它可能是操作失誤，也可能是最有趣的發現。<br>
+          <span style="font-size:11px;color:#15803d;">能回答這三題，你就有資格寫結論了。不確定怎麼畫圖？→ <a href="../../tools/excel.html" style="color:#166534;font-weight:600;">Excel 工具箱</a></span>
+        </div>
+      </div>
+
+      <!-- Step Footer -->
+      <div class="step-footer" style="display:flex;align-items:center;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);">
+        <button class="step-btn" data-step="prev" style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:white;color:var(--text-secondary);font-weight:600;">← 上一步</button>
+        <div class="step-dots" style="display:flex;gap:6px;">
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot" style="width:8px;height:8px;border-radius:50%;background:var(--border);"></span>
+          <span class="step-dot current" style="width:8px;height:8px;border-radius:50%;background:var(--phase2);"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;cursor:not-allowed;color:var(--text-muted);background:var(--bg);">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- POST-CLASS SECTION -->
+    <div class="post-class" style="margin-top:40px;">
+      <button class="post-class-toggle" style="width:100%;padding:16px 20px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-weight:600;color:var(--phase2);">
+        <span>📦 課後資源（AI 檢核、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow" style="transition:transform 0.3s;">▶</span>
+      </button>
+      <div class="post-class-body" style="display:none;margin-top:20px;">
+
+        <!-- AI 檢核站 -->
+        <div style="background:var(--bg);border:1.5px solid var(--phase2);border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <span style="font-size:22px;">📋</span>
+          <div style="margin-top:10px;">
+            <div style="font-weight:700;font-size:13px;color:var(--phase2);margin-bottom:8px;">AI 檢核站</div>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">完成你的實驗計畫後，把計畫交給 AI（ChatGPT、Perplexity 等），請它幫你找漏洞：</p>
+            <div style="display:grid;gap:6px;font-size:12px;color:var(--text-secondary);">
+              <div style="background:white;border-radius:4px;padding:8px 12px;">「我的控制變因有沒有遺漏？」</div>
+              <div style="background:white;border-radius:4px;padding:8px 12px;">「這個實驗設計有什麼潛在問題？」</div>
+              <div style="background:white;border-radius:4px;padding:8px 12px;">「你覺得我的數據量夠嗎？需要幾組重複？」</div>
+            </div>
+            <div style="background:#eff6ff;border:1px dashed #93c5fd;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px;color:var(--text-secondary);">
+              <strong style="color:#1e40af;">💬 複製貼上範本：</strong>「我正在設計一個實驗，研究問題是＿＿。操縱變因是＿＿（水準：＿＿），應變變因是＿＿，控制變因有＿＿。請幫我檢查：(1) 控制變因有沒有遺漏 (2) 實驗步驟有沒有潛在問題 (3) 數據量夠不夠」<br>
+              <span style="font-size:10px;color:#60a5fa;">給 AI 越多上下文，它的回饋越有用。空白處填入你自己的內容再送出。</span>
+            </div>
+            <p style="font-size:11px;color:var(--phase2);margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是代筆人。它指出問題，你決定要不要改、怎麼改。</p>
+          </div>
+        </div>
+
+        <!-- 學習歷程提示 -->
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">保留你的實驗設計單、原始數據單、數據表、圖表和誤差分析報告。這套材料證明你完成了一個從「規劃」到「執行」再到「反思」的完整科學探究循環。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你原本的實驗計畫和實際做的有什麼不同？改了什麼？為什麼改？<br>
+            <span style="font-size:11px;color:#8b5cf6;">「計畫 vs 實際」的落差本身就是最好的反思素材——改得好代表你在成長。</span>
+          </div>
+        </div>
+
+        <!-- 學習目標 -->
+        <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#0369a1;font-size:13px;margin-bottom:8px;">🎯 學習目標</div>
+          <ul style="font-size:12px;color:#0c4a6e;padding-left:18px;line-height:1.9;">
+            <li>能從現象或理論出發，提出可驗證的研究問題</li>
+            <li>能設計含操縱變因、控制變因與應變變因的實驗計畫</li>
+            <li>能有系統地蒐集數據，並判斷數據的可靠性</li>
+            <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
+          </ul>
+        </div>
+
+        <!-- 教師筆記 -->
+        <div style="background:#f5e6ff;border:1px solid #ddd6fe;border-radius:6px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#7c3aed;font-size:12px;margin-bottom:8px;">📌 教學目標（教師視角）</div>
+          <ul style="font-size:12px;color:#6d28d9;padding-left:18px;line-height:2;">
+            <li>讓學生在實際操作中體驗 Lv1 的理論，面對「真實數據」的雜亂與挑戰</li>
+            <li>培養學生辨識與控制變因的能力，體驗「科學方法」中規劃研究的必要性</li>
+            <li>引導學生反思實驗誤差來源，理解「理想模型」和「真實實驗」的差異</li>
+          </ul>
+        </div>
+
+        <!-- 單元導航 -->
+        <div class="unit-nav" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <a href="../phase1/diffraction-lv1.html" style="display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--phase2);font-weight:600;transition:all 0.3s;">← DNA 繞射 Lv1 論證建模</a>
+          <a href="../phase3/diffraction-lv3.html" style="display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--phase2);font-weight:600;transition:all 0.3s;">DNA 繞射 Lv3 發現問題 →</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

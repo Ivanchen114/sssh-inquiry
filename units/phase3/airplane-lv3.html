@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase3/airplane-lv3">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>紙飛機 Lv3 · 定點降落競賽 · 探究與實作</title>
+  <meta name="description" content="紙飛機 Lv3 發現問題：定點降落競賽，挑戰精準控制飛行軌跡。">
+  <meta property="og:title" content="紙飛機 Lv3 · 定點降落競賽 · 探究與實作">
+  <meta property="og:description" content="紙飛機 Lv3 發現問題：定點降落競賽，挑戰精準控制飛行軌跡。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/airplane-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·紙飛機</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>✈️ 紙飛機模組 · Lv3 發現問題</h1>
+    <p class="subtitle">精準降落挑戰——不是飛最遠，而是飛最準。</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">競賽 + 自主探究</span>
+    </div>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active">
+      <span class="step-num">1</span>挑戰規則
+    </button>
+    <button class="step-tab">
+      <span class="step-num">2</span>製作與測試
+    </button>
+    <button class="step-tab">
+      <span class="step-num">3</span>從競賽到問題
+    </button>
+    <button class="step-tab">
+      <span class="step-num">4</span>後續探究
+    </button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：挑戰規則 ═══ -->
+    <div class="step-panel active" data-step="1">
+      <div class="step-action">瞭解競賽的目標、規則和限制，規劃你的設計策略。</div>
+
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🏆 挑戰規則</div>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>目標：</strong>從起飛線投擲紙飛機，使其降落在 <strong>5 公尺外的目標圈</strong>（直徑 1m）內
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>材料限制：</strong>A4 紙 1 張（可加最多 2 個迴紋針）。不得使用膠帶或其他材料
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>計分方式：</strong>每組投擲 5 次，落在圈內得 3 分、圈邊 1m 內得 1 分、其他 0 分。總分最高獲勝
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">
+            <strong>附加挑戰（加分）：</strong>第二輪目標移到 <strong>8 公尺</strong>，成功得 5 分
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">🔧 設計階段：你要考慮什麼？</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <div style="font-weight:700;color:var(--phase3);margin-bottom:4px;">飛行距離控制</div>
+            5m 不遠也不近。你需要什麼角度和力道？Lv1 的模擬數據能幫你估算嗎？
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <div style="font-weight:700;color:var(--phase3);margin-bottom:4px;">方向穩定性</div>
+            飛機會歪——你在 Lv2 學過對稱性的影響。配重怎麼放？
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <div style="font-weight:700;color:var(--phase3);margin-bottom:4px;">滑翔 vs 俯衝</div>
+            滑翔型飛得遠但不好控制；俯衝型可預測但距離短。你怎麼取捨？
+          </div>
+          <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
+            <div style="font-weight:700;color:var(--phase3);margin-bottom:4px;">尾翼微調</div>
+            尾翼上翻讓飛機「翹頭」減速降落。翻多少度剛好？
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="step-btn" disabled>← 上一步</button>
+          <button class="step-btn primary">下一步 →</button>
+        </div>
+        <div class="step-dots">
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：製作與測試 ═══ -->
+    <div class="step-panel" data-step="2">
+      <div class="step-action">設計、製作你的紙飛機，試飛並記錄每次的改良過程。</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">📝 設計迭代記錄</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">每次改良都記下來——這是最好的學習歷程素材。</p>
+        <div style="overflow-x:auto;">
+          <table style="font-size:12px;">
+            <thead><tr>
+              <th>版本</th><th>改了什麼</th><th>為什麼改</th><th>結果如何</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>V1</td><td style="color:var(--text-muted);font-style:italic;">初始設計</td><td></td><td></td></tr>
+              <tr><td>V2</td><td></td><td></td><td></td></tr>
+              <tr><td>V3</td><td></td><td></td><td></td></tr>
+              <tr><td>決賽版</td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作 · 規劃階段</div>
+        <div style="font-size:12px;color:#1e3a8a;line-height:1.6;">
+          把你的任務限制告訴 AI（距離、材料、規則），請它幫你發想設計方案。你可以問：「用 A4 紙和 2 個迴紋針，什麼設計最可能降落在 5m 外的 1m 圈內？」記得截圖保存對話。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="step-btn">← 上一步</button>
+          <button class="step-btn primary">下一步 →</button>
+        </div>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 發現問題鷹架：直覺對照站 ═══ -->
+    <section class="step-card" style="border-left:4px solid #16a34a;background:#f0fdf4;">
+      <div class="step-title" style="color:#166534;">🔍 直覺對照站：從落差中挖問題</div>
+      <div class="step-action">科學提問常從「我以為會這樣，結果不是」的直覺落差開始。不用公式、不用模型——先誠實面對你自己的直覺。</div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">💭 Step 1：實作前的直覺預期</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          回到你動手之前——那時你心裡以為結果會怎樣？用白話寫，不要背公式。
+        </div>
+        <textarea placeholder="我做之前以為會 ___，因為 ___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">👀 Step 2：實作時的觀察</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          實際做下去、或看同學做，你觀察到什麼？特別是<strong>預期外的</strong>結果、驚訝、卡關、意外。
+        </div>
+        <div style="background:#fef3c7;border:1px solid #fbbf24;padding:10px;border-radius:6px;font-size:12px;color:#78350f;margin-bottom:10px;">
+          💡 這個模組可以留意：機翼面積、重心位置、投擲速度、紙張厚度對飛行距離的影響；飛行姿態（平飛、俯衝、翻滾、盤旋）；同一架紙飛機多次投擲的散佈
+        </div>
+        <textarea placeholder="我看到 ___，其中最讓我意外的是 ___" style="width:100%;min-height:70px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">⚖️ Step 3：落差盤點</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          你的直覺預期和實際觀察差在哪？往哪個方向偏？偏多還偏少？可以從「方向、大小、時機」三個角度想。
+        </div>
+        <textarea placeholder="預期：___&#10;實際：___&#10;落差：___（方向/大小/時機）" style="width:100%;min-height:80px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">❓ Step 4：把落差變問題</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          從落差最讓你困惑的地方，用句型生出一個可探究的問題：<br>
+          · 「改變 ___，___ 會怎麼變？」<br>
+          · 「什麼條件下 ___ 會反轉？」<br>
+          · 「___ 和 ___ 哪個影響比較大？」
+        </div>
+        <textarea placeholder="我的探究問題：___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div style="background:#dcfce7;border:1px solid #16a34a;padding:12px;border-radius:8px;font-size:13px;color:#14532d;">
+        <strong>👉 承接下一步：</strong>這個從落差長出來的問題，就是你接下來要自己規劃研究、自己建模、自己解釋的起點。發現問題不需要公式——只需要誠實的直覺 + 敏銳的觀察。
+      </div>
+    </section>
+
+    <!-- ═══ Step 3：從競賽到問題 ═══ -->
+    <div class="step-panel" data-step="3">
+      <div class="step-action">反思比賽中的觀察，將現象轉化為可探究的科學問題。</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">💭 賽後反思：比賽中你注意到什麼？</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">每次試飛和比賽中你一定遇到很多「奇怪」的事。那些就是問題的起點。</p>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item phase3">
+            <strong>Step 1 · 記錄觀察</strong>：寫下 3 個你在設計或比賽中注意到的現象（越具體越好）
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 2 · 轉化為問題</strong>：用「如果改變___，___會怎樣？」提出至少 3 個問題
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 3 · 篩選品質</strong>：四條件檢查（可測量、有變因、教室可行、不是查書題）。選出 1 個最想探究的
+          </div>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto;margin-bottom:16px;">
+        <table style="font-size:12px;width:100%;">
+          <thead><tr style="background:var(--bg);"><th>❌ 需要改進</th><th>問題出在哪</th><th>✅ 好的探究問題</th></tr></thead>
+          <tbody>
+            <tr><td>「什麼摺法最好？」</td><td style="color:var(--text-muted);">太模糊、無法量化</td><td>「箭型 vs 滑翔型 vs 三角型紙飛機，5m 降落精準度（偏移距離）有什麼差異？」</td></tr>
+            <tr><td>「為什麼飛機會歪？」</td><td style="color:var(--text-muted);">需要更精確</td><td>「左右翼面積差（0mm, 2mm, 4mm）如何影響飛行軌跡的偏移角度？」</td></tr>
+            <tr><td>「配重有用嗎？」</td><td style="color:var(--text-muted);">可以更具體</td><td>「迴紋針放在機鼻 vs 機翼 vs 尾翼，對 5m 降落精準度有什麼影響？」</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Layer 1: 對稱性與穩定性 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：你每次丟同一架飛機，落點都在同一個地方嗎？如果不同，可能的原因是什麼？</div>
+        <button class="think-toggle">想好了？點擊看分析 →</button>
+        <div class="think-hidden">
+          <p><strong>變異原因分析：</strong>① 丟的力度和角度每次不同 → 可探究「初速和角度對落點的影響」<br>② 空氣流動不穩定（風、對流） → 可探究「環境因素對飛行穩定性的影響」<br>③ 飛機本身對稱性問題（歪翅、重量分佈不均） → 可探究「翼面對稱性對精準度的影響」</p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 觀察與問題記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你在設計迭代中最大的改進，以及由此產生的探究問題</div>
+        <textarea class="think-input" data-key="airplane-lv3-q1" placeholder="例如：V1 到 V2 我加了配重，偏移從 1.5m 降到 0.5m。我想探究「配重位置對精準度的確切影響」…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 問題品質評估 -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 下列哪個問題最「能在課堂上做正式實驗」？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 「迴紋針位置（機鼻 vs 翼中央 vs 尾翼）對從 5m 外精準降落的偏移距離有什麼量化影響？」</button>
+          <button class="think-opt" data-val="b">B. 「什麼摺法讓飛機飛得最準？」</button>
+          <button class="think-opt" data-val="c">C. 「紙飛機怎樣才能飛得穩定？」</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          A 對！有明確的操縱變因（迴紋針位置）、可測量的結果（偏移距離）、時間和空間都可行。B 和 C 太籠統，難以設計明確的實驗。</div>
+      </div>
+
+      <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:22px;">💡</span>
+        <div>
+          <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+          <div style="font-size:12px;color:#78716c;">把競賽中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="step-btn">← 上一步</button>
+          <button class="step-btn primary">下一步 →</button>
+        </div>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+          <span class="step-dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：後續探究 ═══ -->
+    <div class="step-panel" data-step="4">
+      <div class="step-action">設計實驗方案，收集數據，分析結果，發表發現。</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">🔬 選定問題後，規劃你的研究</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">依照以下步驟完成一個小型探究：</p>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📋 實驗計畫（操縱/控制/應變/水準/重複次數）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🔬 執行實驗、用捲尺/量角器收集數據</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📊 畫圖、找趨勢、寫結論</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🎤 口頭報告：問題→設計→數據→結論→模型的限制→新問題</div>
+        </div>
+      </div>
+
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作 · 反思階段</div>
+        <div style="font-size:12px;color:#1e3a8a;line-height:1.6;">
+          活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+        </div>
+      </div>
+
+      <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;color:var(--express);font-size:13px;margin-bottom:8px;">📂 學習歷程素材</div>
+        <p style="font-size:13px;color:#6d28d9;margin-bottom:10px;">好素材：設計迭代記錄（V1→V2→決賽版）+ 比賽數據 + 賽後觀察 + 你提出的問題 + AI 對話截圖</p>
+        <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;font-size:12px;color:#6d28d9;">
+          ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+          你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+          <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「V1 太輕被風吹偏，V2 加配重後偏移從 2m 降到 0.5m」才有說服力。</span>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="step-btn">← 上一步</button>
+          <button class="step-btn primary" disabled>下一步 →</button>
+        </div>
+        <div class="step-dots">
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot current"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Post-Class Section ═══ -->
+    <div class="post-class" style="margin-top:40px;border-top:2px solid var(--border);padding-top:24px;">
+      <button class="post-class-toggle" style="background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--text-primary);">
+        <span>📌 課堂後資訊（教師與學生皆可檢視）</span>
+        <span class="toggle-icon" style="display:inline-block;">▶</span>
+      </button>
+
+      <div class="post-class-body" style="display:none;margin-top:16px;padding:16px 0;">
+
+        <div style="margin-bottom:24px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:12px;">🎯 學習目標</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：配重位置如何影響偏移方向與距離？）</li>
+            <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：迴紋針放在機鼻 vs 機翼 vs 尾翼，對 5m 降落精準度有什麼影響？）</li>
+            <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「左右翼面積差（0mm vs 2mm vs 4mm）如何影響飛行軌跡偏移角度？」vs「什麼摺法最好？」）</li>
+            <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom:24px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:12px;">👩‍🏫 教師備註</div>
+
+        <div style="margin-bottom:24px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:12px;">👩‍🏫 教師備註</div>
+          <div style="background:var(--bg);border-radius:8px;padding:14px 16px;font-size:12px;color:var(--text-secondary);line-height:1.8;">
+            <strong>競賽設置建議</strong>
+            <ul style="padding-left:18px;margin-top:8px;">
+              <li>目標圈用粉筆或膠帶在地上畫即可。建議在走廊或體育館執行</li>
+              <li>第一節：給 20 分鐘設計 + 試飛 + 改良；第二節：正式比賽 + 記錄</li>
+              <li>「定點降落」比「飛最遠」更需要控制力——這讓精準度和穩定性成為核心議題</li>
+              <li>比賽時要求每組記錄每次落點的偏移距離和方向——這是後續分析的原始數據</li>
+            </ul>
+            <strong style="margin-top:12px;display:block;">常見的意外發現</strong>
+            <ul style="padding-left:18px;margin-top:8px;">
+              <li>「加配重反而更準」——因為增加慣性減少風的影響</li>
+              <li>「向上丟比平丟更容易控制落點」——因為拋物線末段近乎垂直</li>
+              <li>「同一架飛機每次飛的距離都不同」——這就是為什麼需要重複測量</li>
+            </ul>
+            <p style="margin-top:12px;font-style:italic;">這三個發現都是極好的問題起點，可以引導學生進入後續探究。</p>
+          </div>
+        </div>
+
+        <div style="margin-bottom:24px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:12px;">📌 教學目標（教師視角）</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:18px;line-height:2;">
+            <li>透過「定點降落」競賽，將焦點從「飛最遠」轉向「飛最準」——精準控制更難也更有趣</li>
+            <li>學生須整合 Lv1（角度效應）和 Lv2（變因控制）的經驗來設計競賽策略</li>
+            <li>從競賽中觀察到的意外現象，自然產生可探究問題</li>
+            <li>建立「競賽→觀察→問題→研究」的問題發現迴圈</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="unit-nav">
+      <a href="../phase2/airplane-lv2.html">← 紙飛機 Lv2</a>
+      <a href="../../index.html">回到課程總覽 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase2/airplane-lv2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>紙飛機 Lv2 · 規劃研究 · 探究與實作</title>
+  <meta name="description" content="紙飛機 Lv2 規劃研究：把 lv1 的經驗模型搬到真實教室——設計、執行、迭代。">
+  <meta property="og:title" content="紙飛機 Lv2 · 規劃研究 · 探究與實作">
+  <meta property="og:description" content="紙飛機 Lv2 規劃研究：把 lv1 的經驗模型搬到真實教室——設計、執行、迭代。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase2/airplane-lv2.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>紙飛機</span><span>›</span>
+      <span style="color:var(--phase2)">Lv2 規劃研究</span>
+    </div>
+    <h1>✈️ 紙飛機 · Lv2 規劃研究</h1>
+    <p class="subtitle">把 lv1 的經驗模型搬到真實教室——這次你是唯一的投擲員</p>
+    <div class="meta-tags">
+      <span class="tag phase2">規劃研究</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">變因設計 + 擬合選擇 + 迭代</span>
+    </div>
+  </div>
+
+  <!-- ═══ 🎯 學習目標 ═══ -->
+  <div style="background:var(--bg);border-left:4px solid var(--phase2);border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
+    <div style="font-weight:700;color:var(--text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">🎯</span>
+      <span>學習目標</span>
+    </div>
+    <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能將 lv1 的虛擬模型轉成可在教室執行的實驗計畫（選變因、決水準、寫流程）</li>
+      <li>能提出可驗證的假設（「A 從 X 增到 Y，距離會...」），並預見誤差來源</li>
+      <li>能選擇合適的擬合模型（線性 vs 二次 vs 飽和）並用 R² 和殘差判讀</li>
+      <li>能在「計畫—執行—迭代」循環中，發現原計畫的缺陷並改進</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>選題×假設</button>
+    <button class="step-tab"><span class="step-num">2</span>設計鷹架</button>
+    <button class="step-tab"><span class="step-num">3</span>執行×迭代</button>
+    <button class="step-tab"><span class="step-num">4</span>分析×擬合</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ═══ Step 1：選題×假設 ═══ -->
+    <div class="step-panel active">
+      <div class="step-action">從 lv1 的三變因出發，選一個要在教室實測驗證的問題，並寫下可驗證的假設。</div>
+
+      <div style="background:var(--bg);border-radius:8px;padding:12px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;color:var(--text-primary);">📎 接續 lv1 的經驗模型</div>
+        <div style="font-family:'DM Mono',monospace;font-size:13px;background:white;padding:8px 12px;border-radius:4px;margin:6px 0;">
+          D = D<sub>max</sub> · f(A) · g(x_cg) · h(v)
+        </div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+          lv1 你是在<strong>模擬器</strong>裡找形狀。lv2 要你<strong>親自丟紙飛機</strong>驗證：模擬器說的「A 有最佳值、v 會飽和」在真實世界成立嗎？
+        </div>
+      </div>
+
+      <div class="section-title">可選研究問題</div>
+      <div style="display:grid;gap:10px;margin-bottom:16px;">
+        <div class="q-item phase2">
+          <strong>Q1（驗證型）：</strong>機翼面積 A 真的有最佳值嗎？<br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：A（5 個水準，例如 60 / 120 / 180 / 240 / 300 cm²）｜應變：5 次投擲的平均距離｜預期：倒 U 形</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>Q2（驗證型）：</strong>配重位置（迴紋針數量/位置）真的有最佳值嗎？<br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：0 / 1 / 2 / 3 個迴紋針夾在機鼻、機中、機尾｜應變：平均距離 + 穩定性</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>Q3（驗證型）：</strong>投擲力道 v 真的會飽和嗎？<br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：輕 / 中 / 強 / 盡全力（4 級）｜應變：平均距離｜挑戰：如何客觀分級力道？</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>Q4（延伸型）：</strong>不同紙張重量（70g / 80g / 120g）會讓 A 的最佳點往哪邊移？<br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：紙張重量 × A（兩個變因交互作用）｜應變：平均距離</span>
+        </div>
+        <div class="q-item phase2">
+          <strong>Q5（延伸型）：</strong>對稱性偏差如何影響飛行方向？<br>
+          <span style="font-size:12px;color:var(--text-muted);">操縱：左右翼差（0 / 2 / 4 / 6 mm）｜應變：落點偏移量（不是距離）</span>
+        </div>
+      </div>
+
+      <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:6px;padding:12px 16px;font-size:12.5px;color:#78350f;margin-bottom:14px;line-height:1.8;">
+        💡 <strong>為什麼建議 Q1–Q3「驗證型」優先？</strong>因為 lv1 已經給你一個明確的預測（有最佳值 / 飽和），lv2 的工作是驗證這個預測在真實世界成立嗎。<strong>有預測才是假設，沒預測只是好奇</strong>。
+      </div>
+
+      <!-- Layer 2: 選題與預測 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你選哪一個？寫出「研究問題 + 假設」。假設要有明確預測（例：「A 從 60 增到 180，距離增加；180 後減少」）</div>
+        <textarea class="think-input" data-key="airplane-lv2-choice" placeholder="研究問題：___&#10;假設（可驗證的預測）：___&#10;如果假設錯，我會看到什麼現象？___"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 變因理解選擇題 -->
+      <div class="think-block choice" data-answer="a">
+        <div class="think-prompt">🎯 你做 Q1，測 5 個機翼面積。「每個水準丟幾次」這個決定依據什麼？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 根據紙飛機的變異程度（lv1 已知 ±15%）決定；目標是讓平均值的不確定度小於水準之間的差異</button>
+          <button class="think-opt" data-val="b">B. 越多越好，丟到手酸為止</button>
+          <button class="think-opt" data-val="c">C. 跟別人一樣丟 3 次就夠了</button>
+          <button class="think-opt" data-val="d">D. 看時間還剩多少，丟到下課就好</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          A 是正確思路。變異大（每次差 ±15%）→ 如果 A=120 和 A=180 的平均只差 0.5 m，而每個水準的標準差是 1 m，那你需要更多次數才能「看見」真實差異。一般建議每個水準至少 5 次，標準差大的話 8–10 次。這是規劃研究的核心：<strong>重複次數不是拍腦袋</strong>，是根據訊號/雜訊比決定的。
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 2：設計鷹架 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">用六格鷹架把你的想法變成「明天就能執行」的計畫。</div>
+
+      <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--text-primary);">📋 實驗設計六格</div>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:white;border-left:3px solid var(--phase2);padding:10px 14px;">
+            <strong>1. 假設（含預期形狀）</strong>：例「D vs A 是倒 U 形，最佳值約 150–200 cm²」
+          </div>
+          <div style="background:white;border-left:3px solid var(--phase2);padding:10px 14px;">
+            <strong>2. 變因拆解</strong>：操縱變因（至少 4 個水準，範圍涵蓋 lv1 的最佳點）｜應變變因（含單位和工具）｜控制變因（列 ≥ 5 項：紙張、投擲者、位置、角度、室內風）
+          </div>
+          <div style="background:white;border-left:3px solid var(--phase2);padding:10px 14px;">
+            <strong>3. 測量工具 + 精度</strong>：捲尺 1 cm / 手機碼錶 0.1 s / 目測 ±50 cm（目測的不確定度要誠實）
+          </div>
+          <div style="background:white;border-left:3px solid var(--phase2);padding:10px 14px;">
+            <strong>4. 重複次數 × 異常值規則</strong>：每水準 ≥ 5 次；寫下「什麼情況下刪掉資料」（例：撞到牆、突然有風）
+          </div>
+          <div style="background:white;border-left:3px solid var(--phase2);padding:10px 14px;">
+            <strong>5. 力道控制策略</strong>：固定投擲員 + 固定姿勢 + 先試 10 次測標準差；若 std > 平均的 20% 就改彈射器
+          </div>
+          <div style="background:white;border-left:3px solid var(--phase2);padding:10px 14px;">
+            <strong>6. 擬合計畫</strong>：你打算用什麼擬合？線性（y = kx）/ 二次（y = ax² + bx + c）/ 飽和（y = a·(1 − exp(−v/τ)））—— 為什麼？（跟 lv1 的預期形狀對齊）
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border:1.5px solid var(--phase2);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:22px;">📝</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--phase2);">填寫研究規劃表</div>
+          <div style="font-size:12px;color:var(--text-secondary);">用六步流程把你的想法變成可執行的實驗計畫 → <a href="research-plan.html" style="color:var(--phase2);font-weight:600;">開始填寫</a></div>
+        </div>
+      </div>
+
+      <!-- 力道控制挑戰 -->
+      <div class="section-title">紙飛機實驗的核心挑戰：力道變異</div>
+      <div class="card" style="margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">lv1 模擬器裡雜訊 ±15% 是假設，真實世界可能更大。<strong>力道變異</strong>是紙飛機實驗最難控的源頭——你無法精確重複肌肉出力。</p>
+        <div style="display:grid;gap:8px;font-size:12px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+            <strong style="color:var(--phase2);">策略 A：橡皮筋彈射器</strong> — 固定拉長的橡皮筋彈射，力道最一致（適合 Q1、Q2；Q3 沒辦法用）
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+            <strong style="color:var(--phase2);">策略 B：固定姿勢投擲</strong> — 手臂伸直、只用手腕甩。每次從耳朵旁同一位置出手
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;color:var(--text-secondary);">
+            <strong style="color:var(--phase2);">策略 C：先做「校準 10 次」</strong> — 全部固定只改投擲，測實際的 std。std 大就改策略 A，或增加 N
+          </div>
+        </div>
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;font-size:12px;color:#9a3412;margin-top:10px;">
+          💡 <strong>科學態度：</strong>在報告中寫「我們的投擲 std 是 ___m（平均 ___m），所以 X% 變異來自投擲，不是機翼設計差異」——這是規劃研究的誠實標記。
+        </div>
+      </div>
+
+      <!-- 擬合前思考：該選哪種模型？ -->
+      <div class="section-title">擬合選擇：形狀決定模型</div>
+      <div class="card" style="margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">lv1 告訴你三種形狀：<strong>有最佳值（倒 U）/ 飽和 / 單調</strong>。每種對應不同的擬合模型：</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:11.5px;">
+          <div style="background:var(--bg);border-radius:4px;padding:10px;">
+            <div style="font-weight:700;color:#2563eb;margin-bottom:4px;">倒 U（A, x_cg）</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;margin-bottom:4px;">D = a·x² + b·x + c</div>
+            二次擬合，頂點 = −b/(2a) 就是最佳值
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px;">
+            <div style="font-weight:700;color:#059669;margin-bottom:4px;">飽和（v）</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;margin-bottom:4px;">D = D∞·(1 − e<sup>−v/τ</sup>)</div>
+            指數飽和，D∞ 是上限、τ 是特徵速度
+          </div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px;">
+            <div style="font-weight:700;color:#f59e0b;margin-bottom:4px;">單調（紙重）</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;margin-bottom:4px;">D = k·m + b</div>
+            線性擬合，斜率代表敏感度
+          </div>
+        </div>
+        <div style="background:#f0f9ff;border:1px solid #bfdbfe;border-radius:6px;padding:10px 14px;font-size:12px;color:#1e40af;margin-top:10px;">
+          💡 <strong>R² 不是一切</strong>：如果你數據是倒 U 形，硬套線性也能得到 R² = 0.3，但這告訴你「模型錯了」，不是「數據爛」。選對模型，R² 才有意義。
+        </div>
+      </div>
+
+      <!-- Layer 2: 計畫反思 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你的「六格」回答（第 1、2、5、6 格最關鍵）</div>
+        <textarea class="think-input" data-key="airplane-lv2-plan" placeholder="1. 假設：___&#10;2. 變因：操縱___/應變___/控制___&#10;5. 力道控制：___&#10;6. 擬合計畫：___因為___" style="min-height:110px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 3：執行×迭代 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">先試飛再正式——規劃研究的核心是「迭代」，不是一次到位。</div>
+
+      <div class="section-title" style="color:var(--phase2);">三輪迭代</div>
+
+      <div style="display:grid;gap:10px;margin-bottom:16px;">
+        <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;">
+          <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:4px;">輪 1：校準試飛（10 次相同設定）</div>
+          <div style="font-size:12px;color:#78350f;line-height:1.7;">
+            先固定所有變因（例如全部用 A=180、cg=0.35、中等力道），連續丟 10 次。<br>
+            <strong>算 std / 平均</strong>。超過 20% → 改力道策略；低於 20% → 繼續。
+          </div>
+        </div>
+        <div style="background:#dbeafe;border:1px solid #bfdbfe;border-radius:8px;padding:12px 14px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:4px;">輪 2：初掃（每水準 3 次）</div>
+          <div style="font-size:12px;color:#1e3a8a;line-height:1.7;">
+            每個水準丟 3 次，看大致形狀。<strong>這時候不追精度，追「有沒有訊號」</strong>。<br>
+            如果 5 個水準的平均看起來亂七八糟，先回頭檢查實驗設計，別繼續加數據。
+          </div>
+        </div>
+        <div style="background:#dcfce7;border:1px solid #bbf7d0;border-radius:8px;padding:12px 14px;">
+          <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:4px;">輪 3：補強（每水準補到 ≥ 5 次）</div>
+          <div style="font-size:12px;color:#14532d;line-height:1.7;">
+            趨勢明確後，把每個水準補到 5–8 次。<strong>不確定度（誤差棒）要短於水準之間的差異</strong>，結論才站得住。
+          </div>
+        </div>
+      </div>
+
+      <!-- 小組分工 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:6px;">🤝 小組分工</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:11.5px;color:#1e3a8a;">
+          <div><strong>投擲員：</strong>固定 1 人，全程不換</div>
+          <div><strong>記錄員：</strong>量距離、填表格、計算平均和 std</div>
+          <div><strong>品管員：</strong>盯每次條件是否一致（風、人站位）</div>
+        </div>
+      </div>
+
+      <!-- 異常值處理 -->
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+        <div style="font-weight:700;color:#166534;font-size:13px;margin-bottom:6px;">🚨 異常值處理 SOP</div>
+        <ol style="font-size:12px;color:#15803d;padding-left:20px;line-height:1.8;margin:0;">
+          <li><strong>全部記錄</strong>——別急著刪</li>
+          <li>寫下「為什麼覺得異常」（撞牆、突風、手滑）</li>
+          <li>如果有明確物理原因 → 加註「排除」，但原始資料保留</li>
+          <li>如果沒原因 → 保留。<strong>沒原因的異常值通常是訊號不是雜訊</strong></li>
+        </ol>
+      </div>
+
+      <!-- Layer 3: 結果判讀 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 你測 A = 60 / 120 / 180 / 240 / 300 cm²，平均距離分別 3.2 / 5.8 / 7.1 / 6.9 / 5.4 m，每組 std ≈ 1.0。應該下什麼結論？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. A 越大飛越遠——因為前四個點大致上升</button>
+          <button class="think-opt" data-val="b">B. 看起來有最佳值在 180 附近（180 和 240 的差在誤差內），但需要在 150–210 之間加更多水準確認</button>
+          <button class="think-opt" data-val="c">C. 數據太亂，實驗失敗</button>
+          <button class="think-opt" data-val="d">D. A = 60 是 outlier，刪掉重算</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 是規劃研究的典型思路。數據顯示倒 U 趨勢（跟 lv1 預測吻合），但頂點位置不清楚——需要加點在 150–210 之間。這就是「迭代」：第一輪發現區域，第二輪放大那個區域。A 不對（單調增加的結論漏看後面兩點下降）；C、D 都是過早下結論。
+        </div>
+      </div>
+
+      <!-- Layer 2: 結論撰寫 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你前兩輪的發現，以及第三輪「要補哪裡」的計畫</div>
+        <textarea class="think-input" data-key="airplane-lv2-iterate" placeholder="輪 1：校準 std = ___m（___%）&#10;輪 2：5 水準初掃結果：___&#10;輪 3 補強計畫：在 ___ 附近加密水準，因為 ___" style="min-height:90px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ Step 4：分析×擬合 ═══ -->
+    <div class="step-panel">
+      <div class="step-action">用合適的擬合模型讀出物理量，比對 lv1 預測，寫結論。</div>
+
+      <div class="section-title" style="color:var(--phase2);">從擬合讀物理</div>
+
+      <div style="background:var(--bg);border-radius:8px;padding:12px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;color:var(--text-primary);">✅ 好的擬合分析四步驟</div>
+        <ol style="font-size:13px;color:var(--text-secondary);padding-left:22px;line-height:2;margin:0;">
+          <li>畫散佈圖 + 誤差棒（std/√N），用肉眼看形狀</li>
+          <li>選一個擬合模型（Step 2 你已經決定過了），算 R²</li>
+          <li>看<strong>殘差圖</strong>——殘差應該亂分散，如果有系統性趨勢 → 模型錯了</li>
+          <li>從擬合參數讀物理（倒 U 頂點、飽和上限、斜率）—— 和 lv1 的預測差多少？</li>
+        </ol>
+      </div>
+
+      <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:14px;">
+        <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:6px;">⚠️ 殘差的秘密</div>
+        <div style="font-size:12.5px;color:#78350f;line-height:1.8;">
+          殘差 = 實測 − 擬合。如果你用線性擬合了倒 U 形數據，<strong>殘差會呈現「微笑曲線」</strong>——這就是「你選錯模型」的訊號。高中階段不需要算統計檢定，用肉眼看殘差圖夠了。
+        </div>
+      </div>
+
+      <!-- AI 檢核站 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 檢核站（審稿人模式）</div>
+        <p style="font-size:12px;color:#1e3a8a;margin-bottom:10px;line-height:1.7;">把你的擬合結果和 lv1 預測的對照貼給 AI，請它以審稿人角色找問題。AI 不會做實驗，但會幫你找邏輯漏洞。</p>
+        <div style="background:white;border-radius:6px;padding:10px 12px;font-size:11px;font-family:'DM Mono',monospace;color:#334155;line-height:1.7;">
+          我做紙飛機實驗，操縱 A 從 60 到 300 cm²，每水準 N 次取平均。lv1 模擬器預測 A 最佳值在 180，我實測擬合出頂點是 ___ cm²，差 ___%。std/平均 = ___。請以審稿人角色指出：(1) 我的結論是否站得住；(2) 還有哪些變異來源沒處理；(3) 如果要增加可信度，下一步該怎麼做。
+        </div>
+        <button onclick="navigator.clipboard.writeText(document.querySelectorAll('.page-body pre, [style*=\"DM Mono\"]')[document.querySelectorAll('.page-body pre, [style*=\"DM Mono\"]').length - 1]?.textContent || '').then(()=>{this.textContent='✅ 已複製';setTimeout(()=>this.textContent='📋 複製 Prompt',1500)})" style="margin-top:8px;background:#dbeafe;border:none;padding:5px 12px;border-radius:4px;font-size:11px;cursor:pointer;color:#1e40af;">📋 複製 Prompt</button>
+        <p style="font-size:11px;color:#3b82f6;margin-top:8px;font-style:italic;">⚠️ AI 是審稿人，不是老闆。採納或駁回都要有理由。</p>
+      </div>
+
+      <!-- Layer 2: 總結 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 寫下你的「擬合結果 → 物理量 → 對照 lv1 預測」三段式結論</div>
+        <textarea class="think-input" data-key="airplane-lv2-fit" placeholder="擬合模型：___ | R² = ___&#10;讀出的物理量：最佳值 A = ___ cm²（lv1 預測 180 cm²）&#10;差異原因推論：___（例：真實紙張有摺縫、A 的定義不同）" style="min-height:100px;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+        <p style="font-size:13px;color:#6d28d9;">好素材：研究規劃表截圖、實驗照片、原始數據表、擬合圖 + 殘差圖、AI 審稿對話、lv1 vs lv2 對照表。</p>
+        <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+          ✍️ <strong>反思錨點</strong>：你原訂計畫跟實際執行最大的落差是什麼？你怎麼迭代的？下一組同學可以從你的失誤學到什麼？
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ═══ POST-CLASS ═══ -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body" style="display:none;">
+
+        <!-- 數據品質預防針 -->
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px;">💉 數據品質檢核</div>
+          <div style="display:grid;gap:6px;font-size:12px;color:#78350f;">
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>每個水準 ≥ 5 次（std 大就做 8–10 次）</span>
+            </label>
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>校準輪的 std / 平均 ≤ 20%</span>
+            </label>
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>異常值全部記錄、附排除理由</span>
+            </label>
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>擬合模型選擇跟「預期形狀」對齊（不是哪個 R² 高就選哪個）</span>
+            </label>
+            <label style="display:flex;align-items:start;gap:6px;cursor:pointer;">
+              <input type="checkbox" style="margin-top:2px;accent-color:#d97706;">
+              <span>有畫殘差圖，沒有系統性趨勢</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 教師筆記 -->
+        <div style="background:#f5f3ff;border:1px solid #d8b4fe;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#6d28d9;font-size:13px;margin-bottom:8px;">👩‍🏫 教學指引（教師版）</div>
+          <ul style="font-size:12px;color:#5d2f8d;padding-left:18px;line-height:1.9;">
+            <li><strong>教學核心：</strong>「計畫—校準—迭代」的完整循環，不是一次到位的實驗</li>
+            <li><strong>重點鷹架：</strong>六格設計表 + 三輪迭代 + 擬合模型選擇 + 殘差判讀</li>
+            <li><strong>常見迷思：</strong>學生會直接去丟 30 次然後畫折線。要求先校準 10 次才動正式，能訓練規劃思維</li>
+            <li><strong>AI 檢核：</strong>定位成「審稿人」而非「老闆」。學生要學會評估 AI 建議、決定採納或駁回</li>
+            <li><strong>lv1 → lv2 銜接：</strong>lv1 的虛擬三變因模型是 lv2 的「先驗」，lv2 驗證或修正 lv1 的預測</li>
+          </ul>
+          <div style="background:#faf5ff;border:1px dashed #d8b4fe;border-radius:6px;padding:10px 12px;margin-top:10px;font-size:12px;color:#5d2f8d;">
+            <strong>課綱指標：</strong>
+            <span class="ind-tag q" style="font-size:11px;">Q2 計畫研究</span>
+            <span class="ind-tag r" style="font-size:11px;">R2 變因控制</span>
+            <span class="ind-tag r" style="font-size:11px;">R3 操作蒐集</span>
+            <span class="ind-tag a" style="font-size:11px;">A1 整理數據</span>
+            <span class="ind-tag a" style="font-size:11px;">A2 比較分析</span>
+            <span class="ind-tag c" style="font-size:11px;">C1 陳述結果</span>
+          </div>
+        </div>
+
+        <!-- Unit Nav -->
+        <div class="unit-nav">
+          <a href="../phase1/airplane-lv1.html">← 紙飛機 Lv1</a>
+          <a href="../phase3/airplane-lv3.html">紙飛機 Lv3 發現問題 →</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

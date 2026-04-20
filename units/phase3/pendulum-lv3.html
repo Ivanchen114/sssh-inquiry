@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/units/phase3/pendulum-lv3">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>單擺 Lv3 · 10 秒極限競賽 · 探究與實作</title>
+  <meta name="description" content="單擺 Lv3 發現問題：10 秒極限競賽，挑戰設計最接近 10 秒的擺。">
+  <meta property="og:title" content="單擺 Lv3 · 10 秒極限競賽 · 探究與實作">
+  <meta property="og:description" content="單擺 Lv3 發現問題：10 秒極限競賽，挑戰設計最接近 10 秒的擺。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/units/phase3/pendulum-lv3.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+  <script>window.SITE_ROOT = '../..';</script>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="../../index.html">首頁</a><span>›</span><span>主題·單擺</span><span>›</span>
+      <span style="color:var(--phase3)">Lv3 發現問題</span>
+    </div>
+    <h1>🕰️ 單擺模組 · Lv3 發現問題</h1>
+    <p class="subtitle">設計一個剛好擺 10 秒的單擺——然後問出更好的問題。</p>
+    <div class="meta-tags">
+      <span class="tag phase3">發現問題</span>
+      <span class="tag">4 節課</span>
+      <span class="tag">競賽 + 自主探究</span>
+    </div>
+  </div>
+
+  <!-- 學習目標 -->
+  <div style="background:var(--info-bg);border-left:4px solid var(--phase3);padding:16px 20px;margin:0 20px 20px 20px;border-radius:6px;">
+    <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">🎯 學習目標</div>
+    <ul style="font-size:12px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
+      <li>能從實作經驗中觀察現象，並記錄「意料之外」的發現（例如：競賽中計時誤差從何而來？）</li>
+      <li>能將觀察轉化為具有操縱變因的可探究科學問題（例如：初始角度大小如何影響累積誤差？）</li>
+      <li>能區分「好的探究問題」與「過於模糊或無法實驗的問題」（例如：「盲數方法的最佳變因組合是什麼？」vs「怎樣才能更準？」）</li>
+      <li>能根據問題規劃後續研究方向，形成自主探究的起點</li>
+    </ul>
+  </div>
+
+  <nav class="step-nav">
+    <button class="step-tab active"><span class="step-num">1</span>挑戰規則</button>
+    <button class="step-tab"><span class="step-num">2</span>製作與測試</button>
+    <button class="step-tab"><span class="step-num">3</span>從競賽到問題</button>
+    <button class="step-tab"><span class="step-num">4</span>後續探究</button>
+  </nav>
+
+  <div class="page-body">
+
+    <!-- ════════════════════════════════════ -->
+    <!-- Step 1: 挑戰規則 -->
+    <!-- ════════════════════════════════════ -->
+    <div class="step-panel active">
+      <div class="step-action">閱讀挑戰規則、準備材料，規劃你的設計策略。</div>
+
+      <div class="card" style="margin-bottom:16px;border-left:3px solid var(--phase3);">
+        <div style="font-weight:700;font-size:15px;margin-bottom:10px;">🏆 挑戰規則</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">任務</div>
+            設計一個單擺，讓它<strong>連續擺動的時間剛好是 10.00 秒</strong>（從放手到你喊停）。
+          </div>
+          <div style="background:var(--bg);padding:10px 12px;border-radius:6px;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">盲測制度</div>
+            你不能邊看碼錶邊喊停。設計好你的擺 → 計算幾個週期 ≈ 10 秒 → <strong>盲數</strong>那個次數後喊停 → 老師才亮碼錶。
+          </div>
+        </div>
+        <div class="info-box orange">
+          ⚠️ 盲測的意義：你不是在「猜時間」，而是在「信任你的模型」。如果你的計算正確，你數的週期數 × 週期 = 10 秒。
+        </div>
+      </div>
+
+      <div class="section-title">材料與設計</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:12px;color:var(--text-secondary);margin-bottom:14px;">
+          <div style="background:var(--bg);padding:10px;border-radius:6px;text-align:center;">棉線 / 釣魚線</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;text-align:center;">砝碼（10–500g）</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;text-align:center;">量尺 / 捲尺</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;text-align:center;">碼錶（老師持有）</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;text-align:center;">計算機</div>
+          <div style="background:var(--bg);padding:10px;border-radius:6px;text-align:center;">固定支架</div>
+        </div>
+
+        <!-- 設計思路：先想再看 -->
+        <div class="collapsible think-first">
+          <div class="collapsible-header">
+            🧠 設計提示：先自己想，再點開看<span class="toggle-icon">▶</span>
+          </div>
+          <div class="collapsible-body">
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+              <p><strong>Step 1</strong>：先決定你要數幾個週期。假設 n 個週期 = 10 秒，那 T = 10/n 秒。</p>
+              <p><strong>Step 2</strong>：用 T = 2π√(L/g) 反推需要的擺長 L。</p>
+              <p><strong>Step 3</strong>：量好擺長、架好單擺。注意：L 是從支點到擺心的距離，不是繩子長度。</p>
+              <p><strong>Step 4</strong>：先自己計時驗證 2–3 次，微調後再正式盲測。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev" disabled>← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- Step 2: 製作與測試 -->
+    <!-- ════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="step-action">組裝單擺、練習盲數、參加競賽，記錄數據。</div>
+
+      <div class="section-title">競賽流程</div>
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 1 · 設計與練習（50 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">計算目標擺長 → 組裝 → 自行計時驗證 → 微調 → 練習盲數。每組可以練習 3 次，然後鎖定設計。</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--phase3);">
+          <div style="font-weight:700;font-size:13px;color:var(--phase3);margin-bottom:4px;">節 2 · 正式盲測（25 分鐘）</div>
+          <p style="font-size:12px;color:var(--text-secondary);line-height:1.8;">每組上場：放手 → 盲數 → 喊停 → 老師亮碼錶。全班記錄每組的「實際秒數」和「與 10 秒的差距」。最接近的組獲勝。</p>
+        </div>
+      </div>
+
+      <div class="section-title">競賽數據表</div>
+      <div style="overflow-x:auto;margin-bottom:20px;">
+        <table>
+          <thead><tr><th>組別</th><th>設計擺長 (cm)</th><th>目標週期 (s)</th><th>盲數次數</th><th>實際時間 (s)</th><th>|誤差| (s)</th></tr></thead>
+          <tbody>
+            <tr><td>第 1 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>第 2 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>第 3 組</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td><td style="color:var(--text-muted);">___</td></tr>
+            <tr><td>…</td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- 發現問題鷹架：直覺對照站 -->
+    <!-- ════════════════════════════════════ -->
+    <section class="step-card" style="border-left:4px solid #16a34a;background:#f0fdf4;">
+      <div class="step-title" style="color:#166534;">🔍 直覺對照站：從落差中挖問題</div>
+      <div class="step-action">科學提問常從「我以為會這樣，結果不是」的直覺落差開始。不用公式、不用模型——先誠實面對你自己的直覺。</div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">💭 Step 1：實作前的直覺預期</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          回到你動手之前——那時你心裡以為結果會怎樣？用白話寫，不要背公式。
+        </div>
+        <textarea placeholder="我做之前以為會 ___，因為 ___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">👀 Step 2：實作時的觀察</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          實際做下去、或看同學做，你觀察到什麼？特別是<strong>預期外的</strong>結果、驚訝、卡關、意外。
+        </div>
+        <div style="background:#fef3c7;border:1px solid #fbbf24;padding:10px;border-radius:6px;font-size:12px;color:#78350f;margin-bottom:10px;">
+          💡 這個模組可以留意：不同擺長、擺錘重量、擺角下的週期差異；擺幅隨時間衰減的速度；繩子扭轉造成的偏擺；放手手法對首次擺幅的影響
+        </div>
+        <textarea placeholder="我看到 ___，其中最讓我意外的是 ___" style="width:100%;min-height:70px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">⚖️ Step 3：落差盤點</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          你的直覺預期和實際觀察差在哪？往哪個方向偏？偏多還偏少？可以從「方向、大小、時機」三個角度想。
+        </div>
+        <textarea placeholder="預期：___&#10;實際：___&#10;落差：___（方向/大小/時機）" style="width:100%;min-height:80px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div class="think-block" style="background:#fff;border:1px solid #86efac;padding:14px;border-radius:8px;margin:14px 0;">
+        <div style="font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">❓ Step 4：把落差變問題</div>
+        <div style="font-size:13px;line-height:1.7;color:#166534;margin-bottom:10px;">
+          從落差最讓你困惑的地方，用句型生出一個可探究的問題：<br>
+          · 「改變 ___，___ 會怎麼變？」<br>
+          · 「什麼條件下 ___ 會反轉？」<br>
+          · 「___ 和 ___ 哪個影響比較大？」
+        </div>
+        <textarea placeholder="我的探究問題：___" style="width:100%;min-height:60px;padding:8px;border:1px solid #86efac;border-radius:4px;font-size:13px;"></textarea>
+      </div>
+
+      <div style="background:#dcfce7;border:1px solid #16a34a;padding:12px;border-radius:8px;font-size:13px;color:#14532d;">
+        <strong>👉 承接下一步：</strong>這個從落差長出來的問題，就是你接下來要自己規劃研究、自己建模、自己解釋的起點。發現問題不需要公式——只需要誠實的直覺 + 敏銳的觀察。
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- Step 3: 從競賽到問題 -->
+    <!-- ════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="step-action">反思競賽過程，從觀察轉化為可探究的科學問題。</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">💭 賽後反思：你在競賽中遇到什麼問題？</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">剛才的比賽，你的設計一定不完美。那些「不完美」就是問題的起點。</p>
+        <div style="display:grid;gap:8px;margin-bottom:14px;">
+          <div class="q-item phase3">
+            <strong>Step 1 · 記錄觀察</strong>：寫下 3 個你在競賽中注意到的現象（例如：「擺了幾次之後幅度變小很多」「繩子會扭轉」「每次放手的方式不同結果不同」）
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 2 · 轉化為問題</strong>：用「如果改變___，___會怎樣？」的句型，從觀察中提出至少 3 個問題
+          </div>
+          <div class="q-item phase3">
+            <strong>Step 3 · 篩選品質</strong>：用四條件檢查每個問題——可量化？可操作？非查書題？有變因？選出 1 個最想探究的
+          </div>
+        </div>
+      </div>
+
+      <!-- 好壞問題對照：先想再看 -->
+      <div class="collapsible think-first">
+        <div class="collapsible-header">
+          🔍 好問題 vs 需要改進的問題（先自己想，再點開對照）<span class="toggle-icon">▶</span>
+        </div>
+        <div class="collapsible-body">
+          <div style="overflow-x:auto;">
+            <table style="font-size:12px;">
+              <thead><tr><th>❌ 需要改進</th><th>問題出在哪</th><th>✅ 好的探究問題</th></tr></thead>
+              <tbody>
+                <tr><td>「單擺為什麼會擺動？」</td><td style="color:var(--text-muted);">查書題</td><td>「擺線材質（棉線 vs 釣魚線）會影響衰減速度嗎？」</td></tr>
+                <tr><td>「我的設計不準」</td><td style="color:var(--text-muted);">不是問題</td><td>「初始角度 10° vs 30° vs 50°，對 10 秒內的累積誤差影響多大？」</td></tr>
+                <tr><td>「怎樣才能更準？」</td><td style="color:var(--text-muted);">太模糊</td><td>「數 5 次 vs 10 次 vs 20 次週期，哪種策略的盲測誤差最小？」</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:12px;color:#92400e;margin-top:10px;">→ 完整的問題分類框架，看 <a href="../../tools/good-question.html" style="color:#92400e;font-weight:700;">工具箱：什麼是好的探究問題</a></p>
+        </div>
+      </div>
+
+      <!-- Layer 2: 問題轉化記錄 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 根據你在競賽中的觀察，寫下「最想探究的一個問題」及其理由</div>
+        <textarea class="think-input" data-key="pendulum-lv3-q1" placeholder="例如：我想探究「初始角度如何影響累積誤差」，因為看到別組的盲數有時偏差特別大…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 3: 問題品質檢驗 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 檢查你的問題：下列哪個問題是「最好探究的」？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 「單擺為什麼會擺？」</button>
+          <button class="think-opt" data-val="b">B. 「加速數週期的盲數策略是否比減速數週期更準？」</button>
+          <button class="think-opt" data-val="c">C. 「怎樣才能不出錯？」</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 是最好的問題——它有明確的操縱變因（數的速度快慢）、可量化的結果（誤差大小），而且用實驗就能驗證。A 是查書題，C 太模糊。</div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span><span class="step-dot"></span>
+        </div>
+        <button class="step-btn primary" data-step="next">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- Step 4: 後續探究 -->
+    <!-- ════════════════════════════════════ -->
+    <div class="step-panel">
+      <div class="step-action">規劃實驗、執行研究、分析數據，完成 4 節課的探究。</div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px;">🔬 後續探究（節 3–4）</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">選定問題後，你可以自己規劃一個小型研究：</p>
+        <div style="display:grid;gap:8px;font-size:13px;color:var(--text-secondary);">
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📋 寫出實驗計畫（操縱變因、控制變因、應變變因、水準數、重複次數）</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🔬 執行實驗、收集數據</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">📊 畫圖、找趨勢、寫結論</div>
+          <div style="background:var(--bg);border-radius:4px;padding:10px 14px;">🎤 5 分鐘口頭報告：問題 → 設計 → 數據 → 結論 → 新問題</div>
+        </div>
+      </div>
+
+      <div class="step-footer">
+        <button class="step-btn" data-step="prev">← 上一步</button>
+        <div class="step-dots">
+          <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot current"></span>
+        </div>
+        <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- Post-Class Resources -->
+    <!-- ════════════════════════════════════ -->
+    <div class="post-class">
+      <button class="post-class-toggle">
+        <span>📦 課後資源（AI 協作、學習歷程、教師筆記）</span>
+        <span class="toggle-arrow">▶</span>
+      </button>
+      <div class="post-class-body">
+
+        <!-- 問題發現單 -->
+        <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">💡</span>
+          <div>
+            <div style="font-weight:700;color:#92400e;font-size:13px;">填寫問題發現單</div>
+            <div style="font-size:12px;color:#78716c;">把實驗中的觀察轉化為可探究的問題 → <a href="question-discover.html" style="color:#b45309;">前往填寫</a></div>
+          </div>
+        </div>
+
+        <!-- AI 協作 -->
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1e40af;font-size:13px;margin-bottom:8px;">🤖 AI 協作</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:#1e3a8a;">
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📐 規劃階段</div>
+              把你的任務限制告訴 AI（材料、規則、目標），請它幫你發想設計方案。記得截圖保存對話——展示你怎麼提問比 AI 給了什麼答案更重要。
+            </div>
+            <div style="background:white;border-radius:6px;padding:10px 12px;">
+              <div style="font-weight:700;margin-bottom:4px;">📝 反思階段</div>
+              活動結束後，把你的觀察和反思草稿交給 AI 潤飾文字。但核心內容（觀察到什麼、為什麼失敗、怎麼改進）必須是你自己的思考。
+            </div>
+          </div>
+          <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ 規劃時 AI 是設計夥伴；反思時 AI 是文字編輯。兩個階段都是你在主導。</p>
+        </div>
+
+        <!-- 學習歷程提示 -->
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:16px 20px;margin-bottom:16px;">
+          <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+          <p style="font-size:13px;color:#6d28d9;">好素材：設計計算過程 → 競賽記錄表 → 賽後觀察 → 問題清單與篩選理由 → 後續研究成果。這完整呈現了「發現問題」的能力。</p>
+          <div style="background:#faf5ff;border:1px dashed #c4b5fd;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:12px;color:#6d28d9;">
+            ✍️ <strong>反思錨點</strong>（寫 2-3 句就好）：<br>
+            你的第一版設計和最終版差在哪？如果重來一次，你會在哪個環節做不同的決定？<br>
+            <span style="font-size:11px;color:#8b5cf6;">比起「我學到團隊合作」，寫出「第一次船壁做 3cm 太矮改成 5cm」才有說服力。</span>
+          </div>
+        </div>
+
+        <!-- 教師備註 -->
+        <div class="collapsible teacher-toggle">
+          <div class="collapsible-header">
+            👩‍🏫 教師備註<span class="toggle-icon">▶</span>
+          </div>
+          <div class="collapsible-body">
+            <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+              10 秒競賽的設計邏輯：學生必須真正理解 T = 2π√(L/g) 才能算出正確擺長，這是 Lv1 論證建模的應用。盲測迫使他們信任計算結果而非感覺。常見的誤差來源（繩長 ≠ 擺長、初始角度太大、計數錯誤）自然成為 Lv3 問題的素材。<br><br>
+              階段二的重點不是「找到好問題」而是「經歷從觀察到問題的轉化過程」。如果學生提出的問題偏弱，不要直接否定——用「你覺得這個問題要怎麼設計實驗？」來引導他們自己發現問題的侷限。
+            </p>
+          </div>
+        </div>
+
+        <!-- Unit Navigation -->
+        <div class="unit-nav">
+          <a href="../phase2/pendulum-lv2.html">← 單擺 Lv2</a>
+          <a href="../phase3/final.html">期末成果發表 →</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>
