@@ -58,16 +58,23 @@
   </div>
 
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>選題×假設</button>
-    <button class="step-tab"><span class="step-num">2</span>設計鷹架</button>
-    <button class="step-tab"><span class="step-num">3</span>執行×迭代</button>
-    <button class="step-tab"><span class="step-num">4</span>分析×擬合</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
 
-    <!-- ═══ Step 1：選題×假設 ═══ -->
-    <div class="step-panel active">
+    <!-- ═══ 階段一：發現問題 ═══ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">從 Lv1 的意外或疑惑，長出你自己的研究問題</div>
+        <p class="stage-desc">Lv2 你要<strong>自己選題並提假設</strong>。老師不再給研究問題——你的任務是把 Lv1 的預測失準、意外現象、或沒解釋清楚的地方，寫成一個<strong>可驗證的研究問題</strong>，並提出有依據的假設。這是整份研究的起點。</p>
+        <span class="who-bar student">✏️ 本階段學生主導</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：問題發想引導、假設檢核表</span>
+      </div>
       <div class="step-action">從 lv1 的三變因出發，選一個要在教室實測驗證的問題，並寫下可驗證的假設。</div>
 
       <div style="background:var(--bg);border-radius:8px;padding:12px 16px;margin-bottom:14px;">
@@ -111,7 +118,9 @@
       <!-- Layer 2: 選題與預測 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 你選哪一個？寫出「研究問題 + 假設」。假設要有明確預測（例：「A 從 60 增到 180，距離增加；180 後減少」）</div>
-        <textarea class="think-input" data-key="airplane-lv2-choice" placeholder="研究問題：___&#10;假設（可驗證的預測）：___&#10;如果假設錯，我會看到什麼現象？___"></textarea>
+        <textarea class="think-input" data-key="airplane-lv2-choice" rows="4" style="line-height:1.8;">研究問題：___
+假設（可驗證的預測）：___
+如果假設錯，我會看到什麼現象？___</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -138,8 +147,15 @@
       </div>
     </div>
 
-    <!-- ═══ Step 2：設計鷹架 ═══ -->
-    <div class="step-panel">
+    <!-- ═══ 階段二：規劃研究 ═══ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">自己設計實驗：操縱變因、控制變因、重複次數</div>
+        <p class="stage-desc">Lv2 的核心——<strong>你自己設計實驗計畫</strong>。要說明：操縱什麼、控制什麼、怎麼測、重複幾次、誤差如何處理。每個設計選擇都要有理由。老師會給你一份檢核表確保你沒漏掉關鍵項目。</p>
+        <span class="who-bar student">✏️ 本階段學生主導</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：實驗設計檢核表</span>
+      </div>
       <div class="step-action">用六格鷹架把你的想法變成「明天就能執行」的計畫。</div>
 
       <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:14px;">
@@ -223,7 +239,10 @@
       <!-- Layer 2: 計畫反思 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你的「六格」回答（第 1、2、5、6 格最關鍵）</div>
-        <textarea class="think-input" data-key="airplane-lv2-plan" placeholder="1. 假設：___&#10;2. 變因：操縱___/應變___/控制___&#10;5. 力道控制：___&#10;6. 擬合計畫：___因為___" style="min-height:110px;"></textarea>
+        <textarea class="think-input" data-key="airplane-lv2-plan" style="min-height:110px;line-height:1.8" rows="5">1. 假設：___
+2. 變因：操縱___/應變___/控制___
+5. 力道控制：___
+6. 擬合計畫：___因為___</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -236,8 +255,14 @@
       </div>
     </div>
 
-    <!-- ═══ Step 3：執行×迭代 ═══ -->
-    <div class="step-panel">
+    <!-- ═══ 階段三：執行與分析 ═══ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">按自己的計畫執行、記錄、做初步分析</div>
+        <p class="stage-desc">依照你在 Stage 2 寫的計畫實際操作：收集數據、畫圖、判斷數據可靠性（至少 3 次重複）。初步分析要能看出變因的關係——線性？平方？飽和？</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">先試飛再正式——規劃研究的核心是「迭代」，不是一次到位。</div>
 
       <div class="section-title" style="color:var(--phase2);">三輪迭代</div>
@@ -303,7 +328,9 @@
       <!-- Layer 2: 結論撰寫 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你前兩輪的發現，以及第三輪「要補哪裡」的計畫</div>
-        <textarea class="think-input" data-key="airplane-lv2-iterate" placeholder="輪 1：校準 std = ___m（___%）&#10;輪 2：5 水準初掃結果：___&#10;輪 3 補強計畫：在 ___ 附近加密水準，因為 ___" style="min-height:90px;"></textarea>
+        <textarea class="think-input" data-key="airplane-lv2-iterate" style="min-height:90px;line-height:1.8" rows="4">輪 1：校準 std = ___m（___%）
+輪 2：5 水準初掃結果：___
+輪 3 補強計畫：在 ___ 附近加密水準，因為 ___</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -316,8 +343,14 @@
       </div>
     </div>
 
-    <!-- ═══ Step 4：分析×擬合 ═══ -->
-    <div class="step-panel">
+    <!-- ═══ 階段四：論證與反思 ═══ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">用 CER 論證結果、對組內發表、反思下一步</div>
+        <p class="stage-desc">用 <strong>CER（主張–證據–推理）</strong>架構把你的結論寫完整；對組內或全班做一次<strong>初步發表</strong>（口頭或迷你海報）；最後反思：哪些結論可信？哪些還有疑問？下一 Lv（Lv3）你想挑戰什麼？</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">用合適的擬合模型讀出物理量，比對 lv1 預測，寫結論。</div>
 
       <div class="section-title" style="color:var(--phase2);">從擬合讀物理</div>
@@ -353,7 +386,9 @@
       <!-- Layer 2: 總結 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你的「擬合結果 → 物理量 → 對照 lv1 預測」三段式結論</div>
-        <textarea class="think-input" data-key="airplane-lv2-fit" placeholder="擬合模型：___ | R² = ___&#10;讀出的物理量：最佳值 A = ___ cm²（lv1 預測 180 cm²）&#10;差異原因推論：___（例：真實紙張有摺縫、A 的定義不同）" style="min-height:100px;"></textarea>
+        <textarea class="think-input" data-key="airplane-lv2-fit" style="min-height:100px;line-height:1.8" rows="4">擬合模型：___ | R² = ___
+讀出的物理量：最佳值 A = ___ cm²（lv1 預測 180 cm²）
+差異原因推論：___（例：真實紙張有摺縫、A 的定義不同）</textarea>
         <div class="think-status"></div>
       </div>
 

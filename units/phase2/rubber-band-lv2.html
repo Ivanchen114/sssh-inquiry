@@ -59,16 +59,23 @@
 
   <!-- ═══ 步驟導航列 ═══ -->
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>選題×假設</button>
-    <button class="step-tab"><span class="step-num">2</span>設計鷹架</button>
-    <button class="step-tab"><span class="step-num">3</span>執行×迭代</button>
-    <button class="step-tab"><span class="step-num">4</span>分析×擬合</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
 
-    <!-- ═══ Step 1：選題×假設 ═══ -->
-    <div class="step-panel active">
+    <!-- ═══ 階段一：發現問題 ═══ -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">從 Lv1 的意外或疑惑，長出你自己的研究問題</div>
+        <p class="stage-desc">Lv2 你要<strong>自己選題並提假設</strong>。老師不再給研究問題——你的任務是把 Lv1 的預測失準、意外現象、或沒解釋清楚的地方，寫成一個<strong>可驗證的研究問題</strong>，並提出有依據的假設。這是整份研究的起點。</p>
+        <span class="who-bar student">✏️ 本階段學生主導</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：問題發想引導、假設檢核表</span>
+      </div>
       <div class="step-action">從 lv1 的飽和模型出發，選一個值得驗證或延伸的研究問題。</div>
 
       <!-- lv1 回顧：飽和模型 -->
@@ -123,7 +130,9 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 選一個研究問題（或自訂），寫下你的假設與初步預測</div>
-        <textarea class="think-input" data-key="rubber-band-lv2-q" rows="4" placeholder="我選：Q1（橡皮筋條數 vs D∞）&#10;假設：條數越多，D∞ 越大，因為總儲能上限是每條橡皮筋儲能的加總。&#10;初步預測：1 條 D∞ ≈ 170 cm；2 條 D∞ ≈ 300 cm（不完全加倍，因為罐子重量沒變，摩擦損耗一樣）。"></textarea>
+        <textarea class="think-input" data-key="rubber-band-lv2-q" rows="4" style="line-height:1.8;">我選：Q1（橡皮筋條數 vs D∞）
+假設：條數越多，D∞ 越大，因為總儲能上限是每條橡皮筋儲能的加總。
+初步預測：1 條 D∞ ≈ 170 cm；2 條 D∞ ≈ 300 cm（不完全加倍，因為罐子重量沒變，摩擦損耗一樣）。</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -139,8 +148,15 @@
       </div>
     </div>
 
-    <!-- ═══ Step 2：設計鷹架 ═══ -->
-    <div class="step-panel">
+    <!-- ═══ 階段二：規劃研究 ═══ -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">自己設計實驗：操縱變因、控制變因、重複次數</div>
+        <p class="stage-desc">Lv2 的核心——<strong>你自己設計實驗計畫</strong>。要說明：操縱什麼、控制什麼、怎麼測、重複幾次、誤差如何處理。每個設計選擇都要有理由。老師會給你一份檢核表確保你沒漏掉關鍵項目。</p>
+        <span class="who-bar student">✏️ 本階段學生主導</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：實驗設計檢核表</span>
+      </div>
       <div class="step-action">用六格設計清單把研究問題轉成可執行的實驗計畫。</div>
 
       <!-- 六格設計表 -->
@@ -265,7 +281,12 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 用六格格式寫下你的設計（每格至少 1 句）</div>
-        <textarea class="think-input" data-key="rubber-band-lv2-design" rows="8" placeholder="① 假設：&#10;② 變因拆解：操縱＝___；應變＝___；控制＝___、___、___...&#10;③ 工具×精度：&#10;④ 重複次數：&#10;⑤ 操作一致性：&#10;⑥ 擬合計畫：掃 ___ 的 5 個水準，每個水準掃 5-6 個圈數，擬合飽和模型讀出 D∞ 和 τ"></textarea>
+        <textarea class="think-input" data-key="rubber-band-lv2-design" rows="7" style="line-height:1.8;">① 假設：
+② 變因拆解：操縱＝___；應變＝___；控制＝___、___、___...
+③ 工具×精度：
+④ 重複次數：
+⑤ 操作一致性：
+⑥ 擬合計畫：掃 ___ 的 5 個水準，每個水準掃 5-6 個圈數，擬合飽和模型讀出 D∞ 和 τ</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -281,8 +302,14 @@
       </div>
     </div>
 
-    <!-- ═══ Step 3：執行×迭代 ═══ -->
-    <div class="step-panel">
+    <!-- ═══ 階段三：執行與分析 ═══ -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">按自己的計畫執行、記錄、做初步分析</div>
+        <p class="stage-desc">依照你在 Stage 2 寫的計畫實際操作：收集數據、畫圖、判斷數據可靠性（至少 3 次重複）。初步分析要能看出變因的關係——線性？平方？飽和？</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">不要一次跑完——用三輪迭代累積可信數據。</div>
 
       <!-- 三輪迭代 -->
@@ -381,7 +408,10 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 第一輪校準結果：你的 std/mean 是多少？有通過 ≤ 20% 的標準嗎？如果沒過，你做了什麼調整？</div>
-        <textarea class="think-input" data-key="rubber-band-lv2-calib" rows="3" placeholder="校準組條件：___&#10;10 次數據：___&#10;mean = ___ cm，std = ___ cm，std/mean = ___%&#10;調整：___"></textarea>
+        <textarea class="think-input" data-key="rubber-band-lv2-calib" rows="5" style="line-height:1.8;">校準組條件：___
+10 次數據：___
+mean = ___ cm，std = ___ cm，std/mean = ___%
+調整：___</textarea>
         <div class="think-status"></div>
       </div>
 
@@ -397,8 +427,14 @@
       </div>
     </div>
 
-    <!-- ═══ Step 4：分析×擬合 ═══ -->
-    <div class="step-panel">
+    <!-- ═══ 階段四：論證與反思 ═══ -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">用 CER 論證結果、對組內發表、反思下一步</div>
+        <p class="stage-desc">用 <strong>CER（主張–證據–推理）</strong>架構把你的結論寫完整；對組內或全班做一次<strong>初步發表</strong>（口頭或迷你海報）；最後反思：哪些結論可信？哪些還有疑問？下一 Lv（Lv3）你想挑戰什麼？</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">擬合飽和模型、做殘差分析、用不確定度論證結論。</div>
 
       <!-- 擬合步驟 -->
@@ -466,7 +502,9 @@
 
       <div class="think-block record">
         <div class="think-prompt">✏️ 用 CER 格式寫下你的結論（含擬合參數與不確定度）</div>
-        <textarea class="think-input" data-key="rubber-band-lv2-conclusion" rows="5" placeholder="主張（Claim）：___&#10;證據（Evidence）：擬合得 D∞ = ___ ± ___，τ = ___ ± ___，R² = ___。不同水準的誤差棒（是/否）重疊。&#10;推理（Reasoning）：從 lv1 的飽和模型出發，我的假設預測 ___，實際結果 ___。這（支持/反對）假設，因為 ___。"></textarea>
+        <textarea class="think-input" data-key="rubber-band-lv2-conclusion" rows="4" style="line-height:1.8;">主張（Claim）：___
+證據（Evidence）：擬合得 D∞ = ___ ± ___，τ = ___ ± ___，R² = ___。不同水準的誤差棒（是/否）重疊。
+推理（Reasoning）：從 lv1 的飽和模型出發，我的假設預測 ___，實際結果 ___。這（支持/反對）假設，因為 ___。</textarea>
         <div class="think-status"></div>
       </div>
 

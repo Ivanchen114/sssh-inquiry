@@ -58,15 +58,22 @@
   </div>
 
   <nav class="step-nav">
-    <button class="step-tab active"><span class="step-num">1</span>選題</button>
-    <button class="step-tab"><span class="step-num">2</span>設計實驗</button>
-    <button class="step-tab"><span class="step-num">3</span>執行與數據</button>
-    <button class="step-tab"><span class="step-num">4</span>分析與發表</button>
+    <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
+    <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
+    <button class="step-tab"><span class="step-num">3</span>執行與分析</button>
+    <button class="step-tab"><span class="step-num">4</span>論證與反思</button>
   </nav>
 
   <div class="page-body">
-    <!-- STEP 1: 選題 -->
-    <div class="step-panel active">
+    <!-- 階段一：發現問題 -->
+    <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
+      <div class="stage-intro">
+        <div class="stage-label">階段一 · 發現問題</div>
+        <div class="stage-title">從 Lv1 的意外或疑惑，長出你自己的研究問題</div>
+        <p class="stage-desc">Lv2 你要<strong>自己選題並提假設</strong>。老師不再給研究問題——你的任務是把 Lv1 的預測失準、意外現象、或沒解釋清楚的地方，寫成一個<strong>可驗證的研究問題</strong>，並提出有依據的假設。這是整份研究的起點。</p>
+        <span class="who-bar student">✏️ 本階段學生主導</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：問題發想引導、假設檢核表</span>
+      </div>
       <div class="step-action">
         <strong>你的任務：</strong>從變因清單中，找出你最感興趣的一個變因，並寫出你想探究的問題。
       </div>
@@ -161,8 +168,15 @@
       </div>
     </div>
 
-    <!-- STEP 2: 設計實驗 -->
-    <div class="step-panel">
+    <!-- 階段二：規劃研究 -->
+    <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
+      <div class="stage-intro phase2">
+        <div class="stage-label">階段二 · 規劃研究</div>
+        <div class="stage-title">自己設計實驗：操縱變因、控制變因、重複次數</div>
+        <p class="stage-desc">Lv2 的核心——<strong>你自己設計實驗計畫</strong>。要說明：操縱什麼、控制什麼、怎麼測、重複幾次、誤差如何處理。每個設計選擇都要有理由。老師會給你一份檢核表確保你沒漏掉關鍵項目。</p>
+        <span class="who-bar student">✏️ 本階段學生主導</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：實驗設計檢核表</span>
+      </div>
       <div class="step-action">
         <strong>你的任務：</strong>寫出完整的實驗計畫，讓另一組同學看得懂。然後互相審查彼此的計畫。
       </div>
@@ -253,8 +267,14 @@
       </div>
     </div>
 
-    <!-- STEP 3: 執行與數據 -->
-    <div class="step-panel">
+    <!-- 階段三：執行與分析 -->
+    <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
+      <div class="stage-intro phase3">
+        <div class="stage-label">階段三 · 執行與分析</div>
+        <div class="stage-title">按自己的計畫執行、記錄、做初步分析</div>
+        <p class="stage-desc">依照你在 Stage 2 寫的計畫實際操作：收集數據、畫圖、判斷數據可靠性（至少 3 次重複）。初步分析要能看出變因的關係——線性？平方？飽和？</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">
         <strong>你的任務：</strong>依照計畫執行實驗，收集每個水準的數據，用 Excel 計算平均值並畫圖。
       </div>
@@ -356,8 +376,14 @@
       </div>
     </div>
 
-    <!-- STEP 4: 分析與發表 -->
-    <div class="step-panel">
+    <!-- 階段四：論證與反思 -->
+    <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
+      <div class="stage-intro phase4">
+        <div class="stage-label">階段四 · 論證與反思</div>
+        <div class="stage-title">用 CER 論證結果、對組內發表、反思下一步</div>
+        <p class="stage-desc">用 <strong>CER（主張–證據–推理）</strong>架構把你的結論寫完整；對組內或全班做一次<strong>初步發表</strong>（口頭或迷你海報）；最後反思：哪些結論可信？哪些還有疑問？下一 Lv（Lv3）你想挑戰什麼？</p>
+        <span class="who-bar student">✏️ 本階段學生全程執行</span>
+      </div>
       <div class="step-action">
         <strong>你的任務：</strong>用數據回答研究問題，寫出你的發現，然後向班上同學報告。
       </div>
