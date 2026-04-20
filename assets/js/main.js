@@ -719,13 +719,17 @@ function initExportFab() {
   const inputs = document.querySelectorAll('.think-input');
   if (inputs.length === 0) return;
 
-  // 頁尾區塊——優先掛到 .page-body 裡（和正文寬度、對齊一致），找不到才退 #main-content / body
-  const host = document.querySelector('.page-body')
+  // 掛載點優先順序：Stage 4 的 .learning-self-check → .page-body → main → body
+  // 放在自評檢核後面，形成「勾選 → 解鎖匯出」的儀式流程
+  const selfCheck = document.querySelector('.learning-self-check');
+  const host = selfCheck
+            || document.querySelector('.page-body')
             || document.getElementById('main-content')
             || document.querySelector('main')
             || document.body;
+  const mountedInCheck = !!selfCheck;
   const section = document.createElement('section');
-  section.className = 'export-footer';
+  section.className = mountedInCheck ? 'export-footer in-check' : 'export-footer';
 
   const photoCount = document.querySelectorAll('.photo-slot').length;
   const photoHint = photoCount > 0
@@ -750,12 +754,20 @@ function initExportFab() {
       ${photoCount > 0 ? '<div class="export-footer-step">④ 依照文件裡的 📷 標記，把手機相簿的照片插入對應位置</div>' : ''}
     </div>
   `;
-  host.appendChild(section);
+  // 掛在 .learning-self-check 之後（平級），不是塞進去——才會在勾選清單下方而非內部
+  if (mountedInCheck) {
+    selfCheck.parentNode.insertBefore(section, selfCheck.nextSibling);
+  } else {
+    host.appendChild(section);
+  }
 
   // Toast
   const toast = document.createElement('div');
   toast.className = 'export-toast';
   document.body.appendChild(toast);
+
+  // 自評檢核鎖：掛在 Stage 4 的狀況下，未全勾時按鈕 disabled
+  if (mountedInCheck) initSelfCheckLock(selfCheck, section);
 
   function showToast(msg) {
     toast.textContent = msg;
@@ -783,6 +795,11 @@ function initExportFab() {
 
   // 複製到剪貼簿（純文字，給 Google Docs 貼上）
   copyBtn.addEventListener('click', () => {
+    // 用 data-locked 而非 disabled——後者會阻止 click 事件觸發，看不到提示 toast
+    if (copyBtn.dataset.locked === 'true') {
+      showToast('請先把上方「學習自評」全部勾起來');
+      return;
+    }
     const text = buildExportText();
     if (!text) return;
     navigator.clipboard.writeText(text).then(() => {
@@ -799,6 +816,60 @@ function initExportFab() {
       showToast('✓ 已複製到剪貼簿！');
     });
   });
+}
+
+// ═══════════════════════════════════════════════════
+//  自評檢核鎖：全勾才能匯出 + localStorage 持久化
+// ═══════════════════════════════════════════════════
+function initSelfCheckLock(selfCheck, exportSection) {
+  const unitKey = selfCheck.dataset.unitKey || 'default';
+  const storageKey = 'selfcheck_' + unitKey;
+  const boxes = selfCheck.querySelectorAll('.self-check-box');
+  if (boxes.length === 0) return;
+
+  const copyBtn = exportSection.querySelector('.export-footer-btn');
+  const lockHint = document.createElement('div');
+  lockHint.className = 'export-lock-hint';
+  exportSection.insertBefore(lockHint, copyBtn);
+
+  // 讀取已儲存的勾選狀態
+  let saved = [];
+  try {
+    saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  } catch (e) { saved = []; }
+
+  boxes.forEach(box => {
+    const idx = parseInt(box.dataset.idx, 10);
+    if (saved.includes(idx)) {
+      box.checked = true;
+      box.closest('.self-check-item').classList.add('checked');
+    }
+    box.addEventListener('change', () => {
+      box.closest('.self-check-item').classList.toggle('checked', box.checked);
+      persist();
+      updateLock();
+    });
+  });
+
+  function persist() {
+    const arr = [];
+    boxes.forEach(b => { if (b.checked) arr.push(parseInt(b.dataset.idx, 10)); });
+    try { localStorage.setItem(storageKey, JSON.stringify(arr)); } catch (e) {}
+  }
+
+  function updateLock() {
+    const all = Array.from(boxes).every(b => b.checked);
+    copyBtn.dataset.locked = String(!all);
+    exportSection.classList.toggle('locked', !all);
+    exportSection.classList.toggle('unlocked', all);
+    if (all) {
+      lockHint.innerHTML = '<span class="lock-unlocked">✓ 已全部勾選——可以匯出學習記錄了</span>';
+    } else {
+      const done = Array.from(boxes).filter(b => b.checked).length;
+      lockHint.innerHTML = `<span class="lock-locked">🔒 尚未解鎖（已勾 ${done}/${boxes.length}）</span>`;
+    }
+  }
+  updateLock();
 }
 
 // ═══════════════════════════════════════════════════
