@@ -549,14 +549,27 @@ T vs L（多項式）：R² = __</textarea>
       <div class="student-block">
         <div class="sb-title">🧠 論證二：擺長和週期是什麼關係？選哪個模型最合理？</div>
         <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.75;">
-          回到階段三<strong>活動二</strong>的觀察記錄。物理合理性比 R² 更重要——<strong>L = 0 時 T 應該是什麼？</strong>
+          回到階段三<strong>活動二</strong>的觀察記錄。比起「擬合線多直」，更要問：<strong>L = 0（沒擺繩）時，T 應該是多少？</strong>
         </p>
 
         <div class="think-block record">
-          <div class="think-prompt">✏️ 用 CER 論證你選的模型（截距、R²、物理意義都要講）</div>
-          <textarea class="think-input" data-key="pendulum-lv1-model" style="min-height:110px;line-height:1.8" rows="4">主張：我選 ____ 模型。
-證據：T vs L 線性截距 = __ s；T² vs L 線性截距 = __ s²，R² = __。
-理由：L = 0（沒有擺繩）時 T 物理上應該 = __。因此 ____ 模型的截距才合理；R² 只是輔助，因為多項式可以靠加項數拉高 R² 卻失去物理意義。</textarea>
+          <div class="think-prompt">✏️ 用 CER 論證你選的模型（含截距與物理意義）</div>
+
+          <!-- 外部 hint：CER 寫作架構 + 反例/正例 -->
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--text-secondary);line-height:1.75;">
+            <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">📐 寫作架構</div>
+            <ul style="margin:0 0 8px;padding-left:20px;">
+              <li><strong>主張（Claim）</strong>：你選 T vs L 還是 T² vs L 模型？</li>
+              <li><strong>證據（Evidence）</strong>：兩個模型擬合直線的截距各是多少？</li>
+              <li><strong>理由（Reasoning）</strong>：L = 0（沒擺繩）時 T 物理上該是多少？哪個模型的截距較接近這個值？</li>
+            </ul>
+            <div style="border-top:1px dashed #cbd5e1;padding-top:6px;margin-top:6px;">
+              <div style="color:#b91c1c;margin-bottom:3px;">❌ 「T² vs L 線性看起來比較直，所以選這個。」 <span style="color:#7f1d1d;">（只看「直不直」不算理由——硬擬都能擬到很直）</span></div>
+              <div style="color:#15803d;">✅ 「主張：選 T² vs L 模型。證據：T vs L 截距 ≈ 0.6 s、T² vs L 截距 ≈ 0.05 s²。理由：L = 0 表示沒擺繩、不會擺，T 應該是 0；T² vs L 截距接近 0 才符合這個物理事實。」</div>
+            </div>
+          </div>
+
+          <textarea class="think-input" data-key="pendulum-lv1-model" style="min-height:110px;line-height:1.8" rows="4" placeholder="例：主張：選 ___ 模型。證據：T vs L 截距 ___ s、T² vs L 截距 ___ s²。理由：L = 0 時 T 應為 ___，因此 ___ 模型的截距才合理。"></textarea>
           <div class="think-status"></div>
         </div>
 
@@ -564,12 +577,12 @@ T vs L（多項式）：R² = __</textarea>
         <div class="think-block choice" data-answer="c">
           <div class="think-prompt">🎯 小檢查：哪個模型最能描述「擺長如何影響週期」？</div>
           <div class="think-options">
-            <button class="think-opt" data-val="a">A. T vs L 多項式模型：R² 最高，擬合最好</button>
+            <button class="think-opt" data-val="a">A. T vs L 多項式模型：擬合曲線最貼合資料點</button>
             <button class="think-opt" data-val="b">B. T vs L 冪次模型：曲線通過原點，比線性合理</button>
             <button class="think-opt" data-val="c">C. T² vs L 線性模型：通過原點的直線，物理意義最清楚</button>
           </div>
           <div class="think-feedback" style="display:none;">
-            R² 高不代表模型好——多項式永遠可以靠加項數把 R² 衝高，但物理上毫無意義。好的模型要先通過「物理合理性」的檢驗：T² vs L 的線性模型截距接近 0，符合「L=0 → T=0」的邊界條件。R² 只是「確認」你的物理判斷沒錯。這條斜率藏著重要訊息——課後延伸會告訴你，前人怎麼用它算出重力加速度。
+            「擬合得多貼」不代表模型對——多項式永遠可以靠加項數把資料硬塞進貼合曲線，但物理上毫無意義。好的模型要先通過「物理合理性」的檢驗：T² vs L 的線性模型截距接近 0，符合「L = 0 → T = 0」的邊界條件。直線的斜率藏著重要訊息——課後延伸會告訴你，前人怎麼用它算出重力加速度。
           </div>
         </div>
       </div>
