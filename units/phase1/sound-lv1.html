@@ -419,7 +419,7 @@
       <div style="display:grid;gap:6px;margin-bottom:14px;">
         <div class="q-item"><strong>Q4：</strong>高音 Do 的頻率是低音 Do 的幾倍？這叫什麼？物理上「頻率加倍 = 高八度」，這個關係是<strong>等差</strong>還是<strong>等比</strong>？</div>
         <div class="q-item"><strong>Q5：</strong>選<strong>線性</strong>趨勢線——它能描述你的數據嗎？如果音階頻率是等差的，每個音之間應該差多少 Hz？實際數據是這樣嗎？</div>
-        <div class="q-item"><strong>Q6：</strong>試試<strong>冪次</strong>趨勢線——R² 比線性高嗎？但真正的音階規律是「每半音×1.059…」（等比數列）。用「主張—理由—證據」論證為什麼音階不是等差數列。</div>
+        <div class="q-item"><strong>Q6：</strong>試試<strong>冪次</strong>趨勢線——擬合曲線比線性更貼合資料嗎？但真正的音階規律是「每半音×1.059…」（等比數列）。用「主張—理由—證據」論證為什麼音階不是等差數列。</div>
       </div>
 
       <div class="collapsible think-first" style="margin:0;">
@@ -992,7 +992,7 @@ window.labData = recordedNotes;
       const pred=xi=>a*xi+b;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：f = ${a.toFixed(1)}·序號 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>R² = ${R2.toFixed(4)}<br>斜率 = ${a.toFixed(1)} Hz/音<br>截距 = ${b.toFixed(1)} Hz`};
+      return{R2,pred,info:`方程式：f = ${a.toFixed(1)}·序號 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>斜率 = ${a.toFixed(1)} Hz/音<br>截距 = ${b.toFixed(1)} Hz`};
     }
     if(type==='power'){
       const lx=x.map(Math.log),ly=y.map(Math.log);
@@ -1003,7 +1003,7 @@ window.labData = recordedNotes;
       const pred=xi=>a*Math.pow(xi,nn);
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：f = ${a.toFixed(1)}·序號^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}`};
+      return{R2,pred,info:`方程式：f = ${a.toFixed(1)}·序號^${nn.toFixed(2)}<br>指數 n = ${nn.toFixed(3)}`};
     }
     if(type==='poly'){
       const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
@@ -1014,7 +1014,7 @@ window.labData = recordedNotes;
       const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：f = ${c[2].toFixed(2)}·序號² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(1)}·序號 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(1)}<br>R² = ${R2.toFixed(4)}`};
+      return{R2,pred,info:`方程式：f = ${c[2].toFixed(2)}·序號² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(1)}·序號 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(1)}`};
     }
     return null;
   }
@@ -1049,7 +1049,6 @@ window.labData = recordedNotes;
         for(let i=0;i<=60;i++){const xv=1+7*i/60;const yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?ctx.moveTo(cx,cy):ctx.lineTo(cx,cy);}
         ctx.stroke();ctx.setLineDash([]);
         ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
-        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.55),toY(yMax*0.85));
         fi.style.display='block';fi.innerHTML=fit.info;
       }
     } else {fi.style.display='none';}

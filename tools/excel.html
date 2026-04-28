@@ -157,7 +157,7 @@
           <div style="font-size:13px;color:var(--text-secondary);">右鍵點圖上的數據點 → 「加趨勢線」→ 選「線性」（通常）→ 勾選：</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
             <div style="background:var(--bg);border-radius:4px;padding:6px 10px;font-size:12px;color:var(--phase2);font-weight:600;">☑ 在圖表上顯示方程式</div>
-            <div style="background:var(--bg);border-radius:4px;padding:6px 10px;font-size:12px;color:var(--phase2);font-weight:600;">☑ 在圖表上顯示 R² 值</div>
+            <div style="background:var(--bg);border-radius:4px;padding:6px 10px;font-size:12px;color:var(--phase2);font-weight:600;">☑ 在圖表上顯示方程式</div>
           </div>
         </div>
       </div>
@@ -172,15 +172,15 @@
         <div style="background:var(--phase2);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">✓</div>
         <div>
           <div style="font-weight:700;font-size:13px;color:var(--phase2);">完成檢查</div>
-          <div style="font-size:13px;color:var(--text-secondary);">最終圖表應包含：標題、X 軸標籤（含單位）、Y 軸標籤（含單位）、趨勢線、方程式、R² 值。</div>
+          <div style="font-size:13px;color:var(--text-secondary);">最終圖表應包含：標題、X 軸標籤（含單位）、Y 軸標籤（含單位）、趨勢線、方程式、截距、斜率。</div>
         </div>
       </div>
     </div>
 
-    <!-- R² 說明 -->
-    <div class="section-title">四、R² 是什麼？怎麼解讀？</div>
+    <!-- 擬合品質判讀說明 -->
+    <div class="section-title">四、怎麼判讀擬合品質？</div>
     <div class="card" style="margin-bottom:24px;">
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">R²（決定係數）告訴你：數據點和趨勢線符合的程度。</p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">判斷擬合品質有幾個面向：（1）資料點貼合趨勢線的程度；（2）截距和斜率是否符合物理意義；（3）模型在範圍外的行為合理嗎？</p>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center;margin-bottom:14px;">
         <div style="background:var(--bg);border-radius:6px;padding:12px;border-top:3px solid #16a34a;">
           <div style="font-size:18px;font-weight:800;color:#16a34a;">0.99+</div>
@@ -196,7 +196,7 @@
         </div>
       </div>
       <div style="background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 14px;font-size:12px;color:#15803d;">
-        💡 R² 低不一定代表實驗失敗——可能是關係根本不是線性的（例如冪次或指數），試試看 log-log 圖或半 log 圖。
+        💡 資料點貼得不夠直不一定代表實驗失敗——可能是關係根本不是線性的（例如冪次或指數），試試看 log-log 圖或半 log 圖。
       </div>
     </div>
 

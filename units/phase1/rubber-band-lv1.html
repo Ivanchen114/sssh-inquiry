@@ -47,7 +47,7 @@
       <span>學習目標（論證建模精雕）</span>
     </div>
     <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
-      <li>能從數據形狀選出合適的經驗模型（線性 / 冪次 / <strong>飽和模型</strong>），並用 R² 與殘差判斷</li>
+      <li>能從數據形狀選出合適的經驗模型（線性 / 冪次 / <strong>飽和模型</strong>），並用殘差與擬合形狀判斷</li>
       <li>能用「主張—證據—推理」的 CER 架構論證：為什麼橡皮筋會出現飽和？</li>
       <li>能辨識「理想彈簧模型 $E_p = \tfrac{1}{2}kx^2$」在橡皮筋上的失效邊界</li>
       <li>能從「推出距離 vs 回滾距離」的差距估算摩擦損耗比</li>
@@ -219,7 +219,7 @@
       <div class="stage-intro phase3">
         <div class="stage-label">階段三 · 執行與分析</div>
         <div class="stage-title">用數據比較三種模型：線性、冪次、飽和——哪個最合理？</div>
-        <p class="stage-desc">按照階段二的規劃，把橡皮筋的拉力-伸長量數據用三種模型去擬合，比較 R²、殘差、物理合理性，找出最適合的模型。重點不是算對一個係數——是看懂「為什麼飽和模型才合理」。</p>
+        <p class="stage-desc">按照階段二的規劃，把橡皮筋的拉力-伸長量數據用三種模型去擬合，比較殘差、擬合形狀、物理合理性，找出最適合的模型。重點不是算對一個係數——是看懂「為什麼飽和模型才合理」。</p>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
       <div class="step-action">用數據比較三種模型：線性、冪次、飽和模型——哪個最合理？</div>
@@ -285,14 +285,14 @@
           <strong>Q3：</strong>切到<strong>飽和</strong>模型。讀取 $D_\infty$（推出距離上限）——大約是多少 cm？$\tau$（時間常數）代表什麼？
         </div>
         <div class="q-item">
-          <strong>Q4：</strong>三個模型的 R² 都不低，為什麼<strong>飽和模型物理上最合理</strong>？從物理機制（不是從 R²）出發論證。
+          <strong>Q4：</strong>三個模型擬合曲線都不錯地貼合資料，為什麼<strong>飽和模型物理上最合理</strong>？從物理機制（不是從擬合貼合度）出發論證。
         </div>
       </div>
 
       <!-- Layer 2: 模型選擇記錄 -->
       <div class="think-block record">
-        <div class="think-prompt">✏️ 寫下你選的模型、R²、與一句理由（從物理機制出發）</div>
-        <textarea class="think-input" data-key="rubber-band-lv1-model" rows="5" style="line-height:1.8;" placeholder="我選：飽和模型&#10;R² = …&#10;D∞ ≈ … cm&#10;理由：橡皮筋有彈性極限，超過就…"></textarea>
+        <div class="think-prompt">✏️ 寫下你選的模型、擬合形狀、與一句理由（從物理機制出發）（從物理機制出發）</div>
+        <textarea class="think-input" data-key="rubber-band-lv1-model" rows="5" style="line-height:1.8;" placeholder="我選：飽和模型&#10;D∞ ≈ … cm&#10;理由：橡皮筋有彈性極限，超過就…"></textarea>
         <div class="think-status"></div>
       </div>
 
@@ -302,11 +302,11 @@
         <div class="think-options">
           <button class="think-opt" data-val="a">A. 飽和模型有物理極限 $D_\infty$，對應橡皮筋的彈性上限</button>
           <button class="think-opt" data-val="b">B. 飽和模型的初期行為（線性增加）和橡皮筋線性區一致</button>
-          <button class="think-opt" data-val="c">C. 飽和模型的 R² 最高，所以最好</button>
+          <button class="think-opt" data-val="c">C. 飽和模型擬合曲線最貼合資料，所以最好</button>
           <button class="think-opt" data-val="d">D. 線性模型預測「轉 1000 圈距離也會增加 1000 倍」，物理不合理</button>
         </div>
         <div class="think-feedback" style="display:none;">
-          R² 高不代表模型好——只代表擬合誤差小。三個模型在這個範圍內 R² 都不低，但只有飽和模型能<strong>預測超出數據範圍</strong>的行為（$x \to \infty$ 時 $y \to D_\infty$）。這叫「外推能力」，是判斷模型好壞的關鍵。
+          「擬合得多貼」不代表模型好——只代表擬合誤差小。三個模型在這個範圍內都能不錯地貼合資料，但只有飽和模型能<strong>預測超出數據範圍</strong>的行為（$x \to \infty$ 時 $y \to D_\infty$）。這叫「外推能力」，是判斷模型好壞的關鍵。
         </div>
       </div>
 
@@ -314,8 +314,8 @@
         <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
         <div class="collapsible-body">
           <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
-            Lv1 的核心是用「飽和曲線」建立經驗模型，並論證它比線性或冪次模型更合理。學生常陷入「R² 比誰高」的迷思——要引導他們看<strong>物理機制</strong>和<strong>外推行為</strong>。<br><br>
-            範圍內所有三個模型 R² 都可能超過 0.95，但：線性模型截距偏離 0 且超過 30 圈後嚴重偏差；冪次模型在 $x \to \infty$ 時無上限，違反彈性極限；只有飽和模型的 $D_\infty$ 對應「橡皮筋進入塑性區、不再有額外能量輸出」的物理事實。<br><br>
+            Lv1 的核心是用「飽和曲線」建立經驗模型，並論證它比線性或冪次模型更合理。學生常陷入「擬合得越貼越好」的迷思——要引導他們看<strong>物理機制</strong>和<strong>外推行為</strong>。<br><br>
+            範圍內所有三個模型都可能擬得很貼合資料，但：線性模型截距偏離 0 且超過 30 圈後嚴重偏差；冪次模型在 $x \to \infty$ 時無上限，違反彈性極限；只有飽和模型的 $D_\infty$ 對應「橡皮筋進入塑性區、不再有額外能量輸出」的物理事實。<br><br>
             Q4 是<strong>CER 的預演</strong>——下一步會正式做 CER。
           </p>
         </div>
@@ -407,7 +407,7 @@
         <div class="collapsible-body">
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
             □ <strong>Claim</strong> 是明確的肯定句，不是疑問句或猶豫語句<br>
-            □ <strong>Evidence</strong> 有<strong>具體數字</strong>（圈數、距離、R²、$D_\infty$ 等），不只是「數據顯示」<br>
+            □ <strong>Evidence</strong> 有<strong>具體數字</strong>（圈數、距離、$D_\infty$ 等），不只是「數據顯示」<br>
             □ <strong>Reasoning</strong> 引用物理原理（塑性變形、摩擦生熱、能量守恆），而不只是重述現象<br>
             □ 三者<strong>邏輯串連</strong>：證據真的能推出主張？推理真的能解釋為什麼證據支持主張？<br>
             □ 沒有「循環論證」：例如「因為飽和所以飽和」，要能解釋<strong>背後機制</strong>
@@ -473,7 +473,7 @@
         <div class="self-check-list">
           <label class="self-check-item">
             <input type="checkbox" class="self-check-box" data-idx="0">
-            <span class="self-check-text">能從數據形狀選出合適的經驗模型（線性 / 冪次 / <strong>飽和模型</strong>），並用 R² 與殘差判斷</span>
+            <span class="self-check-text">能從數據形狀選出合適的經驗模型（線性 / 冪次 / <strong>飽和模型</strong>），並用殘差與擬合形狀判斷</span>
           </label>
           <label class="self-check-item">
             <input type="checkbox" class="self-check-box" data-idx="1">
@@ -516,7 +516,7 @@
               <li>主軸：<strong>論證建模精雕</strong>——從多模型比較中選出最合理的經驗模型，並用 CER 論證</li>
               <li>發現問題 / 規劃研究 是 checkpoint（在第 5 步出現，不展開精雕）</li>
               <li>核心觀念：橡皮筋 ≠ 理想彈簧，有彈性極限；飽和模型的 $D_\infty$ 對應物理極限</li>
-              <li>R² 高不代表模型好——要看物理機制和外推能力</li>
+              <li>「擬合得多貼」不代表模型好——要看物理機制和外推能力</li>
             </ul>
           </div>
         </div>
@@ -525,7 +525,7 @@
           <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
           <p style="font-size:13px;color:var(--text-secondary);">「從三個模型中選出最合理的一個，並用 CER 論證」是本課最值得收錄的片段。建議把你的 Step 3 模型選擇記錄 + Step 4 兩個 CER 貼進歷程檔。</p>
           <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
-            ✍️ 反思錨點：你從「R² 高就是好」到「物理機制更重要」的轉變是哪一刻？（2-3 句就好）
+            ✍️ 反思錨點：你從「擬合得越貼越好」到「物理機制更重要」的轉變是哪一刻？（2-3 句就好）
           </p>
         </div>
 
@@ -664,7 +664,7 @@
       const pred=xi=>a*xi+b;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`模型：距離 = ${a.toFixed(2)}·圈數 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>R² = ${R2.toFixed(4)}<br>截距 b = ${b.toFixed(1)} cm${Math.abs(b)>10?' ⚠️ 偏離 0 太多':' ✓'}<br>斜率 a = ${a.toFixed(2)} cm/圈`};
+      return{R2,pred,info:`模型：距離 = ${a.toFixed(2)}·圈數 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>截距 b = ${b.toFixed(1)} cm${Math.abs(b)>10?' ⚠️ 偏離 0 太多':' ✓'}<br>斜率 a = ${a.toFixed(2)} cm/圈`};
     }
     if(type==='power'){
       const lx=x.map(Math.log),ly=y.map(Math.log);
@@ -675,7 +675,7 @@
       const pred=xi=>a*Math.pow(xi,nn);
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`模型：距離 = ${a.toFixed(2)}·圈數^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${nn<1?' (n<1 → 增速遞減，但 x→∞ 仍無上限)':''}`};
+      return{R2,pred,info:`模型：距離 = ${a.toFixed(2)}·圈數^${nn.toFixed(2)}<br>指數 n = ${nn.toFixed(3)}${nn<1?' (n<1 → 增速遞減，但 x→∞ 仍無上限)':''}`};
     }
     if(type==='sat'){
       // 飽和模型：y = D∞ (1 - exp(-x/τ))；grid search on (D∞, τ)
@@ -694,7 +694,7 @@
       const pred = xi => D*(1 - Math.exp(-xi/tau));
       const SS_res = x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2, 0);
       const R2 = SS_tot>0 ? 1 - SS_res/SS_tot : 0;
-      return {R2, pred, info: `模型：距離 = D∞ × (1 − e^(−圈數 / τ))<br>R² = ${R2.toFixed(4)}<br>D∞ = ${D.toFixed(0)} cm（推出距離上限）<br>τ = ${tau.toFixed(1)} 圈（時間常數）<br>✓ 有物理極限，不會無限增加`};
+      return {R2, pred, info: `模型：距離 = D∞ × (1 − e^(−圈數 / τ))<br>D∞ = ${D.toFixed(0)} cm（推出距離上限）<br>τ = ${tau.toFixed(1)} 圈（時間常數）<br>✓ 有物理極限，不會無限增加`};
     }
     return null;
   }
@@ -743,7 +743,6 @@
           }
         }
         ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
-        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.6),toY(yMax*0.85));
         fitInfo.style.display='block';fitInfo.innerHTML=fit.info;
       }
     } else {fitInfo.style.display='none';}

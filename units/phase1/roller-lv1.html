@@ -239,7 +239,7 @@
       <div style="display:grid;gap:6px;margin-bottom:14px;">
         <div class="q-item"><strong>Q1：</strong>計算平均時間（最後一排的②合理嗎？怎麼處理？）。選<strong>線性</strong>趨勢線——截距代表「距離 = 0 時的翻滾時間」，物理上合理嗎？</div>
         <div class="q-item"><strong>Q2：</strong>觀察數據形狀——距離加倍，時間增加超過一倍。試試<strong>冪次</strong>趨勢線，指數 n 大約是多少？n > 1 代表什麼物理意義？</div>
-        <div class="q-item"><strong>Q3：</strong>試試<strong>多項式</strong>——R² 可能最高，但物理上為什麼「距離和時間是二次方關係」？你能想到一個合理的物理解釋嗎？</div>
+        <div class="q-item"><strong>Q3：</strong>試試<strong>多項式</strong>——擬合曲線可能最貼合資料點，但物理上為什麼「距離和時間是二次方關係」？你能想到一個合理的物理解釋嗎？</div>
         <div class="q-item"><strong>Q4：</strong>溜冰選手張開手臂轉得慢、收起手臂轉得快。這跟你的數據規律一致嗎？用「主張—理由—證據」論證你的趨勢線選擇。</div>
       </div>
 
@@ -472,7 +472,7 @@
       const pred=xi=>a*xi+b;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：時間 = ${a.toFixed(3)}·距離 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(2)} 秒<br>斜率 = ${a.toFixed(3)} 秒/cm`};
+      return{R2,pred,info:`方程式：時間 = ${a.toFixed(3)}·距離 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(2)}<br>截距 = ${b.toFixed(2)} 秒<br>斜率 = ${a.toFixed(3)} 秒/cm`};
     }
     if(type==='power'){
       const lx=x.map(Math.log),ly=y.map(Math.log);
@@ -483,7 +483,7 @@
       const pred=xi=>a*Math.pow(xi,nn);
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：時間 = ${a.toFixed(3)}·距離^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-2)<0.3?' (≈2，接近平方關係)':nn>1?' (n>1，超線性增長)':''}`};
+      return{R2,pred,info:`方程式：時間 = ${a.toFixed(3)}·距離^${nn.toFixed(2)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-2)<0.3?' (≈2，接近平方關係)':nn>1?' (n>1，超線性增長)':''}`};
     }
     if(type==='poly'){
       const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
@@ -494,7 +494,7 @@
       const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：時間 = ${c[2].toFixed(4)}·距離² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·距離 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(2)}<br>R² = ${R2.toFixed(4)}`};
+      return{R2,pred,info:`方程式：時間 = ${c[2].toFixed(4)}·距離² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·距離 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(2)}`};
     }
     return null;
   }
@@ -530,7 +530,6 @@
         for(let i=0;i<=60;i++){const xv=xMax*i/60;if(xv<=0&&trendType==='power')continue;const yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?ctx.moveTo(cx,cy):ctx.lineTo(cx,cy);}
         ctx.stroke();ctx.setLineDash([]);
         ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
-        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.55),toY(yMax*0.85));
         fitInfo.style.display='block';fitInfo.innerHTML=fit.info;
       }
     } else {fitInfo.style.display='none';}

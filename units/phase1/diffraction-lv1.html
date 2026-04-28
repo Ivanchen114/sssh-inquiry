@@ -250,7 +250,7 @@
 
       <div style="display:grid;gap:8px;margin-bottom:14px;">
         <div class="q-item"><strong>Q1：</strong>選<strong>線性</strong>趨勢線。截距代表「L = 0 時的亮紋寬度」——物理上螢幕貼著狹縫時，亮紋寬度應該是多少？截距合理嗎？</div>
-        <div class="q-item"><strong>Q2：</strong>計算 $\Delta y_0/L$ 比值——每一組都差不多嗎？斜率代表什麼物理含義？試試多項式——R² 更高嗎？有必要用更複雜的模型嗎？</div>
+        <div class="q-item"><strong>Q2：</strong>計算 $\Delta y_0/L$ 比值——每一組都差不多嗎？斜率代表什麼物理含義？試試多項式——擬合曲線會更貼合資料點嗎？但物理上「Δy₀ 跟狹縫寬度是二次方關係」講得通嗎？有必要用更複雜的模型嗎？</div>
       </div>
 
       <!-- Layer 2: 線性關係數據分析 -->
@@ -355,7 +355,7 @@
         </p>
         <div class="think-block record" style="margin:0;">
           <div class="think-prompt">✏️ 寫下你的 CER 論證（4-6 句）</div>
-          <textarea class="think-input" data-key="diffraction-lv1-cer" rows="4" style="line-height:1.8;" placeholder="主張（Claim）：狹縫越窄，中央亮紋越寬。&#10;證據（Evidence）：a=0.05mm 時 Δy₀=26mm；a=0.20mm 時 Δy₀=6.5mm。a×Δy₀ ≈ 1.3 mm²（固定），R² = …。&#10;推理（Reasoning）：光是波，通過寬度 a 的狹縫時，繞射角度 θ 滿足 sin(θ) = λ/a。狹縫越窄 → θ 越大 → 螢幕上光散得越開……"></textarea>
+          <textarea class="think-input" data-key="diffraction-lv1-cer" rows="4" style="line-height:1.8;" placeholder="主張（Claim）：狹縫越窄，中央亮紋越寬。&#10;證據（Evidence）：a=0.05mm 時 Δy₀=26mm；a=0.20mm 時 Δy₀=6.5mm。a×Δy₀ ≈ 1.3 mm²（固定），&#10;推理（Reasoning）：光是波，通過寬度 a 的狹縫時，繞射角度 θ 滿足 sin(θ) = λ/a。狹縫越窄 → θ 越大 → 螢幕上光散得越開……"></textarea>
           <div class="think-status"></div>
         </div>
       </div>
@@ -544,7 +544,7 @@
       const pred=xi=>a*xi+b;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：${yLabel} = ${a.toFixed(3)}·${xLabel} ${b>=0?'+':'−'} ${Math.abs(b).toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(3)}<br>斜率 = ${a.toFixed(4)}`};
+      return{R2,pred,info:`方程式：${yLabel} = ${a.toFixed(3)}·${xLabel} ${b>=0?'+':'−'} ${Math.abs(b).toFixed(2)}<br>截距 = ${b.toFixed(3)}<br>斜率 = ${a.toFixed(4)}`};
     }
     if(type==='power'){
       const posIdx=x.map((_,i)=>i).filter(i=>x[i]>0&&y[i]>0);
@@ -559,7 +559,7 @@
       const pred=xi=>xi>0?a*Math.pow(xi,nn):0;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：${yLabel} = ${a.toFixed(3)}·${xLabel}^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-1)<0.15?' (≈1，正比)':Math.abs(nn+1)<0.15?' (≈−1，反比)':''}`};
+      return{R2,pred,info:`方程式：${yLabel} = ${a.toFixed(3)}·${xLabel}^${nn.toFixed(2)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-1)<0.15?' (≈1，正比)':Math.abs(nn+1)<0.15?' (≈−1，反比)':''}`};
     }
     if(type==='poly'){
       const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
@@ -570,7 +570,7 @@
       const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：${yLabel} = ${c[2].toFixed(4)}·${xLabel}² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·${xLabel} ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(2)}<br>R² = ${R2.toFixed(4)}`};
+      return{R2,pred,info:`方程式：${yLabel} = ${c[2].toFixed(4)}·${xLabel}² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·${xLabel} ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(2)}`};
     }
     return null;
   }
@@ -616,7 +616,6 @@
         for(let i=0;i<=60;i++){const xv=xMax*i/60;if(xv<=0&&trend1==='power')continue;const yv=fit.pred(xv);if(yv<0||yv>yMax*1.2)continue;const cx=toX(xv),cy=toY(yv);i===0?ctx1.moveTo(cx,cy):ctx1.lineTo(cx,cy);}
         ctx1.stroke();ctx1.setLineDash([]);
         ctx1.fillStyle='#059669';ctx1.font='bold 10px sans-serif';ctx1.textAlign='left';
-        ctx1.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.55),toY(yMax*0.85));
         fi.style.display='block';fi.innerHTML=fit.info;
       }
     } else {fi.style.display='none';}
@@ -667,7 +666,6 @@
         for(let i=1;i<=80;i++){const xv=xMax*i/80;if(xv<=0)continue;const yv=fit.pred(xv);if(yv<0||yv>yMax*1.3)continue;const cx=toX(xv),cy=toY(yv);if(!started){ctx2.moveTo(cx,cy);started=true;}else ctx2.lineTo(cx,cy);}
         ctx2.stroke();ctx2.setLineDash([]);
         ctx2.fillStyle='#059669';ctx2.font='bold 10px sans-serif';ctx2.textAlign='left';
-        ctx2.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.55),toY(yMax*0.85));
         fi.style.display='block';fi.innerHTML=fit.info;
       }
     } else {fi.style.display='none';}

@@ -158,7 +158,7 @@
     <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;margin:0;">
       <li>能用「主張—證據—推理（CER）」的架構，對<strong>別人給你的數據</strong>進行科學論證</li>
       <li>能辨識數據中的趨勢，並以<strong>數學模型</strong>（線性、冪次、多項式）描述 T 與 L 的關係</li>
-      <li>能評估模型的適用範圍與限制，分辨「R² 高」和「物理上合理」的差別</li>
+      <li>能評估模型的適用範圍與限制，分辨「擬合得多貼」和「物理上合理」的差別</li>
       <li>能把<strong>直覺預測</strong>和<strong>結構化假設</strong>放在一起比較，看出兩者的差別</li>
     </ul>
   </div>
@@ -367,9 +367,9 @@
 
       <!-- 活動二：虛擬擺 -->
       <p style="font-size:13px;color:var(--text-secondary);margin:22px 0 8px;font-weight:700;">活動二、擺長組——用虛擬單擺收集數據（25–35 分鐘）</p>
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">按老師的計畫測 6 種擺長（10–60 cm），每種至少 3 次。收集完後切換到 T² vs L，試不同趨勢線，觀察<strong>截距</strong>和<strong>R²</strong>。</p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">按老師的計畫測 6 種擺長（10–60 cm），每種至少 3 次。收集完後切換到 T² vs L，試不同趨勢線，觀察<strong>截距</strong>和擬合形狀。</p>
       <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:12px;line-height:1.8;">
-        <strong style="color:var(--text-secondary);">觀察任務</strong>：比較 T vs L 和 T² vs L 兩張圖、比較線性／冪次／多項式三條趨勢線。記下<strong style="color:var(--text-secondary);">截距各是多少、R² 各是多少</strong>——論證留到下一階段。
+        <strong style="color:var(--text-secondary);">觀察任務</strong>：比較 T vs L 和 T² vs L 兩張圖、比較線性／冪次／多項式三條趨勢線。記下<strong style="color:var(--text-secondary);">截距各是多少、擬合形狀（線性／曲線／彎曲）為何</strong>——論證留到下一階段。
       </p>
 
     <!-- 主實驗區 -->
@@ -458,11 +458,11 @@
         <div class="student-block phase3" style="margin-top:6px;">
           <div class="sb-title">🔍 把你觀察到的數字記下來（先不下結論）</div>
           <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.8;">
-            切換兩種圖、三條趨勢線，分別看<strong>截距</strong>和<strong>R²</strong>。數字會自動顯示在圖表下方——請手動抄進下面框。
+            切換兩種圖、三條趨勢線，分別看<strong>截距</strong>和擬合形狀。數字會自動顯示在圖表下方——請手動抄進下面框。
           </p>
           <div class="think-block record">
             <div class="think-prompt">✏️ 觀察記錄（數字填空，不寫推論）</div>
-            <textarea class="think-input" data-key="pendulum-lv1-obs" style="min-height:110px;line-height:1.8" rows="5" placeholder="T vs L（線性）：截距 ≈ __ s，R² = __&#10;T² vs L（線性）：截距 ≈ __ s²，R² = __&#10;T vs L（冪次）：指數 n ≈ __，R² = __&#10;T vs L（多項式）：R² = __"></textarea>
+            <textarea class="think-input" data-key="pendulum-lv1-obs" style="min-height:110px;line-height:1.8" rows="5" placeholder="T vs L（線性）：截距 ≈ __ s&#10;T² vs L（線性）：截距 ≈ __ s²&#10;T vs L（冪次）：指數 n ≈ __&#10;T vs L（多項式）：截距 ≈ __"></textarea>
             <div class="think-status"></div>
           </div>
         </div>
@@ -624,7 +624,7 @@
           </label>
           <label class="self-check-item">
             <input type="checkbox" class="self-check-box" data-idx="2">
-            <span class="self-check-text">能評估模型的適用範圍與限制，分辨「R² 高」和「物理上合理」的差別</span>
+            <span class="self-check-text">能評估模型的適用範圍與限制，分辨「擬合得多貼」和「物理上合理」的差別</span>
           </label>
           <label class="self-check-item">
             <input type="checkbox" class="self-check-box" data-idx="3">
@@ -1089,7 +1089,7 @@ function computeFit(x, y, type) {
     const R2 = SS_tot > 0 ? 1 - SS_res / SS_tot : 0;
     return { type, a, b, R2, pred,
       label: `y = ${a.toFixed(3)}x ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(3)}`,
-      info: `方程式：T${graphMode === 'T2_vs_L' ? '²' : ''} = ${a.toFixed(3)}·L ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(3)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(4)} ${graphMode === 'T2_vs_L' ? 's²' : 's'}${Math.abs(b) > 0.02 ? ' ⚠️' : ' ✓'}`
+      info: `方程式：T${graphMode === 'T2_vs_L' ? '²' : ''} = ${a.toFixed(3)}·L ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(3)}<br>截距 = ${b.toFixed(4)} ${graphMode === 'T2_vs_L' ? 's²' : 's'}${Math.abs(b) > 0.02 ? ' ⚠️' : ' ✓'}`
     };
   }
 
@@ -1106,7 +1106,7 @@ function computeFit(x, y, type) {
     const R2 = SS_tot > 0 ? 1 - SS_res / SS_tot : 0;
     return { type, a, n: nn, R2, pred,
       label: `y = ${a.toFixed(3)}·x^${nn.toFixed(2)}`,
-      info: `方程式：T${graphMode === 'T2_vs_L' ? '²' : ''} = ${a.toFixed(3)}·L^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}`
+      info: `方程式：T${graphMode === 'T2_vs_L' ? '²' : ''} = ${a.toFixed(3)}·L^${nn.toFixed(2)}<br>指數 n = ${nn.toFixed(3)}`
     };
   }
 
@@ -1141,7 +1141,7 @@ function computeFit(x, y, type) {
     const yVar = graphMode === 'T2_vs_L' ? 'T²' : 'T';
     return { type, c, R2, pred,
       label: `y = ${c[2].toFixed(2)}x² ${c[1] >= 0 ? '+' : '−'} ${Math.abs(c[1]).toFixed(2)}x ${c[0] >= 0 ? '+' : '−'} ${Math.abs(c[0]).toFixed(3)}`,
-      info: `方程式：${yVar} = ${c[2].toFixed(2)}L² ${c[1] >= 0 ? '+' : '−'} ${Math.abs(c[1]).toFixed(2)}L ${c[0] >= 0 ? '+' : '−'} ${Math.abs(c[0]).toFixed(3)}<br>R² = ${R2.toFixed(4)}`
+      info: `方程式：${yVar} = ${c[2].toFixed(2)}L² ${c[1] >= 0 ? '+' : '−'} ${Math.abs(c[1]).toFixed(2)}L ${c[0] >= 0 ? '+' : '−'} ${Math.abs(c[0]).toFixed(3)}`
     };
   }
   return null;
@@ -1238,7 +1238,6 @@ function updateGraph() {
 
       // 標示
       gCtx.fillStyle = '#059669'; gCtx.font = 'bold 10px sans-serif'; gCtx.textAlign = 'left';
-      gCtx.fillText(`R²=${fit.R2.toFixed(3)}`, toX(xMax * 0.55), toY(yMax * 0.85));
 
       fitInfo.style.display = 'block';
       fitInfo.innerHTML = fit.info;

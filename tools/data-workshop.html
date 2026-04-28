@@ -160,7 +160,7 @@
             <strong>Q1：</strong>你算出的 g 值和標準值 9.8 m/s² 相差多少百分比？這算好還是不好？
           </div>
           <div class="q-item">
-            <strong>Q2：</strong>R² 值是多少？這代表數據點和趨勢線的吻合度如何？
+            <strong>Q2：</strong>資料點貼合趨勢線嗎？有沒有偏離直線太遠的點？
           </div>
           <div class="q-item">
             <strong>Q3：</strong>如果有一個數據點明顯偏離趨勢線，你會怎麼處理？
@@ -239,7 +239,7 @@
         <div style="font-weight:700;font-size:14px;margin-bottom:10px;">判讀與結論</div>
         <div style="display:grid;gap:8px;font-size:13px;">
           <div class="q-item">
-            <strong>Q1：</strong>F vs x 圖是直線嗎？R² 接近 1 嗎？這代表什麼物理意義？
+            <strong>Q1：</strong>F vs x 圖是直線嗎？資料點貼合得多直？這代表什麼物理意義？
           </div>
           <div class="q-item">
             <strong>Q2：</strong>如果掛 300g 砝碼，你預測伸長量大概多少 cm？怎麼算的？
@@ -338,7 +338,7 @@
         <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>每組至少重複 3 次取平均</span></label>
         <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>散佈圖（不是折線圖）</span></label>
         <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>X 軸 Y 軸都有標籤和單位</span></label>
-        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>趨勢線 + 方程式 + R²</span></label>
+        <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>趨勢線 + 方程式</span></label>
         <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>從斜率/截距算出物理量</span></label>
         <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>和理論值/標準值比較</span></label>
         <label style="display:flex;align-items:start;gap:6px;"><input type="checkbox" style="margin-top:2px;accent-color:#d97706;"><span>討論誤差來源和模型限制</span></label>
@@ -406,7 +406,6 @@ function drawPendulumChart(){
   const slope = (n*sumXY - sumX*sumY)/(n*sumX2 - sumX*sumX);
   const intercept = (sumY - slope*sumX)/n;
 
-  // R²
   const meanY = sumY/n;
   let ssTot=0, ssRes=0;
   for(let i=0;i<n;i++){
@@ -419,7 +418,7 @@ function drawPendulumChart(){
     'L (m)', 'T² (s²)', 0, 0.6, 0, 2.5, '#2952c4');
 
   document.getElementById('pendulum-chart-info').innerHTML =
-    `趨勢線：T² = <strong>${slope.toFixed(2)}</strong> × L + ${intercept.toFixed(3)}　|　R² = ${r2.toFixed(4)}　|　斜率 = ${slope.toFixed(2)} → g = 39.48 ÷ ${slope.toFixed(2)} = <strong>${(39.48/slope).toFixed(1)}</strong> m/s²`;
+    `趨勢線：T² = <strong>${slope.toFixed(2)}</strong> × L + ${intercept.toFixed(3)}　|　　斜率 = ${slope.toFixed(2)} → g = 39.48 ÷ ${slope.toFixed(2)} = <strong>${(39.48/slope).toFixed(1)}</strong> m/s²`;
 }
 
 // ═══ 圖表繪製：彈簧 ═══
@@ -444,7 +443,7 @@ function drawSpringChart(){
 
   const kVal = slope * 100; // N/m（斜率是 N/cm，×100 得 N/m）
   document.getElementById('spring-chart-info').innerHTML =
-    `趨勢線：F = <strong>${slope.toFixed(4)}</strong> × x + ${intercept.toFixed(3)}　|　R² = ${r2.toFixed(4)}　|　k = ${slope.toFixed(4)} N/cm = <strong>${kVal.toFixed(1)}</strong> N/m`;
+    `趨勢線：F = <strong>${slope.toFixed(4)}</strong> × x + ${intercept.toFixed(3)}　|　　k = ${slope.toFixed(4)} N/cm = <strong>${kVal.toFixed(1)}</strong> N/m`;
 }
 
 // ═══ 圖表繪製：浮力 ═══
@@ -468,7 +467,7 @@ function drawBuoyancyChart(){
     'V_排 (cm³)', 'F_b (N)', 0, 24, 0, 0.25, '#b5621e');
 
   document.getElementById('buoyancy-chart-info').innerHTML =
-    `趨勢線：F_b = <strong>${slope.toFixed(5)}</strong> × V + ${intercept.toFixed(4)}　|　R² = ${r2.toFixed(4)}　|　斜率 ≈ ρg (N/cm³)`;
+    `趨勢線：F_b = <strong>${slope.toFixed(5)}</strong> × V + ${intercept.toFixed(4)}　|　　斜率 ≈ ρg (N/cm³)`;
 }
 
 // ═══ 通用散佈圖繪製 ═══

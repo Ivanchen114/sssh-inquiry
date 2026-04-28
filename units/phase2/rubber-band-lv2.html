@@ -261,7 +261,7 @@
           </table>
         </div>
         <div style="background:white;border-radius:6px;padding:10px;margin-top:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
-          <strong>⚠️ 選擇原則</strong>：別只看 R²，要問「$x \to \infty$ 的行為合理嗎？」飽和模型有極限、冪次模型無極限——物理上哪個成立？
+          <strong>⚠️ 選擇原則</strong>：別只看擬合得多貼，要問「$x \to \infty$ 的行為合理嗎？」飽和模型有極限、冪次模型無極限——物理上哪個成立？
         </div>
       </div>
 
@@ -448,7 +448,7 @@ mean = ___ cm，std = ___ cm，std/mean = ___%
             <strong style="color:var(--text-primary);">1. 畫散佈圖（含誤差棒）</strong>：X 軸 = 操縱變因；Y 軸 = 平均值；誤差棒 = ± std/√n
           </div>
           <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
-            <strong style="color:var(--text-primary);">2. 選模型</strong>：對照 Step 2 的模型選擇表，依形狀選。比較線性 vs 飽和 vs 冪次的 R²。
+            <strong style="color:var(--text-primary);">2. 選模型</strong>：對照 Step 2 的模型選擇表，依形狀選。比較線性 vs 飽和 vs 冪次的擬合形狀。
           </div>
           <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
             <strong style="color:var(--text-primary);">3. 殘差分析</strong>：計算每點的殘差 = 實測 − 擬合。畫殘差圖——如果殘差隨機分佈 → 模型合適；如果有系統性弧形 → 模型形狀錯了。
@@ -496,7 +496,7 @@ mean = ___ cm，std = ___ cm，std/mean = ___%
         </div>
         <div style="background:white;border:1px dashed #93c5fd;border-radius:6px;padding:10px 14px;font-size:11.5px;color:#1e3a8a;line-height:1.8;">
           <strong>📝 AI prompt 範本：</strong><br>
-          「我研究 ___（操縱變因）對橡皮筋動力罐推出距離的影響。假設：___。數據（水準 vs 平均±std）：___。擬合飽和模型得 $D_\infty$ = ___、$\tau$ = ___，R² = ___。殘差分佈：___。請幫我檢查：(1) 擬合參數的物理意義合理嗎？(2) R² 高不代表模型對，還有哪些檢驗要做？(3) 我的假設通過驗證了嗎？為什麼？」
+          「我研究 ___（操縱變因）對橡皮筋動力罐推出距離的影響。假設：___。數據（水準 vs 平均±std）：___。擬合飽和模型得 $D_\infty$ = ___、$\tau$ = ___。殘差分佈：___。請幫我檢查：(1) 擬合參數的物理意義合理嗎？(2) 擬合貼合度高不代表模型對，還有哪些檢驗要做？(3) 我的假設通過驗證了嗎？為什麼？」
         </div>
         <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是老闆。它提出問題，你決定要不要改。</p>
       </div>
@@ -504,7 +504,7 @@ mean = ___ cm，std = ___ cm，std/mean = ___%
       <div class="think-block record">
         <div class="think-prompt">✏️ 用 CER 格式寫下你的結論（含擬合參數與不確定度）</div>
         <textarea class="think-input" data-key="rubber-band-lv2-conclusion" rows="4" style="line-height:1.8;">主張（Claim）：___
-證據（Evidence）：擬合得 D∞ = ___ ± ___，τ = ___ ± ___，R² = ___。不同水準的誤差棒（是/否）重疊。
+證據（Evidence）：擬合得 D∞ = ___ ± ___，τ = ___ ± ___。不同水準的誤差棒（是/否）重疊。
 推理（Reasoning）：從 lv1 的飽和模型出發，我的假設預測 ___，實際結果 ___。這（支持/反對）假設，因為 ___。</textarea>
         <div class="think-status"></div>
       </div>

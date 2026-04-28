@@ -1222,15 +1222,12 @@ function drawScatter(cvs, data, xLabel, yLabel, color, fixedWhich, fitThroughOri
       g.setLineDash([]);
 
       const meanY2 = ys.reduce((a, v) => a + v, 0) / ys.length;
-      const SS_tot = ys.reduce((s, yi) => s + (yi - meanY2) ** 2, 0);
-      const SS_res = data.reduce((s, d) => s + (d.y - (k * d.x + b)) ** 2, 0);
-      const R2 = SS_tot > 0 ? 1 - SS_res / SS_tot : 0;
       g.fillStyle = color;
       g.font = 'bold 10px sans-serif';
       g.textAlign = 'right';
       const label = fitThroughOrigin
-        ? ('k=' + k.toPrecision(3) + '  R²=' + R2.toFixed(3))
-        : ('k=' + k.toPrecision(3) + '  b=' + b.toPrecision(3) + '  R²=' + R2.toFixed(3));
+        ? ('k=' + k.toPrecision(3))
+        : ('k=' + k.toPrecision(3) + '  b=' + b.toPrecision(3));
       g.fillText(label, W - pad.r - 2, pad.t + 12);
     }
   }

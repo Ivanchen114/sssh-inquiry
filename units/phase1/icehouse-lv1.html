@@ -237,7 +237,7 @@
       <div style="display:grid;gap:8px;margin-bottom:14px;">
         <div class="q-item"><strong>Q1：</strong>選<strong>線性</strong>趨勢線。截距代表「不加鹽（0g）時的最低溫」——物理上純冰水溫度應該是多少？你的截距合理嗎？</div>
         <div class="q-item"><strong>Q2：</strong>觀察斜率：每多加 10g 鹽，溫度會下降多少？但 80g→120g 時還維持這個比例嗎？線性模型在哪裡開始「不合理」？</div>
-        <div class="q-item"><strong>Q3：</strong>試試<strong>多項式</strong>——R² 可能更高，但物理上「加到 200g 鹽溫度繼續無限下降」合理嗎？真實世界有什麼限制？</div>
+        <div class="q-item"><strong>Q3：</strong>試試<strong>多項式</strong>——擬合曲線會更貼合資料點，但物理上「加到 200g 鹽溫度繼續無限下降」合理嗎？真實世界有什麼限制？</div>
         <div class="q-item"><strong>Q4：</strong>如果目標是「最快降到 -10°C」，你會選多少鹽？如果目標是「最低溫度」呢？用數據論證你的選擇。</div>
       </div>
 
@@ -472,7 +472,7 @@
       const pred=xi=>a*xi+b;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：溫度 = ${a.toFixed(3)}·鹽量 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(1)} °C${Math.abs(b)>2?' ⚠️':' ✓'}<br>斜率 = ${a.toFixed(3)} °C/g`};
+      return{R2,pred,info:`方程式：溫度 = ${a.toFixed(3)}·鹽量 ${b>=0?'+':'−'} ${Math.abs(b).toFixed(1)}<br>截距 = ${b.toFixed(1)} °C${Math.abs(b)>2?' ⚠️':' ✓'}<br>斜率 = ${a.toFixed(3)} °C/g`};
     }
     if(type==='power'){
       // 冪次需要正值，跳過 x=0 的點，對 |y| 做 log-log
@@ -488,7 +488,7 @@
       const pred=xi=>xi>0?-a*Math.pow(xi,nn):0;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：溫度 = −${a.toFixed(3)}·鹽量^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${nn<1?' (n<1，增速遞減)':''}`};
+      return{R2,pred,info:`方程式：溫度 = −${a.toFixed(3)}·鹽量^${nn.toFixed(2)}<br>指數 n = ${nn.toFixed(3)}${nn<1?' (n<1，增速遞減)':''}`};
     }
     if(type==='poly'){
       const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
@@ -499,7 +499,7 @@
       const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
       const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
       const R2=SS_tot>0?1-SS_res/SS_tot:0;
-      return{R2,pred,info:`方程式：溫度 = ${c[2].toFixed(5)}·鹽量² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·鹽量 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(1)}<br>R² = ${R2.toFixed(4)}`};
+      return{R2,pred,info:`方程式：溫度 = ${c[2].toFixed(5)}·鹽量² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(3)}·鹽量 ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(1)}`};
     }
     return null;
   }
@@ -544,7 +544,6 @@
         for(let i=0;i<=80;i++){const xv=xMax*i/80;if(xv<=0&&trendType==='power')continue;const yv=fit.pred(xv);const cx=toX(xv),cy=toY(yv);if(cy<pad.t||cy>H-pad.b)continue;if(!started){ctx.moveTo(cx,cy);started=true;}else ctx.lineTo(cx,cy);}
         ctx.stroke();ctx.setLineDash([]);
         ctx.fillStyle='#059669';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
-        ctx.fillText('R²='+fit.R2.toFixed(3),toX(xMax*0.6),toY(yMin*0.15));
         fitInfo.style.display='block';fitInfo.innerHTML=fit.info;
       }
     } else {fitInfo.style.display='none';}
