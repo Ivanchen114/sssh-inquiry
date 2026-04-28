@@ -529,24 +529,15 @@ function initStepEngine() {
   }
 
   function scrollToStepTop() {
-    // 按下「下一步」後按鈕仍保有焦點，部分瀏覽器會把焦點元素自動捲回視野、
+    // 按下「下一步/上一步」後按鈕仍保有焦點，部分瀏覽器會把焦點元素自動捲回視野、
     // 覆蓋我們的 scrollTo。先 blur 再捲動。
     if (document.activeElement && typeof document.activeElement.blur === 'function') {
       document.activeElement.blur();
     }
-    const nav = document.querySelector('.step-nav');
-    if (!nav) return;
-    let target = absoluteTop(nav);
-    const mh = document.getElementById('mobile-header');
-    if (mh && getComputedStyle(mh).display !== 'none') {
-      target -= mh.offsetHeight;
-    }
-    target = Math.max(0, target);
-    // 先 instant 立刻到位（避免焦點/smooth 互咬），再以 smooth 微調（讓使用者看到動作）
-    window.scrollTo(0, target);
-    // 若瀏覽器支援 smooth，再呼叫一次做動畫微調
+    // 捲到頁面最上方（讓 H1 + meta + 學習目標 chip + step-nav 都在視野內）
+    window.scrollTo(0, 0);
     try {
-      window.scrollTo({ top: target, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (_) { /* 舊瀏覽器忽略 */ }
   }
 
