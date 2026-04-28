@@ -1588,6 +1588,43 @@ tr:nth-child(even) td { background: #fafaf8; }
 }
 
 /* ═══════════════════════════════════════════════════
+   表單輸入框（.fill-blank）：研究規劃表 / 論證建模 / 問題發現等工具頁共用
+   預設 focus 用 phase2（綠）；其他 phase 在頁面內部 inline override 即可
+   ═══════════════════════════════════════════════════ */
+.fill-blank {
+  display: block;
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fafbfc;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-family: inherit;
+  outline: none;
+  margin-bottom: 8px;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.fill-blank:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+.fill-blank:focus {
+  background: white;
+  border-color: var(--phase2);
+  box-shadow: 0 0 0 3px rgba(30, 122, 82, 0.15);
+}
+.fill-blank::placeholder {
+  color: #94a3b8;
+}
+textarea.fill-blank {
+  resize: vertical;
+  min-height: 64px;
+  line-height: 1.65;
+  padding: 10px 12px;
+}
+
+/* ═══════════════════════════════════════════════════
    學習目標（收合進標題塊；預設關閉）
    ═══════════════════════════════════════════════════ */
 .learning-goals {

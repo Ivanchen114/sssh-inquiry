@@ -90,33 +90,7 @@
       font-size: 12px;
       margin-bottom: 6px;
     }
-    .fill-blank {
-      display: block;
-      width: 100%;
-      border: none;
-      border-bottom: 1.5px dashed var(--border);
-      background: transparent;
-      padding: 6px 0;
-      font-size: 13px;
-      color: var(--text-primary);
-      font-family: inherit;
-      outline: none;
-      margin-bottom: 4px;
-    }
-    .fill-blank:focus {
-      border-bottom-color: var(--phase2);
-    }
-    .fill-blank::placeholder {
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    textarea.fill-blank {
-      resize: vertical;
-      min-height: 48px;
-      border: 1.5px dashed var(--border);
-      border-radius: 4px;
-      padding: 8px;
-    }
+    /* .fill-blank 樣式已抽到 assets/css/style.css 全站共用，預設 focus = phase2（綠）對應本頁 */
     textarea.fill-blank:focus {
       border-color: var(--phase2);
     }

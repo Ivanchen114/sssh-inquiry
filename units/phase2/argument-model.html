@@ -86,29 +86,11 @@
       font-size: 12px;
       margin-bottom: 6px;
     }
-    .fill-blank {
-      display: block;
-      width: 100%;
-      border: none;
-      border-bottom: 1.5px dashed var(--border);
-      background: transparent;
-      padding: 6px 0;
-      font-size: 13px;
-      color: var(--text-primary);
-      font-family: inherit;
-      outline: none;
-      margin-bottom: 4px;
+    /* .fill-blank 基底樣式在 assets/css/style.css；本頁是論證建模工具，focus 用 phase1 藍 */
+    .fill-blank:focus {
+      border-color: var(--phase1);
+      box-shadow: 0 0 0 3px rgba(41, 82, 196, 0.15);
     }
-    .fill-blank:focus { border-bottom-color: var(--phase1); }
-    .fill-blank::placeholder { color: var(--text-muted); font-style: italic; }
-    textarea.fill-blank {
-      resize: vertical;
-      min-height: 48px;
-      border: 1.5px dashed var(--border);
-      border-radius: 4px;
-      padding: 8px;
-    }
-    textarea.fill-blank:focus { border-color: var(--phase1); }
 
     /* CER 三欄 */
     .cer-grid {
