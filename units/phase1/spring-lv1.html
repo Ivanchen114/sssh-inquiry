@@ -369,15 +369,28 @@ P3：我認為極限…</textarea>
           <div style="display:grid;gap:7px;font-size:12px;color:var(--text-secondary);">
             <div class="q-item">Q1：選<strong>線性</strong>趨勢線。截距代表「力 = 0 時的伸長量」——物理上沒掛砝碼時，彈簧伸長量應該是多少？你的截距合理嗎？</div>
             <div class="q-item">Q2：斜率的單位是什麼？它代表什麼物理意義？（提示：「每多 1 N 的力，彈簧多伸長多少」）如果換更硬的彈簧，斜率會怎麼變？</div>
-            <div class="q-item">Q3：試試<strong>多項式</strong>趨勢線——R² 可能更高，但物理上「力和伸長量是二次方關係」講得通嗎？R² 高就代表模型好嗎？</div>
+            <div class="q-item">Q3：試試<strong>多項式</strong>趨勢線——擬合曲線會更貼合資料點，但物理上「力和伸長量是二次方關係」講得通嗎？擬合得越貼，模型就越對嗎？</div>
             <div class="q-item">Q4：用「主張—理由—證據」論證：力和彈簧伸長量之間是什麼關係？你選擇哪條趨勢線，為什麼？</div>
           </div>
 
           <div class="think-block record" style="margin-top:12px;">
             <div class="think-prompt">✏️ 用「主張—理由—證據」論證你選的模型</div>
-            <textarea class="think-input" data-key="spring-lv1-model" style="min-height:80px;line-height:1.8" rows="4">例如：我選線性模型。
-理由：R² = 0.998，而且截距接近 0，符合「不施力就不伸長」的物理意義。
-證據：冪次模型的指數 n ≈ 1.0，本質上就是線性…</textarea>
+
+            <!-- 外部 hint：CER 寫作架構 + 反例/正例 -->
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--text-secondary);line-height:1.75;">
+              <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">📐 寫作架構</div>
+              <ul style="margin:0 0 8px;padding-left:20px;">
+                <li><strong>主張（Claim）</strong>：F 和 x 是什麼關係？（線性？冪次？二次？）</li>
+                <li><strong>證據（Evidence）</strong>：截距是多少？斜率是多少？冪次模型的指數 n ≈ 多少？</li>
+                <li><strong>理由（Reasoning）</strong>：物理上「不施力就不伸長」要求截距接近 0；指數 n ≈ 1 等同線性。哪個模型同時滿足這兩件事？</li>
+              </ul>
+              <div style="border-top:1px dashed #cbd5e1;padding-top:6px;margin-top:6px;">
+                <div style="color:#b91c1c;margin-bottom:3px;">❌ 「多項式擬合得最貼，所以選二次方關係。」 <span style="color:#7f1d1d;">（只看「貼不貼」不算理由——多項式都能擬到很貼）</span></div>
+                <div style="color:#15803d;">✅ 「主張：F 和 x 成正比（線性）。證據：線性截距 ≈ 0、斜率 = 50 N/m；冪次模型擬合的指數 n ≈ 1.0。理由：截距 0 符合不施力就不伸長；n ≈ 1 表示冪次本質上就是線性。」</div>
+              </div>
+            </div>
+
+            <textarea class="think-input" data-key="spring-lv1-model" style="min-height:80px;line-height:1.8" rows="4" placeholder="例：主張：F 和 x 成正比（線性）。證據：截距 ___ N、斜率 ___ N/m、冪次指數 n ≈ ___。理由：___。"></textarea>
             <div class="think-status"></div>
           </div>
 
@@ -906,17 +919,13 @@ document.getElementById('trendControls').addEventListener('click', e => {
 
 function computeFit(x, y, type) {
   const n = x.length;
-  const meanY = y.reduce((a,b)=>a+b,0)/n;
-  const SS_tot = y.reduce((s,yi)=>s+(yi-meanY)**2,0);
   if (type === 'linear') {
     const sx=x.reduce((a,b)=>a+b,0), sy=y.reduce((a,b)=>a+b,0);
     const sxy=x.reduce((s,xi,i)=>s+xi*y[i],0), sx2=x.reduce((s,xi)=>s+xi*xi,0);
     const a=(n*sxy-sx*sy)/(n*sx2-sx*sx), b=(sy-a*sx)/n;
     const pred=xi=>a*xi+b;
-    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
-    const R2=SS_tot>0?1-SS_res/SS_tot:0;
-    return{type,a,b,R2,pred,
-      info:`方程式：F = ${a.toFixed(2)}·x ${b>=0?'+':'−'} ${Math.abs(b).toFixed(3)}<br>R² = ${R2.toFixed(4)}<br>截距 = ${b.toFixed(4)} N${Math.abs(b)>0.05?' ⚠️':' ✓'}<br>斜率 = ${a.toFixed(2)} N/m`};
+    return{type,a,b,pred,
+      info:`方程式：F = ${a.toFixed(2)}·x ${b>=0?'+':'−'} ${Math.abs(b).toFixed(3)}<br>截距 = ${b.toFixed(4)} N${Math.abs(b)>0.05?' ⚠️':' ✓ 接近 0'}<br>斜率 = ${a.toFixed(2)} N/m`};
   }
   if (type === 'power') {
     const lx=x.map(Math.log), ly=y.map(Math.log);
@@ -925,10 +934,8 @@ function computeFit(x, y, type) {
     const nn=(n*slxy-slx*sly)/(n*slx2-slx*slx);
     const a=Math.exp((sly-nn*slx)/n);
     const pred=xi=>a*Math.pow(xi,nn);
-    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
-    const R2=SS_tot>0?1-SS_res/SS_tot:0;
-    return{type,a,n:nn,R2,pred,
-      info:`方程式：F = ${a.toFixed(3)}·x^${nn.toFixed(2)}<br>R² = ${R2.toFixed(4)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-1)<0.1?' (≈1，接近線性)':''}`};
+    return{type,a,n:nn,pred,
+      info:`方程式：F = ${a.toFixed(3)}·x^${nn.toFixed(2)}<br>指數 n = ${nn.toFixed(3)}${Math.abs(nn-1)<0.1?' ✓（≈1，本質上就是線性）':' ⚠️（偏離 1，可能不是純線性）'}`};
   }
   if (type === 'poly') {
     const sp=p=>x.reduce((s,xi)=>s+Math.pow(xi,p),0);
@@ -937,10 +944,8 @@ function computeFit(x, y, type) {
     for(let col=0;col<3;col++){let mr=col;for(let r=col+1;r<3;r++)if(Math.abs(A[r][col])>Math.abs(A[mr][col]))mr=r;[A[col],A[mr]]=[A[mr],A[col]];for(let r=col+1;r<3;r++){const f=A[r][col]/A[col][col];for(let j=col;j<=3;j++)A[r][j]-=f*A[col][j];}}
     const c=[0,0,0];for(let i=2;i>=0;i--){c[i]=A[i][3];for(let j=i+1;j<3;j++)c[i]-=A[i][j]*c[j];c[i]/=A[i][i];}
     const pred=xi=>c[0]+c[1]*xi+c[2]*xi*xi;
-    const SS_res=x.reduce((s,xi,i)=>s+(y[i]-pred(xi))**2,0);
-    const R2=SS_tot>0?1-SS_res/SS_tot:0;
-    return{type,c,R2,pred,
-      info:`方程式：F = ${c[2].toFixed(1)}x² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(2)}x ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(3)}<br>R² = ${R2.toFixed(4)}`};
+    return{type,c,pred,
+      info:`方程式：F = ${c[2].toFixed(1)}x² ${c[1]>=0?'+':'−'} ${Math.abs(c[1]).toFixed(2)}x ${c[0]>=0?'+':'−'} ${Math.abs(c[0]).toFixed(3)}<br>x² 係數 = ${c[2].toFixed(2)}${Math.abs(c[2])<0.5?'（接近 0，本質仍是線性）':' ⚠️（小心：多項式總能擬得很貼，但物理上 F = ax² 講得通嗎？）'}`};
   }
   return null;
 }
@@ -996,8 +1001,6 @@ function updateGraph() {
       const steps=60;
       for(let i=0;i<=steps;i++){const xv=xMax*i/steps,yv=fit.pred(xv);if(yv<0)continue;const cx=toX(xv),cy=toY(yv);i===0?gCtx.moveTo(cx,cy):gCtx.lineTo(cx,cy);}
       gCtx.stroke();gCtx.setLineDash([]);
-      gCtx.fillStyle='#059669';gCtx.font='bold 10px sans-serif';gCtx.textAlign='left';
-      gCtx.fillText(`R²=${fit.R2.toFixed(3)}`,toX(xMax*0.55),toY(yMax*0.85));
       fitInfo.style.display='block'; fitInfo.innerHTML=fit.info;
     }
   } else { fitInfo.style.display='none'; }
