@@ -1057,6 +1057,35 @@ function buildExportMarkdown() {
     return '';
   }
 
+  // 把資料表轉成 markdown 表格；沒任何 cell 被填過就回空字串
+  function mdTable(table) {
+    const rows = Array.from(table.querySelectorAll('tr'));
+    if (rows.length === 0) return '';
+    let hasFill = false;
+    const grid = rows.map(row =>
+      Array.from(row.querySelectorAll('th, td')).map(cell => {
+        const input = cell.querySelector('.think-input');
+        if (input) {
+          const key = input.dataset.key;
+          const val = key && records[key] ? records[key].trim() : '';
+          if (val) hasFill = true;
+          return val || '___';
+        }
+        return cell.textContent.trim().replace(/\s+/g, ' ').replace(/\|/g, '\\|');
+      })
+    );
+    if (!hasFill) return '';
+    sectionNum++;
+    let s = `### ${sectionNum}. （資料表）\n\n`;
+    s += '| ' + grid[0].join(' | ') + ' |\n';
+    s += '|' + grid[0].map(() => ' --- ').join('|') + '|\n';
+    grid.slice(1).forEach(row => {
+      s += '| ' + row.join(' | ') + ' |\n';
+    });
+    s += '\n';
+    return s;
+  }
+
   function mdTeacherBlock(el) {
     const titleEl = el.querySelector('.tb-title');
     const tbTitle = titleEl ? titleEl.textContent.trim() : '';
@@ -1097,6 +1126,7 @@ function buildExportMarkdown() {
           const sbTitle = titleEl ? titleEl.textContent.trim() : '';
           let inner = '';
           item.querySelectorAll('.think-block').forEach(tb => { inner += mdThinkBlock(tb); });
+          item.querySelectorAll('table').forEach(t => { inner += mdTable(t); });
           if (inner) {
             panelMd += `**✏️ 你的填寫｜${sbTitle}**\n\n` + inner;
           }
@@ -1110,6 +1140,12 @@ function buildExportMarkdown() {
         }
       });
 
+      // 額外掃 panel 下不在任何 block 內的頂層 <table>
+      panel.querySelectorAll('table').forEach(t => {
+        if (t.closest('.teacher-block') || t.closest('.student-block')) return;
+        panelMd += mdTable(t);
+      });
+
       if (panelMd) {
         md += `\n## 階段 ${stageNum} · ${stageName}\n\n`;
         md += panelMd;
@@ -1119,6 +1155,9 @@ function buildExportMarkdown() {
     // 舊版頁面
     document.querySelectorAll('.think-block').forEach(block => {
       md += mdThinkBlock(block);
+    });
+    document.querySelectorAll('table').forEach(t => {
+      md += mdTable(t);
     });
   }
 
@@ -1207,6 +1246,49 @@ function buildExportText() {
     return s;
   }
 
+  // 格式化資料表：抓 thead + tbody，cell 若含 .think-input 就讀 records 值
+  // 沒任何 cell 被填過就回傳空字串（不匯出空表）
+  function formatTable(table) {
+    const rows = Array.from(table.querySelectorAll('tr'));
+    if (rows.length === 0) return '';
+    let hasFill = false;
+    const grid = rows.map(row => {
+      return Array.from(row.querySelectorAll('th, td')).map(cell => {
+        const input = cell.querySelector('.think-input');
+        if (input) {
+          const key = input.dataset.key;
+          const val = key && records[key] ? records[key].trim() : '';
+          if (val) hasFill = true;
+          return val || '___';
+        }
+        return cell.textContent.trim().replace(/\s+/g, ' ');
+      });
+    });
+    if (!hasFill) return '';
+
+    // 計算每欄最大寬度，做對齊輸出
+    const colN = Math.max(...grid.map(r => r.length));
+    const widths = Array.from({length: colN}, (_, i) =>
+      Math.max(...grid.map(r => (r[i] || '').length))
+    );
+    sectionNum++;
+    hasRecord = true;
+    let s = '【' + sectionNum + '】（資料表）\n';
+    grid.forEach((row, ri) => {
+      const padded = row.map((cell, ci) => {
+        const w = widths[ci];
+        return cell + ' '.repeat(Math.max(0, w - cell.length));
+      });
+      s += '| ' + padded.join(' | ') + ' |\n';
+      if (ri === 0) {
+        // 表頭分隔線
+        s += '|' + widths.map(w => '-'.repeat(w + 2)).join('|') + '|\n';
+      }
+    });
+    s += '\n';
+    return s;
+  }
+
   function formatTeacherBlock(el) {
     const titleEl = el.querySelector('.tb-title');
     const tbTitle = titleEl ? titleEl.textContent.trim() : '';
@@ -1257,6 +1339,7 @@ function buildExportText() {
           let innerOut = '';
           item.querySelectorAll('.think-block').forEach(tb => { innerOut += formatThinkBlock(tb); });
           item.querySelectorAll('.photo-slot').forEach(ps => { innerOut += formatPhotoSlot(ps); });
+          item.querySelectorAll('table').forEach(t => { innerOut += formatTable(t); });
           if (innerOut) {
             panelOut += '〖你的填寫〗 ' + sbTitle + '\n\n' + innerOut;
           }
@@ -1274,6 +1357,12 @@ function buildExportText() {
         }
       });
 
+      // 額外掃 panel 下不在任何 block 內的頂層 <table>
+      panel.querySelectorAll('table').forEach(t => {
+        if (t.closest('.teacher-block') || t.closest('.student-block')) return;
+        panelOut += formatTable(t);
+      });
+
       if (panelOut) {
         out += BAR + '\n';
         out += '🔹 階段 ' + stageNum + ' · ' + stageName + '\n';
@@ -1287,6 +1376,10 @@ function buildExportText() {
     elements.forEach(el => {
       if (el.classList.contains('photo-slot')) out += formatPhotoSlot(el);
       else out += formatThinkBlock(el);
+    });
+    // 也掃 table（學生在表格填的內容）
+    document.querySelectorAll('table').forEach(t => {
+      out += formatTable(t);
     });
   }
 
