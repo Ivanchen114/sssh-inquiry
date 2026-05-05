@@ -415,22 +415,50 @@ function updateProgress(){
   document.getElementById('overall-progress').style.width = pct + '%';
 }
 
-// ═══ 三句話日誌 localStorage ═══
+// ═══ 三句話日誌：寫入統一 schema (window.SSSH_RECORDS) ═══
+// 之前用 raw localStorage.setItem('ir-log-w*')，沒有 sssh_ 前綴 → 不會被
+// tools/weekly-export.html 的 scanAll 抓到。改成統一 schema 後就會自動進
+// 「本週學習記錄」彙整。舊資料 (raw key) 仍會被讀進來顯示，第一次輸入
+// 後即升級為 v2 schema。
 (function(){
+  const LABELS = {
+    'ir-log-w1': '自主探究 W1 日誌（聚焦）',
+    'ir-log-w2': '自主探究 W2 日誌（試做）',
+    'ir-log-w3': '自主探究 W3 日誌（收數據）',
+    'ir-log-w4': '自主探究 W4 日誌（成果）',
+  };
+
   document.querySelectorAll('textarea[data-log-key]').forEach(ta => {
     const key = ta.dataset.logKey;
     const status = document.querySelector('[data-log-status="' + key + '"]');
+    const label = LABELS[key] || ta.placeholder || key;
+
+    // 還原：優先讀統一 schema，後備讀舊 raw key
+    let saved = '';
     try {
-      const saved = localStorage.getItem(key);
-      if (saved) ta.value = saved;
+      if (window.SSSH_RECORDS) {
+        const records = window.SSSH_RECORDS.read();
+        saved = window.SSSH_RECORDS.getValue(records, key);
+      }
+      if (!saved) {
+        const legacy = localStorage.getItem(key);
+        if (legacy) saved = legacy;
+      }
     } catch(e){}
+    if (saved) ta.value = saved;
+
     let timer = null;
     ta.addEventListener('input', () => {
       if (status) status.textContent = '— 輸入中…';
       clearTimeout(timer);
       timer = setTimeout(() => {
         try {
-          localStorage.setItem(key, ta.value);
+          if (window.SSSH_RECORDS) {
+            window.SSSH_RECORDS.write(key, ta.value, { label, type: 'text' });
+          } else {
+            // 極舊版 main.js fallback
+            localStorage.setItem(key, ta.value);
+          }
           if (status) {
             const t = new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' });
             status.textContent = '— 已存於本機 · ' + t;
