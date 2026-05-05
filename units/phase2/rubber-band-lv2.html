@@ -80,12 +80,12 @@
       <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:13px;color:#0369a1;margin-bottom:6px;">🔄 lv1 學到的飽和模型</div>
         <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
-          推出距離 $D$ 對轉圈數 $n$ 的關係：$D(n) = D_\infty \cdot (1 - e^{-n/\tau})$
+          推出距離 D 對轉圈數 n 的關係：$D(n) = D_\infty \cdot (1 - e^{-n/\tau})$
           <ul style="padding-left:18px;margin:6px 0;">
-            <li>$D_\infty$：推出距離的物理極限（橡皮筋儲能上限 + 摩擦損耗決定）</li>
-            <li>$\tau$：達到 63% 極限所需的圈數（反映儲能效率）</li>
+            <li>D_∞：推出距離的物理極限（橡皮筋儲能上限 + 摩擦損耗決定）</li>
+            <li>τ：達到 63% 極限所需的圈數（反映儲能效率）</li>
           </ul>
-          <strong>lv1 只改了一個變因（轉圈數）。lv2 要問：其他變因如何改變 $D_\infty$ 或 $\tau$？</strong>
+          <strong>lv1 只改了一個變因（轉圈數）。lv2 要問：其他變因如何改變 D_∞ 或 τ？</strong>
         </div>
       </div>
 
@@ -97,20 +97,20 @@
 
         <div style="display:grid;gap:10px;">
           <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;">
-            <div style="font-weight:700;font-size:12.5px;color:#166534;">Q1（驗證型）：橡皮筋<strong>條數</strong>如何影響 $D_\infty$？</div>
-            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：條數越多 → 總儲能上限越高 → $D_\infty$ 越大。預期線性或次線性。</div>
+            <div style="font-weight:700;font-size:12.5px;color:#166534;">Q1（驗證型）：橡皮筋<strong>條數</strong>如何影響 D_∞？</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：條數越多 → 總儲能上限越高 → D_∞ 越大。預期線性或次線性。</div>
           </div>
           <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;">
             <div style="font-weight:700;font-size:12.5px;color:#166534;">Q2（驗證型）：<strong>罐子重量</strong>如何影響推出距離和回滾距離的<strong>差距</strong>？</div>
             <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：重罐摩擦力大 → 損耗多 → 推出 − 回滾 差距變大。</div>
           </div>
           <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;">
-            <div style="font-weight:700;font-size:12.5px;color:#166534;">Q3（驗證型）：<strong>橡皮筋「粗細」</strong>是否改變 $\tau$？</div>
-            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：粗橡皮筋彈性限度高 → 線性區長 → $\tau$ 變大。</div>
+            <div style="font-weight:700;font-size:12.5px;color:#166534;">Q3（驗證型）：<strong>橡皮筋「粗細」</strong>是否改變 τ？</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">lv1 假設：粗橡皮筋彈性限度高 → 線性區長 → τ 變大。</div>
           </div>
           <div style="background:#fef3c7;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 6px 6px 0;">
             <div style="font-weight:700;font-size:12.5px;color:#92400e;">Q4（延伸型）：<strong>地面材質</strong>如何影響飽和模型？</div>
-            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">改變摩擦係數 → 只影響 $D_\infty$？還是連 $\tau$ 都變？這是 lv1 沒碰過的延伸。</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">改變摩擦係數 → 只影響 D_∞？還是連 τ 都變？這是 lv1 沒碰過的延伸。</div>
           </div>
           <div style="background:#fef3c7;border-left:3px solid #f59e0b;padding:10px 14px;border-radius:0 6px 6px 0;">
             <div style="font-weight:700;font-size:12.5px;color:#92400e;">Q5（延伸型）：同總長度下，橡皮筋<strong>「串聯 vs 並聯」</strong>哪個推得更遠？</div>
@@ -122,7 +122,7 @@
       <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:12px;color:#991b1b;margin-bottom:4px;">⚠️ 為什麼要從 lv1 模型出發提問？</div>
         <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
-          從「條數變多會怎樣」直接開做，你只會得到「變多一點」這種結論。但從「$D_\infty$ 或 $\tau$ 如何改變」出發，你的數據會回答一個<strong>更深的問題</strong>——變因影響的是「儲能上限」還是「儲能效率」？這才是規劃研究的重點。
+          從「條數變多會怎樣」直接開做，你只會得到「變多一點」這種結論。但從「D_∞ 或 τ 如何改變」出發，你的數據會回答一個<strong>更深的問題</strong>——變因影響的是「儲能上限」還是「儲能效率」？這才是規劃研究的重點。
         </div>
       </div>
 
@@ -164,7 +164,7 @@
           <div style="background:var(--bg);border-radius:6px;padding:12px;">
             <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">① 假設</div>
             <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
-              從 lv1 模型推出的預測：如「條數 × 2 → $D_\infty$ × 1.8」（不是 ×2，因為摩擦不變）
+              從 lv1 模型推出的預測：如「條數 × 2 → D_∞ × 1.8」（不是 ×2，因為摩擦不變）
             </div>
           </div>
           <div style="background:var(--bg);border-radius:6px;padding:12px;">
@@ -194,7 +194,7 @@
           <div style="background:var(--bg);border-radius:6px;padding:12px;">
             <div style="font-weight:700;font-size:12px;color:var(--text-primary);margin-bottom:6px;">⑥ 擬合計畫</div>
             <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
-              每個水準都要<strong>掃一條飽和曲線</strong>（不同圈數），讀出 $D_\infty$ 和 $\tau$ 再比較
+              每個水準都要<strong>掃一條飽和曲線</strong>（不同圈數），讀出 D_∞ 和 τ 再比較
             </div>
           </div>
         </div>
@@ -248,15 +248,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td style="padding:6px;">先快後慢 → 逼近水平線</td><td style="padding:6px;"><strong>飽和 $y = A(1-e^{-x/\tau})$</strong></td><td style="padding:6px;">$A$（上限）、$\tau$（速率常數）</td></tr>
-              <tr><td style="padding:6px;">直線</td><td style="padding:6px;">線性 $y = kx + b$</td><td style="padding:6px;">$k$（靈敏度）、$b$（截距是否為 0）</td></tr>
-              <tr><td style="padding:6px;">倒 U 形（有最佳值）</td><td style="padding:6px;">二次 $y = ax^2 + bx + c$</td><td style="padding:6px;">$-b/2a$（最佳值位置）</td></tr>
-              <tr><td style="padding:6px;">緩升的弧線（無上限）</td><td style="padding:6px;">冪次 $y = ax^n$</td><td style="padding:6px;">$n$（冪指數）</td></tr>
+              <tr><td style="padding:6px;">先快後慢 → 逼近水平線</td><td style="padding:6px;"><strong>飽和 $y = A(1-e^{-x/\tau})$</strong></td><td style="padding:6px;">A（上限）、τ（速率常數）</td></tr>
+              <tr><td style="padding:6px;">直線</td><td style="padding:6px;">線性 $y = kx + b$</td><td style="padding:6px;">k（靈敏度）、b（截距是否為 0）</td></tr>
+              <tr><td style="padding:6px;">倒 U 形（有最佳值）</td><td style="padding:6px;">二次 y = ax² + bx + c</td><td style="padding:6px;">$-b/2a$（最佳值位置）</td></tr>
+              <tr><td style="padding:6px;">緩升的弧線（無上限）</td><td style="padding:6px;">冪次 y = axⁿ</td><td style="padding:6px;">n（冪指數）</td></tr>
             </tbody>
           </table>
         </div>
         <div style="background:white;border-radius:6px;padding:10px;margin-top:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
-          <strong>⚠️ 選擇原則</strong>：別只看擬合得多貼，要問「$x \to \infty$ 的行為合理嗎？」飽和模型有極限、冪次模型無極限——物理上哪個成立？
+          <strong>⚠️ 選擇原則</strong>：別只看擬合得多貼，要問「x → ∞ 的行為合理嗎？」飽和模型有極限、冪次模型無極限——物理上哪個成立？
         </div>
       </div>
 
@@ -441,7 +441,7 @@
             <strong style="color:var(--text-primary);">3. 殘差分析</strong>：計算每點的殘差 = 實測 − 擬合。畫殘差圖——如果殘差隨機分佈 → 模型合適；如果有系統性弧形 → 模型形狀錯了。
           </div>
           <div style="background:var(--bg);border-radius:6px;padding:10px 14px;">
-            <strong style="color:var(--text-primary);">4. 讀參數</strong>：從擬合結果讀出 $D_\infty$、$\tau$ 等；和 Step 1 的假設比較。
+            <strong style="color:var(--text-primary);">4. 讀參數</strong>：從擬合結果讀出 D_∞、τ 等；和 Step 1 的假設比較。
           </div>
         </div>
       </div>
@@ -483,7 +483,7 @@
         </div>
         <div style="background:white;border:1px dashed #93c5fd;border-radius:6px;padding:10px 14px;font-size:11.5px;color:#1e3a8a;line-height:1.8;">
           <strong>📝 AI prompt 範本：</strong><br>
-          「我研究 ___（操縱變因）對橡皮筋動力罐推出距離的影響。假設：___。數據（水準 vs 平均±std）：___。擬合飽和模型得 $D_\infty$ = ___、$\tau$ = ___。殘差分佈：___。請幫我檢查：(1) 擬合參數的物理意義合理嗎？(2) 擬合貼合度高不代表模型對，還有哪些檢驗要做？(3) 我的假設通過驗證了嗎？為什麼？」
+          「我研究 ___（操縱變因）對橡皮筋動力罐推出距離的影響。假設：___。數據（水準 vs 平均±std）：___。擬合飽和模型得 D_∞ = ___、τ = ___。殘差分佈：___。請幫我檢查：(1) 擬合參數的物理意義合理嗎？(2) 擬合貼合度高不代表模型對，還有哪些檢驗要做？(3) 我的假設通過驗證了嗎？為什麼？」
         </div>
         <p style="font-size:11px;color:#3b82f6;margin-top:10px;font-style:italic;">⚠️ AI 是審稿人，不是老闆。它提出問題，你決定要不要改。</p>
       </div>
@@ -590,7 +590,7 @@
               💡 參考答案<span class="toggle-icon">▶</span>
             </div>
             <div class="collapsible-body" style="font-size:12px;color:var(--text-secondary);padding:8px 0 0 0;">
-              （1）水準太少（只 3 個），看不到飽和趨勢；（2）每水準只 3 次，不確定度過大；（3）直接測 30 圈，可能已超過彈性極限，看不到線性區；（4）沒說明條數怎麼「並聯」或「串聯」；（5）沒控制橡皮筋品牌/批號；（6）沒測不同圈數 → 沒辦法擬合飽和曲線 → 沒辦法比較 $D_\infty$；（7）沒做校準，不知道 std/mean。
+              （1）水準太少（只 3 個），看不到飽和趨勢；（2）每水準只 3 次，不確定度過大；（3）直接測 30 圈，可能已超過彈性極限，看不到線性區；（4）沒說明條數怎麼「並聯」或「串聯」；（5）沒控制橡皮筋品牌/批號；（6）沒測不同圈數 → 沒辦法擬合飽和曲線 → 沒辦法比較 D_∞；（7）沒做校準，不知道 std/mean。
             </div>
           </div>
         </div>

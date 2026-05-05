@@ -44,7 +44,7 @@
       <ul>
         <li>能從數據形狀選出合適的經驗模型（線性 / 冪次 / <strong>飽和模型</strong>），並用殘差與擬合形狀判斷</li>
         <li>能用「主張—證據—推理」的 CER 架構論證：為什麼橡皮筋會出現飽和？</li>
-        <li>能辨識「理想彈簧模型 $E_p = \tfrac{1}{2}kx^2$」在橡皮筋上的失效邊界</li>
+        <li>能辨識「理想彈簧模型 E_p = ½kx²」在橡皮筋上的失效邊界</li>
         <li>能從「推出距離 vs 回滾距離」的差距估算摩擦損耗比</li>
       </ul>
     </details>
@@ -134,7 +134,7 @@
       <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:13px;color:#991b1b;margin-bottom:6px;">⚠️ 常見迷思</div>
         <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
-          課本教過理想彈簧的公式：$E_p = \tfrac{1}{2}kx^2$，力與形變量成正比。於是很多人會假設：「橡皮筋也是一樣吧？轉越多圈能量越多，所以距離應該跟圈數的平方成正比。」<br>
+          課本教過理想彈簧的公式：E_p = ½kx²，力與形變量成正比。於是很多人會假設：「橡皮筋也是一樣吧？轉越多圈能量越多，所以距離應該跟圈數的平方成正比。」<br>
           <strong>這個假設會失敗。</strong>而失敗的原因，正是這堂課要建立的模型。
         </div>
       </div>
@@ -144,7 +144,7 @@
           <div style="font-weight:700;color:var(--phase1);margin-bottom:8px;font-size:13px;">理想彈簧（課本版）</div>
           <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.9;">
             <li>力 $F = kx$（線性）</li>
-            <li>能量 $E_p = \tfrac{1}{2}kx^2$</li>
+            <li>能量 E_p = ½kx²</li>
             <li>形變量可以無限增加</li>
             <li>釋放能量 = 儲存能量（無損耗）</li>
           </ul>
@@ -193,7 +193,7 @@
         <div class="think-prompt">🤔 想一想：為什麼「轉圈數加倍，推出距離卻沒加倍」？（先自己想再點開）</div>
         <button class="think-toggle">想好了？點擊看提示 →</button>
         <div class="think-hidden">
-          <p><strong>兩個原因同時作用：</strong>（1）橡皮筋進入<strong>非線性/塑性區</strong>後，每多轉一圈儲存的能量越來越少，不再是 $\tfrac{1}{2}kx^2$ 的二次關係；（2）儲存的能量中，有一部分會在鬆開時轉成熱（內部摩擦），沒變成推動能。所以即使你「轉加倍」，也不會「推加倍」。</p>
+          <p><strong>兩個原因同時作用：</strong>（1）橡皮筋進入<strong>非線性/塑性區</strong>後，每多轉一圈儲存的能量越來越少，不再是 ½kx² 的二次關係；（2）儲存的能量中，有一部分會在鬆開時轉成熱（內部摩擦），沒變成推動能。所以即使你「轉加倍」，也不會「推加倍」。</p>
         </div>
       </div>
 
@@ -310,20 +310,20 @@
         <div style="font-weight:700;font-size:12px;color:#92400e;margin-bottom:6px;">🧠 三個模型的長相</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.7;">
           <div><strong style="color:var(--phase1);">線性 $y = ax + b$</strong><br>直線。每多轉一圈，距離增加一樣多。</div>
-          <div><strong style="color:var(--phase1);">冪次 $y = ax^n$</strong><br>$n&lt;1$ 時是緩升的弧線；$n=1$ 退化成線性。</div>
-          <div><strong style="color:var(--phase1);">飽和 $y = D_\infty(1 - e^{-x/\tau})$</strong><br>初期快、逐漸逼近水平線 $D_\infty$（極限值）。</div>
+          <div><strong style="color:var(--phase1);">冪次 y = axⁿ</strong><br>$n&lt;1$ 時是緩升的弧線；n = 1 退化成線性。</div>
+          <div><strong style="color:var(--phase1);">飽和 $y = D_\infty(1 - e^{-x/\tau})$</strong><br>初期快、逐漸逼近水平線 D_∞（極限值）。</div>
         </div>
       </div>
 
       <div style="display:grid;gap:10px;margin-bottom:14px;">
         <div class="q-item">
-          <strong>Q1：</strong>切到<strong>線性</strong>模型。看截距 $b$——物理上這代表「轉 0 圈的推出距離」。你的截距是 0 嗎？若不是，這代表線性模型在哪個區域最不準？
+          <strong>Q1：</strong>切到<strong>線性</strong>模型。看截距 b——物理上這代表「轉 0 圈的推出距離」。你的截距是 0 嗎？若不是，這代表線性模型在哪個區域最不準？
         </div>
         <div class="q-item">
-          <strong>Q2：</strong>切到<strong>冪次</strong>模型。看指數 $n$——你預期 $n$ 是多少？實際上 $n$ 是大於 1 還是小於 1？這告訴你什麼？
+          <strong>Q2：</strong>切到<strong>冪次</strong>模型。看指數 n——你預期 n 是多少？實際上 n 是大於 1 還是小於 1？這告訴你什麼？
         </div>
         <div class="q-item">
-          <strong>Q3：</strong>切到<strong>飽和</strong>模型。讀取 $D_\infty$（推出距離上限）——大約是多少 cm？$\tau$（時間常數）代表什麼？
+          <strong>Q3：</strong>切到<strong>飽和</strong>模型。讀取 D_∞（推出距離上限）——大約是多少 cm？τ（時間常數）代表什麼？
         </div>
         <div class="q-item">
           <strong>Q4：</strong>三個模型擬合曲線都不錯地貼合資料，為什麼<strong>飽和模型物理上最合理</strong>？從物理機制（不是從擬合貼合度）出發論證。
@@ -341,13 +341,13 @@
       <div class="think-block choice" data-answer="c">
         <div class="think-prompt">🎯 以下三個理由，哪個<strong>不是</strong>選飽和模型的好理由？</div>
         <div class="think-options">
-          <button class="think-opt" data-val="a">A. 飽和模型有物理極限 $D_\infty$，對應橡皮筋的彈性上限</button>
+          <button class="think-opt" data-val="a">A. 飽和模型有物理極限 D_∞，對應橡皮筋的彈性上限</button>
           <button class="think-opt" data-val="b">B. 飽和模型的初期行為（線性增加）和橡皮筋線性區一致</button>
           <button class="think-opt" data-val="c">C. 飽和模型擬合曲線最貼合資料，所以最好</button>
           <button class="think-opt" data-val="d">D. 線性模型預測「轉 1000 圈距離也會增加 1000 倍」，物理不合理</button>
         </div>
         <div class="think-feedback" style="display:none;">
-          「擬合得多貼」不代表模型好——只代表擬合誤差小。三個模型在這個範圍內都能不錯地貼合資料，但只有飽和模型能<strong>預測超出數據範圍</strong>的行為（$x \to \infty$ 時 $y \to D_\infty$）。這叫「外推能力」，是判斷模型好壞的關鍵。
+          「擬合得多貼」不代表模型好——只代表擬合誤差小。三個模型在這個範圍內都能不錯地貼合資料，但只有飽和模型能<strong>預測超出數據範圍</strong>的行為（x → ∞ 時 y → D_∞）。這叫「外推能力」，是判斷模型好壞的關鍵。
         </div>
       </div>
 
@@ -356,7 +356,7 @@
         <div class="collapsible-body">
           <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
             Lv1 的核心是用「飽和曲線」建立經驗模型，並論證它比線性或冪次模型更合理。學生常陷入「擬合得越貼越好」的迷思——要引導他們看<strong>物理機制</strong>和<strong>外推行為</strong>。<br><br>
-            範圍內所有三個模型都可能擬得很貼合資料，但：線性模型截距偏離 0 且超過 30 圈後嚴重偏差；冪次模型在 $x \to \infty$ 時無上限，違反彈性極限；只有飽和模型的 $D_\infty$ 對應「橡皮筋進入塑性區、不再有額外能量輸出」的物理事實。<br><br>
+            範圍內所有三個模型都可能擬得很貼合資料，但：線性模型截距偏離 0 且超過 30 圈後嚴重偏差；冪次模型在 x → ∞ 時無上限，違反彈性極限；只有飽和模型的 D_∞ 對應「橡皮筋進入塑性區、不再有額外能量輸出」的物理事實。<br><br>
             Q4 是<strong>CER 的預演</strong>——下一步會正式做 CER。
           </p>
         </div>
@@ -427,9 +427,9 @@
           <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
             <strong>儲存能量 $E_{儲}$</strong>（橡皮筋纏 30 圈）<br>
             　↓ 推出階段（動能 → 摩擦生熱）<br>
-            推出滑行 ≈ 159 cm（動能的 $E_1$ 被地面摩擦消耗）<br>
+            推出滑行 ≈ 159 cm（動能的 E₁ 被地面摩擦消耗）<br>
             　↓ 橡皮筋鬆回一部分（剩餘位能轉動能）<br>
-            回滾滑行 ≈ 115 cm（動能的 $E_2$ 被摩擦消耗）<br>
+            回滾滑行 ≈ 115 cm（動能的 E₂ 被摩擦消耗）<br>
             <strong>總摩擦損耗 ∝ 159 + 115 = 274 cm 的滑行距離</strong><br>
             <strong>另外還有：橡皮筋內部摩擦生熱</strong>（儲存時和釋放時都有，不可逆）
           </div>
@@ -448,7 +448,7 @@
         <div class="collapsible-body">
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
             □ <strong>Claim</strong> 是明確的肯定句，不是疑問句或猶豫語句<br>
-            □ <strong>Evidence</strong> 有<strong>具體數字</strong>（圈數、距離、$D_\infty$ 等），不只是「數據顯示」<br>
+            □ <strong>Evidence</strong> 有<strong>具體數字</strong>（圈數、距離、D_∞ 等），不只是「數據顯示」<br>
             □ <strong>Reasoning</strong> 引用物理原理（塑性變形、摩擦生熱、能量守恆），而不只是重述現象<br>
             □ 三者<strong>邏輯串連</strong>：證據真的能推出主張？推理真的能解釋為什麼證據支持主張？<br>
             □ 沒有「循環論證」：例如「因為飽和所以飽和」，要能解釋<strong>背後機制</strong>
@@ -471,7 +471,7 @@
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">先翻回 P1–P3 的預測，和你做完的模型分析對照——差多少？差在哪裡？</p>
 
       <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 12px;">延伸思考</div>
-      <div class="q-item" style="margin-bottom:8px;">如果換<strong>粗一點</strong>或<strong>多條並聯</strong>的橡皮筋，$D_\infty$ 會變大還是變小？$\tau$ 呢？</div>
+      <div class="q-item" style="margin-bottom:8px;">如果換<strong>粗一點</strong>或<strong>多條並聯</strong>的橡皮筋，D_∞ 會變大還是變小？τ 呢？</div>
       <div class="q-item" style="margin-bottom:8px;">罐子重量會影響飽和點嗎？試著預測重罐 vs 輕罐的飽和曲線。</div>
       <div class="q-item" style="margin-bottom:8px;">推出/回滾距離的「比值」有規律嗎？轉越多圈，比值會變大還是變小？為什麼？</div>
       <div class="q-item" style="margin-bottom:16px;">如果在光滑冰面上（幾乎無摩擦），飽和現象會消失嗎？還是仍然存在？（提示：飽和有兩個來源）</div>
@@ -522,7 +522,7 @@
           </label>
           <label class="self-check-item">
             <input type="checkbox" class="self-check-box" data-idx="2">
-            <span class="self-check-text">能辨識「理想彈簧模型 $E_p = \tfrac{1}{2}kx^2$」在橡皮筋上的失效邊界</span>
+            <span class="self-check-text">能辨識「理想彈簧模型 E_p = ½kx²」在橡皮筋上的失效邊界</span>
           </label>
           <label class="self-check-item">
             <input type="checkbox" class="self-check-box" data-idx="3">
@@ -556,7 +556,7 @@
             <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
               <li>主軸：<strong>論證建模精雕</strong>——從多模型比較中選出最合理的經驗模型，並用 CER 論證</li>
               <li>發現問題 / 規劃研究 是 checkpoint（在第 5 步出現，不展開精雕）</li>
-              <li>核心觀念：橡皮筋 ≠ 理想彈簧，有彈性極限；飽和模型的 $D_\infty$ 對應物理極限</li>
+              <li>核心觀念：橡皮筋 ≠ 理想彈簧，有彈性極限；飽和模型的 D_∞ 對應物理極限</li>
               <li>「擬合得多貼」不代表模型好——要看物理機制和外推能力</li>
             </ul>
           </div>
@@ -573,7 +573,7 @@
         <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px 20px;margin-top:12px;">
           <div style="font-weight:700;color:var(--text-primary);font-size:13px;margin-bottom:8px;">💡 延伸閱讀：橡皮的非線性彈性</div>
           <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:8px;">
-            理想彈簧的 $E_p = \tfrac{1}{2}kx^2$ 適用於<strong>小形變</strong>、<strong>金屬晶格</strong>等條件。橡皮筋是高分子材料（聚異戊二烯或合成橡膠），分子鏈結構使它：
+            理想彈簧的 E_p = ½kx² 適用於<strong>小形變</strong>、<strong>金屬晶格</strong>等條件。橡皮筋是高分子材料（聚異戊二烯或合成橡膠），分子鏈結構使它：
           </p>
           <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:1.9;">
             <li>小形變時：分子鏈伸直，近似線性（胡克定律成立）</li>

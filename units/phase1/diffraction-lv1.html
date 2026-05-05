@@ -122,19 +122,19 @@
             光通過狹縫時會「彎」開來。狹縫越窄 → 光彎越多 → 螢幕上的亮紋越寬。
           </div>
           <div>
-            <strong style="color:var(--phase1);">中央亮紋寬度 $\Delta y_0$</strong><br>
-            螢幕上最亮最寬的那條紋。$\Delta y_0$ 由狹縫寬 $a$、距離 $L$、波長 $\lambda$ 決定。
+            <strong style="color:var(--phase1);">中央亮紋寬度 Δy₀</strong><br>
+            螢幕上最亮最寬的那條紋。Δy₀ 由狹縫寬 a、距離 L、波長 λ 決定。
           </div>
           <div>
             <strong style="color:var(--phase1);">因次分析 Dimensional</strong><br>
-            找出 $\Delta y_0$ 和 $a$、$L$、$\lambda$ 的關係，用「量綱」邏輯推導，不需複雜理論。
+            找出 Δy₀ 和 a、L、λ 的關係，用「量綱」邏輯推導，不需複雜理論。
           </div>
         </div>
       </div>
 
       <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:6px;padding:12px 16px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:13px;color:#0369a1;margin-bottom:8px;">今天的任務</div>
-        <div style="font-size:13px;color:#0369a1;">從數據中找出 $\Delta y_0$ 和 $a$、$L$、$\lambda$ 之間的數學關係——你能用因次分析自己推導出來嗎？</div>
+        <div style="font-size:13px;color:#0369a1;">從數據中找出 Δy₀ 和 a、L、λ 之間的數學關係——你能用因次分析自己推導出來嗎？</div>
       </div>
 
       <div style="margin-top:16px;">
@@ -171,7 +171,7 @@
       <div class="stage-intro phase2">
         <div class="stage-label">階段二 · 規劃研究</div>
         <div class="stage-title">看老師怎麼設計這個研究：控制變因 + 兩個活動的對照</div>
-        <p class="stage-desc">Lv1 你不用自己規劃——老師已經把<strong>要測什麼</strong>（Δy₀ vs L、Δy₀ vs a）、<strong>怎麼控制變因</strong>（固定兩個、變動一個）都安排好了。下面 Stage 3 會讓你做兩個對照活動：活動一固定 a、變動 L；活動二固定 L、變動 a。這樣你就能用因次分析把 $\Delta y_0$ 和 $L$、$a$、$\lambda$ 的完整關係推出來。</p>
+        <p class="stage-desc">Lv1 你不用自己規劃——老師已經把<strong>要測什麼</strong>（Δy₀ vs L、Δy₀ vs a）、<strong>怎麼控制變因</strong>（固定兩個、變動一個）都安排好了。下面 Stage 3 會讓你做兩個對照活動：活動一固定 a、變動 L；活動二固定 L、變動 a。這樣你就能用因次分析把 Δy₀ 和 L、a、λ 的完整關係推出來。</p>
         <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
       </div>
       <div class="step-action">理解兩個活動的控制變因設計——等等自己做時知道每個活動在控制什麼。</div>
@@ -273,10 +273,10 @@
       </div>
       <div class="step-action">分析活動一（Δy₀ vs L）+ 活動二（Δy₀ vs a）的數據，找出關係並用因次分析推導完整公式。</div>
 
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">固定狹縫寬度 $a = 0.1$ mm，雷射波長 $\lambda = 650$ nm（紅色），改變螢幕距離 $L$，測量中央亮紋寬度 $\Delta y_0$：</p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">固定狹縫寬度 a = 0.1 mm，雷射波長 λ = 650 nm（紅色），改變螢幕距離 L，測量中央亮紋寬度 Δy₀：</p>
       <div style="overflow-x:auto;margin-bottom:16px;">
         <table>
-          <thead><tr><th>$L$ (cm)</th><th>$\Delta y_0$ (mm)</th><th>$\Delta y_0/L$ (無量綱)</th></tr></thead>
+          <thead><tr><th>L (cm)</th><th>Δy₀ (mm)</th><th>Δy₀/L (無量綱)</th></tr></thead>
           <tbody>
             <tr><td>50</td><td>6.5</td><td style="color:var(--text-muted);"><input type="text" class="think-input table-input" data-key="diffraction-lv1-tbl1-r1-c2"></td></tr>
             <tr><td>100</td><td>13.2</td><td style="color:var(--text-muted);"><input type="text" class="think-input table-input" data-key="diffraction-lv1-tbl1-r2-c2"></td></tr>
@@ -305,12 +305,12 @@
 
       <div style="display:grid;gap:8px;margin-bottom:14px;">
         <div class="q-item"><strong>Q1：</strong>選<strong>線性</strong>趨勢線。截距代表「L = 0 時的亮紋寬度」——物理上螢幕貼著狹縫時，亮紋寬度應該是多少？截距合理嗎？</div>
-        <div class="q-item"><strong>Q2：</strong>計算 $\Delta y_0/L$ 比值——每一組都差不多嗎？斜率代表什麼物理含義？試試多項式——擬合曲線會更貼合資料點嗎？但物理上「Δy₀ 跟狹縫寬度是二次方關係」講得通嗎？有必要用更複雜的模型嗎？</div>
+        <div class="q-item"><strong>Q2：</strong>計算 Δy₀/L 比值——每一組都差不多嗎？斜率代表什麼物理含義？試試多項式——擬合曲線會更貼合資料點嗎？但物理上「Δy₀ 跟狹縫寬度是二次方關係」講得通嗎？有必要用更複雜的模型嗎？</div>
       </div>
 
       <!-- Layer 2: 線性關係數據分析 -->
       <div class="think-block record">
-        <div class="think-prompt">✏️ 計算表中 $\Delta y_0/L$ 的每一個值。你發現什麼規律？它代表什麼物理意義？</div>
+        <div class="think-prompt">✏️ 計算表中 Δy₀/L 的每一個值。你發現什麼規律？它代表什麼物理意義？</div>
         <textarea class="think-input" data-key="diffraction-lv1-linear" placeholder="例如：比值都約為…這表示…的關係是…（直線/曲線）"></textarea>
         <div class="think-status"></div>
       </div>
@@ -319,7 +319,7 @@
         <div class="collapsible-header">🧠 Q1–Q2 提示：先自己想，再點開<span class="toggle-icon">▶</span></div>
         <div class="collapsible-body">
           <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
-            $\Delta y_0/L \approx 0.00013$（單位 mm/mm），這就是「角度的正切」或「小角近似」的體現。圖應該是一條通過原點的直線。
+            Δy₀/L ≈ 0.00013（單位 mm/mm），這就是「角度的正切」或「小角近似」的體現。圖應該是一條通過原點的直線。
           </div>
         </div>
       </div>
@@ -329,10 +329,10 @@
         <div style="font-weight:700;color:var(--phase1);">🧪 活動二：Δy₀ vs a（固定 L = 1 m）</div>
       </div>
 
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">固定 $L = 100$ cm，$\lambda = 650$ nm，改變狹縫寬 $a$，測量 $\Delta y_0$：</p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">固定 L = 100 cm，λ = 650 nm，改變狹縫寬 a，測量 Δy₀：</p>
       <div style="overflow-x:auto;margin-bottom:16px;">
         <table>
-          <thead><tr><th>$a$ (mm)</th><th>$\Delta y_0$ (mm)</th><th>$a \times \Delta y_0$ (mm²)</th></tr></thead>
+          <thead><tr><th>a (mm)</th><th>Δy₀ (mm)</th><th>a × Δy₀ (mm²)</th></tr></thead>
           <tbody>
             <tr><td>0.05</td><td>26.0</td><td style="color:var(--text-muted);"><input type="text" class="think-input table-input" data-key="diffraction-lv1-tbl2-r1-c2"></td></tr>
             <tr><td>0.10</td><td>13.0</td><td style="color:var(--text-muted);"><input type="text" class="think-input table-input" data-key="diffraction-lv1-tbl2-r2-c2"></td></tr>
@@ -359,27 +359,27 @@
       </div>
 
       <div style="display:grid;gap:8px;margin-bottom:14px;">
-        <div class="q-item"><strong>Q3：</strong>選<strong>冪次</strong>趨勢線——指數 n 大約是多少？n ≈ -1 代表什麼物理意義？計算 $a \times \Delta y_0$ 乘積驗證。</div>
+        <div class="q-item"><strong>Q3：</strong>選<strong>冪次</strong>趨勢線——指數 n 大約是多少？n ≈ -1 代表什麼物理意義？計算 a × Δy₀ 乘積驗證。</div>
         <div class="q-item"><strong>Q4：</strong>選<strong>線性</strong>趨勢線——截距合理嗎？物理上「狹縫無限寬→亮紋不會消失」，線性模型預測的是什麼？哪個模型更合理？</div>
-        <div class="q-item"><strong>Q5：</strong>結合 Q1–Q4，用因次分析推導 $\Delta y_0 = k \cdot \frac{L\lambda}{a}$，算出 $k$ ≈ ?（理論值 2）。誤差來源有哪些？</div>
+        <div class="q-item"><strong>Q5：</strong>結合 Q1–Q4，用因次分析推導 $\Delta y_0 = k \cdot \frac{L\lambda}{a}$，算出 k ≈ ?（理論值 2）。誤差來源有哪些？</div>
       </div>
 
       <!-- Layer 3: 反比關係與因次分析 -->
       <div class="think-block choice" data-answer="a">
-        <div class="think-prompt">🎯 從 Q3 的 $a \times \Delta y_0$ 乘積幾乎固定，這代表什麼？</div>
+        <div class="think-prompt">🎯 從 Q3 的 a × Δy₀ 乘積幾乎固定，這代表什麼？</div>
         <div class="think-options">
-          <button class="think-opt" data-val="a">A. $\Delta y_0 \propto 1/a$（反比關係）</button>
-          <button class="think-opt" data-val="b">B. $\Delta y_0 \propto a$（正比關係）</button>
-          <button class="think-opt" data-val="c">C. $\Delta y_0$ 和 $a$ 無關</button>
+          <button class="think-opt" data-val="a">A. Δy₀ ∝ 1/a（反比關係）</button>
+          <button class="think-opt" data-val="b">B. Δy₀ ∝ a（正比關係）</button>
+          <button class="think-opt" data-val="c">C. Δy₀ 和 a 無關</button>
         </div>
         <div class="think-feedback" style="display:none;">
-          乘積固定 $\Rightarrow$ 反比。這說明狹縫越窄，亮紋越寬——直覺上「小開口」製造「大圖案」。結合 Q1 的 $\Delta y_0 \propto L$，你就能推導出完整公式 $\Delta y_0 = k \cdot \frac{L\lambda}{a}$。
+          乘積固定 $\Rightarrow$ 反比。這說明狹縫越窄，亮紋越寬——直覺上「小開口」製造「大圖案」。結合 Q1 的 Δy₀ ∝ L，你就能推導出完整公式 $\Delta y_0 = k \cdot \frac{L\lambda}{a}$。
         </div>
       </div>
 
       <!-- Layer 2: 因次分析與誤差 -->
       <div class="think-block record">
-        <div class="think-prompt">✏️ 用 Q3 的乘積值和 Q1 的比值，計算出你的 $k$ 值。跟理論值 2 比較，差多少百分比？可能的誤差來源有哪些？</div>
+        <div class="think-prompt">✏️ 用 Q3 的乘積值和 Q1 的比值，計算出你的 k 值。跟理論值 2 比較，差多少百分比？可能的誤差來源有哪些？</div>
         <textarea class="think-input" data-key="diffraction-lv1-k" placeholder="例如：我算出k=…，理論k=2，誤差…%。可能是因為…（量尺精度/狹縫製造偏差等）"></textarea>
         <div class="think-status"></div>
       </div>
@@ -388,12 +388,12 @@
         <div class="collapsible-header">🧠 Q3–Q5 因次分析提示<span class="toggle-icon">▶</span></div>
         <div class="collapsible-body">
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
-            <p><strong>Step 1：</strong>$a \times \Delta y_0 \approx 1.3$ mm²（固定），這證明 $\Delta y_0 \propto 1/a$</p>
-            <p style="margin-top:8px;"><strong>Step 2：</strong>寫出因次：$[\Delta y_0]$ = 長度，$[L]$ = 長度，$[\lambda]$ = 長度，$[a]$ = 長度（四者都是「長度」）</p>
-            <p style="margin-top:8px;"><strong>Step 3：</strong>因次平衡推出形式：$\Delta y_0 = k \cdot L^1 \cdot \lambda^1 \cdot a^{-1}$，其中 $k$ 是<strong>無因次常數</strong>。</p>
+            <p><strong>Step 1：</strong>a × Δy₀ ≈ 1.3 mm²（固定），這證明 Δy₀ ∝ 1/a</p>
+            <p style="margin-top:8px;"><strong>Step 2：</strong>寫出因次：[Δy₀] = 長度，[L] = 長度，[λ] = 長度，[a] = 長度（四者都是「長度」）</p>
+            <p style="margin-top:8px;"><strong>Step 3：</strong>因次平衡推出形式：$\Delta y_0 = k \cdot L^1 \cdot \lambda^1 \cdot a^{-1}$，其中 k 是<strong>無因次常數</strong>。</p>
             <p style="margin-top:8px;"><strong>Step 4：</strong>從實驗數據算 $k = \dfrac{a \cdot \Delta y_0}{L \cdot \lambda}$ ≈ 2。</p>
             <p style="margin-top:8px;background:#fef2f2;border-left:3px solid #dc2626;padding:8px 10px;border-radius:0 4px 4px 0;">
-              <strong>⚠️ 關鍵釐清</strong>：因次分析<strong>只能定出形式</strong>（哪個變因是正比、哪個是反比），<strong>不能定出常數 $k$</strong>。$k$ 一定要靠<strong>實驗測</strong>或用更深入的波動理論推導。這個例子 $k=2$ 是中央亮紋寬度的經典結果（從中央極大到第一暗紋位置 $\sin\theta = \lambda/a$ 推得）。
+              <strong>⚠️ 關鍵釐清</strong>：因次分析<strong>只能定出形式</strong>（哪個變因是正比、哪個是反比），<strong>不能定出常數 k</strong>。k 一定要靠<strong>實驗測</strong>或用更深入的波動理論推導。這個例子 k = 2 是中央亮紋寬度的經典結果（從中央極大到第一暗紋位置 sin θ = λ/a 推得）。
             </p>
           </div>
         </div>
@@ -418,8 +418,8 @@
         <div class="collapsible-header">👩‍🏫 教師備註<span class="toggle-icon">▶</span></div>
         <div class="collapsible-body">
           <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
-            <li><strong>Q1 & Q2：</strong>$\Delta y_0/L \approx 0.00013$（無量綱比值），直線形狀</li>
-            <li><strong>Q3：</strong>$a \times \Delta y_0 \approx 1.3$ mm²（固定），證明反比關係</li>
+            <li><strong>Q1 & Q2：</strong>Δy₀/L ≈ 0.00013（無量綱比值），直線形狀</li>
+            <li><strong>Q3：</strong>a × Δy₀ ≈ 1.3 mm²（固定），證明反比關係</li>
             <li><strong>Q4：</strong>$k = \frac{a \cdot \Delta y_0}{L \cdot \lambda} = \frac{1.3 \text{ mm}^2}{1000 \text{ mm} \times 0.00065 \text{ mm}} \approx 2$</li>
             <li><strong>Q5 誤差來源：</strong>精密度（尺的分度、光源單色性、狹縫製造偏差）</li>
           </ul>
@@ -453,8 +453,8 @@
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">先翻回 P1–P3 的預測，和你的數據分析比較——差多少？差在哪裡？</p>
 
       <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 12px;">延伸思考</div>
-      <div class="q-item" style="margin-bottom:8px;">如果改用綠光雷射（$\lambda \approx 532$ nm），同樣狹縫和距離，$\Delta y_0$ 會變大還是變小？為什麼？</div>
-      <div class="q-item" style="margin-bottom:8px;">X 射線的波長約 0.1 nm，為什麼它能「看見」DNA 的結構（約 2 nm 寬）？而用肉眼（可見光，$\lambda \approx 500$ nm）看不見？</div>
+      <div class="q-item" style="margin-bottom:8px;">如果改用綠光雷射（λ ≈ 532 nm），同樣狹縫和距離，Δy₀ 會變大還是變小？為什麼？</div>
+      <div class="q-item" style="margin-bottom:8px;">X 射線的波長約 0.1 nm，為什麼它能「看見」DNA 的結構（約 2 nm 寬）？而用肉眼（可見光，λ ≈ 500 nm）看不見？</div>
       <div class="q-item" style="margin-bottom:8px;">為什麼平常開門看不到明顯的繞射？（門的寬度和光的波長的比例關係）</div>
       <div class="q-item" style="margin-bottom:16px;">如果用兩條狹縫代替一條，螢幕上會看到什麼圖案？這和 DNA 的 Photo 51 十字紋有什麼關係？</div>
 
@@ -544,7 +544,7 @@
           <div class="collapsible-body">
             <ul style="font-size:13px;color:var(--text-secondary);padding-left:18px;line-height:2;">
               <li>從 Rosalind Franklin 的 Photo 51 歷史引入，讓學生理解「用光探測微觀結構」的概念</li>
-              <li>用給定的繞射數據建立 $\Delta y_0$ 與 $a$、$L$ 的定量關係</li>
+              <li>用給定的繞射數據建立 Δy₀ 與 a、L 的定量關係</li>
               <li>練習因次分析推導公式，不需複雜波動理論</li>
             </ul>
           </div>
@@ -552,7 +552,7 @@
 
         <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-top:12px;">
           <div style="font-weight:700;color:var(--text-secondary);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
-          <p style="font-size:13px;color:var(--text-secondary);">本單元的數據表、$\Delta y_0 \propto L\lambda/a$ 推導過程和你的因次分析，展示了「從實驗數據中建立物理模型」的能力。</p>
+          <p style="font-size:13px;color:var(--text-secondary);">本單元的數據表、Δy₀ ∝ Lλ/a 推導過程和你的因次分析，展示了「從實驗數據中建立物理模型」的能力。</p>
           <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">
             ✍️ 反思錨點：你<em>之前</em>的預測 vs 實際結果差在哪？（2-3 句就好）
           </p>

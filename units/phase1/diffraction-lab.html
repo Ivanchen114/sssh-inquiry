@@ -38,7 +38,7 @@
 
     <div style="background:linear-gradient(135deg,#0e7490,#06b6d4);border-radius:12px;padding:20px;color:white;margin-bottom:20px;">
       <div style="font-size:16px;font-weight:700;margin-bottom:14px;">🔬 單狹縫繞射實驗</div>
-      <p style="font-size:12px;opacity:0.85;margin-bottom:14px;">雷射光通過狹縫後會因為繞射而展開，在螢幕上形成明暗相間的圖案。中央亮紋最寬最亮，兩側依序變暗變窄。調整參數觀察 $\Delta y_0 = 2L\lambda/a$ 的關係。</p>
+      <p style="font-size:12px;opacity:0.85;margin-bottom:14px;">雷射光通過狹縫後會因為繞射而展開，在螢幕上形成明暗相間的圖案。中央亮紋最寬最亮，兩側依序變暗變窄。調整參數觀察 Δy₀ = 2Lλ/a 的關係。</p>
 
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;">
         <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:12px;">
@@ -78,7 +78,7 @@
         <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📋 數據記錄</div>
         <table style="width:100%;font-size:12px;background:rgba(255,255,255,0.05);border-radius:6px;">
           <thead><tr style="color:#67e8f9;">
-            <th style="padding:8px;">a (mm)</th><th style="padding:8px;">L (cm)</th><th style="padding:8px;">λ (nm)</th><th style="padding:8px;">$\Delta y_0$ (mm)</th><th style="padding:8px;">$\Delta y_0$/L</th><th style="padding:8px;">a×$\Delta y_0$ (mm²)</th>
+            <th style="padding:8px;">a (mm)</th><th style="padding:8px;">L (cm)</th><th style="padding:8px;">λ (nm)</th><th style="padding:8px;">Δy₀ (mm)</th><th style="padding:8px;">Δy₀/L</th><th style="padding:8px;">a×Δy₀ (mm²)</th>
           </tr></thead>
           <tbody id="diff-data"></tbody>
         </table>
@@ -87,14 +87,14 @@
     </div>
 
     <div style="display:grid;gap:8px;font-size:13px;margin-bottom:20px;">
-      <div class="q-item">Q1：固定 a 和 λ，改變 L——$\Delta y_0$ 和 L 是什麼關係？（看 $\Delta y_0$/L 那一欄）</div>
-      <div class="q-item">Q2：固定 L 和 λ，改變 a——$\Delta y_0$ 和 a 是什麼關係？（看 a×$\Delta y_0$ 那一欄）</div>
-      <div class="q-item">Q3：波長越長（紅→綠→藍），中央亮紋寬度怎麼變？這符合 $\Delta y_0 = 2L\lambda/a$ 嗎？</div>
+      <div class="q-item">Q1：固定 a 和 λ，改變 L——Δy₀ 和 L 是什麼關係？（看 Δy₀/L 那一欄）</div>
+      <div class="q-item">Q2：固定 L 和 λ，改變 a——Δy₀ 和 a 是什麼關係？（看 a×Δy₀ 那一欄）</div>
+      <div class="q-item">Q3：波長越長（紅→綠→藍），中央亮紋寬度怎麼變？這符合 Δy₀ = 2Lλ/a 嗎？</div>
       <div class="q-item">Q4：為什麼狹縫越窄，光反而散得越開？這和粒子的行為有什麼不同？</div>
     </div>
 
     <div class="info-box green">
-      <strong>💡 物理模型：</strong>單狹縫繞射的中央亮紋寬度 $\Delta y_0 = 2L\lambda/a$。第一暗紋位置滿足 $\sin\theta = \lambda/a$（小角近似下 $\theta \approx \lambda/a$）。模擬器加入了 ±3% 的測量誤差，讓你體驗真實實驗中的數據波動。
+      <strong>💡 物理模型：</strong>單狹縫繞射的中央亮紋寬度 Δy₀ = 2Lλ/a。第一暗紋位置滿足 sin θ = λ/a（小角近似下 θ ≈ λ/a）。模擬器加入了 ±3% 的測量誤差，讓你體驗真實實驗中的數據波動。
     </div>
 
     <div class="unit-nav">
