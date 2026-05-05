@@ -117,6 +117,7 @@ const NAV_DATA = [
       { name: '　ORID 反思框架', path: 'tools/orid.html' },
       { name: '　Excel 數據分析', path: 'tools/excel.html' },
       { name: '　數據分析工坊', path: 'tools/data-workshop.html' },
+      { name: '　📅 本週學習記錄', path: 'tools/weekly-export.html' },
       { name: '　學習歷程指引', path: 'tools/portfolio.html' },
       { name: '　自主探究指引', path: 'tools/independent-research.html' },
       { name: '　什麼是好的探究問題', path: 'tools/good-question.html' },
@@ -533,7 +534,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 匯出學習記錄
   initExportFab();
+
 });
+
+// （Records API 暴露於下方，schema 定義之後）
 
 // ═══════════════════════════════════════════════════
 //  照片插槽：用 data-* 自動渲染視覺內容
@@ -692,6 +696,13 @@ function initThinkReveal() {
 
 // ═══════════════════════════════════════════════════
 //  互動思考元件 — Layer 2: 自我記錄 (localStorage)
+//  Schema v2（向下相容）：
+//    Legacy:  { [key]: "string" }
+//    v2:      { [key]: { value, ts, page, title, label, type } }
+//  讀取端用 getRecordValue() 取出純字串；寫入端一律走 _writeRecord()，
+//  自動補上 ts / page / title / label / type 五個欄位。
+//  匯出器（buildExportText / buildExportMarkdown / weekly-export.html）
+//  只認這套 schema。
 // ═══════════════════════════════════════════════════
 const THINK_STORAGE_KEY = 'sssh_think_records';
 
@@ -700,37 +711,163 @@ function _readThinkRecords() {
   catch { return {}; }
 }
 
-function _saveThinkRecord(key, value) {
+function _normalizeRecord(raw) {
+  if (raw == null) return null;
+  if (typeof raw === 'string') {
+    return { value: raw, ts: null, page: null, title: null, label: null, type: 'text', _legacy: true };
+  }
+  if (typeof raw === 'object') {
+    return {
+      value: raw.value != null ? String(raw.value) : '',
+      ts: typeof raw.ts === 'number' ? raw.ts : null,
+      page: raw.page || null,
+      title: raw.title || null,
+      label: raw.label || null,
+      type: raw.type || 'text',
+      _legacy: false,
+    };
+  }
+  return null;
+}
+
+// 讀取端通用：拿純字串值（吃舊 schema 也吃新 schema）
+function getRecordValue(records, key) {
+  const raw = records[key];
+  if (raw == null) return '';
+  if (typeof raw === 'string') return raw;
+  if (typeof raw === 'object') return raw.value != null ? String(raw.value) : '';
+  return '';
+}
+
+// 寫入端通用：永遠寫 v2 schema
+function _writeRecord(key, value, opts) {
+  if (!key) return;
+  const o = opts || {};
   const records = _readThinkRecords();
-  records[key] = value;
-  localStorage.setItem(THINK_STORAGE_KEY, JSON.stringify(records));
+  records[key] = {
+    value: value != null ? String(value) : '',
+    ts: Date.now(),
+    page: location.pathname,
+    title: document.title,
+    label: o.label || null,
+    type: o.type || 'text',
+  };
+  try { localStorage.setItem(THINK_STORAGE_KEY, JSON.stringify(records)); } catch (e) {}
+}
+
+// 從 input 元素萃取 record metadata（共用給 think-input / fill-blank / table-cell input）
+// ── Records API 暴露：給 weekly-export.html 等外部頁面共用 ─
+// 必須宣告在 THINK_STORAGE_KEY / 各 helper 之後，才不會踩 const TDZ。
+window.SSSH_RECORDS = {
+  STORAGE_KEY: THINK_STORAGE_KEY,
+  read: _readThinkRecords,
+  normalize: _normalizeRecord,
+  getValue: getRecordValue,
+  write: _writeRecord,
+  // 掃所有 sssh_* localStorage key，回傳 normalized 記錄陣列
+  // [{ key, value, ts, page, title, label, type, source }]
+  scanAll() {
+    const out = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const storageKey = localStorage.key(i);
+      if (!storageKey || !storageKey.startsWith('sssh_')) continue;
+      let parsed;
+      try { parsed = JSON.parse(localStorage.getItem(storageKey)); }
+      catch { continue; }
+      if (!parsed || typeof parsed !== 'object') continue;
+      Object.keys(parsed).forEach(recordKey => {
+        const norm = _normalizeRecord(parsed[recordKey]);
+        if (!norm || !norm.value) return;
+        out.push(Object.assign({ key: recordKey, source: storageKey }, norm));
+      });
+    }
+    return out;
+  },
+};
+
+// 把 location.pathname 變成穩定 slug，用作沒 data-key 時的 fallback 命名空間
+function _pageSlug() {
+  return location.pathname
+    .replace(/^\//, '')
+    .replace(/\.html$/, '')
+    .replace(/[^a-z0-9一-鿿]+/gi, '.');
+}
+
+function _extractRecordMeta(input) {
+  const ds = input.dataset;
+  // Key 優先序：data-record-key > data-key > pageSlug.id > null
+  // 大量 .fill-blank 只有 id（如 research-plan.html 的 id="q-raw"），加 page namespace
+  // 確保跨頁不會撞 key。
+  let key = ds.recordKey || ds.key;
+  if (!key && input.id) key = `${_pageSlug()}.${input.id}`;
+
+  // Label 優先序：data-record-label > 最近 .think-prompt > <label for=id> > placeholder
+  const labelAttr = ds.recordLabel;
+  let label = labelAttr || null;
+  if (!label) {
+    const block = input.closest('.think-block');
+    const promptEl = block ? block.querySelector('.think-prompt') : null;
+    if (promptEl) label = promptEl.textContent.trim();
+  }
+  if (!label && input.id) {
+    try {
+      const lbl = document.querySelector(`label[for="${CSS.escape(input.id)}"]`);
+      if (lbl) label = lbl.textContent.trim();
+    } catch (e) {}
+  }
+  if (!label && typeof input.getAttribute === 'function') {
+    const ph = input.getAttribute('placeholder');
+    if (ph) label = ph;
+  }
+
+  // Type 優先序：data-record-type > class/tag 推斷
+  let type = ds.recordType;
+  if (!type) {
+    if (input.classList.contains('fill-blank')) type = 'fill-blank';
+    else if (input.tagName === 'TEXTAREA') type = 'text';
+    else if (input.type === 'checkbox') type = 'checkbox';
+    else type = 'text';
+  }
+  return { key, label, type };
+}
+
+// 收集「散落」的 record input：[data-record-key] / [data-key] / .fill-blank[id]
+// 但排除已被 .think-block / <table> 處理的（避免重複輸出）。
+// 給 buildExportText / buildExportMarkdown 在 student-block 與 step-panel 層補抓。
+function _collectLooseInputs(scope) {
+  if (!scope) return [];
+  return Array.from(scope.querySelectorAll(
+    '[data-record-key], [data-key], .fill-blank[id]'
+  )).filter(el => !el.closest('.think-block') && !el.closest('table'));
 }
 
 function initThinkRecord() {
-  const inputs = document.querySelectorAll('.think-input');
+  // 統一輸入：.think-input（textarea）+ .fill-blank（短答）
+  const inputs = document.querySelectorAll('.think-input, .fill-blank');
   if (inputs.length === 0) return;
 
   const records = _readThinkRecords();
   let saveTimer = null;
 
   inputs.forEach(input => {
-    const key = input.dataset.key;
-    if (!key) return;
+    const meta = _extractRecordMeta(input);
+    if (!meta.key) return;
 
-    // 還原已存的內容
-    if (records[key]) {
-      input.value = records[key];
-      const status = input.parentElement.querySelector('.think-status');
+    // 還原已存的內容（吃舊 string 也吃新 object）
+    const savedValue = getRecordValue(records, meta.key);
+    if (savedValue) {
+      input.value = savedValue;
+      const status = input.parentElement && input.parentElement.querySelector('.think-status');
       if (status) { status.textContent = '↑ 上次的記錄已載入'; status.className = 'think-status saved'; }
     }
 
     // 自動儲存（打字後 800ms）
     input.addEventListener('input', () => {
-      const status = input.parentElement.querySelector('.think-status');
+      const status = input.parentElement && input.parentElement.querySelector('.think-status');
       if (status) { status.textContent = '輸入中…'; status.className = 'think-status'; }
       clearTimeout(saveTimer);
       saveTimer = setTimeout(() => {
-        _saveThinkRecord(key, input.value);
+        _writeRecord(meta.key, input.value, { label: meta.label, type: meta.type });
         if (status) { status.textContent = '✓ 已自動儲存'; status.className = 'think-status saved'; }
       }, 800);
     });
@@ -738,8 +875,8 @@ function initThinkRecord() {
     // 失焦時立即存
     input.addEventListener('blur', () => {
       if (input.value) {
-        _saveThinkRecord(key, input.value);
-        const status = input.parentElement.querySelector('.think-status');
+        _writeRecord(meta.key, input.value, { label: meta.label, type: meta.type });
+        const status = input.parentElement && input.parentElement.querySelector('.think-status');
         if (status) { status.textContent = '✓ 已自動儲存'; status.className = 'think-status saved'; }
       }
     });
@@ -753,24 +890,40 @@ function initThinkChoice() {
   document.querySelectorAll('.think-block.choice').forEach(block => {
     const answer = block.dataset.answer;
     const options = block.querySelectorAll('.think-opt');
+    const ds = block.dataset;
+    const key = ds.recordKey || ds.key || null;
+    const labelAttr = ds.recordLabel;
+    const promptEl = block.querySelector('.think-prompt');
+    const label = labelAttr || (promptEl ? promptEl.textContent.trim() : null);
+
+    function applyChoice(chosen, persist) {
+      if (block.classList.contains('answered')) return;
+      block.classList.add('answered');
+      options.forEach(o => {
+        o.disabled = true;
+        // 標記學生實際選的選項（給匯出器判別「我選了什麼」用）
+        if (o.dataset.val === chosen) o.classList.add('selected');
+        if (o.dataset.val === answer) {
+          o.classList.add('correct');
+        } else if (o.dataset.val === chosen && chosen !== answer) {
+          o.classList.add('wrong');
+        }
+      });
+      if (persist && key) {
+        _writeRecord(key, chosen, { label, type: 'choice' });
+      }
+    }
 
     options.forEach(opt => {
-      opt.addEventListener('click', () => {
-        if (block.classList.contains('answered')) return; // 已作答
-
-        block.classList.add('answered');
-        const chosen = opt.dataset.val;
-
-        options.forEach(o => {
-          o.disabled = true;
-          if (o.dataset.val === answer) {
-            o.classList.add('correct');
-          } else if (o === opt && chosen !== answer) {
-            o.classList.add('wrong');
-          }
-        });
-      });
+      opt.addEventListener('click', () => applyChoice(opt.dataset.val, true));
     });
+
+    // 還原上次選過的答案（不再次寫入）
+    if (key) {
+      const records = _readThinkRecords();
+      const saved = getRecordValue(records, key);
+      if (saved) applyChoice(saved, false);
+    }
   });
 }
 
@@ -778,7 +931,7 @@ function initThinkChoice() {
 //  匯出學習記錄（頁尾獨立區塊，貼 Google Docs 用）
 // ═══════════════════════════════════════════════════
 function initExportFab() {
-  const inputs = document.querySelectorAll('.think-input');
+  const inputs = document.querySelectorAll('.think-input, .fill-blank');
   if (inputs.length === 0) return;
 
   // 掛載點優先順序：Stage 4 的 .learning-self-check → .page-body → main → body
@@ -844,8 +997,8 @@ function initExportFab() {
     const records = _readThinkRecords();
     let filled = 0;
     inputs.forEach(input => {
-      const key = input.dataset.key;
-      if (key && records[key] && records[key].trim()) filled++;
+      const meta = _extractRecordMeta(input);  // P1-1: id-only fill-blank 也算得到
+      if (meta.key && getRecordValue(records, meta.key).trim()) filled++;
     });
     countEl.textContent = filled + '/' + inputs.length;
   }
@@ -1053,14 +1206,15 @@ function buildExportMarkdown() {
     const promptText = prompt.textContent.trim();
     if (block.classList.contains('record')) {
       const input = block.querySelector('.think-input');
-      const key = input ? input.dataset.key : null;
-      const value = key && records[key] ? records[key].trim() : '';
+      const key = input ? (input.dataset.recordKey || input.dataset.key) : null;
+      const value = key ? getRecordValue(records, key).trim() : '';
       if (value) {
         sectionNum++;
         return `### ${sectionNum}. ${promptText}\n\n${value}\n\n`;
       }
     } else if (block.classList.contains('choice')) {
-      const selected = block.querySelector('.think-opt.correct, .think-opt.wrong.selected, .think-opt.selected');
+      // 只看 .selected — 學生實際點的那一個
+      const selected = block.querySelector('.think-opt.selected');
       if (selected) {
         sectionNum++;
         const isCorrect = selected.classList.contains('correct');
@@ -1081,10 +1235,10 @@ function buildExportMarkdown() {
     let hasFill = false;
     const grid = rows.map(row =>
       Array.from(row.querySelectorAll('th, td')).map(cell => {
-        const input = cell.querySelector('.think-input');
+        const input = cell.querySelector('.think-input, .fill-blank');
         if (input) {
-          const key = input.dataset.key;
-          const val = key && records[key] ? records[key].trim() : '';
+          const key = input.dataset.recordKey || input.dataset.key;
+          const val = key ? getRecordValue(records, key).trim() : '';
           if (val) hasFill = true;
           return val || '___';
         }
@@ -1100,6 +1254,23 @@ function buildExportMarkdown() {
       s += '| ' + row.join(' | ') + ' |\n';
     });
     s += '\n';
+    return s;
+  }
+
+  // P1-2: 補抓不在 .think-block / table 裡的 record input（多為 .fill-blank）
+  function mdLooseInputs(scope) {
+    const inputs = _collectLooseInputs(scope);
+    if (inputs.length === 0) return '';
+    let s = '';
+    inputs.forEach(input => {
+      const meta = _extractRecordMeta(input);
+      if (!meta.key) return;
+      const value = getRecordValue(records, meta.key).trim();
+      if (!value) return;
+      sectionNum++;
+      const lbl = meta.label || `(${meta.key})`;
+      s += `### ${sectionNum}. ${lbl}\n\n${value}\n\n`;
+    });
     return s;
   }
 
@@ -1144,6 +1315,7 @@ function buildExportMarkdown() {
           let inner = '';
           item.querySelectorAll('.think-block').forEach(tb => { inner += mdThinkBlock(tb); });
           item.querySelectorAll('table').forEach(t => { inner += mdTable(t); });
+          inner += mdLooseInputs(item);  // P1-2
           if (inner) {
             panelMd += `**✏️ 你的填寫｜${sbTitle}**\n\n` + inner;
           }
@@ -1162,6 +1334,18 @@ function buildExportMarkdown() {
         if (t.closest('.teacher-block') || t.closest('.student-block')) return;
         panelMd += mdTable(t);
       });
+      // P1-2: panel 內、不在 teacher/student-block 的散落 input
+      _collectLooseInputs(panel)
+        .filter(el => !el.closest('.teacher-block') && !el.closest('.student-block'))
+        .forEach(input => {
+          const meta = _extractRecordMeta(input);
+          if (!meta.key) return;
+          const value = getRecordValue(records, meta.key).trim();
+          if (!value) return;
+          sectionNum++;
+          const lbl = meta.label || `(${meta.key})`;
+          panelMd += `### ${sectionNum}. ${lbl}\n\n${value}\n\n`;
+        });
 
       if (panelMd) {
         md += `\n## 階段 ${stageNum} · ${stageName}\n\n`;
@@ -1176,6 +1360,7 @@ function buildExportMarkdown() {
     document.querySelectorAll('table').forEach(t => {
       md += mdTable(t);
     });
+    md += mdLooseInputs(document);  // P1-2: 非 staged 頁面也要掃
   }
 
   let hasLabData = false;
@@ -1225,15 +1410,16 @@ function buildExportText() {
     const promptText = prompt.textContent.trim();
     if (el.classList.contains('record')) {
       const input = el.querySelector('.think-input');
-      const key = input ? input.dataset.key : null;
-      const value = key && records[key] ? records[key].trim() : '';
+      const key = input ? (input.dataset.recordKey || input.dataset.key) : null;
+      const value = key ? getRecordValue(records, key).trim() : '';
       if (value) {
         sectionNum++;
         hasRecord = true;
         return '【' + sectionNum + '】' + promptText + '\n' + value + '\n\n';
       }
     } else if (el.classList.contains('choice')) {
-      const selected = el.querySelector('.think-opt.correct, .think-opt.wrong.selected, .think-opt.selected');
+      // 只看 .selected — 學生實際點的那一個
+      const selected = el.querySelector('.think-opt.selected');
       if (selected) {
         sectionNum++;
         hasRecord = true;
@@ -1271,10 +1457,10 @@ function buildExportText() {
     let hasFill = false;
     const grid = rows.map(row => {
       return Array.from(row.querySelectorAll('th, td')).map(cell => {
-        const input = cell.querySelector('.think-input');
+        const input = cell.querySelector('.think-input, .fill-blank');
         if (input) {
-          const key = input.dataset.key;
-          const val = key && records[key] ? records[key].trim() : '';
+          const key = input.dataset.recordKey || input.dataset.key;
+          const val = key ? getRecordValue(records, key).trim() : '';
           if (val) hasFill = true;
           return val || '___';
         }
@@ -1303,6 +1489,24 @@ function buildExportText() {
       }
     });
     s += '\n';
+    return s;
+  }
+
+  // P1-2: 補抓不在 .think-block / table 裡的 record input（多為 .fill-blank）
+  function formatLooseInputs(scope) {
+    const inputs = _collectLooseInputs(scope);
+    if (inputs.length === 0) return '';
+    let s = '';
+    inputs.forEach(input => {
+      const meta = _extractRecordMeta(input);
+      if (!meta.key) return;
+      const value = getRecordValue(records, meta.key).trim();
+      if (!value) return;
+      sectionNum++;
+      hasRecord = true;
+      const lbl = meta.label || `(${meta.key})`;
+      s += '【' + sectionNum + '】' + lbl + '\n' + value + '\n\n';
+    });
     return s;
   }
 
@@ -1357,6 +1561,7 @@ function buildExportText() {
           item.querySelectorAll('.think-block').forEach(tb => { innerOut += formatThinkBlock(tb); });
           item.querySelectorAll('.photo-slot').forEach(ps => { innerOut += formatPhotoSlot(ps); });
           item.querySelectorAll('table').forEach(t => { innerOut += formatTable(t); });
+          innerOut += formatLooseInputs(item);  // P1-2
           if (innerOut) {
             panelOut += '〖你的填寫〗 ' + sbTitle + '\n\n' + innerOut;
           }
@@ -1379,6 +1584,19 @@ function buildExportText() {
         if (t.closest('.teacher-block') || t.closest('.student-block')) return;
         panelOut += formatTable(t);
       });
+      // P1-2: panel 內、不在 teacher/student-block 的散落 input
+      _collectLooseInputs(panel)
+        .filter(el => !el.closest('.teacher-block') && !el.closest('.student-block'))
+        .forEach(input => {
+          const meta = _extractRecordMeta(input);
+          if (!meta.key) return;
+          const value = getRecordValue(records, meta.key).trim();
+          if (!value) return;
+          sectionNum++;
+          hasRecord = true;
+          const lbl = meta.label || `(${meta.key})`;
+          panelOut += '【' + sectionNum + '】' + lbl + '\n' + value + '\n\n';
+        });
 
       if (panelOut) {
         out += BAR + '\n';
@@ -1398,6 +1616,7 @@ function buildExportText() {
     document.querySelectorAll('table').forEach(t => {
       out += formatTable(t);
     });
+    out += formatLooseInputs(document);  // P1-2: 非 staged 頁面也要掃
   }
 
   let hasLabData = false;

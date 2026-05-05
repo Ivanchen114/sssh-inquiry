@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/tools/weekly-export.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>本週學習記錄 · 探究與實作</title>
+  <meta name="description" content="把這段時間在所有單元頁面上填寫過的學習記錄一次匯出，貼到 Google 文件或學習歷程。">
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    .we-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card-bg);
+      margin-bottom: 14px;
+    }
+    .we-toolbar label { font-size: 13px; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px; }
+    .we-toolbar select,
+    .we-toolbar input[type="date"] {
+      font-size: 13px;
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--bg);
+      color: var(--text-primary);
+    }
+    .we-stats {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .we-stats strong { color: var(--text-primary); }
+    .we-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .we-btn {
+      font-size: 14px;
+      padding: 9px 18px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .we-btn:hover { border-color: var(--phase2); }
+    .we-btn.primary {
+      background: var(--phase2);
+      border-color: var(--phase2);
+      color: white;
+    }
+    .we-btn.primary:hover { filter: brightness(1.05); }
+    .we-btn.danger {
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+    .we-btn.danger:hover { background: #fef2f2; }
+    .we-preview {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fafafa;
+      padding: 14px 16px;
+      max-height: 60vh;
+      overflow-y: auto;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--text-primary);
+    }
+    .we-empty {
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+    }
+    .we-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 200;
+    }
+    .we-toast.show { opacity: 1; }
+    .we-help {
+      margin-top: 22px;
+      padding: 14px 16px;
+      background: #f0f9ff;
+      border-left: 3px solid #0284c7;
+      border-radius: 4px;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #0c4a6e;
+    }
+    .we-help strong { color: #075985; }
+    .custom-range { display: none; gap: 8px; align-items: center; }
+    .custom-range.show { display: inline-flex; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb"><a href="../index.html">首頁</a> › <a href="index.html">工具箱</a> › 本週學習記錄</div>
+    <h1>📅 本週學習記錄</h1>
+    <p class="subtitle">把你在不同單元頁面填寫過的記錄一次彙整。預設區間：本週（週一 00:00 起）。</p>
+  </div>
+
+  <div class="page-body">
+
+    <div class="we-toolbar">
+      <label>區間：
+        <select id="we-range">
+          <option value="this-week" selected>本週（週一至今）</option>
+          <option value="last-week">上週</option>
+          <option value="last-7d">過去 7 天</option>
+          <option value="this-month">本月</option>
+          <option value="all">全部記錄</option>
+          <option value="custom">自訂日期</option>
+        </select>
+      </label>
+      <span class="custom-range" id="we-custom-range">
+        <input type="date" id="we-from" />
+        ～
+        <input type="date" id="we-to" />
+      </span>
+      <span class="we-stats">
+        匯出 <strong id="we-count">0</strong> 筆記錄，涵蓋 <strong id="we-pages">0</strong> 個頁面
+        <span id="we-undated" style="display:none;">（另有 <strong id="we-undated-count">0</strong> 筆無時間戳）</span>
+      </span>
+    </div>
+
+    <div class="we-actions">
+      <button id="we-copy" class="we-btn primary">📋 複製到剪貼簿</button>
+      <button id="we-download" class="we-btn">⬇️ 下載 Markdown 檔</button>
+      <button id="we-refresh" class="we-btn">🔄 重新讀取</button>
+    </div>
+
+    <div id="we-preview-host">
+      <pre class="we-preview" id="we-preview"></pre>
+    </div>
+    <div class="we-empty" id="we-empty" style="display:none;">
+      這段時間沒有任何學習記錄。試試切到「全部記錄」看看歷史內容，或回到單元頁面填寫一些東西。
+    </div>
+
+    <div class="we-help">
+      <strong>使用提示</strong><br>
+      1. 確認區間（預設本週週一起到現在）<br>
+      2. 按「複製到剪貼簿」→ 打開 Google 文件 → <kbd>Ctrl</kbd>+<kbd>V</kbd> / <kbd>⌘</kbd>+<kbd>V</kbd> 貼上<br>
+      3. 沒有時間戳的舊記錄不會出現在區間內，切到「全部記錄」可以看到<br>
+      4. 學習記錄存在你目前使用的瀏覽器，換裝置或清快取會消失，建議定期匯出
+    </div>
+
+  </div>
+</div>
+
+<div class="we-toast" id="we-toast"></div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+(function() {
+  // ── 主題對照表（path slug → 顯示名稱）──
+  const TOPIC_LABELS = {
+    pendulum: '🕰️ 單擺',
+    spring: '🌀 彈簧',
+    buoyancy: '🚢 浮力',
+    sound: '🔊 聲音',
+    roller: '🎡 翻滾仔',
+    'rubber-band': '🥫 橡皮筋動力罐',
+    diffraction: '🔬 DNA 繞射',
+    icehouse: '🧊 冰屋',
+    airplane: '✈️ 紙飛機',
+  };
+
+  function pageMeta(page) {
+    if (!page) return { phase: null, topic: null, depth: null, group: '(未知頁面)' };
+    // 例：/units/phase1/pendulum-lv1.html  或  /units/phase1/pendulum-lv1
+    const m = page.match(/\/units\/phase(\d)\/([a-z0-9-]+?)(?:-lv(\d))?(?:\.html)?$/i);
+    if (m) {
+      const phase = parseInt(m[1], 10);
+      const topicSlug = m[2];
+      const depth = m[3] ? 'Lv' + m[3] : null;
+      const topicLabel = TOPIC_LABELS[topicSlug] || topicSlug;
+      const group = depth
+        ? `${topicLabel} · ${depth}（Phase ${phase}）`
+        : `${topicLabel}（Phase ${phase}）`;
+      return { phase, topic: topicSlug, depth, group };
+    }
+    const t = page.match(/\/tools\/([a-z0-9-]+)/i);
+    if (t) return { phase: null, topic: null, depth: null, group: '🧰 工具：' + t[1] };
+    return { phase: null, topic: null, depth: null, group: page };
+  }
+
+  function startOfWeek(d) {
+    const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const dow = x.getDay(); // 0 = Sun
+    const diff = (dow === 0 ? -6 : 1 - dow);
+    x.setDate(x.getDate() + diff);
+    return x;
+  }
+
+  function startOfMonth(d) {
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  }
+
+  function getRange(mode, fromInput, toInput) {
+    const now = new Date();
+    if (mode === 'all') return { from: null, to: null, includeUndated: true, label: '全部記錄' };
+    if (mode === 'last-7d') {
+      const from = new Date(now.getTime() - 7 * 86400000);
+      return { from, to: now, includeUndated: false, label: '過去 7 天' };
+    }
+    if (mode === 'this-week') {
+      return { from: startOfWeek(now), to: now, includeUndated: false, label: '本週' };
+    }
+    if (mode === 'last-week') {
+      const thisMon = startOfWeek(now);
+      const lastMon = new Date(thisMon.getTime() - 7 * 86400000);
+      return { from: lastMon, to: thisMon, includeUndated: false, label: '上週' };
+    }
+    if (mode === 'this-month') {
+      return { from: startOfMonth(now), to: now, includeUndated: false, label: '本月' };
+    }
+    if (mode === 'custom') {
+      const from = fromInput ? new Date(fromInput + 'T00:00:00') : null;
+      const to = toInput ? new Date(toInput + 'T23:59:59') : null;
+      return { from, to, includeUndated: false, label: `${fromInput || '?'} ~ ${toInput || '?'}` };
+    }
+    return { from: null, to: null, includeUndated: true, label: '' };
+  }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function fmtDate(d) {
+    if (!d) return '';
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+  function fmtDateOnly(d) {
+    if (!d) return '';
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+
+  function inRange(ts, from, to) {
+    if (ts == null) return false;
+    if (from && ts < from.getTime()) return false;
+    if (to && ts > to.getTime()) return false;
+    return true;
+  }
+
+  function buildMarkdown(records, rangeInfo) {
+    const now = new Date();
+    let md = `# 學習記錄彙整\n`;
+    md += `> 區間：${rangeInfo.label}`;
+    if (rangeInfo.from) md += `（${fmtDateOnly(rangeInfo.from)} ~ ${fmtDateOnly(rangeInfo.to || now)}）`;
+    md += `\n> 匯出時間：${fmtDate(now)}\n> 共 ${records.length} 筆\n\n`;
+
+    // 依 group 分組
+    const groups = new Map();
+    records.forEach(r => {
+      const meta = pageMeta(r.page);
+      const groupKey = meta.group + (r.title ? `\n> ${r.title}` : '');
+      if (!groups.has(groupKey)) groups.set(groupKey, { meta, items: [] });
+      groups.get(groupKey).items.push(r);
+    });
+
+    // group 排序：phase asc, topic alpha
+    const sortedGroups = Array.from(groups.entries()).sort((a, b) => {
+      const pa = a[1].meta.phase || 99;
+      const pb = b[1].meta.phase || 99;
+      if (pa !== pb) return pa - pb;
+      return (a[1].meta.topic || '').localeCompare(b[1].meta.topic || '');
+    });
+
+    sortedGroups.forEach(([groupKey, { items }]) => {
+      md += `\n## ${groupKey.split('\n')[0]}\n`;
+      const titleLine = groupKey.split('\n')[1];
+      if (titleLine) md += `${titleLine}\n`;
+      // items 依 ts 排序
+      items.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+      items.forEach((r, i) => {
+        const lbl = r.label || `(${r.key})`;
+        const tsStr = r.ts ? ` · ${fmtDate(new Date(r.ts))}` : '';
+        md += `\n### ${i + 1}. ${lbl}${tsStr}\n\n`;
+        // 多行值縮排成 quote 比較好讀
+        const v = String(r.value || '').trim();
+        md += v + '\n';
+      });
+      md += '\n';
+    });
+
+    md += `\n---\n*松山高中 · 探究與實作 · 學習記錄彙整*\n`;
+    return md;
+  }
+
+  // ── DOM ──
+  const $range = document.getElementById('we-range');
+  const $custom = document.getElementById('we-custom-range');
+  const $from = document.getElementById('we-from');
+  const $to = document.getElementById('we-to');
+  const $count = document.getElementById('we-count');
+  const $pages = document.getElementById('we-pages');
+  const $undated = document.getElementById('we-undated');
+  const $undatedCount = document.getElementById('we-undated-count');
+  const $preview = document.getElementById('we-preview');
+  const $previewHost = document.getElementById('we-preview-host');
+  const $empty = document.getElementById('we-empty');
+  const $copy = document.getElementById('we-copy');
+  const $download = document.getElementById('we-download');
+  const $refresh = document.getElementById('we-refresh');
+  const $toast = document.getElementById('we-toast');
+
+  // 自訂區間預設值：今天
+  const today = new Date();
+  $to.value = fmtDateOnly(today);
+  $from.value = fmtDateOnly(new Date(today.getTime() - 6 * 86400000));
+
+  let currentMd = '';
+
+  function showToast(msg) {
+    $toast.textContent = msg;
+    $toast.classList.add('show');
+    setTimeout(() => $toast.classList.remove('show'), 2200);
+  }
+
+  function rebuild() {
+    const mode = $range.value;
+    $custom.classList.toggle('show', mode === 'custom');
+
+    const api = window.SSSH_RECORDS;
+    if (!api) {
+      $preview.textContent = '⚠️ 找不到 SSSH_RECORDS API（main.js 可能未正確載入）';
+      $previewHost.style.display = '';
+      $empty.style.display = 'none';
+      return;
+    }
+
+    const all = api.scanAll(); // [{key, value, ts, page, title, label, type, source}]
+    const rangeInfo = getRange(mode, $from.value, $to.value);
+
+    let undatedTotal = 0;
+    const filtered = all.filter(r => {
+      if (r.ts == null) {
+        undatedTotal++;
+        return rangeInfo.includeUndated;
+      }
+      return inRange(r.ts, rangeInfo.from, rangeInfo.to);
+    });
+
+    const pageSet = new Set(filtered.map(r => r.page || '(unknown)'));
+    $count.textContent = filtered.length;
+    $pages.textContent = pageSet.size;
+    if (undatedTotal > 0 && !rangeInfo.includeUndated) {
+      $undated.style.display = '';
+      $undatedCount.textContent = undatedTotal;
+    } else {
+      $undated.style.display = 'none';
+    }
+
+    if (filtered.length === 0) {
+      $previewHost.style.display = 'none';
+      $empty.style.display = '';
+      currentMd = '';
+      $copy.disabled = true;
+      $download.disabled = true;
+    } else {
+      currentMd = buildMarkdown(filtered, rangeInfo);
+      $preview.textContent = currentMd;
+      $previewHost.style.display = '';
+      $empty.style.display = 'none';
+      $copy.disabled = false;
+      $download.disabled = false;
+    }
+  }
+
+  $range.addEventListener('change', rebuild);
+  $from.addEventListener('change', rebuild);
+  $to.addEventListener('change', rebuild);
+  $refresh.addEventListener('click', rebuild);
+
+  $copy.addEventListener('click', () => {
+    if (!currentMd) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(currentMd)
+        .then(() => showToast('✓ 已複製！打開 Google 文件按 Ctrl+V / ⌘+V 貼上'))
+        .catch(() => fallbackCopy());
+    } else {
+      fallbackCopy();
+    }
+  });
+
+  function fallbackCopy() {
+    const ta = document.createElement('textarea');
+    ta.value = currentMd;
+    ta.style.cssText = 'position:fixed;left:-9999px;';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast('✓ 已複製到剪貼簿'); }
+    catch (e) { showToast('複製失敗，請手動選取上方文字'); }
+    document.body.removeChild(ta);
+  }
+
+  $download.addEventListener('click', () => {
+    if (!currentMd) return;
+    const blob = new Blob([currentMd], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = fmtDateOnly(new Date()).replace(/-/g, '');
+    a.href = url;
+    a.download = `學習記錄_${$range.value}_${stamp}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // 等 main.js 把 window.SSSH_RECORDS 掛上去再跑（DOMContentLoaded 通常已足夠）
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', rebuild);
+  } else {
+    rebuild();
+  }
+})();
+</script>
+</body>
+</html>
