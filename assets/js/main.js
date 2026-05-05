@@ -309,6 +309,59 @@ function initTeacherMode() {
 }
 
 // ═══════════════════════════════════════════════════
+//  教師模式 B：時間預算 overlay
+//  讀 step-panel 的 data-time，教師模式開啟時在 stage-label 旁
+//  浮現 ⏱️ time chip；page-header 末尾加總時長 chip。
+//  data-time 格式：分鐘數字（"15"）或範圍（"15-20"）。
+//  沒有 data-time 的 panel 跳過，總時長只加總「有值」的部分。
+// ═══════════════════════════════════════════════════
+function initTimeBudget() {
+  const panels = document.querySelectorAll('.step-panel[data-time]');
+  if (panels.length === 0) return;
+
+  let totalMin = 0, totalMax = 0, hasAny = false;
+
+  panels.forEach(panel => {
+    const raw = (panel.getAttribute('data-time') || '').trim();
+    if (!raw) return;
+    // 解析：支援 "15"、"15-20"、"15min"、"15 分鐘"
+    const m = raw.match(/(\d+)\s*(?:[-–~]\s*(\d+))?/);
+    if (!m) return;
+    const lo = parseInt(m[1], 10);
+    const hi = m[2] ? parseInt(m[2], 10) : lo;
+    totalMin += lo;
+    totalMax += hi;
+    hasAny = true;
+
+    // 在 stage-label 旁加 chip；若無 stage-label 則放在 panel 開頭
+    const label = panel.querySelector('.stage-label');
+    const chip = document.createElement('span');
+    chip.className = 'time-chip teacher-only';
+    chip.textContent = lo === hi ? `⏱️ 約 ${lo} 分鐘` : `⏱️ 約 ${lo}–${hi} 分鐘`;
+    chip.style.display = 'none';  // 預設隱藏，由 initTeacherMode 控制
+    if (label) {
+      label.appendChild(chip);
+    } else {
+      panel.insertBefore(chip, panel.firstChild);
+    }
+  });
+
+  // 在 page-header 末尾加總時長 chip
+  if (hasAny) {
+    const header = document.querySelector('.page-header');
+    if (header) {
+      const total = document.createElement('div');
+      total.className = 'time-chip time-chip-total teacher-only';
+      total.style.display = 'none';
+      total.textContent = totalMin === totalMax
+        ? `⏱️ 總時長 ≈ ${totalMin} 分鐘（教師模式專用）`
+        : `⏱️ 總時長 ≈ ${totalMin}–${totalMax} 分鐘（教師模式專用）`;
+      header.appendChild(total);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════
 //  桌面 Sidebar 收合（⌘/Ctrl + \ 或點按鈕）
 //  狀態存 localStorage，跨頁跨 session 持續
 // ═══════════════════════════════════════════════════
@@ -439,6 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mount.remove();
   }
 
+  initTimeBudget();   // 必須在 initTeacherMode 前跑（先生成 .teacher-only chip）
   initTeacherMode();
   initMobileMenu();
   initDesktopSidebarToggle();

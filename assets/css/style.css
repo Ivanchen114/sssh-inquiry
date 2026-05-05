@@ -1588,6 +1588,81 @@ tr:nth-child(even) td { background: #fafaf8; }
 }
 
 /* ═══════════════════════════════════════════════════
+   教師模式 C：課堂引導筆記
+   只在 pivot textarea 旁加，教師模式才顯示。
+   結構：期待思考方向 / 常見偏題 / 後續討論問題 三段
+   ═══════════════════════════════════════════════════ */
+.teacher-note {
+  margin: 8px 0 12px;
+  padding: 12px 16px;
+  background: #f5f3ff;
+  border: 1px solid #c4b5fd;
+  border-left: 4px solid #7c3aed;
+  border-radius: 0 8px 8px 0;
+  font-size: 12.5px;
+  color: #4c1d95;
+  line-height: 1.75;
+}
+.teacher-note-title {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #5b21b6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.teacher-note-section {
+  margin-bottom: 8px;
+}
+.teacher-note-section:last-child {
+  margin-bottom: 0;
+}
+.teacher-note-label {
+  font-weight: 700;
+  font-size: 11.5px;
+  color: #6d28d9;
+  margin-bottom: 2px;
+  letter-spacing: 0.02em;
+}
+.teacher-note-body {
+  color: #4c1d95;
+}
+
+/* ═══════════════════════════════════════════════════
+   教師模式 B：時間預算 overlay
+   ═══════════════════════════════════════════════════ */
+.time-chip {
+  display: inline-block;
+  background: #fef3c7;
+  color: #78350f;
+  border: 1px solid #fbbf24;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  margin-left: 8px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.time-chip-total {
+  display: block;
+  margin: 12px 0 0;
+  padding: 8px 14px;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 8px 8px 0;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #78350f;
+  text-align: left;
+  width: fit-content;
+}
+
+/* ═══════════════════════════════════════════════════
    表單輸入框（.fill-blank）：研究規劃表 / 論證建模 / 問題發現等工具頁共用
    預設 focus 用 phase2（綠）；其他 phase 在頁面內部 inline override 即可
    ═══════════════════════════════════════════════════ */
