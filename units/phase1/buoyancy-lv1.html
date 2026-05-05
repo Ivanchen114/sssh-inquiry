@@ -396,9 +396,9 @@
           <div>
             <div class="ctrl-label">② 砝碼（點木板放置）</div>
             <div class="weight-btn-group" id="weightBtns">
-              <button class="weight-btn active" data-weight="20">20 g</button>
-              <button class="weight-btn" data-weight="50">50 g</button>
-              <button class="weight-btn" data-weight="100">100 g</button>
+              <button class="weight-btn active" data-weight="5">5 g</button>
+              <button class="weight-btn" data-weight="10">10 g</button>
+              <button class="weight-btn" data-weight="20">20 g</button>
             </div>
           </div>
           <div style="font-size:11px;color:var(--text-muted);line-height:1.6;background:var(--bg);border-radius:5px;padding:8px 10px;">
@@ -696,7 +696,7 @@ const SCALE = 14; // px per cm（A=400→L=20cm→280px，能裝下）
 
 // ── 狀態 ──
 let currentArea = 100;
-let currentWeight = 20;
+let currentWeight = 5;
 let weights = [];      // [{x: cm from left edge of block, mass: g}]
 let records = [];      // [{id, area, mass, depth, sunk, tipped, note}]
 let recordCounter = 0;
