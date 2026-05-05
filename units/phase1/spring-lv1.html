@@ -269,7 +269,54 @@
         </div>
       </div>
 
-      <div class="step-footer">
+      
+      <!-- 老師的實驗計畫（學生照做即可） -->
+      <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <!-- 器材 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🧰 實驗器材</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.85;margin:0;">
+            <li>彈簧（原長 L₀ = 8.0 cm）</li>
+            <li>5 種砝碼（50 / 100 / 150 / 200 / 250 gw）</li>
+            <li>尺（mm 刻度）+ 支架</li>
+            <li>1 gw ≈ 0.0098 N（換算用）</li>
+          </ul>
+        </div>
+
+        <!-- 架設 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🛠️ 實驗架設</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.85;">
+            彈簧吊在支架 → 掛砝碼 → 等彈簧穩定再讀伸長量 x = 目前長度 − L₀。每組重量量 3 次取平均。
+          </div>
+        </div>
+      </div>
+
+      <!-- 步驟 -->
+      <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">🔬 實驗步驟</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">步驟 1：依序掛 5 種砝碼，每種測 3 次伸長量</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>選 50 gw 砝碼掛上、等穩定、量 x（共 3 次）</li>
+            <li>依序換 100 / 150 / 200 / 250 gw，每種測 3 次</li>
+            <li>把 (F, x) 寫進階段三的數據表，每種 F 算平均 x̄</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 預期分析 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:#1e3a8a;margin-bottom:6px;">📊 老師期待你做的分析</div>
+        <div style="font-size:12.5px;color:#1e40af;line-height:1.85;">
+          <strong>F vs x 散佈圖</strong>：預期是<strong>過原點的直線</strong>（F ∝ x）→ 斜率 = 彈力常數 k。<br>用 1 gw ≈ 0.0098 N 換算，斜率單位變成 N/cm。<br><strong>限制檢查</strong>：拉到很大時可能偏離直線——這就是「彈性極限」，Lv2 可深入。
+        </div>
+      </div>
+
+<div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
           <span class="step-dot"></span>

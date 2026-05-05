@@ -305,7 +305,62 @@
         </a>
       </div>
 
-      <div class="step-footer">
+      
+      <!-- 老師的實驗計畫（學生照做即可） -->
+      <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <!-- 器材 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🧰 實驗器材</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.85;margin:0;">
+            <li>細繩（可調長 10–60 cm，每 10 cm 一段）</li>
+            <li>擺錘（質量固定）</li>
+            <li>量角器（讀振幅 θ）</li>
+            <li>計時器（量 10 次擺動取平均算 T）</li>
+          </ul>
+        </div>
+
+        <!-- 架設 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🛠️ 實驗架設</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.85;">
+            擺繩固定在支架上 → 擺錘自由懸掛 → 拉到指定振幅 θ 放手 → 計時 10 次擺動的總時間 ÷ 10 = 平均週期 T。
+          </div>
+        </div>
+      </div>
+
+      <!-- 步驟 -->
+      <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">🔬 實驗步驟</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">活動一（檢驗 H1：振幅是否影響週期）</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>固定 L = 60 cm、擺錘質量不變</li>
+            <li>取兩個振幅：5°（小振幅）和 20°（大振幅）</li>
+            <li>每組各測 3 次平均週期 T，比較兩組差距</li>
+          </ol>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">活動二（檢驗 H3：擺長 vs 週期關係）</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>固定 θ ≤ 15°、擺錘質量不變</li>
+            <li>取 6 種擺長：10、20、30、40、50、60 cm</li>
+            <li>每組測 3 次平均 T，得 6 組（L, T）數據</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 預期分析 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:#1e3a8a;margin-bottom:6px;">📊 老師期待你做的分析</div>
+        <div style="font-size:12.5px;color:#1e40af;line-height:1.85;">
+          <strong>活動一</strong>：兩組 T 差距若小於量測誤差 → 振幅不影響週期（小角度近似成立）。<br><strong>活動二</strong>：畫 T vs L 跟 T² vs L 兩張圖——哪個是<strong>過原點的直線</strong>？<br>T² vs L 通過原點的直線 → 證明 T² ∝ L，可推出 T = 2π√(L/g)，從斜率反推重力加速度 g。
+        </div>
+      </div>
+
+<div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
           <span class="step-dot"></span>

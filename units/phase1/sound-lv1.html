@@ -251,7 +251,54 @@
         </div>
       </div>
 
-      <div class="step-footer">
+      
+      <!-- 老師的實驗計畫（學生照做即可） -->
+      <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <!-- 器材 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🧰 實驗器材</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.85;margin:0;">
+            <li>虛擬示波器（顯示波形）</li>
+            <li>音叉 / 鋼琴音檔（可選不同音名 C, D, E, F, G, A, B, C′）</li>
+            <li>波形量測工具：5 個週期總時間</li>
+          </ul>
+        </div>
+
+        <!-- 架設 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🛠️ 實驗架設</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.85;">
+            選定音名 → 觸發發聲 → 從波形上量 5 個週期的總時間 t → 週期 T = t/5 → 頻率 f = 1/T。每個音重做 1 次驗證。
+          </div>
+        </div>
+      </div>
+
+      <!-- 步驟 -->
+      <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">🔬 實驗步驟</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">步驟 1：量 8 個音（C 到 C′）的頻率</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>從 C 開始，量出 5 個週期的總時間 t（毫秒）</li>
+            <li>計算週期 T = t/5、頻率 f = 1/T（Hz）</li>
+            <li>依序量 D / E / F / G / A / B / C′</li>
+            <li>把 (音名, f) 寫進階段三的數據表</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 預期分析 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:#1e3a8a;margin-bottom:6px;">📊 老師期待你做的分析</div>
+        <div style="font-size:12.5px;color:#1e40af;line-height:1.85;">
+          <strong>相鄰音比值 f(下一個) / f(上一個)</strong>：算 7 個比值，看是否接近常數。<br>預期：每一個半音的頻率比 ≈ 2^(1/12) ≈ 1.059（十二平均律）。<br><strong>八度音</strong>：C′ / C 應該 ≈ 2.0（高八度頻率剛好兩倍）。<br>畫 f vs 音名序號 → 不是直線、是<strong>等比數列</strong>（指數曲線）。
+        </div>
+      </div>
+
+<div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
           <span class="step-dot"></span>

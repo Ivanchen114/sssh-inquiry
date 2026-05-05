@@ -189,7 +189,62 @@
         </div>
       </div>
 
-      <div class="step-footer">
+      
+      <!-- 老師的實驗計畫（學生照做即可） -->
+      <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <!-- 器材 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🧰 實驗器材</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.85;margin:0;">
+            <li>雷射筆（紅光 λ ≈ 650 nm）</li>
+            <li>可調狹縫（a = 0.05 / 0.1 / 0.15 / 0.2 mm）</li>
+            <li>螢幕 + 尺（量中央亮紋寬度 Δy₀）</li>
+            <li>可調螢幕距離 L（50 / 100 / 150 / 200 cm）</li>
+          </ul>
+        </div>
+
+        <!-- 架設 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🛠️ 實驗架設</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.85;">
+            雷射光通過狹縫 → 在螢幕上產生繞射圖案 → 量中央最亮亮紋的寬度 Δy₀（亮紋邊緣到邊緣的距離）。
+          </div>
+        </div>
+      </div>
+
+      <!-- 步驟 -->
+      <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">🔬 實驗步驟</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">活動一：固定 a、變 L → 找 Δy₀ vs L 關係</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>固定 a = 0.1 mm，λ = 650 nm</li>
+            <li>改變 L：50、100、150、200 cm，每個 L 量 Δy₀</li>
+            <li>計算 Δy₀ / L 比值，看是否接近常數</li>
+          </ol>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">活動二：固定 L、變 a → 找 Δy₀ vs a 關係</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>固定 L = 1 m，λ = 650 nm</li>
+            <li>改變 a：0.05、0.1、0.15、0.2 mm，每個 a 量 Δy₀</li>
+            <li>計算 a × Δy₀ 乘積，看是否接近常數</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 預期分析 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:#1e3a8a;margin-bottom:6px;">📊 老師期待你做的分析</div>
+        <div style="font-size:12.5px;color:#1e40af;line-height:1.85;">
+          <strong>活動一</strong>：Δy₀ 對 L 是<strong>過原點的直線</strong>（Δy₀ ∝ L），斜率 ≈ 2λ/a。<br><strong>活動二</strong>：Δy₀ 對 a 是<strong>反比曲線</strong>（Δy₀ ∝ 1/a），改畫 Δy₀ vs 1/a 變直線。<br>用<strong>因次分析</strong>合起來推導：Δy₀ = k·Lλ/a（k 為比例常數，理論值 k = 2）。
+        </div>
+      </div>
+
+<div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
           <span class="step-dot"></span>

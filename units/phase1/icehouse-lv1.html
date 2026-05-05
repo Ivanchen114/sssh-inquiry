@@ -178,7 +178,56 @@
         </div>
       </div>
 
-      <div class="step-footer">
+      
+      <!-- 老師的實驗計畫（學生照做即可） -->
+      <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <!-- 器材 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🧰 實驗器材</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.85;margin:0;">
+            <li>保溫杯 + 200 g 碎冰</li>
+            <li>電子秤（量鹽量）</li>
+            <li>溫度計（讀冰水混合溫度）</li>
+            <li>計時器（每 2 分鐘讀一次）</li>
+            <li>5 種鹽量：0、20、40、60、80、100 g</li>
+          </ul>
+        </div>
+
+        <!-- 架設 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🛠️ 實驗架設</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.85;">
+            保溫杯放 200 g 碎冰 → 加指定鹽量、攪拌均勻 → 插入溫度計 → 每 2 分鐘讀一次溫度，持續 10 分鐘 → 記下最低溫度。
+          </div>
+        </div>
+      </div>
+
+      <!-- 步驟 -->
+      <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">🔬 實驗步驟</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">步驟 1：在 6 種鹽量各測一輪 10 分鐘溫度</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>200 g 冰 + 0 g 鹽，每 2 分鐘讀一次溫度（共 6 次：0、2、4、6、8、10 分）</li>
+            <li>找出最低溫度</li>
+            <li>依序換 20、40、60、80、100 g 鹽，重複上面步驟</li>
+            <li>把 (鹽量, 最低溫) 寫進階段三的數據表</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 預期分析 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:#1e3a8a;margin-bottom:6px;">📊 老師期待你做的分析</div>
+        <div style="font-size:12.5px;color:#1e40af;line-height:1.85;">
+          <strong>鹽量 vs 最低溫散佈圖</strong>：預期是<strong>遞減但會飽和</strong>——加越多鹽溫度越低，但超過某個點後不再下降。<br>理論上最佳冰鹽比 ≈ 3:1（200 g 冰配 67 g 鹽）達到最低溫約 −21°C。<br><strong>限制</strong>：實際因為熱傳遞、保溫條件等影響，可能達不到理論最低溫。
+        </div>
+      </div>
+
+<div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
         <div class="step-dots">
           <span class="step-dot"></span>
