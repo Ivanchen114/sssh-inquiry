@@ -117,6 +117,58 @@
     .we-help strong { color: #075985; }
     .custom-range { display: none; gap: 8px; align-items: center; }
     .custom-range.show { display: inline-flex; }
+
+    /* 身分區塊（班/座/姓） */
+    .we-identity {
+      display: grid;
+      grid-template-columns: 110px 110px 1fr;
+      gap: 10px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--phase2);
+      border-radius: 10px;
+      background: #f0fdf4;
+      margin-bottom: 14px;
+    }
+    .we-identity label { font-size: 12px; color: #065f46; font-weight: 700; display: flex; flex-direction: column; gap: 4px; }
+    .we-identity input {
+      font-size: 14px;
+      padding: 7px 10px;
+      border: 1px solid #a7f3d0;
+      border-radius: 5px;
+      background: white;
+      color: var(--text-primary);
+    }
+    .we-identity input:focus { outline: none; border-color: var(--phase2); box-shadow: 0 0 0 2px rgba(30,122,82,0.15); }
+    .we-identity-hint {
+      grid-column: 1 / -1;
+      font-size: 11px;
+      color: #047857;
+      margin-top: -2px;
+    }
+
+    /* 空狀態升級 */
+    .we-empty-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+    .we-empty-list { text-align: left; max-width: 460px; margin: 0 auto 16px; padding-left: 22px; line-height: 1.85; font-size: 13.5px; color: var(--text-secondary); }
+    .we-empty-cta {
+      display: inline-block;
+      background: var(--phase2);
+      color: white;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .we-empty-cta:hover { filter: brightness(1.05); }
+
+    /* 手機版 */
+    @media (max-width: 600px) {
+      .we-identity { grid-template-columns: 1fr 1fr; }
+      .we-identity > label:nth-child(3) { grid-column: 1 / -1; }
+      .we-actions { flex-direction: column; }
+      .we-btn { width: 100%; padding: 12px 16px; font-size: 15px; }
+      .we-toolbar { align-items: stretch; flex-wrap: wrap; }
+    }
   </style>
 </head>
 <body>
@@ -142,6 +194,19 @@
   </div>
 
   <div class="page-body">
+
+    <div class="we-identity" id="we-identity">
+      <label>班級
+        <input type="text" id="we-id-class" placeholder="例：307" autocomplete="off">
+      </label>
+      <label>座號
+        <input type="text" id="we-id-seat" placeholder="例：12" autocomplete="off" inputmode="numeric">
+      </label>
+      <label>姓名
+        <input type="text" id="we-id-name" placeholder="例：陳小明" autocomplete="off">
+      </label>
+      <div class="we-identity-hint">填一次就會記住，下次來不用再填。匯出時會自動加在 Markdown 開頭。</div>
+    </div>
 
     <div class="we-toolbar">
       <label>區間：
@@ -175,7 +240,13 @@
       <pre class="we-preview" id="we-preview"></pre>
     </div>
     <div class="we-empty" id="we-empty" style="display:none;">
-      這段時間沒有任何學習記錄。試試切到「全部記錄」看看歷史內容，或回到單元頁面填寫一些東西。
+      <div class="we-empty-title">📭 這段時間還沒有任何學習記錄</div>
+      <ol class="we-empty-list">
+        <li>這頁是「<strong>匯出</strong>」用的，不是在這裡填寫。</li>
+        <li>請先回到老師指定的<strong>單元頁面</strong>完成學習記錄。</li>
+        <li>下課前再回本頁，選好區間後複製到 Google 文件交作業。</li>
+      </ol>
+      <a href="index.html" class="we-empty-cta">🧰 回工具箱找本週單元 →</a>
     </div>
 
     <div class="we-help">
@@ -281,12 +352,16 @@
     return true;
   }
 
-  function buildMarkdown(records, rangeInfo) {
+  function buildMarkdown(records, rangeInfo, identity) {
     const now = new Date();
-    let md = `# 學習記錄彙整\n`;
-    md += `> 區間：${rangeInfo.label}`;
+    let md = `# 本週學習記錄\n`;
+    if (identity) {
+      md += `班級：${identity.class || '___'}　座號：${identity.seat || '___'}　姓名：${identity.name || '___'}\n`;
+    }
+    md += `匯出時間：${fmtDate(now)}\n`;
+    md += `區間：${rangeInfo.label}`;
     if (rangeInfo.from) md += `（${fmtDateOnly(rangeInfo.from)} ~ ${fmtDateOnly(rangeInfo.to || now)}）`;
-    md += `\n> 匯出時間：${fmtDate(now)}\n> 共 ${records.length} 筆\n\n`;
+    md += `\n共 ${records.length} 筆記錄\n\n`;
 
     // 依 group 分組
     const groups = new Map();
@@ -342,11 +417,49 @@
   const $download = document.getElementById('we-download');
   const $refresh = document.getElementById('we-refresh');
   const $toast = document.getElementById('we-toast');
+  const $idClass = document.getElementById('we-id-class');
+  const $idSeat = document.getElementById('we-id-seat');
+  const $idName = document.getElementById('we-id-name');
 
   // 自訂區間預設值：今天
   const today = new Date();
   $to.value = fmtDateOnly(today);
   $from.value = fmtDateOnly(new Date(today.getTime() - 6 * 86400000));
+
+  // 還原身分（班/座/姓）
+  const IDENTITY_KEY = 'sssh_export_identity';
+  function loadIdentity() {
+    try {
+      const raw = localStorage.getItem(IDENTITY_KEY);
+      if (!raw) return;
+      const obj = JSON.parse(raw);
+      if (obj && typeof obj === 'object') {
+        $idClass.value = obj.class || '';
+        $idSeat.value = obj.seat || '';
+        $idName.value = obj.name || '';
+      }
+    } catch (e) {}
+  }
+  function saveIdentity() {
+    try {
+      localStorage.setItem(IDENTITY_KEY, JSON.stringify({
+        class: $idClass.value.trim(),
+        seat: $idSeat.value.trim(),
+        name: $idName.value.trim(),
+      }));
+    } catch (e) {}
+  }
+  function getIdentity() {
+    return {
+      class: $idClass.value.trim(),
+      seat: $idSeat.value.trim(),
+      name: $idName.value.trim(),
+    };
+  }
+  loadIdentity();
+  [$idClass, $idSeat, $idName].forEach(el => {
+    el.addEventListener('input', () => { saveIdentity(); rebuild(); });
+  });
 
   let currentMd = '';
 
@@ -397,7 +510,7 @@
       $copy.disabled = true;
       $download.disabled = true;
     } else {
-      currentMd = buildMarkdown(filtered, rangeInfo);
+      currentMd = buildMarkdown(filtered, rangeInfo, getIdentity());
       $preview.textContent = currentMd;
       $previewHost.style.display = '';
       $empty.style.display = 'none';

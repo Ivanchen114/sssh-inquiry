@@ -7,6 +7,7 @@ const NAV_DATA = [
     items: [
       { name: '🧭 網站操作說明', path: 'tools/guide.html' },
       { name: '課程總覽', path: 'index.html' },
+      { name: '📅 本週學習記錄（匯出）', path: 'tools/weekly-export.html' },
     ]
   },
   {
@@ -118,7 +119,6 @@ const NAV_DATA = [
       { name: '　ORID 反思框架', path: 'tools/orid.html' },
       { name: '　Excel 數據分析', path: 'tools/excel.html' },
       { name: '　數據分析工坊', path: 'tools/data-workshop.html' },
-      { name: '　📅 本週學習記錄', path: 'tools/weekly-export.html' },
       { name: '　學習歷程指引', path: 'tools/portfolio.html' },
       { name: '　自主探究指引', path: 'tools/independent-research.html' },
       { name: '　什麼是好的探究問題', path: 'tools/good-question.html' },

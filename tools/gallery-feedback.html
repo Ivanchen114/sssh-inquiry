@@ -33,6 +33,44 @@
     .self-row { display:grid; grid-template-columns:140px 1fr; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:6px; margin-bottom:8px; background:white; }
     .self-row .self-label { font-weight:700; font-size:13px; color:var(--text-primary); }
     .self-row .self-hint { font-size:12px; color:var(--text-muted); margin-top:4px; line-height:1.7; }
+
+    /* 今日鐵律：禁用詞卡 */
+    .gw-forbidden {
+      border: 2px solid #b91c1c;
+      background: #fef2f2;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 1px 4px rgba(185, 28, 28, 0.08);
+    }
+    .gw-forbidden-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .gw-forbidden-icon { font-size: 18px; }
+    .gw-forbidden-title {
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: #991b1b;
+    }
+    .gw-forbidden-body {
+      font-size: 13.5px;
+      color: #7f1d1d;
+      line-height: 1.8;
+    }
+    .gw-forbidden-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .gw-pill {
+      background: #b91c1c;
+      color: white;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
   </style>
 </head>
 <body>
@@ -63,6 +101,24 @@
   </div>
 
   <div class="page-body">
+
+    <!-- ─── 今日鐵律：禁用詞 ─── -->
+    <div class="gw-forbidden">
+      <div class="gw-forbidden-head">
+        <span class="gw-forbidden-icon">🚫</span>
+        <span class="gw-forbidden-title">今日鐵律</span>
+      </div>
+      <div class="gw-forbidden-body">
+        不要寫這五個詞——出現就重寫。
+        <div class="gw-forbidden-pills">
+          <span class="gw-pill">不錯</span>
+          <span class="gw-pill">很棒</span>
+          <span class="gw-pill">做得好</span>
+          <span class="gw-pill">加油</span>
+          <span class="gw-pill">沒問題</span>
+        </div>
+      </div>
+    </div>
 
     <!-- ─── 為什麼要這份工具 ─── -->
     <div class="card" style="margin-bottom:20px;">

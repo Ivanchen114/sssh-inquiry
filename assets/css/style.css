@@ -1978,3 +1978,10 @@ textarea.fill-blank {
   .export-footer-btn { width: 100%; justify-content: center; }
   .photo-slot { padding: 12px 14px; }
 }
+
+/* ── gallery-feedback 手機版 ─────────────────────── */
+@media (max-width: 700px) {
+  .gw-nav-grid { grid-template-columns: 1fr 1fr; }
+  .gw-prompt-grid { grid-template-columns: 1fr; }
+  .self-row { grid-template-columns: 1fr; }
+}

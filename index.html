@@ -207,6 +207,40 @@
       border-radius: 3px;
       margin-top: 8px;
     }
+
+    /* ── 從哪裡開始（hero 三按鈕） ── */
+    .hero-entries {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 22px 0 8px;
+    }
+    @media (max-width: 720px) { .hero-entries { grid-template-columns: 1fr; } }
+    .hero-entry {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--card-bg);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: transform 0.12s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .hero-entry:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+    .hero-entry .he-icon { font-size: 26px; }
+    .hero-entry .he-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-muted); text-transform: uppercase; }
+    .hero-entry .he-text { font-size: 14px; font-weight: 700; margin-top: 2px; line-height: 1.4; }
+    .hero-entry.e-new { border-left: 4px solid #2952c4; }
+    .hero-entry.e-new:hover { border-color: #2952c4; }
+    .hero-entry.e-class { border-left: 4px solid #1e7a52; }
+    .hero-entry.e-class:hover { border-color: #1e7a52; }
+    .hero-entry.e-export { border-left: 4px solid #b5621e; }
+    .hero-entry.e-export:hover { border-color: #b5621e; }
   </style>
 </head>
 <body>
@@ -235,6 +269,31 @@
     </div>
     <h1>探究與實作</h1>
     <p class="lead">每個物理主題，都有三個深度可以走。你可以停在 Lv1，也可以一路到 Lv3。</p>
+
+    <!-- 從哪裡開始（學生入口三按鈕） -->
+    <div class="hero-entries">
+      <a href="tools/guide.html" class="hero-entry e-new">
+        <div class="he-icon">🆕</div>
+        <div class="he-body">
+          <div class="he-label">第一次來</div>
+          <div class="he-text">看網站操作說明</div>
+        </div>
+      </a>
+      <a href="tools/index.html" class="hero-entry e-class">
+        <div class="he-icon">📖</div>
+        <div class="he-body">
+          <div class="he-label">今天上課</div>
+          <div class="he-text">前往工具箱找老師指定頁面</div>
+        </div>
+      </a>
+      <a href="tools/weekly-export.html" class="hero-entry e-export">
+        <div class="he-icon">📋</div>
+        <div class="he-body">
+          <div class="he-label">下課前</div>
+          <div class="he-text">匯出本週學習記錄</div>
+        </div>
+      </a>
+    </div>
 
     <div class="depth-explain">
       <div class="depth-explain-card dep1">
