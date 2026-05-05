@@ -1592,18 +1592,21 @@ tr:nth-child(even) td { background: #fafaf8; }
    數據表 / 變因設計表的 cell 中嵌入：保持表格視覺
    ═══════════════════════════════════════════════════ */
 .table-input {
+  display: block;
   width: 100%;
+  height: 100%;
+  min-height: 32px;
   border: none;
   background: transparent;
-  padding: 4px 6px;
+  padding: 6px 8px;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-primary);
   text-align: center;
   box-sizing: border-box;
   outline: none;
-  border-radius: 3px;
-  transition: background 0.15s, box-shadow 0.15s;
+  /* 不加 border-radius——保持跟 cell 直角一致 */
+  transition: background 0.12s, outline 0.12s;
 }
 .table-input::placeholder {
   color: #cbd5e1;
@@ -1614,11 +1617,16 @@ tr:nth-child(even) td { background: #fafaf8; }
 }
 .table-input:focus {
   background: white;
-  box-shadow: inset 0 0 0 2px var(--phase1);
+  /* 用 outline 取代 inset box-shadow，offset -2px 確保框畫在 cell 內側 */
+  outline: 2px solid var(--phase1);
+  outline-offset: -2px;
+  position: relative;
+  z-index: 1;
 }
 /* 表格 cell 包 input 時，cell 自身不要有 padding（input 已有）*/
 td:has(> .table-input) {
   padding: 0 !important;
+  vertical-align: middle;
 }
 
 /* ═══════════════════════════════════════════════════
