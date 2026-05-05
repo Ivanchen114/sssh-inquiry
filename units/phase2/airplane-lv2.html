@@ -116,9 +116,22 @@
       <!-- Layer 2: 選題與預測 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 你選哪一個？寫出「研究問題 + 假設」。假設要有明確預測（例：「A 從 60 增到 180，距離增加；180 後減少」）</div>
-        <textarea class="think-input" data-key="airplane-lv2-choice" rows="4" style="line-height:1.8;">研究問題：___
-假設（可驗證的預測）：___
-如果假設錯，我會看到什麼現象？___</textarea>
+
+        <!-- 外部 hint：假設品質檢核 -->
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--text-secondary);line-height:1.75;">
+          <div style="font-weight:700;color:var(--text-primary);margin-bottom:4px;">📐 好假設的三件事</div>
+          <ul style="margin:0 0 8px;padding-left:20px;">
+            <li><strong>有方向</strong>：增加 / 減少 / 倒 U 形 / 有最佳值——具體說</li>
+            <li><strong>有依據</strong>：根據 Lv1 模擬器 / 物理直覺 / 過去經驗</li>
+            <li><strong>能被否證</strong>：寫「如果假設錯，我會看到什麼」</li>
+          </ul>
+          <div style="border-top:1px dashed #cbd5e1;padding-top:6px;margin-top:6px;">
+            <div style="color:#b91c1c;margin-bottom:3px;">❌ 「我假設機翼面積會影響飛行距離。」 <span style="color:#7f1d1d;">（沒方向、沒否證條件）</span></div>
+            <div style="color:#15803d;">✅ 「假設：A 從 60→180 cm² 距離增加，180→300 反而減少（倒 U）。依據：Lv1 模擬器在 180 附近找到最大值。如果錯，我會看到單調遞增或遞減。」</div>
+          </div>
+        </div>
+
+        <textarea class="think-input" data-key="airplane-lv2-choice" rows="4" style="line-height:1.8;" placeholder="研究問題：___&#10;假設：___（增 / 減 / 倒 U / 有最佳值）&#10;依據：___（Lv1 看到什麼）&#10;如果假設錯，我會看到：___"></textarea>
         <div class="think-status"></div>
       </div>
 
@@ -237,10 +250,7 @@
       <!-- Layer 2: 計畫反思 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你的「六格」回答（第 1、2、5、6 格最關鍵）</div>
-        <textarea class="think-input" data-key="airplane-lv2-plan" style="min-height:110px;line-height:1.8" rows="5">1. 假設：___
-2. 變因：操縱___/應變___/控制___
-5. 力道控制：___
-6. 擬合計畫：___因為___</textarea>
+        <textarea class="think-input" data-key="airplane-lv2-plan" style="min-height:110px;line-height:1.8" rows="5" placeholder="1. 假設：___&#10;2. 變因：操縱 ___ / 應變 ___ / 控制 ___&#10;5. 力道控制：___&#10;6. 擬合計畫：選 ___ 模型，因為 ___"></textarea>
         <div class="think-status"></div>
       </div>
 
@@ -326,9 +336,7 @@
       <!-- Layer 2: 結論撰寫 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你前兩輪的發現，以及第三輪「要補哪裡」的計畫</div>
-        <textarea class="think-input" data-key="airplane-lv2-iterate" style="min-height:90px;line-height:1.8" rows="4">輪 1：校準 std = ___m（___%）
-輪 2：5 水準初掃結果：___
-輪 3 補強計畫：在 ___ 附近加密水準，因為 ___</textarea>
+        <textarea class="think-input" data-key="airplane-lv2-iterate" style="min-height:90px;line-height:1.8" rows="4" placeholder="輪 1：校準 std = ___ m（佔均值 ___%）&#10;輪 2：5 水準初掃，最大值出現在 ___，整體形狀像 ___（單調 / 倒 U / 飽和）&#10;輪 3 補強計畫：在 ___ 附近加密水準，因為 ___"></textarea>
         <div class="think-status"></div>
       </div>
 
@@ -384,9 +392,7 @@
       <!-- Layer 2: 總結 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你的「擬合結果 → 物理量 → 對照 lv1 預測」三段式結論</div>
-        <textarea class="think-input" data-key="airplane-lv2-fit" style="min-height:100px;line-height:1.8" rows="4">擬合模型：___
-讀出的物理量：最佳值 A = ___ cm²（lv1 預測 180 cm²）
-差異原因推論：___（例：真實紙張有摺縫、A 的定義不同）</textarea>
+        <textarea class="think-input" data-key="airplane-lv2-fit" style="min-height:100px;line-height:1.8" rows="4" placeholder="擬合模型：___（線性 / 二次 / 飽和 / ⋯⋯）&#10;讀出的物理量：最佳值 A = ___ cm²（Lv1 模擬器預測 180 cm²）&#10;差異原因推論：___（例：真實紙張有摺縫、A 的定義不同、空氣阻力⋯⋯）"></textarea>
         <div class="think-status"></div>
       </div>
 
