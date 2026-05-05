@@ -114,6 +114,7 @@ const NAV_DATA = [
     items: [
       { name: '工具箱', path: 'tools/index.html' },
       { name: '　表達與分享', path: 'tools/presentation.html' },
+      { name: '　🖼️ Gallery Walk 回饋', path: 'tools/gallery-feedback.html' },
       { name: '　ORID 反思框架', path: 'tools/orid.html' },
       { name: '　Excel 數據分析', path: 'tools/excel.html' },
       { name: '　數據分析工坊', path: 'tools/data-workshop.html' },
