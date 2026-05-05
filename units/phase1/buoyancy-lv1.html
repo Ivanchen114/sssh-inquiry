@@ -346,11 +346,6 @@
         （真實實驗室用黏土而不是砝碼，就是因為黏土可貼平分布、不易翻覆——但這也讓學生感受不到力矩的存在。）
       </div>
 
-      <div style="margin-top:14px;">
-        <a href="buoyancy-lab.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-secondary);transition:all 0.12s;">
-          🔬 <span><strong style="color:var(--text-primary);">外部虛擬實驗室</strong>：更完整的浮力操作場景</span> <span style="margin-left:auto;">→</span>
-        </a>
-      </div>
 
       <div class="think-block reveal">
         <div class="think-prompt">🤔 想一想：為什麼船要造得「寬扁」而不是「細長」？</div>
@@ -845,7 +840,9 @@ function draw() {
   // 木塊 + 砝碼
   const blockW = s.L * SCALE;
   const blockH = s.h_wood * SCALE;
-  const blockBottomY = TANK.waterY + s.actualDepth * SCALE;
+  // 動畫中：用插值的 depth 而非最終 depth
+  const animDepth = dropAnim ? (dropAnim.depthFrom + (dropAnim.depthTo - dropAnim.depthFrom) * dropAnim.progress) : s.actualDepth;
+  const blockBottomY = TANK.waterY + animDepth * SCALE;
   const blockTopY = blockBottomY - blockH;
   const blockLeftX = BLOCK_CX - blockW / 2;
 
@@ -945,7 +942,14 @@ function drawWeights(blockLeftX, blockTopY) {
     binList.forEach(w => {
       const size = Math.cbrt(w.mass / WEIGHT_DENSITY) * SCALE;
       const wX = blockLeftX + x_cm * SCALE - size / 2;
-      const wY = stackY - size;
+      let wY = stackY - size;
+
+      // 動畫中的砝碼（最新加入那顆）：從畫面頂端落下
+      if (dropAnim && w === dropAnim.weight) {
+        const startY = TANK.topY - 20; // 起點：水槽上方
+        const endY = wY;
+        wY = startY + (endY - startY) * dropAnim.progress;
+      }
 
       ctx.fillStyle = '#475569';
       ctx.fillRect(wX, wY, size, size);
@@ -966,7 +970,11 @@ function drawWeights(blockLeftX, blockTopY) {
 // ═══════════════════════════════════════════════════
 // 互動
 // ═══════════════════════════════════════════════════
+let dropAnim = null; // {weight, depthFrom, depthTo, t0, dur}
+
 function handlePlaceWeight(clientX, clientY) {
+  if (dropAnim) return; // 動畫中不接受新點擊，避免重疊
+
   const rect = canvas.getBoundingClientRect();
   const sx = canvas.width / rect.width;
   const sy = canvas.height / rect.height;
@@ -978,10 +986,37 @@ function handlePlaceWeight(clientX, clientY) {
   const blockLeftX = BLOCK_CX - blockW / 2;
   const blockRightX = BLOCK_CX + blockW / 2;
 
-  // 只檢查 x 範圍（容錯）+ y 在水槽上半
   if (cx >= blockLeftX && cx <= blockRightX && cy < TANK.bottomY - 10) {
     const xOnBlock = (cx - blockLeftX) / SCALE;
-    weights.push({ x: xOnBlock, mass: currentWeight });
+    const newWeight = { x: xOnBlock, mass: currentWeight };
+    weights.push(newWeight);
+    const sNew = computeState();
+
+    // 啟動下落 + 木塊下沉動畫
+    dropAnim = {
+      weight: newWeight,
+      depthFrom: s.actualDepth,
+      depthTo: sNew.actualDepth,
+      t0: performance.now(),
+      dur: 380, // ms
+    };
+    requestAnimationFrame(animateDrop);
+  }
+}
+
+function animateDrop(now) {
+  if (!dropAnim) return;
+  const t = Math.min(1, (now - dropAnim.t0) / dropAnim.dur);
+  // easeOutQuad：開頭快、收尾緩，看起來像「砝碼掉下、木塊緩沉」
+  const eased = 1 - (1 - t) * (1 - t);
+  // 使用 dropAnim 內部 progress 變數讓 draw() 可以讀
+  dropAnim.progress = eased;
+  draw(); // 含 dropAnim 的時候 draw 會處理動畫邏輯
+  updateStatus();
+  if (t < 1) {
+    requestAnimationFrame(animateDrop);
+  } else {
+    dropAnim = null;
     updateAll();
   }
 }
