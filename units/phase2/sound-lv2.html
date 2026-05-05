@@ -202,13 +202,42 @@
       </div>
 
       <!-- 研究規劃表連結 -->
-      <div style="background:var(--bg);border:1.5px solid var(--phase2);border-radius:8px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:22px;">📋</span>
+      
+      <!-- 內嵌六步研究計畫表（取代外部 research-plan.html link，自動儲存、可匯出）-->
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:16px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#166534;margin-bottom:12px;">📝 你的研究計畫（直接填寫，自動儲存、可匯出）</div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:12.5px;margin-bottom:4px;color:var(--text-primary);">1. 研究問題</div>
+          <textarea class="think-input" data-key="sound-lv2-plan-q" rows="2" placeholder="例如：___ 是否影響 ___？" style="width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;line-height:1.6;"></textarea>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:12.5px;margin-bottom:4px;color:var(--text-primary);">2. 理論預測 + 假設（含「如果錯會看到什麼」）</div>
+          <textarea class="think-input" data-key="sound-lv2-plan-hyp" rows="3" placeholder="根據 v = fλ（或共鳴條件），我認為 ___（增/減/比例），因為 ___。如果假設錯，我會看到 ___" style="width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;line-height:1.6;"></textarea>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:12.5px;margin-bottom:4px;color:var(--text-primary);">3. 操縱變因（含至少 4 個水準）</div>
+          <textarea class="think-input" data-key="sound-lv2-plan-iv" rows="2" placeholder="操縱：___；水準：___, ___, ___, ___" style="width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;line-height:1.6;"></textarea>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:12.5px;margin-bottom:4px;color:var(--text-primary);">4. 控制變因（至少 3 個 + 各自控制方式）</div>
+          <textarea class="think-input" data-key="sound-lv2-plan-cv" rows="3" placeholder="控制 1：___（怎麼控制：___）&#10;控制 2：___&#10;控制 3：___" style="width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;line-height:1.6;"></textarea>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-weight:600;font-size:12.5px;margin-bottom:4px;color:var(--text-primary);">5. 量測方式（工具、精度、重複次數）</div>
+          <textarea class="think-input" data-key="sound-lv2-plan-method" rows="2" placeholder="工具：___（精度 ___）；每水準重複 ___ 次取平均" style="width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;line-height:1.6;"></textarea>
+        </div>
+
         <div>
-          <div style="font-weight:700;font-size:13px;color:var(--phase2);">填寫研究規劃表</div>
-          <div style="font-size:12px;color:var(--text-secondary);">用六步流程把你的想法變成可執行的實驗計畫 → <a href="research-plan.html" style="color:var(--phase2);font-weight:600;">開始填寫</a></div>
+          <div style="font-weight:600;font-size:12.5px;margin-bottom:4px;color:var(--text-primary);">6. 預期分析（畫什麼圖、看什麼趨勢）</div>
+          <textarea class="think-input" data-key="sound-lv2-plan-analysis" rows="2" placeholder="預期看到 ___ 趨勢；畫 ___ vs ___ 圖；如果 ___ 就支持假設" style="width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;line-height:1.6;"></textarea>
         </div>
       </div>
+
 
       <div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
