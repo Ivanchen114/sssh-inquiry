@@ -346,6 +346,65 @@
         （真實實驗室用黏土而不是砝碼，就是因為黏土可貼平分布、不易翻覆——但這也讓學生感受不到力矩的存在。）
       </div>
 
+      <!-- 老師的實驗計畫（學生照做即可） -->
+      <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <!-- 器材 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🧰 實驗器材</div>
+          <ul style="font-size:12px;color:var(--text-secondary);padding-left:16px;line-height:1.85;margin:0;">
+            <li>4 種截面積木板（A = 50 / 100 / 200 / 400 cm²）</li>
+            <li>體積固定 200 cm³（厚度自動換算）</li>
+            <li>3 種砝碼（5 g / 10 g / 20 g，可疊加）</li>
+            <li>水槽 + cm 刻度尺</li>
+            <li>木塊密度 ρ = 0.6 g/cm³（質量 120 g）</li>
+          </ul>
+        </div>
+
+        <!-- 架設 -->
+        <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:6px;">🛠️ 實驗架設</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.85;">
+            木塊浮在水面 → 砝碼疊在木塊上方 → 從水槽側面讀<strong>木塊底部下沉深度 h</strong>（水面到木塊底的距離）<br>
+            ⚠️ 砝碼放<strong>中央</strong>最穩，放邊緣會翻
+          </div>
+        </div>
+      </div>
+
+      <!-- 兩段實驗步驟 -->
+      <div style="background:var(--bg);border-left:3px solid var(--phase1);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:var(--text-primary);margin-bottom:10px;">🔬 兩段實驗步驟</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">第一段：固定 A、變 m → 找 h-m 關係</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>選 A = 200 cm²（中等大小）</li>
+            <li>記錄 m = 0 時的 h（木塊自重沉度，約 0.6 cm）</li>
+            <li>每次加 5 g 砝碼讀一次 h，加到 m = 30 g 為止</li>
+            <li>得到 7 組（m, h）數據</li>
+          </ol>
+        </div>
+
+        <div>
+          <div style="font-weight:600;font-size:12.5px;color:var(--phase1);margin-bottom:4px;">第二段：固定 m、變 A → 找 h-A 關係</div>
+          <ol style="font-size:12.5px;color:var(--text-secondary);padding-left:20px;line-height:1.85;margin:0;">
+            <li>固定 m = 20 g（4 顆 5 g 砝碼）</li>
+            <li>輪流測 4 種 A（50 / 100 / 200 / 400 cm²），記錄 h</li>
+            <li>留意 A = 50 時可能會沉沒——這正是浮力極限的證據</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 預期分析 -->
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:#1e3a8a;margin-bottom:6px;">📊 老師期待你做的分析</div>
+        <div style="font-size:12.5px;color:#1e40af;line-height:1.85;">
+          <strong>第一段（h vs m）</strong>：散佈圖預期是<strong>過原點的直線</strong>（h ∝ m）→ 斜率 = 1/(ρ·A)<br>
+          <strong>第二段（h vs A）</strong>：散佈圖預期是<strong>反比曲線</strong>（h ∝ 1/A）→ 改畫 h vs 1/A 應該變直線 → 斜率 = m/ρ<br>
+          <strong>合起來</strong>：你會自己推出 h = m/(ρ·A)，再改寫成 F<sub>浮</sub> = ρ·V<sub>排開</sub>·g。
+        </div>
+      </div>
 
       <div class="think-block reveal">
         <div class="think-prompt">🤔 想一想：為什麼船要造得「寬扁」而不是「細長」？</div>
