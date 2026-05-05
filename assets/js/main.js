@@ -158,12 +158,29 @@ function resolvePath(rootRelPath) {
 }
 
 function isActivePath(rootRelPath) {
-  const resolved = resolvePath(rootRelPath);
-  const current  = window.location.pathname;
-  // 比對檔名結尾
-  return current.endsWith(rootRelPath) ||
-         current.endsWith(rootRelPath.replace('index.html', '')) ||
-         (rootRelPath === 'index.html' && (current.endsWith('/') || current.endsWith('/index.html')));
+  const current = window.location.pathname;
+
+  // 處理 Vercel cleanUrls: true 會把 URL 的 .html 拿掉
+  // 同時相容三種：/foo.html、/foo、/foo/
+  const withHtml = rootRelPath;                          // 'units/phase1/spring-lv1.html'
+  const withoutHtml = rootRelPath.replace(/\.html$/, ''); // 'units/phase1/spring-lv1'
+
+  // index.html 要特別處理：URL 可能是 /、/index、/index.html
+  if (rootRelPath === 'index.html' || rootRelPath.endsWith('/index.html')) {
+    const baseDir = rootRelPath.replace(/index\.html$/, ''); // '' or 'foo/'
+    return current.endsWith('/') ||
+           current.endsWith('/index.html') ||
+           current.endsWith('/index') ||
+           (baseDir && (
+             current.endsWith('/' + baseDir) ||
+             current.endsWith('/' + baseDir + 'index') ||
+             current.endsWith('/' + baseDir + 'index.html')
+           ));
+  }
+
+  return current.endsWith(withHtml) ||
+         current.endsWith(withoutHtml) ||
+         current.endsWith(withoutHtml + '/');
 }
 
 // ═══════════════════════════════════════════════════
