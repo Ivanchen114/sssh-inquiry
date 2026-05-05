@@ -102,6 +102,13 @@
         </div>
       </div>
 
+      <!-- Record: 為什麼直覺猜直線 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ P2 你預測的圖形是什麼形狀？人為什麼會直覺猜「等比例變慢」（直線）？</div>
+        <textarea class="think-input" data-key="roller-lv1-predict-shape" rows="4" placeholder="我預測 P2 是 ___ 形狀（直線／向上彎曲／向下彎曲），因為 ___。&#10;如果結果是直線，代表「距離加倍 → 時間加倍」；如果是曲線，代表 ___。&#10;我直覺會想到的是 ___，這是因為 ___" style="line-height:1.8;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
       <div class="step-footer">
         <button class="step-btn" data-step="prev" disabled>← 上一步</button>
         <div class="step-dots">
@@ -182,7 +189,13 @@
         </div>
       </div>
 
-      
+      <!-- Record: 為什麼選距離不選質量 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 老師為什麼選「黏土離軸距離」當主變因，不選「黏土質量」？用你的話寫一次。</div>
+        <textarea class="think-input" data-key="roller-lv1-pick-var" rows="4" placeholder="我的理解：在 I = mr² 中，r 是 ___ 項、m 是 ___ 項。&#10;距離加倍會讓 r² 變 ___ 倍，質量加倍只會讓 mr² 變 ___ 倍。&#10;所以老師選距離，因為 ___（提示：要在有限堂課讓學生看到清楚規律，效應大的變因比較划算）" style="line-height:1.8;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
       <!-- 老師的實驗計畫（學生照做即可） -->
       <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
 
@@ -304,10 +317,24 @@
         </div>
       </div>
 
+      <!-- Record: 11 cm 異常判斷理由 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 你選 B「保留並標註」的具體判斷理由是什麼？這筆 3.1 秒的異常可能的物理原因是什麼？</div>
+        <textarea class="think-input" data-key="roller-lv1-outlier-reasoning" rows="4" placeholder="我選 B 的理由：直接刪掉等於 ___，這違背了 ___。&#10;3.1 秒這個異常可能的原因（至少寫 2 個）：&#10;(1) ___（例：翻滾仔卡住後突然彈飛）&#10;(2) ___（例：黏土在過程中脫落讓 r 變小）" style="line-height:1.8;"></textarea>
+        <div class="think-status"></div>
+      </div>
+
       <!-- Interactive: Non-linear relationship reasoning -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 你的「距離 vs 時間」散佈圖是直線還是曲線？你認為是什麼原因造成這個形狀？</div>
         <textarea class="think-input" data-key="roller-lv1-analysis" placeholder="例如：圖呈向上彎曲的曲線，不是直線。我猜是因為黏土離軸心越遠，要翻過去的「阻力」越大…"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Record: 趨勢線選擇 CER -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 用 CER 結構論證你的趨勢線選擇——線性、冪次、多項式三條中哪一條最適合？</div>
+        <textarea class="think-input" data-key="roller-lv1-trendline-cer" rows="6" placeholder="主張（C）：我認為 ___ 趨勢線最適合這份數據。&#10;&#10;證據（E）：線性 R²=___、冪次 R²=___、多項式 R²=___。&#10;&#10;推理（R）：&#10;・線性的截距是 ___ 秒（物理上 合理／不合理 ，因為 r=0 時應該 ___）&#10;・冪次的指數 n=___，n>1 代表 ___&#10;・多項式雖然 R² 可能最高，但會 over-fit。我選 ___ 因為 ___" style="line-height:1.8;"></textarea>
         <div class="think-status"></div>
       </div>
 
@@ -322,6 +349,13 @@
             <strong>這正是探究的意義</strong>：不是每個現象都能用一個公式包裝——認出「這很複雜」本身就是重要的科學判斷。</p>
           </div>
         </div>
+      </div>
+
+      <!-- Record: I = mr² 模型符合度 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 理論預測 I = mr² → 翻滾時間 t 應該與 r 是平方關係（t ∝ r²）。你的數據符合嗎？符合到什麼程度？</div>
+        <textarea class="think-input" data-key="roller-lv1-model-fit" rows="5" placeholder="我從冪次擬合得到的指數 n = ___（理論預測 n = 2）。&#10;偏差 |n − 2| = ___。&#10;這個落差我認為來自：&#10;・___（例：齒軌摩擦會讓實際時間比理論長）&#10;・___（例：手臂本身有質量，I 不只 mr²）&#10;・___（例：計時反應時間 ±0.1 秒在小水準時佔比大）&#10;結論：模型「大致符合 / 部分符合 / 不符合」，因為 ___" style="line-height:1.8;"></textarea>
+        <div class="think-status"></div>
       </div>
 
       <div class="step-footer">
@@ -356,6 +390,13 @@
         <div class="think-hidden">
           <p>許多人直覺會猜直線（「距離越遠，等比例變慢」）。但實際結果是向上彎曲的曲線——距離加倍，時間增加不只一倍。人的直覺往往是線性的，但物理世界常常充滿非線性——這是做實驗才能發現的。</p>
         </div>
+      </div>
+
+      <!-- Record: 直覺反思 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ P2 預測 vs 實際結果的落差告訴你什麼？「直覺」在物理探究中能不能信？</div>
+        <textarea class="think-input" data-key="roller-lv1-intuition-reflection" rows="5" placeholder="我原本預測 ___，實際結果是 ___。&#10;落差告訴我：人的直覺常常是 ___（線性／簡化／忽略 r 的平方項），但物理世界 ___。&#10;以後面對新的物理現象，我會先 ___ 再下結論——直覺可以當「起點」，但不能當「結論」。" style="line-height:1.8;"></textarea>
+        <div class="think-status"></div>
       </div>
 
       <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:20px 0 8px;">延伸思考</div>

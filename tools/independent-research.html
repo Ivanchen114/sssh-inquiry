@@ -76,6 +76,27 @@
       <h3 style="color:var(--phase3);">Week 1 · 選題與聚焦</h3>
       <p style="font-size:12px;color:#78350f;margin-bottom:12px;">從 Lv3 的經驗出發，把模糊的好奇心變成精確的研究問題。</p>
 
+      <!-- ─── 題目靈感庫 ─── -->
+      <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px;">🌱 沒題目？先看靈感庫</div>
+        <p style="font-size:11.5px;color:#78350f;line-height:1.7;margin-bottom:10px;">
+          下面是 7 個跨主題的開放問題範例。你可以直接挑一個、改一個，或從這些問題的「形狀」找出自己的題目。
+          <strong>規則：不准照抄，要至少改一個變因或情境</strong>，否則跟別人題目一樣比起來沒意思。
+        </p>
+        <div style="display:grid;gap:6px;font-size:11.5px;color:#78350f;">
+          <div style="background:white;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;padding:6px 10px;"><strong>🔊 揚聲器：</strong>紙杯口徑（5/7/9/11 cm）如何影響共鳴頻率與音量分佈？</div>
+          <div style="background:white;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;padding:6px 10px;"><strong>🧊 冰屋：</strong>不同材料（保麗龍／瓦楞紙／鋁箔）的「等量厚度」對熱水冷卻速率的影響差多少？</div>
+          <div style="background:white;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;padding:6px 10px;"><strong>🎡 翻滾仔：</strong>齒距（3 mm / 5 mm / 7 mm）如何影響翻滾穩定度（左右偏離量）？</div>
+          <div style="background:white;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;padding:6px 10px;"><strong>🌊 浮力延伸：</strong>同一杯水加入不同量的鹽（0/10/20/30/40 g），雞蛋浮起的深度怎麼變？</div>
+          <div style="background:white;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;padding:6px 10px;"><strong>📏 單擺延伸：</strong>單擺的「衰減一半」時間，與擺錘質量（10/30/60/100 g）有沒有關係？</div>
+          <div style="background:white;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;padding:6px 10px;"><strong>🪂 紙飛機延伸：</strong>機翼末端反折角度（0°/15°/30°/45°）對滑翔距離的影響？</div>
+          <div style="background:white;border-left:3px solid #f59e0b;border-radius:0 4px 4px 0;padding:6px 10px;"><strong>🌀 自由命題：</strong>從 Lv3 你最意外的觀察出發，套句型「___ 如何影響 ___？」</div>
+        </div>
+        <div style="background:#fef3c7;border:1px dashed #f59e0b;border-radius:6px;padding:8px 12px;margin-top:10px;font-size:11.5px;color:#78350f;">
+          <strong>📋 起點任務（30 分鐘）</strong>：在開始選題之前，先做這個——拿你 Lv3 的筆記本翻 5 分鐘，挑出 3 個「我那時想知道但沒做」的問題；接著拿 25 分鐘到實驗室或日常空間，<strong>觀察一個現象</strong>（任何 Lv 主題的器材，看它怎麼動／反應），再把觀察寫下 3 句話。從這 3 句話＋3 個舊問題，你就有 6 個起點。
+        </div>
+      </div>
+
       <div class="milestone" data-week="1">
         <div class="milestone-check" style="border-color:var(--phase3);" onclick="toggleMilestone(this)"></div>
         <div><strong>完成問題發現單</strong><br><span style="color:var(--text-muted);font-size:12px;">把 Lv3 的觀察寫進問題發現單，產出至少 3 個候選問題</span></div>
@@ -101,6 +122,13 @@
 
       <div class="danger-zone">
         ⚠️ <strong>Week 1 常見卡關：</strong>「想不到問題」→ 翻翻 Lv3 的筆記，找「讓你意外的事」；「問題太大」→ 加一個限制條件就會變小。
+      </div>
+
+      <div class="weekly-log" data-week="1" style="background:white;border:1px dashed #f0c8a0;border-radius:6px;padding:10px 14px;margin-top:10px;">
+        <div style="font-weight:700;font-size:12px;color:#9a3412;margin-bottom:6px;">📝 W1 三句話日誌（每天結束花 1 分鐘）</div>
+        <textarea data-log-key="ir-log-w1" rows="3" placeholder="今天做了什麼：&#10;卡在哪：&#10;明天打算："
+          style="width:100%;border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-family:inherit;font-size:12px;line-height:1.7;color:var(--text-primary);background:#fffbf5;resize:vertical;"></textarea>
+        <div data-log-status="ir-log-w1" style="font-size:11px;color:var(--text-muted);margin-top:4px;">— 自動儲存於本機</div>
       </div>
     </div>
 
@@ -135,6 +163,52 @@
       <div class="danger-zone">
         ⚠️ <strong>Week 2 常見卡關：</strong>「不知道水準要選幾個」→ 至少 4 個，間距要均勻；「控制變因列不完」→ 想像你是品管員，什麼東西不能動？
       </div>
+
+      <!-- ─── 核心可行性閘門（W2 末必停一次）─── -->
+      <div style="background:#fef2f2;border:2px solid #fca5a5;border-radius:8px;padding:12px 14px;margin-top:14px;">
+        <div style="font-weight:700;font-size:13px;color:#991b1b;margin-bottom:8px;">🚦 核心可行性閘門（W2 結束時必停一次）</div>
+        <p style="font-size:12px;color:#7f1d1d;line-height:1.7;margin-bottom:10px;">
+          這不是繼續往前的紅綠燈，是<strong>止血點</strong>。問自己一個誠實的問題：
+        </p>
+        <div style="background:white;border:1px solid #fca5a5;border-radius:6px;padding:10px 14px;font-size:13px;font-weight:700;color:#991b1b;margin-bottom:10px;text-align:center;">
+          「我這週的 pilot run，<u>有沒有產出至少 1 筆有效數據點？</u>」
+        </div>
+        <div style="display:grid;gap:8px;font-size:12px;color:#7f1d1d;line-height:1.7;">
+          <div style="background:#dcfce7;border:1px solid #86efac;border-radius:6px;padding:8px 12px;color:#14532d;">
+            <strong>✅ 有 →</strong> 進入 W3 執行階段。但 W3 前 2 天要再做一次「規模 pilot」（用最大水準試一次），確認最極端條件也跑得動。
+          </div>
+          <div style="background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:8px 12px;color:#713f12;">
+            <strong>⚠ 沒有 →</strong> 啟動 Pivot 決策樹，從以下三條路選一條：
+          </div>
+        </div>
+
+        <div style="display:grid;gap:8px;margin-top:10px;font-size:12px;line-height:1.7;">
+          <div style="background:white;border-left:4px solid #f59e0b;border-radius:0 6px 6px 0;padding:10px 14px;">
+            <div style="font-weight:700;color:#9a3412;margin-bottom:4px;">A. 縮減範圍（風險最小，建議優先）</div>
+            <div style="color:#78350f;">把水準從 5 個降到 3 個、把測量範圍砍一半、放棄一個「想要但不必要」的控制變因。<br><span style="color:var(--text-muted);">範例：原本「擺長 0.3/0.5/0.7/0.9/1.1 m」改成「0.5/0.8/1.1 m」。</span></div>
+          </div>
+          <div style="background:white;border-left:4px solid #f59e0b;border-radius:0 6px 6px 0;padding:10px 14px;">
+            <div style="font-weight:700;color:#9a3412;margin-bottom:4px;">B. 換題（風險中，要果斷）</div>
+            <div style="color:#78350f;">問題從根本上做不出來（器材拿不到、量測精度不夠、安全顧慮）。<strong>回到工具箱「好的探究問題」</strong>重新跑四條件檢核，挑次優題目。</div>
+            <a href="good-question.html" style="display:inline-block;margin-top:6px;background:#f59e0b;color:white;padding:4px 12px;border-radius:4px;font-size:11px;font-weight:600;text-decoration:none;">→ 重新做四條件檢核</a>
+          </div>
+          <div style="background:white;border-left:4px solid #f59e0b;border-radius:0 6px 6px 0;padding:10px 14px;">
+            <div style="font-weight:700;color:#9a3412;margin-bottom:4px;">C. 改寫成「為什麼這個方法不行」的研究（風險最高，但價值最高）</div>
+            <div style="color:#78350f;">把「失敗」本身變成題目：「為什麼用 ___ 方法測 ___ 在教室條件下不可行？要改用什麼替代？」<br><span style="color:var(--text-muted);">這條路的報告必須包含：失敗證據、可能原因、替代方案測試。失敗也可以是有價值的研究——這是真實科學的常態。</span></div>
+          </div>
+        </div>
+
+        <div style="background:#1c1c2e;color:#fef9c3;border-radius:6px;padding:8px 12px;margin-top:10px;font-size:11.5px;line-height:1.7;">
+          ⏰ <strong>時間紀律</strong>：要 pivot 就在 W2 末決定。拖到 W3 中才換題，等於把 4 週縮成 1.5 週，必失敗。寧願現在痛 1 天，也不要 W4 痛 7 天。
+        </div>
+      </div>
+
+      <div class="weekly-log" data-week="2" style="background:white;border:1px dashed #b3dcc8;border-radius:6px;padding:10px 14px;margin-top:10px;">
+        <div style="font-weight:700;font-size:12px;color:#065f46;margin-bottom:6px;">📝 W2 三句話日誌</div>
+        <textarea data-log-key="ir-log-w2" rows="3" placeholder="今天做了什麼：&#10;卡在哪：&#10;明天打算："
+          style="width:100%;border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-family:inherit;font-size:12px;line-height:1.7;color:var(--text-primary);background:#f6fdf9;resize:vertical;"></textarea>
+        <div data-log-status="ir-log-w2" style="font-size:11px;color:var(--text-muted);margin-top:4px;">— 自動儲存於本機</div>
+      </div>
     </div>
 
     <!-- ═══ Week 3: 實驗執行 ═══ -->
@@ -167,6 +241,13 @@
 
       <div class="danger-zone">
         ⚠️ <strong>Week 3 常見卡關：</strong>「數據很亂」→ 先看標準差，太大就增加重複次數或改善控制；「圖形不是直線」→ 試試線性化（log-log 或 T²）。
+      </div>
+
+      <div class="weekly-log" data-week="3" style="background:white;border:1px dashed #bfcef8;border-radius:6px;padding:10px 14px;margin-top:10px;">
+        <div style="font-weight:700;font-size:12px;color:#1e3a8a;margin-bottom:6px;">📝 W3 三句話日誌</div>
+        <textarea data-log-key="ir-log-w3" rows="3" placeholder="今天做了什麼：&#10;卡在哪：&#10;明天打算："
+          style="width:100%;border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-family:inherit;font-size:12px;line-height:1.7;color:var(--text-primary);background:#f5f7fe;resize:vertical;"></textarea>
+        <div data-log-status="ir-log-w3" style="font-size:11px;color:var(--text-muted);margin-top:4px;">— 自動儲存於本機</div>
       </div>
     </div>
 
@@ -206,6 +287,56 @@
 
       <div class="danger-zone">
         ⚠️ <strong>Week 4 常見卡關：</strong>「結論不知道怎麼寫」→ 用 CER：先寫主張、再貼數據、最後解釋為什麼；「報告太短」→ 「限制」和「未來方向」通常是被忽略但很重要的部分。
+      </div>
+
+      <div class="weekly-log" data-week="4" style="background:white;border:1px dashed #d4b8f8;border-radius:6px;padding:10px 14px;margin-top:10px;">
+        <div style="font-weight:700;font-size:12px;color:#5b21b6;margin-bottom:6px;">📝 W4 三句話日誌</div>
+        <textarea data-log-key="ir-log-w4" rows="3" placeholder="今天做了什麼：&#10;卡在哪：&#10;明天打算："
+          style="width:100%;border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-family:inherit;font-size:12px;line-height:1.7;color:var(--text-primary);background:#f9f5ff;resize:vertical;"></textarea>
+        <div data-log-status="ir-log-w4" style="font-size:11px;color:var(--text-muted);margin-top:4px;">— 自動儲存於本機</div>
+      </div>
+    </div>
+
+    <!-- ═══ 失敗劇本：實驗做不出來怎麼辦 ═══ -->
+    <div style="background:#fff1f2;border:1px solid #fda4af;border-radius:8px;padding:14px 18px;margin-bottom:20px;">
+      <div style="font-weight:700;color:#9f1239;font-size:14px;margin-bottom:8px;">💥 失敗劇本：當實驗做不出來時</div>
+      <p style="font-size:12.5px;color:#881337;line-height:1.85;margin-bottom:12px;">
+        真實的科學研究有 60% 以上的時間在「失敗」。這頁列出三種你可能遇到的失敗類型——識別出哪一種，再對症下藥。<strong>失敗本身可以是報告的核心發現</strong>，只要你把它寫得清楚。
+      </p>
+
+      <div style="display:grid;gap:10px;">
+
+        <div style="background:white;border-left:4px solid #e11d48;border-radius:0 6px 6px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:#9f1239;margin-bottom:4px;">類型 ① 器材失敗</div>
+          <div style="font-size:12px;color:#881337;line-height:1.8;">
+            <strong>症狀</strong>：要的器材學校沒有／壞掉／精度不夠；買不到、借不到、自製不出來。<br>
+            <strong>應對</strong>：先盤點「有什麼」再決定「做什麼」，不要反過來。可以替代的器材清單：手機分貝計取代專業聲度計、手機溫度 App 取代溫度計、Excel 散佈圖取代專業統計軟體。<br>
+            <strong>怎麼寫進報告</strong>：方法段誠實寫下「原本計畫用 X，實際改用 Y，因為 ___」。這就是「實驗的限制」段落最有料的內容。
+          </div>
+        </div>
+
+        <div style="background:white;border-left:4px solid #e11d48;border-radius:0 6px 6px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:#9f1239;margin-bottom:4px;">類型 ② 設計失敗</div>
+          <div style="font-size:12px;color:#881337;line-height:1.8;">
+            <strong>症狀</strong>：照計畫操作，但結果亂、無法重現、訊號淹沒在噪音裡；趨勢不明顯，標準差比訊號還大。<br>
+            <strong>應對</strong>：（1）增加重複次數（3 次→6 次）；（2）找出最大噪音源（通常是「人」或「環境」），用更剛性的控制（用支架夾住、用標記固定起始位置）；（3）擴大水準間距（原本 5/7/9，改成 3/8/13），讓訊號超過噪音。<br>
+            <strong>怎麼寫進報告</strong>：「結果」段落明確比較「訊號 vs 噪音的量級」，「討論」段落分析<strong>為什麼這個設計沒辦法分辨變因效應</strong>——這是嚴謹的科學態度。
+          </div>
+        </div>
+
+        <div style="background:white;border-left:4px solid #e11d48;border-radius:0 6px 6px 0;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:#9f1239;margin-bottom:4px;">類型 ③ 規模失敗</div>
+          <div style="font-size:12px;color:#881337;line-height:1.8;">
+            <strong>症狀</strong>：問題本身對 4 週時間 / 教室空間 / 學生能力來說太大；想做完整的「為什麼」需要博士論文等級的工具。<br>
+            <strong>應對</strong>：把問題的規模縮 3–5 倍。原本想研究「整個音響系統的頻率響應」，砍成「單一紙杯口徑對 440 Hz 共鳴強度」。原本想驗證一個完整理論，砍成只驗證一個「能或不能」的二選一斷言。<br>
+            <strong>怎麼寫進報告</strong>：在「研究問題」段落明寫「這是更大問題 ___ 的一個小切片」，在「未來方向」段落寫出剩下的切片是什麼，誰可能去做。這叫做「定位你的研究」，是大學論文的寫法。
+          </div>
+        </div>
+
+      </div>
+
+      <div style="background:#fef9c3;border:1px solid #fde68a;border-radius:6px;padding:10px 14px;margin-top:12px;font-size:12px;color:#713f12;line-height:1.8;">
+        🌟 <strong>失敗 ≠ 報告失敗</strong>：一份「成功的失敗報告」需要包含 4 件事：(1) 你嘗試了什麼、(2) 失敗的具體證據（數據／觀察）、(3) 你分析的可能原因（至少 2 個）、(4) 如果再給你資源你會怎麼做。寫到這 4 點，分數可能比「順利完成的平庸研究」更高，因為這才是真實的科學歷程。
       </div>
     </div>
 
@@ -283,6 +414,34 @@ function updateProgress(){
   const pct = Math.round((done/total)*100);
   document.getElementById('overall-progress').style.width = pct + '%';
 }
+
+// ═══ 三句話日誌 localStorage ═══
+(function(){
+  document.querySelectorAll('textarea[data-log-key]').forEach(ta => {
+    const key = ta.dataset.logKey;
+    const status = document.querySelector('[data-log-status="' + key + '"]');
+    try {
+      const saved = localStorage.getItem(key);
+      if (saved) ta.value = saved;
+    } catch(e){}
+    let timer = null;
+    ta.addEventListener('input', () => {
+      if (status) status.textContent = '— 輸入中…';
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        try {
+          localStorage.setItem(key, ta.value);
+          if (status) {
+            const t = new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' });
+            status.textContent = '— 已存於本機 · ' + t;
+          }
+        } catch(e){
+          if (status) status.textContent = '— 儲存失敗（瀏覽器不支援 localStorage）';
+        }
+      }, 600);
+    });
+  });
+})();
 </script>
 </body>
 </html>

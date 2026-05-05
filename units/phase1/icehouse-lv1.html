@@ -178,7 +178,14 @@
         </div>
       </div>
 
-      
+      <!-- Record: 鹽冰降溫和熔點下降的關係 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 看完上面的解釋——<strong>用你自己的話寫</strong>，「鹽冰降溫」和「熔點下降」這兩件事怎麼連起來？</div>
+        <textarea class="think-input" data-key="icehouse-lv1-melting-point" rows="5" style="line-height:1.8;" placeholder="鹽溶解時 ___（吸熱／放熱）。&#10;&#10;這同時又改變了冰的熔點：純冰熔點是 ___ °C，加鹽後熔點降到 ___ °C 以下。&#10;&#10;所以低於 0°C 也能融化（因為新熔點更低），融化又繼續吸熱，溫度持續下降。&#10;&#10;這兩個機制一起作用：(1) ___（吸熱效應）+ (2) ___（熔點下降效應）。&#10;&#10;為什麼冬天路面撒鹽既防結冰、又能讓溫度更低？因為 ___"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+
       <!-- 老師的實驗計畫（學生照做即可） -->
       <div class="section-title" style="color:var(--phase2);margin-top:20px;">📋 老師的實驗計畫（你照做即可）</div>
 
@@ -299,7 +306,7 @@
 
       <!-- Layer 3: 飽和現象與溶解度 -->
       <div class="think-block choice" data-answer="b">
-        <div class="thinking-prompt">🎯 為什麼 80g 到 120g 鹽，最低溫只從 -19.5°C 降到 -19.8°C，增加這麼少？</div>
+        <div class="think-prompt">🎯 為什麼 80g 到 120g 鹽，最低溫只從 -19.5°C 降到 -19.8°C，增加這麼少？</div>
         <div class="think-options">
           <button class="think-opt" data-val="a">A. 80g 已經足夠，加再多也沒用</button>
           <button class="think-opt" data-val="b">B. 鹽的溶解度有上限，超過飽和濃度就溶解不了</button>
@@ -318,6 +325,50 @@
             <p>那個轉折點就暗示了「飽和濃度」大約在多少 g。超過飽和，多餘的鹽溶不進去，自然無法繼續降低熔點。</p>
             <p>試著從數據推算飽和點，而不是背數字——這就是探究的精神。</p>
           </div>
+        </div>
+      </div>
+
+      <!-- CER 雙題塊：論證飽和現象 -->
+      <div style="background:var(--bg);border-left:4px solid var(--phase4);padding:12px 16px;margin:20px 0 12px;border-radius:6px;">
+        <div style="font-weight:700;color:var(--phase4);">📣 CER 論證：用主張–證據–推理把飽和現象寫完整</div>
+      </div>
+
+      <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:6px;">CER 論證框架</div>
+        <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.9;">
+          <strong>Claim（主張）</strong>：你認為答案是什麼？用一句肯定句。<br>
+          <strong>Evidence（證據）</strong>：從數據引用<strong>具體數字</strong>。不能只說「數據顯示」。<br>
+          <strong>Reasoning（推理）</strong>：為什麼這個證據能支持這個主張？引用物理原理（溶解度、熔點下降）。
+        </div>
+      </div>
+
+      <!-- CER 任務 1：為什麼飽和 -->
+      <div style="background:white;border:2px solid var(--phase1);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase1);margin-bottom:10px;">
+          🎯 CER 任務 1：為什麼 80g→120g 鹽，溫度幾乎不再下降？
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          已知：50g 鹽降到 -17.0°C、80g 降到 -19.5°C、120g 只降到 -19.8°C。<strong>用 CER 論證為什麼會出現飽和。</strong>
+        </p>
+        <div class="think-block record" style="margin:0;">
+          <div class="think-prompt">✏️ 用 CER 格式寫下你的論證（建議 4-6 句）</div>
+          <textarea class="think-input" data-key="icehouse-lv1-cer1" rows="5" style="line-height:1.8;" placeholder="主張（Claim）：鹽冰混合物的最低溫度會隨加鹽量增加而飽和，臨界鹽量約在 ___ g。&#10;&#10;證據（Evidence）：從 50→80g 鹽，溫度從 -17.0°C 降到 -19.5°C（降 ___ °C）；但從 80→120g，只從 -19.5 降到 -19.8°C（降 ___ °C，差距縮小到 ___ 倍以下）。&#10;&#10;推理（Reasoning）：水對 NaCl 的溶解度有上限（在 0°C 約為 ___ g/100g 水）。當鹽量超過水所能溶解的上限，多餘的鹽以固體形式留在底部 ___ ，無法 ___，所以也無法繼續降低 ___。"></textarea>
+          <div class="think-status"></div>
+        </div>
+      </div>
+
+      <!-- CER 任務 2：為什麼降溫速度 vs 最終溫度不一定相關 -->
+      <div style="background:white;border:2px solid var(--phase2);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
+        <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:10px;">
+          🎯 CER 任務 2：「降溫速度」和「最終最低溫度」為什麼不是同一件事？
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+          觀察數據：50g 鹽前 2 分鐘從 0°C 降到 -7.8°C（降溫快），但最終最低溫只到 -17.0°C；120g 鹽前 2 分鐘只降到 -8.8°C（降溫沒比較快），但最終達 -19.8°C。<strong>用 CER 論證為什麼速度和終點不直接相關。</strong>
+        </p>
+        <div class="think-block record" style="margin:0;">
+          <div class="think-prompt">✏️ 用 CER 格式寫下你的論證</div>
+          <textarea class="think-input" data-key="icehouse-lv1-cer2" rows="5" style="line-height:1.8;" placeholder="主張：降溫「速度」由 ___ 決定，最終「溫度」由 ___ 決定，兩者來自不同物理機制所以不一定相關。&#10;&#10;證據：50g 鹽前 2 分降到 -7.8°C（速度 ___ °C/min），最終 -17.0°C；120g 鹽前 2 分只降到 -8.8°C（速度 ___ °C/min，沒比 50g 快多少），但最終達 -19.8°C。速度差不多，最終溫度差 ___ °C。&#10;&#10;推理：降溫速度反映 ___（鹽溶解的速率，受顆粒大小、溫度影響）；最終溫度反映 ___（鹽水溶液的共晶點，由溶解度上限決定）。一個是「動力學」、一個是「熱力學」——它們是兩個獨立的物理問題。"></textarea>
+          <div class="think-status"></div>
         </div>
       </div>
 
@@ -377,9 +428,16 @@
         </div>
       </div>
 
-      <!-- Layer 1: 預測對照 -->
+      <!-- Record: P1-P3 預測 vs 實際對照 -->
+      <div class="think-block record">
+        <div class="think-prompt">✏️ 翻回 Stage 1 的預測（P1、P2、P3），逐題寫下「我預測 ___、實際 ___、學到 ___」</div>
+        <textarea class="think-input" data-key="icehouse-lv1-prediction-recap" rows="9" style="line-height:1.8;" placeholder="P1（加鹽後溫度會比 0°C 更低嗎？為什麼？）&#10;・我預測 ___；實際 ___；學到 ___（吸熱反應 + 熔點下降兩個機制同時作用）&#10;&#10;P2（加越多鹽就越低嗎？還是會飽和？）&#10;・我預測 ___；實際 ___；學到 ___（溶解度有上限，超過就溶不進去）&#10;&#10;P3（粗鹽 vs 細鹽降溫速度一樣嗎？）&#10;・我預測 ___；實際 ___；學到 ___（顆粒影響速度但不影響最終溫度）&#10;&#10;整體：我的直覺最常出錯的地方是『___』。下次面對熱學現象，我會先 ___ 再下結論。"></textarea>
+        <div class="think-status"></div>
+      </div>
+
+      <!-- Layer 1: 預測對照（寫完再點開）-->
       <div class="think-block reveal">
-        <div class="think-prompt">🤔 想一想：回頭看第 1 步的預測（P1–P3）。哪些被實驗驗證了？哪些出乎意料？</div>
+        <div class="think-prompt">🤔 寫完上面的對照再點開：你的直覺哪裡失效，是不是和大多數人一樣？</div>
         <button class="think-toggle">想好了？點擊看反思方向 →</button>
         <div class="think-hidden">
           <p>許多學生預測「越多鹽越冷」是無限的，但數據顯示飽和現象。還有人沒想到「降溫速度」和「最終溫度」不一定相關。這正是科學的有趣之處——現實比預期複雜，但規律一旦看清，就能預測和控制。下一步（Lv2）就是找出「最優化」：怎樣加鹽既快又冷。</p>

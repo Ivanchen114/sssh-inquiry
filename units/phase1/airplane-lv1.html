@@ -175,6 +175,20 @@
         </div>
       </div>
 
+      <!-- Layer 3: 拋體模型失效原因校驗 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 為什麼紙飛機軌跡跟拋體公式 R = v²sin(2θ)/g 預測不一樣？最關鍵的原因是哪個？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 風太大（教室風會干擾）</button>
+          <button class="think-opt" data-val="b">B. 空氣阻力是「非保守力」，能量會散失，且機翼還會產生升力——拋體公式把這兩件事都忽略了</button>
+          <button class="think-opt" data-val="c">C. 紙太輕，重力對紙飛機沒作用</button>
+          <button class="think-opt" data-val="d">D. 拋體公式只適用於完全真空</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 對。拋體公式假設只有重力做功（保守力，能量守恆），所以軌跡是完美拋物線。<br>但紙飛機在空氣中：<strong>(1) 阻力</strong>持續做負功，總能量會減少；<strong>(2) 升力</strong>給機翼一個向上的推力，可以讓飛機「滑翔」遠超拋體預測。兩個效應都不在拋體公式裡。<br>A 不對：風確實干擾，但風是<em>外加</em>的雜訊，不是公式失效的根本原因——即使無風的真空管裡，紙飛機也不會走拋物線。<br>C 完全錯：紙再輕重力都還在（地球上沒有東西能擺脫重力）。<br>D 也錯：拋體公式在「阻力可忽略」（如保齡球短距離）時是好用的近似，不是只能在真空。<br><strong>關鍵詞：「非保守力」「能量散失」「升力」</strong>——這三個概念決定了我們為什麼要用「經驗模型」而不是公式。
+        </div>
+      </div>
+
       <div class="step-footer">
         <button class="step-btn" data-step="prev" disabled>← 上一步</button>
         <div class="step-dots">
@@ -389,6 +403,29 @@
         <div style="font-weight:700;color:var(--phase4);">🧩 建立你的模型</div>
       </div>
       <div class="step-action">整合三個關係成「經驗模型」、用 CER 論證、最後對照預測評估限制。</div>
+
+      <!-- Layer 3: 形狀辨識校驗 -->
+      <div class="think-block choice" data-answer="b">
+        <div class="think-prompt">🎯 你掃完三個變因得到三條曲線：<br>
+        <strong>① D vs A</strong>：50→100 cm² 距離快速上升 5→9 m，100→200 cm² 持平在 9.2 m 附近，200→300 cm² 又掉到 7.5 m<br>
+        <strong>② D vs x_cg</strong>：x_cg 0.20→0.45，距離從 6.5 m 單調下降到 4.2 m<br>
+        <strong>③ D vs v</strong>：v 從 4 m/s 到 12 m/s，距離從 3 m 上升到 8.5 m，後段斜率明顯變緩<br>
+        哪一條形狀最像「<strong>單峰最佳值</strong>」（倒 U 形）？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. ① D vs A：先升後平再降的形狀，看起來像有最佳值</button>
+          <button class="think-opt" data-val="b">B. 只有 ① D vs A 是真正的倒 U；② 是單調下降；③ 是飽和（上升但斜率遞減，沒有降下來）</button>
+          <button class="think-opt" data-val="c">C. ② D vs x_cg 因為它有清楚的趨勢</button>
+          <button class="think-opt" data-val="d">D. ③ D vs v 因為它「先升後降」（斜率變化）</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          B 對。倒 U 的關鍵特徵是「<strong>有真正下降的右半邊</strong>」——不是只有「斜率變緩」。<br>
+          ① <strong>真倒 U</strong>：50→100 升、100→200 平、200→300 <em>降</em>（從 9.2 掉到 7.5）。三個區段，最佳值在 100–200 之間。<br>
+          ② <strong>單調下降</strong>：從頭到尾都在掉，沒有反轉。<br>
+          ③ <strong>飽和</strong>（不是倒 U）：斜率變緩但<em>還在上升</em>沒下降——這是「再大力也沒用」的飽和形狀，而不是「投太大力反而飛不遠」的倒 U。<br>
+          A 雖然認對倒 U，但選項說得太籠統，沒有把「飽和 vs 倒 U」的差異講清楚——B 才是有區辨力的答案。<br>
+          C、D 完全認錯形狀。<strong>「先升後降」≠「先升後平」≠「斜率變緩」——三種形狀對應三種物理機制（倒 U=阻力反超升力 / 飽和=機構性上限 / 單調=線性效應），認錯了模型也會選錯。</strong>
+        </div>
+      </div>
 
       <div style="background:var(--bg);border-radius:8px;padding:14px 16px;margin-bottom:14px;">
         <div style="font-weight:700;font-size:13px;margin-bottom:8px;color:var(--text-primary);">🧩 模型組裝：把三個形狀乘起來</div>

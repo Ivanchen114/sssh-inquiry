@@ -126,6 +126,29 @@
         </div>
       </div>
 
+      <!-- Layer 1: reveal — 為什麼從模型提問更好 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：直接問「條數會怎樣」和「條數如何影響 D∞」差在哪？同樣的數據能回答的東西不一樣多？先自己想再點開。</div>
+        <button class="think-toggle">想好了？點擊看提示 →</button>
+        <div class="think-hidden">
+          <p>直接問「條數會怎樣」，你得到的答案只是「會變多」——這是 Lv1 等級的結論。<br>從模型 $D(n) = D_\infty(1 - e^{-n/\tau})$ 出發，你問的是「條數改變的是<strong>儲能上限 D_∞</strong>，還是<strong>儲能效率 τ</strong>？」——這是兩個截然不同的物理機制，需要不同的擬合策略才能分開。<br>同樣的數據，<strong>問題決定你能看到什麼</strong>。會問問題比會做實驗更難——這正是 Lv2 規劃研究要練的核心能力。</p>
+        </div>
+      </div>
+
+      <!-- Layer 3: choice — 哪個假設最具可證偽性 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 暖身題：以下四個假設，哪個<strong>最具可證偽性（最容易被實驗反駁）</strong>？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 橡皮筋條數越多，D_∞ 越大</button>
+          <button class="think-opt" data-val="b">B. 橡皮筋很神奇，能儲存很多能量</button>
+          <button class="think-opt" data-val="c">C. 條數從 1→3，D_∞ 增加 1.5–1.8 倍（次線性，因摩擦不變）</button>
+          <button class="think-opt" data-val="d">D. 材質好的橡皮筋通常表現比較好</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          C 對。可證偽性 = 假設能被數據「打臉」的明確程度。<br>A 太弱（「越多越大」沒說多多少，只要 D_∞ 增加一點點都算對，幾乎不可能被反駁）<br>B 模糊到沒辦法測（「神奇」「很多」都不可量化）<br>D 用「通常」「比較好」這種閃爍語，無法用實驗判定<br>C 給了具體的<strong>方向 + 量化區間 + 物理機制</strong>——如果實驗測到 D_∞ 加倍以上、或完全不變、或反而下降，假設就被反駁。<strong>好假設要敢於可能錯。</strong>
+        </div>
+      </div>
+
       <div class="think-block record">
         <div class="think-prompt">✏️ 選一個研究問題（或自訂），寫下你的假設與初步預測</div>
         <textarea class="think-input" data-key="rubber-band-lv2-q" rows="4" style="line-height:1.8;" placeholder="我選：Q1（橡皮筋條數 vs D∞）&#10;假設：條數越多，D∞ 越大，因為總儲能上限是每條橡皮筋儲能的加總。&#10;初步預測：1 條 D∞ ≈ 170 cm；2 條 D∞ ≈ 300 cm（不完全加倍，因為罐子重量沒變，摩擦損耗一樣）。"></textarea>
@@ -233,6 +256,17 @@
         </div>
       </div>
 
+      <!-- Layer 1: reveal — 操作一致性的隱藏陷阱 -->
+      <div class="think-block reveal">
+        <div class="think-prompt">🤔 想一想：上面六個策略你都做到了，還有什麼會偷偷影響你的數據？至少想出 2 個隱藏陷阱再點開。</div>
+        <button class="think-toggle">想好了？點擊看 3 個常被忽略的陷阱 →</button>
+        <div class="think-hidden">
+          <p><strong>陷阱 1 · 操作員疲勞</strong>：同一人連續做 60 次，前 30 次和後 30 次的「手感」會不一樣（手腕緊繃度、放手俐落度）。如果你的水準是按順序測（先 1 條、再 2 條、再 3 條），疲勞會被誤讀成「條數的影響」。<br><strong>對策：水準順序隨機化</strong>，或每測 10 次強制換手。</p>
+          <p style="margin-top:8px;"><strong>陷阱 2 · 橡皮筋熱機效應</strong>：第一次拉伸 vs 第十次拉伸，橡皮筋的彈性係數不一樣。前幾次「分子鏈還沒對齊」，後幾次才穩定。<br><strong>對策：每條橡皮筋先空轉 3–5 次當熱身，這幾次數據丟掉不算。</strong></p>
+          <p style="margin-top:8px;"><strong>陷阱 3 · 環境溫度漂移</strong>：暖氣／冷氣／陽光直射讓教室溫度差 3–5°C，橡皮筋彈性係數隨之變動。如果你的實驗跨了下課時間（人都出去走廊冷氣關掉再回來），這就是看不見的 confounding variable。<br><strong>對策：每節課開始先記錄室溫，跨節次的數據要分開比較。</strong></p>
+        </div>
+      </div>
+
       <!-- 擬合模型選擇 -->
       <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:10px;">
@@ -257,6 +291,20 @@
         </div>
         <div style="background:white;border-radius:6px;padding:10px;margin-top:10px;font-size:11.5px;color:var(--text-secondary);line-height:1.8;">
           <strong>⚠️ 選擇原則</strong>：別只看擬合得多貼，要問「x → ∞ 的行為合理嗎？」飽和模型有極限、冪次模型無極限——物理上哪個成立？
+        </div>
+      </div>
+
+      <!-- Layer 3: choice — 壞計畫診斷 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 同學阿志的研究計畫：「研究橡皮筋條數對 D_∞ 的影響。1 條／2 條／3 條三個水準，每水準轉 30 圈、量推出距離 3 次取平均。」這個計畫<strong>最致命</strong>的問題是什麼？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 水準太少（只 3 個），看不到趨勢</button>
+          <button class="think-opt" data-val="b">B. 重複次數太少（只 3 次），標準差估不準</button>
+          <button class="think-opt" data-val="c">C. 沒掃多個圈數 → 根本讀不到 D_∞，等於沒回答研究問題</button>
+          <button class="think-opt" data-val="d">D. 沒寫控制變因（地面、橡皮筋批號）</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          C 是最致命的。A、B、D 都是真實的問題，但「修一修」就能補救。<br>C 是<strong>結構性錯誤</strong>——研究問題問的是 D_∞（推出距離的<strong>飽和上限</strong>），但只測一個固定圈數（30 圈），<strong>不可能</strong>讀出 D_∞。要讀 D_∞ 必須掃多個圈數（例如 5、10、15、20、30、50、80）然後擬合飽和曲線，才能外推到 D_∞。<br><strong>致命的不是「漏細節」，而是「研究問題和實驗方法對不上」</strong>——這種錯誤是 4 週後才會發現，到時來不及改。
         </div>
       </div>
 
@@ -331,6 +379,20 @@
             針對<strong>形狀關鍵點</strong>補測：飽和曲線的「轉折點」和「逼近上限」處各加測到 5–8 次。不確定度小了，擬合才準。<br>
             <strong>總時間控管</strong>：全部實驗別超過 2 節課。數據多不如數據準。
           </div>
+        </div>
+      </div>
+
+      <!-- Layer 3: choice — 校準階段決策 -->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 你的第一輪校準：固定條件測 10 次，mean = 120 cm、std = 30 cm，<strong>std/mean = 25%</strong>。下一步該做什麼？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 直接進入第二輪初掃，反正最後會做平均</button>
+          <button class="think-opt" data-val="b">B. 把 25% 寫進不確定度，繼續做</button>
+          <button class="think-opt" data-val="c">C. 停下來找出大標準差的源頭，調整操作後重新校準到 ≤ 20%</button>
+          <button class="think-opt" data-val="d">D. 改用更小的水準間距，這樣相對誤差會自動變小</button>
+        </div>
+        <div class="think-feedback" style="display:none;">
+          C 對。校準閾值（≤ 20%）不是建議，是<strong>止血點</strong>。<br>A 錯：std/mean = 25% 表示<strong>訊號被噪音淹沒</strong>，再多次的平均也救不回來——你看到的「水準差異」可能根本是噪音漂移。<br>B 錯：把不可信的不確定度寫進報告等於「明知有問題還繼續」，後面所有結論都是建立在沙上。<br>D 完全誤解：水準間距是 X 軸的事，std/mean 是 Y 軸的事——改間距只會讓「訊號」變小、訊噪比更糟。<br>正確做法：問「最大噪音源是什麼？」（操作員疲勞、橡皮筋未熱機、地面有灰塵、放手力道不一）→ 對症下藥 → 重測 10 次直到 ≤ 20%。<br><strong>校準失敗就停下來</strong>——這節課最重要的紀律。
         </div>
       </div>
 

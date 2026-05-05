@@ -204,6 +204,106 @@
       </div>
     </div>
 
+    <!-- ─── 互動式四條件自評 ─── -->
+    <div class="section-title">輪到你：四條件自評</div>
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.95;">
+        把你目前想問的探究問題打進下面這格，再逐條打勾。<strong>四條件全打勾才算過關</strong>——任何一條打 ✗ 就要回頭改寫，下面會給你提示往哪個方向修。
+      </p>
+    </div>
+
+    <div class="activity-block info-box phase3" style="margin-bottom:14px;">
+      <div class="activity-header phase3">輸入你的問題</div>
+      <div class="activity-body">
+        <textarea id="gq-input" rows="2" placeholder="把你目前想到的探究問題寫進來，例如：「擺長如何影響單擺的週期？」"
+          style="width:100%;border:1px solid var(--border);border-radius:4px;padding:10px 12px;font-family:inherit;font-size:13.5px;color:var(--text-primary);background:white;resize:vertical;"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:var(--text-muted);">
+          <span id="gq-charcount">0 字</span>
+          <button id="gq-reset" style="background:none;border:1px solid var(--border);border-radius:4px;padding:4px 12px;font-size:12px;color:var(--text-secondary);cursor:pointer;">清除重填</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="gq-checklist" style="display:grid;gap:10px;margin-bottom:14px;">
+
+      <div class="gq-row" data-cond="quant" style="border:1px solid var(--border);border-radius:8px;background:white;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:12px 14px;">
+          <div style="font-size:24px;text-align:center;">📏</div>
+          <div>
+            <div style="font-weight:700;font-size:13.5px;">① 可量化嗎？</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.7;margin-top:2px;">問題裡的關鍵變量能用數字表示嗎？「聲音大小」不算，「分貝數」才算。</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="gq-btn" data-val="yes" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✓ 是</button>
+            <button class="gq-btn" data-val="no" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✗ 否</button>
+          </div>
+        </div>
+        <div class="gq-hint" style="display:none;background:#fef9c3;border-top:1px solid #fde68a;padding:10px 14px;font-size:12px;color:#713f12;line-height:1.8;">
+          <strong>修改方向：</strong>把抽象的詞換成可以用儀器測量的單位。<br>
+          <span style="color:var(--text-muted);">「快不快」→「秒數 / 速度 (m/s)」｜「冷熱」→「溫度 (°C)」｜「響不響」→「分貝 (dB)」｜「強不強」→「力 (N) 或彈力常數 (N/m)」</span>
+        </div>
+      </div>
+
+      <div class="gq-row" data-cond="op" style="border:1px solid var(--border);border-radius:8px;background:white;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:12px 14px;">
+          <div style="font-size:24px;text-align:center;">🔧</div>
+          <div>
+            <div style="font-weight:700;font-size:13.5px;">② 可操作嗎？</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.7;margin-top:2px;">用你手邊的器材、教室空間、4 週的時間，做得完嗎？</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="gq-btn" data-val="yes" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✓ 是</button>
+            <button class="gq-btn" data-val="no" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✗ 否</button>
+          </div>
+        </div>
+        <div class="gq-hint" style="display:none;background:#fef9c3;border-top:1px solid #fde68a;padding:10px 14px;font-size:12px;color:#713f12;line-height:1.8;">
+          <strong>修改方向：</strong>把規模縮到「教室裡能做」的版本。<br>
+          <span style="color:var(--text-muted);">「黑洞重力」→「不同密度液體中的浮力」｜「月球單擺」→「不同擺長的地面單擺」｜「整座橋的應力」→「保麗龍橋的抗彎曲」｜「跨年的氣候變化」→「一週內的室溫變化」</span>
+        </div>
+      </div>
+
+      <div class="gq-row" data-cond="search" style="border:1px solid var(--border);border-radius:8px;background:white;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:12px 14px;">
+          <div style="font-size:24px;text-align:center;">🔍</div>
+          <div>
+            <div style="font-weight:700;font-size:13.5px;">③ 不是查書題？</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.7;margin-top:2px;">答案不能 Google 一下就出來。要由你做實驗才能回答。</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="gq-btn" data-val="yes" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✓ 是</button>
+            <button class="gq-btn" data-val="no" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✗ 否</button>
+          </div>
+        </div>
+        <div class="gq-hint" style="display:none;background:#fef9c3;border-top:1px solid #fde68a;padding:10px 14px;font-size:12px;color:#713f12;line-height:1.8;">
+          <strong>修改方向：</strong>把「是什麼」改成「在我這個情境下是不是這樣」。<br>
+          <span style="color:var(--text-muted);">「光速是多少」→「不同顏色雷射在水中折射角差多少」｜「g 等於多少」→「我用單擺量到的 g 與標準值差多少？誤差來源是什麼」｜「彈簧的虎克定律」→「我這條彈簧在哪個拉伸範圍偏離 F = kx」</span>
+        </div>
+      </div>
+
+      <div class="gq-row" data-cond="var" style="border:1px solid var(--border);border-radius:8px;background:white;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:12px 14px;">
+          <div style="font-size:24px;text-align:center;">🧠</div>
+          <div>
+            <div style="font-weight:700;font-size:13.5px;">④ 有明確變因嗎？</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.7;margin-top:2px;">至少要找得到一個你能改變的（操縱變因）和一個要觀察的（應變變因）。</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="gq-btn" data-val="yes" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✓ 是</button>
+            <button class="gq-btn" data-val="no" style="border:1px solid #d1d5db;background:white;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer;">✗ 否</button>
+          </div>
+        </div>
+        <div class="gq-hint" style="display:none;background:#fef9c3;border-top:1px solid #fde68a;padding:10px 14px;font-size:12px;color:#713f12;line-height:1.8;">
+          <strong>修改方向：</strong>套句型「<u>___（操縱變因）</u> 如何影響 <u>___（應變變因）</u>？」<br>
+          <span style="color:var(--text-muted);">「橡皮筋為什麼會斷」→「橡皮筋被拉伸到不同倍率（1.5x, 2x, 2.5x）後，斷裂前能承受的拉力如何變化」｜「翻滾仔好好玩」→「黏土離軸距離（1cm, 5cm, 9cm）如何影響翻滾仔的下滑時間」</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="gq-result" style="border-radius:8px;padding:14px 18px;font-size:13px;background:#f1f5f9;border:1px solid var(--border);color:var(--text-secondary);margin-bottom:24px;">
+      <strong>進度：</strong>還沒開始評估。先把你的問題輸入上方文字框，再針對每一條按 ✓ 或 ✗。
+    </div>
+
     <!-- ─── 練習活動 ─── -->
     <div class="section-title">練習：改造問題</div>
     <div class="activity-block info-box phase3">
@@ -244,5 +344,103 @@
 </div>
 
 <script src="../assets/js/main.js"></script>
+<script>
+// ═══ 四條件自評互動 ═══
+(function(){
+  const input = document.getElementById('gq-input');
+  const charCount = document.getElementById('gq-charcount');
+  const resetBtn = document.getElementById('gq-reset');
+  const result = document.getElementById('gq-result');
+  const rows = document.querySelectorAll('.gq-row');
+  const labels = { quant:'可量化', op:'可操作', search:'非查書題', var:'有變因' };
+
+  function updateCount(){
+    const len = input.value.trim().length;
+    charCount.textContent = len + ' 字';
+  }
+  input.addEventListener('input', updateCount);
+
+  function paint(btn, val){
+    const row = btn.closest('.gq-row');
+    row.querySelectorAll('.gq-btn').forEach(b => {
+      b.style.background = 'white';
+      b.style.borderColor = '#d1d5db';
+      b.style.color = 'var(--text-primary)';
+      b.style.fontWeight = '400';
+    });
+    const hint = row.querySelector('.gq-hint');
+    if (val === 'yes') {
+      btn.style.background = '#dcfce7';
+      btn.style.borderColor = '#86efac';
+      btn.style.color = '#14532d';
+      btn.style.fontWeight = '700';
+      hint.style.display = 'none';
+      row.dataset.state = 'yes';
+    } else {
+      btn.style.background = '#fee2e2';
+      btn.style.borderColor = '#fca5a5';
+      btn.style.color = '#991b1b';
+      btn.style.fontWeight = '700';
+      hint.style.display = 'block';
+      row.dataset.state = 'no';
+    }
+    summarize();
+  }
+
+  function summarize(){
+    const states = Array.from(rows).map(r => ({ cond: r.dataset.cond, state: r.dataset.state }));
+    const answered = states.filter(s => s.state).length;
+    const passes = states.filter(s => s.state === 'yes').length;
+    const failed = states.filter(s => s.state === 'no').map(s => labels[s.cond]);
+    const hasInput = input.value.trim().length > 0;
+
+    if (!hasInput && answered === 0) {
+      result.style.background = '#f1f5f9';
+      result.style.borderColor = 'var(--border)';
+      result.style.color = 'var(--text-secondary)';
+      result.innerHTML = '<strong>進度：</strong>還沒開始評估。先把你的問題輸入上方文字框，再針對每一條按 ✓ 或 ✗。';
+      return;
+    }
+    if (answered < 4) {
+      result.style.background = '#eff6ff';
+      result.style.borderColor = '#bfdbfe';
+      result.style.color = '#1e3a8a';
+      result.innerHTML = '<strong>進度：</strong>已完成 ' + answered + ' / 4 條檢核' + (passes > 0 ? '（通過 ' + passes + ' 條）' : '') + '。繼續評估剩下的條件。';
+      return;
+    }
+    if (passes === 4) {
+      result.style.background = '#dcfce7';
+      result.style.borderColor = '#86efac';
+      result.style.color = '#14532d';
+      result.innerHTML = '<strong>✅ 四條件全通過——這是一個可探究的好問題。</strong><br><span style="font-size:12.5px;line-height:1.8;">下一步：用「研究規劃表」拆變因，估算需要的水準數和重複次數，然後寫成正式的研究計畫。記得把這份問題＋四條件評估表存進學習歷程，作為「發現問題」能力的證據。</span>';
+    } else {
+      result.style.background = '#fef2f2';
+      result.style.borderColor = '#fecaca';
+      result.style.color = '#991b1b';
+      result.innerHTML = '<strong>⚠ 還沒過關（' + passes + ' / 4）。</strong>沒通過的條件：<strong>' + failed.join('、') + '</strong>。<br><span style="font-size:12.5px;line-height:1.8;">回到上方未通過條件的黃色提示，按提示方向改寫你的問題，然後重新評估一次。修改後的問題往往會比原本的更好。</span>';
+    }
+  }
+
+  document.querySelectorAll('.gq-btn').forEach(btn => {
+    btn.addEventListener('click', () => paint(btn, btn.dataset.val));
+  });
+
+  resetBtn.addEventListener('click', () => {
+    input.value = '';
+    updateCount();
+    rows.forEach(r => {
+      delete r.dataset.state;
+      r.querySelectorAll('.gq-btn').forEach(b => {
+        b.style.background = 'white';
+        b.style.borderColor = '#d1d5db';
+        b.style.color = 'var(--text-primary)';
+        b.style.fontWeight = '400';
+      });
+      r.querySelector('.gq-hint').style.display = 'none';
+    });
+    summarize();
+  });
+})();
+</script>
 </body>
 </html>

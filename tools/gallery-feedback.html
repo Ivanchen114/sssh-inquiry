@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="canonical" href="https://sssh-inquiry.vercel.app/tools/gallery-feedback">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Walk 回饋與反思 · 工具箱 · 探究與實作</title>
+  <meta name="description" content="海報走動觀摩的回饋與反思鷹架——觀察記錄、提問引導、同儕評量、發表者自我反思。">
+  <meta property="og:title" content="Gallery Walk 回饋與反思 · 工具箱 · 探究與實作">
+  <meta property="og:description" content="海報走動觀摩的回饋與反思鷹架——觀察記錄、提問引導、同儕評量、發表者自我反思。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sssh-inquiry.vercel.app/tools/gallery-feedback.html">
+  <meta property="og:site_name" content="松山高中 探究與實作">
+  <meta property="og:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="松山高中 探究與實作課程">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sssh-inquiry.vercel.app/image/og-image.png">
+  <meta property="og:locale" content="zh_TW">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    .gw-input { width:100%; border:1px solid var(--border); border-radius:4px; padding:8px 10px; font-family:inherit; font-size:13px; color:var(--text-primary); background:white; resize:vertical; }
+    .gw-input:focus { outline:none; border-color:var(--phase1); box-shadow:0 0 0 2px rgba(41,82,196,0.12); }
+    .prompt-card { border-radius:8px; padding:14px 16px; border:1px solid var(--border); background:white; }
+    .prompt-card .ptype { font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px; }
+    .prompt-card ul { padding-left:18px; font-size:12.5px; color:var(--text-secondary); line-height:1.95; margin-top:4px; }
+    .rubric-table th, .rubric-table td { font-size:12.5px; vertical-align:top; }
+    .rubric-table .ability-cell { font-weight:700; min-width:84px; }
+    .star-row { display:flex; gap:4px; margin-top:4px; }
+    .star-row span { display:inline-block; width:18px; text-align:center; color:var(--text-muted); border:1px dashed var(--border); border-radius:3px; font-size:11px; }
+    .self-row { display:grid; grid-template-columns:140px 1fr; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:6px; margin-bottom:8px; background:white; }
+    .self-row .self-label { font-weight:700; font-size:13px; color:var(--text-primary); }
+    .self-row .self-hint { font-size:12px; color:var(--text-muted); margin-top:4px; line-height:1.7; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="reading-bar" style="width:0%"></div>
+
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="breadcrumb"><a href="../index.html">首頁</a> › <a href="index.html">工具箱</a> › Gallery Walk 回饋與反思</div>
+    <h1>🖼️ Gallery Walk 回饋與反思</h1>
+    <p class="subtitle">海報走動觀摩的四件配備——別再寫「不錯」、「很棒」</p>
+    <div class="meta-tags">
+      <span class="tag express">表達與分享</span>
+      <span class="tag">期中／期末</span>
+      <span class="tag">小組互動</span>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ─── 為什麼要這份工具 ─── -->
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.95;">
+        Gallery Walk（海報走動觀摩）容易變成「走完一圈、寫一句『做得很好』、結束」。原因不是學生不認真，而是<strong>沒有框架</strong>——他們不知道該看什麼、該問什麼、該怎麼說有用的話。
+      </p>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.95;margin-top:8px;">
+        這頁是一套四件式鷹架：先讓你觀察得「具體」、再學會問「探究過程」的問題、用「四能力」打分有根據、最後讓發表者用提示句把感受整理成成長。
+      </p>
+    </div>
+
+    <!-- ─── 課綱對應 ─── -->
+    <div class="objective-box">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">108 課綱對應學習內容</div>
+      <ul>
+        <li>傾聽他人報告，並能提出具體的意見或建議</li>
+        <li>評估同學探究過程、結果或模型的優點和限制，提出合理疑問或改善方案</li>
+        <li>反思探究成果的應用性、限制性及改進之處</li>
+        <li>對問題、推理過程、實驗結果或數據能保持質疑的態度，並隨時檢視自己思辯內容的合理性</li>
+      </ul>
+    </div>
+
+    <!-- ─── 四件配備導覽 ─── -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0;">
+      <a href="#observe" class="card" style="display:block;border-top:3px solid var(--phase1);text-align:center;padding:14px 10px;">
+        <div style="font-size:24px;margin-bottom:6px;">🔍</div>
+        <div style="font-weight:700;font-size:12.5px;color:var(--phase1);">① 觀察記錄</div>
+        <div style="font-size:11.5px;color:var(--text-muted);margin-top:3px;">看具體的事</div>
+      </a>
+      <a href="#prompt" class="card" style="display:block;border-top:3px solid var(--phase2);text-align:center;padding:14px 10px;">
+        <div style="font-size:24px;margin-bottom:6px;">💭</div>
+        <div style="font-weight:700;font-size:12.5px;color:var(--phase2);">② 提問引導</div>
+        <div style="font-size:11.5px;color:var(--text-muted);margin-top:3px;">問探究過程</div>
+      </a>
+      <a href="#rubric" class="card" style="display:block;border-top:3px solid var(--phase3);text-align:center;padding:14px 10px;">
+        <div style="font-size:24px;margin-bottom:6px;">⚖️</div>
+        <div style="font-weight:700;font-size:12.5px;color:var(--phase3);">③ 同儕規準</div>
+        <div style="font-size:11.5px;color:var(--text-muted);margin-top:3px;">四能力評分</div>
+      </a>
+      <a href="#self" class="card" style="display:block;border-top:3px solid var(--express);text-align:center;padding:14px 10px;">
+        <div style="font-size:24px;margin-bottom:6px;">🪞</div>
+        <div style="font-weight:700;font-size:12.5px;color:var(--express);">④ 發表者反思</div>
+        <div style="font-size:11.5px;color:var(--text-muted);margin-top:3px;">提示句填空</div>
+      </a>
+    </div>
+
+    <!-- ═════════ ① 觀察記錄表 ═════════ -->
+    <div id="observe" class="section-title">① 觀察記錄表（每組一張）</div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        走到一張海報前，<strong>先看 3 分鐘再下筆</strong>。請寫「具體」的描述，不要寫感受。
+        「不錯」「很棒」不算具體；「他們用 4 個不同砝碼，圖上有誤差棒」才是具體。
+      </p>
+    </div>
+
+    <div class="activity-block info-box phase1" style="margin-bottom:24px;">
+      <div class="activity-header phase1">觀察記錄表</div>
+      <div class="activity-body">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;font-size:13px;">
+          <div>
+            <strong>觀察的組別／題目：</strong>
+            <textarea class="gw-input" rows="1" placeholder="例：第 3 組「擺長對單擺週期的影響」"></textarea>
+          </div>
+          <div>
+            <strong>記錄人：</strong>
+            <textarea class="gw-input" rows="1" placeholder="姓名"></textarea>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:10px;font-size:13px;">
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">A. 我看到什麼數據？</div>
+              <div class="self-hint">寫一個你眼睛看到的具體東西：圖表類型、數字範圍、有沒有誤差棒……</div>
+            </div>
+            <textarea class="gw-input" rows="2" placeholder="例：他們有一張 T² vs L 的散佈圖，5 個資料點，有畫趨勢線但沒看到誤差棒。"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">B. 他們的研究問題是？</div>
+              <div class="self-hint">用自己的話寫，不要照抄海報標題。寫得出來代表你聽懂了。</div>
+            </div>
+            <textarea class="gw-input" rows="2" placeholder="例：擺長加倍的時候，週期會變幾倍？"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">C. 一個我覺得做得好的具體點</div>
+              <div class="self-hint">不要寫「整體很棒」。寫「<u>他們在哪一頁／哪個圖／哪句話</u>，做了什麼具體的事，這個事為什麼好」。</div>
+            </div>
+            <textarea class="gw-input" rows="3" placeholder="例：他們在『限制』段落明寫『計時誤差約 ±0.1 秒，比 0.5° 角度差造成的影響大』——把誤差量級講清楚，不是只說『有誤差』。"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">D. 一個我覺得可以更好的具體點</div>
+              <div class="self-hint">不是挑錯，是建議。指出「哪裡」＋「為什麼會卡住」＋「如果是我會怎麼做」。</div>
+            </div>
+            <textarea class="gw-input" rows="3" placeholder="例：方法段沒說重複測幾次，看起來只測 1 次。如果我會至少測 3 次取平均，這樣才能算標準差。"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">E. 一個讓我意外的點</div>
+              <div class="self-hint">「我以為會 X，結果他們是 Y」「我沒想到還可以從這個角度切入」——這類發現比稱讚更有用。</div>
+            </div>
+            <textarea class="gw-input" rows="2" placeholder="例：我以為 T 和 L 會是直線，沒想到他們改畫 T² vs L 才變直線。"></textarea>
+          </div>
+
+        </div>
+
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 14px;margin-top:14px;font-size:12px;color:#9a3412;">
+          ⚠ <strong>禁用詞檢查：</strong>「不錯」「很棒」「做得很好」「加油」「沒什麼問題」——這五個詞如果出現在你的記錄裡，重寫那一格。
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═════════ ② 提問引導卡 ═════════ -->
+    <div id="prompt" class="section-title">② 提問引導卡（每人至少挑兩張用）</div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        好的提問不是「考」對方，是<strong>讓對方思考得更深</strong>。下面 6 張卡，每次走完一張海報，至少從中挑 2 張提問。**過程型提問**（你怎麼決定…？）比結果型提問（為什麼…？）更能練到課綱要的「探究歷程」。
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+
+      <div class="prompt-card" style="border-left:4px solid var(--phase3);">
+        <div class="ptype" style="color:var(--phase3);">⭐ 過程型 · 必問</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">「你們是怎麼決定__的？」</div>
+        <ul>
+          <li>你們是怎麼決定要測這 4 個水準（不是 3 個或 5 個）？</li>
+          <li>你們是怎麼決定哪些變因要控制、哪些不用？</li>
+          <li>你們是怎麼從觀察轉成這個問題的？</li>
+        </ul>
+      </div>
+
+      <div class="prompt-card" style="border-left:4px solid var(--phase3);">
+        <div class="ptype" style="color:var(--phase3);">⭐ 過程型 · 必問</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">「中間有踩坑嗎？怎麼修的？」</div>
+        <ul>
+          <li>第一次試做的時候有什麼地方沒按計畫走？</li>
+          <li>哪個步驟你們改過幾次？最後為什麼選這個版本？</li>
+          <li>數據看起來有沒有讓你們意外、然後回頭修方法的時候？</li>
+        </ul>
+      </div>
+
+      <div class="prompt-card" style="border-left:4px solid var(--phase1);">
+        <div class="ptype" style="color:var(--phase1);">澄清型</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">「你說的 X，是指…？」</div>
+        <ul>
+          <li>你們提到的「精準度」具體是用什麼指標衡量？</li>
+          <li>圖上這個誤差棒是用標準差還是不確定度？</li>
+          <li>「衰減」是指振幅一半嗎？多少時間以內？</li>
+        </ul>
+      </div>
+
+      <div class="prompt-card" style="border-left:4px solid var(--phase2);">
+        <div class="ptype" style="color:var(--phase2);">假設延伸型</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">「如果把 X 換成 Y，你預測…？」</div>
+        <ul>
+          <li>如果擺長拉到 2 公尺，你預測 T² 還會是直線嗎？</li>
+          <li>如果改用比較重的擺錘，你的數據會怎麼變？</li>
+          <li>如果在月球上做，公式還適用嗎？</li>
+        </ul>
+      </div>
+
+      <div class="prompt-card" style="border-left:4px solid var(--phase3);">
+        <div class="ptype" style="color:var(--phase3);">質疑型（友善版）</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">「有沒有可能是…造成的？」</div>
+        <ul>
+          <li>你們有沒有可能不是擺長影響週期，而是釋放角度？</li>
+          <li>計時是用手機嗎？反應時間有沒有可能影響結果？</li>
+          <li>會不會有別的變因你們沒控制到？</li>
+        </ul>
+      </div>
+
+      <div class="prompt-card" style="border-left:4px solid var(--express);">
+        <div class="ptype" style="color:var(--express);">建議型</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px;">「最值得改進的環節是？」</div>
+        <ul>
+          <li>如果再給你們一週，你們最想補什麼？</li>
+          <li>哪一段你們自己也覺得「下次要重做」？</li>
+          <li>給我們一個可以延伸的方向？</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:12px 16px;margin-bottom:24px;font-size:13px;color:#0c4a6e;">
+      💡 <strong>小提醒：</strong>過程型問題（怎麼決定 / 怎麼修 / 怎麼想到）是探究與實作最核心的提問，因為它讓發表者把「思考歷程」說出來——而思考歷程才是課綱最在意的能力。每場 Gallery Walk，每人至少要問 1 個過程型問題。
+    </div>
+
+    <!-- ═════════ ③ 同儕回饋規準 ═════════ -->
+    <div id="rubric" class="section-title">③ 同儕回饋規準（對應四大探究能力）</div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        評分不是「打人情分」。每個面向都對應 108 課綱的一項探究能力，依照具體描述對號入座，<strong>3 顆星不是普通的 3，是有條件達標的 3</strong>。
+      </p>
+    </div>
+
+    <div style="overflow-x:auto;margin-bottom:14px;">
+      <table class="rubric-table">
+        <thead>
+          <tr>
+            <th style="width:90px;">能力面向</th>
+            <th style="width:25%;">★ 1 顆 · 待加強</th>
+            <th style="width:25%;">★★ 2 顆 · 可</th>
+            <th style="width:25%;">★★★ 3 顆 · 優</th>
+            <th style="width:90px;">你給</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ability-cell" style="color:var(--phase1);">論<br><span style="font-weight:400;font-size:11px;color:var(--text-muted);">論證建模</span></td>
+            <td>結論只有「成功／失敗」，沒有用數據支撐</td>
+            <td>有引用數據，但缺解釋為什麼數據支持結論</td>
+            <td>用 CER 結構：主張→證據→理由清楚；指認模型限制</td>
+            <td><div class="star-row"><span>1</span><span>2</span><span>3</span></div></td>
+          </tr>
+          <tr>
+            <td class="ability-cell" style="color:var(--phase2);">規<br><span style="font-weight:400;font-size:11px;color:var(--text-muted);">規劃研究</span></td>
+            <td>變因不清楚／沒控制變因／重複次數不足</td>
+            <td>變因清楚但控制不完整，或重複次數說明含糊</td>
+            <td>操縱／應變／控制三類變因都明列；有 pilot 與修正紀錄</td>
+            <td><div class="star-row"><span>1</span><span>2</span><span>3</span></div></td>
+          </tr>
+          <tr>
+            <td class="ability-cell" style="color:var(--phase3);">發<br><span style="font-weight:400;font-size:11px;color:var(--text-muted);">發現問題</span></td>
+            <td>研究問題是查書題或不可量化</td>
+            <td>問題符合可量化、可操作，但沒說明為什麼選這個</td>
+            <td>能說明從觀察→篩選→定題的歷程；通過四條件檢核</td>
+            <td><div class="star-row"><span>1</span><span>2</span><span>3</span></div></td>
+          </tr>
+          <tr>
+            <td class="ability-cell" style="color:var(--express);">表<br><span style="font-weight:400;font-size:11px;color:var(--text-muted);">表達分享</span></td>
+            <td>海報擁擠、沒有圖表標籤、講解依賴照唸</td>
+            <td>結構清晰但圖表細節（軸標、單位、誤差）有缺</td>
+            <td>視線引導自然；圖表完整；能直接回應提問並補充</td>
+            <td><div class="star-row"><span>1</span><span>2</span><span>3</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="activity-block info-box phase3" style="margin-bottom:24px;">
+      <div class="activity-header phase3">給對方的兩段話（必填）</div>
+      <div class="activity-body">
+        <div style="display:grid;gap:10px;font-size:13px;">
+          <div>
+            <strong>👍 一個我從你們海報學到的東西：</strong>
+            <textarea class="gw-input" rows="2" placeholder="句型：你們的 ___ 讓我注意到 ___，這是我自己組沒想到的。"></textarea>
+          </div>
+          <div>
+            <strong>🔧 一個具體可行的建議：</strong>
+            <textarea class="gw-input" rows="2" placeholder="句型：如果在 ___（哪個段落／圖／步驟）加上 ___，會讓 ___ 更清楚。"></textarea>
+          </div>
+        </div>
+        <div style="background:white;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:12px;color:var(--text-muted);">
+          ✅ 通過檢查：兩段話都用了「具體名詞」（哪個段落／哪張圖／哪個步驟），沒有用「整體」「都」「全部」這種抽象詞。
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ ④ 發表者自我反思單 ═════════ -->
+    <div id="self" class="section-title">④ 發表者自我反思單（Gallery Walk 結束當天填）</div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
+        你站完海報、聽完所有同學的提問之後，<strong>趁記憶還新</strong>把它整理下來。這份不是給老師看的，是給「下個月的你」看的——下次發表前，你會回來翻它。
+      </p>
+    </div>
+
+    <div class="activity-block info-box express" style="margin-bottom:20px;">
+      <div class="activity-header express">自我反思五題（提示句填空）</div>
+      <div class="activity-body">
+
+        <div style="display:grid;gap:10px;font-size:13px;">
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">1. 哪個提問讓我卡住？</div>
+              <div class="self-hint">挑一個你當下答得不順的問題。卡住不丟臉，反而是進步點。</div>
+            </div>
+            <textarea class="gw-input" rows="3" placeholder="句型：有人問我『___』，我當下回答『___』，但其實我不確定。回頭想，正確的答案／更好的回應應該是『___』。"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">2. 哪個建議我會採納？為什麼？</div>
+              <div class="self-hint">不是「全部都會改」（那是空話）。挑一個你最有共鳴的具體建議。</div>
+            </div>
+            <textarea class="gw-input" rows="3" placeholder="句型：有同學建議我們『___』。我會採納這個，因為 ___。下次我會在 ___（哪個環節）做 ___（什麼具體調整）。"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">3. 哪個建議我不會採納？為什麼？</div>
+              <div class="self-hint">這題很重要——能說「為什麼不採納」代表你真的思考過，而不是照單全收。</div>
+            </div>
+            <textarea class="gw-input" rows="3" placeholder="句型：有人建議『___』，但我考量 ___（時間／器材／核心問題）後決定不採納，因為 ___。"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">4. 我從別組的海報學到什麼？</div>
+              <div class="self-hint">具體的：哪一組的哪個做法讓你想「下次我也要這樣做」。</div>
+            </div>
+            <textarea class="gw-input" rows="3" placeholder="句型：第 ___ 組的『___』讓我注意到 ___。我發現他們解決了我也遇到的問題：___。下次我會試 ___。"></textarea>
+          </div>
+
+          <div class="self-row">
+            <div>
+              <div class="self-label">5. 我下一次發表前會做的一件事</div>
+              <div class="self-hint">只挑一件——「下次更努力」不算。要是具體可執行的動作。</div>
+            </div>
+            <textarea class="gw-input" rows="2" placeholder="句型：下次海報展之前，我會 ___（具體動作，例：先請隊友模擬 Q&A 三次）。"></textarea>
+          </div>
+
+        </div>
+
+        <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:10px 14px;margin-top:14px;font-size:12px;color:#6d28d9;">
+          📂 <strong>學習歷程提示：</strong>這份反思單拍照存檔，貼進你的學習歷程「探究歷程反思」段落。比一句「我學到很多」有說服力 100 倍。
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── 教師使用指引 ─── -->
+    <div class="teacher-only" style="display:none;">
+      <div class="teacher-label">教師流程建議（80 分鐘版）</div>
+      <table style="margin-top:8px;">
+        <thead>
+          <tr><th style="width:70px;">時間</th><th style="width:120px;">階段</th><th>任務</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0–10 min</td>
+            <td>展前說明</td>
+            <td>發回饋表（觀察記錄＋規準）。明示：「不准寫『不錯』『很棒』，會被退件重寫。」每人挑 2 張提問卡帶在身上。</td>
+          </tr>
+          <tr>
+            <td>10–55 min</td>
+            <td>走動觀摩</td>
+            <td>每組海報停留 6–8 分鐘。發表者輪流站崗（A 留守 → B 走動 → 半場交換）。每張海報前至少 3 位同學提問，其中 1 位必須問過程型問題。</td>
+          </tr>
+          <tr>
+            <td>55–65 min</td>
+            <td>發表者回站集</td>
+            <td>每組整理收到的問題與建議，準備在下一節做「反思單」。</td>
+          </tr>
+          <tr>
+            <td>65–80 min</td>
+            <td>反思填寫</td>
+            <td>當堂完成自我反思單前 3 題（卡住的提問、採納/不採納的建議）。第 4、5 題可帶回家。</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="teacher-label" style="margin-top:14px;">常見班級狀況與應對</div>
+      <ul>
+        <li><strong>「都寫不錯很棒」：</strong>全班退件重寫。投影一兩個寫得好的範例對照——不要只說規則，要給範本。</li>
+        <li><strong>有人不敢提問：</strong>強制每人手上拿 3 張提問卡，走完一張海報交一張給發表者，沒交完不能下課。</li>
+        <li><strong>發表者被同學圍攻而緊張：</strong>事先約定「先聽 30 秒再問」，不要打斷講解。</li>
+        <li><strong>同儕評量分數差距太大：</strong>用最高與最低各刪一筆取平均，避免主觀干擾。</li>
+        <li><strong>時間不夠：</strong>砍掉觀察記錄表的 D 與 E 兩題，保留 A、B、C 即可。但提問卡與自我反思絕對不能砍。</li>
+      </ul>
+      <div class="teacher-label" style="margin-top:14px;">評量配重建議</div>
+      <p style="font-size:12.5px;">同儕互評占 20–30%、自我反思占 30%、教師評量占 40–50%。同儕分數本身不要直接計入成績，而是用「能否寫出具體建議」「能否提出過程型問題」當作評量依據——這才是課綱真正要的能力。</p>
+    </div>
+
+    <div style="background:#f8f0fe;border:1px solid #d4b8f8;border-radius:6px;padding:14px 18px;margin-bottom:16px;">
+      <div style="font-weight:700;color:var(--express);font-size:12px;margin-bottom:6px;">📂 學習歷程提示</div>
+      <p style="font-size:13px;color:#6d28d9;">把你給別組的兩段話（讚賞＋建議）和自己的反思單一起放進學習歷程，再加一句「我從這次回饋中真正改了什麼」。<strong>能對別人作品提出具體建議，本身就是課綱明示的能力指標。</strong></p>
+    </div>
+
+    <div class="unit-nav">
+      <a href="presentation.html">← 表達與分享</a>
+      <a href="orid.html">ORID 反思框架 →</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
