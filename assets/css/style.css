@@ -1588,6 +1588,20 @@ tr:nth-child(even) td { background: #fafaf8; }
 }
 
 /* ═══════════════════════════════════════════════════
+   KaTeX MathML 強制隱藏（備援，避免 katex.css 沒載到時複製出雙份）
+   ═══════════════════════════════════════════════════ */
+.katex-mathml,
+.katex .katex-mathml {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  height: 1px !important;
+  width: 1px !important;
+  overflow: hidden !important;
+}
+
+/* ═══════════════════════════════════════════════════
    表格內可填輸入框（.table-input）
    數據表 / 變因設計表的 cell 中嵌入：保持表格視覺
    ═══════════════════════════════════════════════════ */
