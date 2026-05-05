@@ -1588,6 +1588,40 @@ tr:nth-child(even) td { background: #fafaf8; }
 }
 
 /* ═══════════════════════════════════════════════════
+   表格內可填輸入框（.table-input）
+   數據表 / 變因設計表的 cell 中嵌入：保持表格視覺
+   ═══════════════════════════════════════════════════ */
+.table-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 4px 6px;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-primary);
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  border-radius: 3px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.table-input::placeholder {
+  color: #cbd5e1;
+  font-style: italic;
+}
+.table-input:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+.table-input:focus {
+  background: white;
+  box-shadow: inset 0 0 0 2px var(--phase1);
+}
+/* 表格 cell 包 input 時，cell 自身不要有 padding（input 已有）*/
+td:has(> .table-input) {
+  padding: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════
    教師模式 C：課堂引導筆記
    只在 pivot textarea 旁加，教師模式才顯示。
    結構：期待思考方向 / 常見偏題 / 後續討論問題 三段
