@@ -32,12 +32,36 @@
   <div class="page-header">
     <h1>🕰️ 單擺模組 · Lv3 開放式探究</h1>
     <p class="subtitle">設計一個剛好擺 10 秒的單擺——然後問出更好的問題。</p>
+
+    <div class="task-statement">
+      <span class="ts-label">本頁任務</span>
+      <span class="ts-body">用 T = 2π√(L/g) 算出你的擺長，盲測挑戰「擺剛好 10 秒」；失敗或誤差大不是重點——重點是從失敗現場「看到問題的種子」，把直覺寫成 3 個可驗證的研究問題，再篩出 1 個作為後續自主探究的起點。</span>
+    </div>
+
     <div class="meta-tags">
       <span class="tag phase3">Lv3</span>
       <span class="tag inquiry-open">開放式探究</span>
       <span class="tag">4 節課</span>
       <span class="tag">競賽 + 自主探究</span>
     </div>
+  </div>
+
+  <!-- ═══ 📍 從哪裡來 ═══ -->
+  <div class="prev-recall">
+    <div class="pr-label">📍 從 Lv2 來</div>
+    <div class="pr-body">
+      在 Lv2，老師給了你一個變因清單（質量／角度／繩材／⋯⋯），你選一個自己設計實驗驗證。<strong>但好的研究問題從哪來</strong>？不是老師給的——是從「自己動手做、結果不對勁」的現場長出來的。這頁你要先做一場 10 秒擺競賽，再從<strong>失敗或誤差</strong>裡挖出研究問題。
+    </div>
+  </div>
+
+  <!-- ═══ ⚠️ 常見錯誤先行 ═══ -->
+  <div class="common-mistakes common-mistakes--banner">
+    <div class="cm-title">⚠️ 進來前先看：Lv3 學生最常踩的 3 個坑</div>
+    <ul>
+      <li><strong>把「失敗」當作該檢討的事</strong>——擺到 10.7 秒不是要懊悔，是要追問「那 0.7 秒從哪來」。<em>解法：誤差是禮物，每個誤差來源都是潛在研究問題。</em></li>
+      <li><strong>提的問題太大太空</strong>——「怎樣才能更準？」這種問題不能設計實驗。<em>解法：好的問題要有操縱變因，例如「初始角度從 5° 增到 30° 時，盲測誤差會單調變大嗎？」</em></li>
+      <li><strong>把 AI 當「設計代工」</strong>——直接問 AI「幫我設計 10 秒擺」就抄走。<em>解法：AI 是設計夥伴，不是設計者。先有自己的計算再讓 AI 挑錯。</em></li>
+    </ul>
   </div>
 
   <!-- 學習目標 -->
@@ -322,7 +346,7 @@
         <p style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">
           從你 Step 3 的問題和假設出發，走六步流程：研究問題 → 假設 → 變因（操縱/控制/應變）→ 量測方法 → 重複次數 → 預期結果。
         </p>
-        <a href="../../tools/research-plan.html" style="display:inline-block;background:var(--phase2);color:white;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">→ 前往研究規劃工具</a>
+        <a href="../phase2/research-plan.html" style="display:inline-block;background:var(--phase2);color:white;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;">→ 前往研究規劃工具</a>
       </div>
 
       <!-- ② 預期結果 + 資源盤點 -->
@@ -428,6 +452,54 @@
         </div>
         <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
       </div>
+    </div>
+
+    <!-- ═══ 🤖 AI 協作邊界（Lv3：AI 當設計夥伴 + 文字編輯） ═══ -->
+    <div class="ai-collab">
+      <div class="ai-title">🤖 AI 在這頁的角色：<span style="font-weight:500;">設計夥伴 + 反思文字編輯</span></div>
+      <div class="ai-grid">
+        <div class="ai-can">
+          <h4>AI 可以幫你</h4>
+          <ul>
+            <li>在你算完擺長後，幫你檢查計算與單位有沒有錯</li>
+            <li>當你提了 3 個問題，幫你比較哪個更有「操縱變因」</li>
+            <li>把你寫好的反思草稿潤飾成可讀的中文</li>
+            <li>對你提的問題回「這個問題要怎麼設計實驗才能答」這種反問</li>
+          </ul>
+        </div>
+        <div class="ai-cant">
+          <h4>AI 不可以替你</h4>
+          <ul>
+            <li>替你決定要做什麼設計、答辯什麼立場</li>
+            <li>替你發想原本沒想過的研究問題（你要先有，再讓 AI 挑錯）</li>
+            <li>編造任何競賽結果或數據</li>
+            <li>替你寫核心的「我學到什麼」</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ai-prompt">
+        <strong>你可以這樣問：</strong>「我在 10 秒擺競賽結果是 <code>X.XX 秒</code>，誤差 <code>Y</code> 秒。我從這個誤差提了 3 個問題：<code>① …② …③ …</code>。請幫我用『操縱變因是否清楚』『資料是否可蒐集』『範圍是否合理』三個角度評比它們，但<strong>不要替我寫新問題</strong>，只指出每個問題的優缺點。」
+      </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核（與 stage 4 的 self-check 互補：這裡是行動清單，那邊是能力自評） ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 行動清單</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我用 T = 2π√(L/g) 算過自己的擺長，不是憑感覺</label></li>
+        <li><label><input type="checkbox"> 我有做盲測（不偷看碼錶），並記下實際秒數與誤差</label></li>
+        <li><label><input type="checkbox"> 我從誤差中寫出 ≥ 3 個有操縱變因的研究問題</label></li>
+        <li><label><input type="checkbox"> 我用「操縱變因／資料可得／範圍合理」篩出 1 個最值得做的問題</label></li>
+        <li><label><input type="checkbox"> 我把對 AI 的對話截圖留檔（展示提問品質，不是 AI 回答）</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：單擺三階段完成。下個主題（彈簧 Lv1）會用同樣的「Lv1 引導→Lv2 自選變因→Lv3 競賽提問」節奏跑一輪——你現在已經是熟手了，可以走快一點。或直接看「期末成果發表」評分標準，把單擺 Lv3 的問題開始發展成期末研究。
+      </div>
+      <a href="../phase3/final.html" class="ns-cta">看期末評分 →</a>
     </div>
 
     <!-- ════════════════════════════════════ -->

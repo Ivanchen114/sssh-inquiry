@@ -2207,6 +2207,108 @@ textarea.fill-blank {
   color: var(--text-secondary);
 }
 
+/* ── 上一階段回顧（Lv2/Lv3 必填，回顧 Lv1/Lv2 的觸發點） */
+.prev-recall {
+  margin: 18px 0;
+  padding: 14px 18px;
+  background: #f8fafc;
+  border-left: 4px solid #94a3b8;
+  border-radius: 0 6px 6px 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+.prev-recall .pr-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.prev-recall .pr-body { color: var(--text-primary); }
+.prev-recall .pr-body strong { color: var(--phase1); }
+
+/* ── AI 協作邊界（Lv2/Lv3 必填，定義 AI 在這頁的角色） */
+.ai-collab {
+  margin: 32px 0 20px;
+  padding: 20px 22px;
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 10px;
+}
+.ai-collab .ai-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #6b21a8;
+  margin-bottom: 14px;
+}
+.ai-collab .ai-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+@media (max-width: 600px) {
+  .ai-collab .ai-grid { grid-template-columns: 1fr; }
+}
+.ai-collab .ai-can,
+.ai-collab .ai-cant {
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.ai-collab .ai-can {
+  background: white;
+  border: 1px solid #e9d5ff;
+}
+.ai-collab .ai-cant {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+.ai-collab .ai-can h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b21a8;
+  margin-bottom: 6px;
+  font-family: inherit;
+}
+.ai-collab .ai-cant h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #991b1b;
+  margin-bottom: 6px;
+  font-family: inherit;
+}
+.ai-collab .ai-can ul,
+.ai-collab .ai-cant ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.ai-collab .ai-can li { color: #4c1d95; margin-bottom: 2px; }
+.ai-collab .ai-cant li { color: #7f1d1d; margin-bottom: 2px; }
+.ai-collab .ai-prompt {
+  padding: 12px 14px;
+  background: white;
+  border-left: 3px solid #a855f7;
+  border-radius: 0 6px 6px 0;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+.ai-collab .ai-prompt strong { color: #6b21a8; }
+.ai-collab .ai-prompt code {
+  background: #f3e8ff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: #6b21a8;
+}
+
 /* ── 手機版微調 */
 @media (max-width: 600px) {
   .task-statement { padding: 12px 14px; font-size: 13.5px; }
@@ -2214,4 +2316,6 @@ textarea.fill-blank {
   .checklist-card { padding: 14px 16px; }
   .next-step { padding: 14px 16px; flex-direction: column; align-items: flex-start; }
   .next-step .ns-cta { width: 100%; justify-content: center; }
+  .ai-collab { padding: 16px 16px; }
+  .prev-recall { padding: 12px 14px; }
 }
