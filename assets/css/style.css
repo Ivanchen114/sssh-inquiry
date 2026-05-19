@@ -1985,3 +1985,233 @@ textarea.fill-blank {
   .gw-prompt-grid { grid-template-columns: 1fr; }
   .self-row { grid-template-columns: 1fr; }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   SOIL 對齊：共用元件
+   ── 設計原則：每頁都有「任務句 → 常見錯誤 → 完成檢核 → 下一步」
+   ── 沿用既有色彩變數，保留 WCAG AA 對比
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── 任務句（每頁 h1 之下，回答「本頁要學會什麼」） */
+.task-statement {
+  margin: 16px 0 0;
+  padding: 14px 18px;
+  border-left: 4px solid var(--phase1);
+  background: #eef2fb;
+  border-radius: 0 8px 8px 0;
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #1c2e6b;
+}
+.task-statement .ts-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--phase1);
+  margin-right: 6px;
+}
+.task-statement .ts-body {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ── 常見錯誤先行（page-body 開頭，提醒學生避坑） */
+.common-mistakes {
+  margin-bottom: 28px;
+  padding: 16px 18px;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+}
+/* banner 變體：放在 page-header 與 step-nav 之間，與 measurement-note 視覺切齊 */
+.common-mistakes--banner {
+  margin: 18px 0;
+  border-left: 4px solid #d97706;
+  border-radius: 0 6px 6px 0;
+}
+.common-mistakes .cm-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #92400e;
+  margin-bottom: 8px;
+}
+.common-mistakes ul {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 13.5px;
+  color: #78350f;
+  line-height: 1.85;
+}
+.common-mistakes ul li { margin-bottom: 2px; }
+.common-mistakes ul li strong { color: #92400e; }
+
+/* ── 完成檢核（page-body 結尾，學生自評是否完成本頁） */
+.checklist-card {
+  margin-top: 32px;
+  padding: 18px 20px;
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  border-radius: 10px;
+}
+.checklist-card .ck-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #065f46;
+  margin-bottom: 12px;
+}
+.checklist-card .ck-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  color: #064e3b;
+  line-height: 1.8;
+}
+.checklist-card .ck-list li {
+  padding: 5px 0;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.checklist-card .ck-list label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+  width: 100%;
+}
+.checklist-card .ck-list input[type="checkbox"] {
+  margin-top: 5px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #059669;
+  cursor: pointer;
+}
+.checklist-card .ck-list label:has(input:checked) {
+  color: #6b6b88;
+  text-decoration: line-through;
+  text-decoration-color: #9ca3af;
+}
+
+/* ── 下一步（page-body 最後，導流到 lv2 或下一主題） */
+.next-step {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: #fff4ec;
+  border: 1px solid #fbd9b7;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.next-step .ns-text {
+  font-size: 13.5px;
+  color: var(--phase3);
+  line-height: 1.6;
+}
+.next-step .ns-text strong { color: #6b3a10; }
+.next-step .ns-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--phase3);
+  color: white;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.next-step .ns-cta:hover { opacity: 0.88; }
+
+/* ── 本學期路線卡（首頁，給學生看的 A/B/C 推薦組合） */
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+@media (max-width: 720px) {
+  .route-grid { grid-template-columns: 1fr; }
+}
+.route-card {
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg, var(--sidebar-bg));
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.route-card:hover {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.route-card.r-a { border-top: 3px solid #2952c4; }
+.route-card.r-b { border-top: 3px solid #1e7a52; }
+.route-card.r-c { border-top: 3px solid #a3551a; }
+
+.route-card .rc-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.route-card.r-a .rc-label { color: #2952c4; }
+.route-card.r-b .rc-label { color: #1e7a52; }
+.route-card.r-c .rc-label { color: #a3551a; }
+
+.route-card .rc-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.route-card .rc-topics {
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.route-card .rc-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ── 首頁開場任務句（取代原本「lead」） */
+.hero-task {
+  margin: 18px 0 4px;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-left: 4px solid var(--phase1);
+  border-radius: 0 10px 10px 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+.hero-task strong { color: var(--phase1); }
+.hero-task .ht-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ── 手機版微調 */
+@media (max-width: 600px) {
+  .task-statement { padding: 12px 14px; font-size: 13.5px; }
+  .common-mistakes { padding: 14px 14px; }
+  .checklist-card { padding: 14px 16px; }
+  .next-step { padding: 14px 16px; flex-direction: column; align-items: flex-start; }
+  .next-step .ns-cta { width: 100%; justify-content: center; }
+}

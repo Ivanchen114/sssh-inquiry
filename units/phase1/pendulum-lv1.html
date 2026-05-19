@@ -138,6 +138,12 @@
   <div class="page-header">
     <h1>🕰️ 單擺 · Lv1 引導式探究</h1>
     <p class="subtitle">用數據「發現」重力加速度。從量測到模型的完整探究迴圈。</p>
+
+    <div class="task-statement">
+      <span class="ts-label">本頁任務</span>
+      <span class="ts-body">用 5 種不同擺長的週期數據，建立 T 與 L 的數學模型；再從模型斜率反推地表的重力加速度 g，並評估你的 g 與 9.81 m/s² 差多少、為什麼會差。</span>
+    </div>
+
     <div class="meta-tags">
       <span class="tag phase1">Lv1</span>
       <span class="tag inquiry-guided">引導式探究</span>
@@ -166,6 +172,16 @@
       <li><strong>重複</strong>：每種擺長至少測 <code>3</code> 次，取平均</li>
       <li><strong>控制變因</strong>：擺角固定在 <code>≤ 15°</code>；質量不變；同一顆擺錘</li>
       <li><strong>不確定度</strong>：人為反應時間約 <code>±0.1–0.2 s</code>，分散到 10 個週期後 <code>≈ ±0.02 s</code></li>
+    </ul>
+  </div>
+
+  <!-- ═══ ⚠️ 常見錯誤先行（進四階段前先看） ═══ -->
+  <div class="common-mistakes common-mistakes--banner">
+    <div class="cm-title">⚠️ 進來前先看：3 個最常踩的坑</div>
+    <ul>
+      <li><strong>只測 1 個週期</strong>就讀秒——人為反應誤差約 ±0.15 s，一個週期測下來相對誤差超過 10%。<em>解法：測 10 個週期再除 10。</em></li>
+      <li><strong>擺角拉到 30°、45°</strong>覺得「擺得清楚比較好量」——但小角度近似只在 θ ≤ 15° 成立，大角度週期會被低估。<em>解法：擺角固定在 ≤ 15°。</em></li>
+      <li>看到「T² 對 L 應該是直線」，就<strong>把不在線上的點丟掉</strong>——這是丟證據不是做科學。<em>解法：保留所有原始點，在報告中解釋偏離原因。</em></li>
     </ul>
   </div>
 
@@ -773,6 +789,26 @@
         </div>
 
       </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我量了至少 5 種不同擺長，每種測了 3 次取平均</label></li>
+        <li><label><input type="checkbox"> 我畫了 T² 對 L 的散佈圖，並做出線性回歸</label></li>
+        <li><label><input type="checkbox"> 我從回歸斜率反推出 g，並比較它與 9.81 m/s² 的差距</label></li>
+        <li><label><input type="checkbox"> 我能用一句話說出我的 g 為什麼跟 9.81 不一樣（不是「實驗有誤差」這種廢話）</label></li>
+        <li><label><input type="checkbox"> 我用 CER 結構（主張—證據—推理）寫了一段論證</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：在 Lv1，問題與方法都是老師給的。下一階段（Lv2）你要自己決定「哪個變因會影響週期」並設計實驗檢驗。
+      </div>
+      <a href="../phase2/pendulum-lv2.html" class="ns-cta">前往 單擺 Lv2 →</a>
     </div>
 
     <div class="unit-nav">
