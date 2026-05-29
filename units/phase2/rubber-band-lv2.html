@@ -30,23 +30,45 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🥫 橡皮筋動力罐 · Lv2 結構式探究</h1>
-    <p class="subtitle">把 lv1 的飽和模型搬到真實教室——從直覺到可重現的變因控制實驗</p>
-    <div class="meta-tags">
-      <span class="tag phase2">Lv2</span>
-      <span class="tag inquiry-structured">結構式探究</span>
-      <span class="tag">4 節課</span>
-      <span class="tag">變因掃描 × 擬合</span>
+    <div class="hero-kicker">
+      <span class="hk-meta">RUBBER-BAND · LV2 · 4 節課</span>
+      <span class="hk-chip">結構式探究</span>
     </div>
-  
-  <details class="learning-goals phase2">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能把 lv1 的飽和模型轉成可驗證的研究問題（含預測）</li>
-        <li>能完成六格設計鷹架：假設 / 變因 / 工具 / 重複次數 / 操作一致性 / 擬合計畫</li>
-        <li>能用三輪迭代（校準 → 初掃 → 補強）累積可信數據</li>
-        <li>能做殘差分析判斷擬合好壞，並用不確定度論證「有/無顯著差異」</li>
-      </ul>
+
+    <h1>🥫 橡皮筋動力罐 · Lv2<span class="h1-accent" style="color:var(--phase2);">真實教室實驗</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">選一個變因（<strong>罐重／表面／橡皮筋條數</strong>）自己設計實驗，量化它對回滾距離的影響。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">Lv1 你會解釋飽和現象。Lv2 你要回答<strong>「什麼決定回滾距離」</strong>——從現象進到工程優化。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">完整實驗計畫 + 三輪迭代數據 + 殘差分析 + <strong>CER 論證</strong>。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      從 Lv1 來｜你會用飽和模型分析。Lv2 把它<strong>搬到真實罐子</strong>——直覺對嗎？
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>把 Lv1 飽和模型轉成可驗證的研究問題（含預測）</li>
+            <li>完成六格設計鷹架：假設／變因／工具／重複／一致性／擬合</li>
+            <li>用三輪迭代（校準 → 初掃 → 補強）累積可信數據</li>
+            <li>做殘差分析並用不確定度論證</li>
+          </ul>
+        </div>
+      </div>
     </details>
   </div>
   <!-- ═══ 步驟導航列 ═══ -->
@@ -76,7 +98,9 @@
       </div>
 
 
-      <!-- lv1 回顧：飽和模型 -->
+      <details class="teacher-aside">
+<summary>📖 回顧：Lv1 的飽和模型（需要時展開）</summary>
+<!-- lv1 回顧：飽和模型 -->
       <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:13px;color:#0369a1;margin-bottom:6px;">🔄 lv1 學到的飽和模型</div>
         <div style="font-size:13px;color:var(--text-secondary);line-height:1.9;">
@@ -89,6 +113,7 @@
         </div>
       </div>
 
+      </details>
       <!-- 研究問題選單 -->
       <div style="background:white;border:2px solid var(--phase2);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:14px;color:var(--phase2);margin-bottom:12px;">
@@ -119,13 +144,16 @@
         </div>
       </div>
 
-      <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;">
+      <details class="teacher-aside">
+<summary>📖 為什麼要從 lv1 模型出發提問？（先自己想過下面那題再展開）</summary>
+<div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:12px;color:#991b1b;margin-bottom:4px;">⚠️ 為什麼要從 lv1 模型出發提問？</div>
         <div style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
           從「條數變多會怎樣」直接開做，你只會得到「變多一點」這種結論。但從「D_∞ 或 τ 如何改變」出發，你的數據會回答一個<strong>更深的問題</strong>——變因影響的是「儲能上限」還是「儲能效率」？這才是規劃研究的重點。
         </div>
       </div>
 
+      </details>
       <!-- Layer 1: reveal — 為什麼從模型提問更好 -->
       <div class="think-block reveal">
         <div class="think-prompt">🤔 想一想：直接問「條數會怎樣」和「條數如何影響 D∞」差在哪？同樣的數據能回答的東西不一樣多？先自己想再點開。</div>
@@ -223,7 +251,9 @@
         </div>
       </div>
 
-      <!-- 操作一致性策略 -->
+      <details class="teacher-aside">
+<summary>🎛️ 操作一致性策略 6 招（執行時再展開）</summary>
+<!-- 操作一致性策略 -->
       <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:13px;color:#92400e;margin-bottom:10px;">
           🎛️ 操作一致性策略（動力罐最難控的地方）
@@ -256,6 +286,7 @@
         </div>
       </div>
 
+      </details>
       <!-- Layer 1: reveal — 操作一致性的隱藏陷阱 -->
       <div class="think-block reveal">
         <div class="think-prompt">🤔 想一想：上面六個策略你都做到了，還有什麼會偷偷影響你的數據？至少想出 2 個隱藏陷阱再點開。</div>
@@ -267,7 +298,9 @@
         </div>
       </div>
 
-      <!-- 擬合模型選擇 -->
+      <details class="teacher-aside">
+<summary>📐 擬合模型對照表（分析數據時再展開）</summary>
+<!-- 擬合模型選擇 -->
       <div style="background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
         <div style="font-weight:700;font-size:13px;color:#5b21b6;margin-bottom:10px;">
           📐 擬合模型選擇（依應變變因形狀）
@@ -294,6 +327,7 @@
         </div>
       </div>
 
+      </details>
       <!-- Layer 3: choice — 壞計畫診斷 -->
       <div class="think-block choice" data-answer="c">
         <div class="think-prompt">🎯 同學阿志的研究計畫：「研究橡皮筋條數對 D_∞ 的影響。1 條／2 條／3 條三個水準，每水準轉 30 圈、量推出距離 3 次取平均。」這個計畫<strong>最致命</strong>的問題是什麼？</div>
@@ -645,6 +679,62 @@
         </div>
         <button class="step-btn" disabled>完成</button>
       </div>
+    </div>
+
+    <!-- ═══ 🤖 AI 協作邊界（Lv2：實驗審稿人） ═══ -->
+    <div class="ai-collab">
+      <div class="ai-title">🤖 AI 在這頁的角色：<span style="font-weight:500;">實驗審稿人</span></div>
+      <div class="ai-grid">
+        <div class="ai-can">
+          <h4>AI 可以幫你</h4>
+          <ul>
+            <li>檢查實驗有沒有控制橡皮筋疲勞、地面材質</li>
+            <li>建議擬合函數（飽和型 vs 冪次律）</li>
+            <li>幫你檢查圖表是否完整</li>
+            <li>對殘差異常反問檢查項</li>
+          </ul>
+        </div>
+        <div class="ai-cant">
+          <h4>AI 不可以替你</h4>
+          <ul>
+            <li>替你決定要測哪個變因</li>
+            <li>編造回滾距離數據</li>
+            <li>替你寫結論</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ai-prompt">
+        <strong>你可以這樣問：</strong>「我的橡皮筋 Lv2 計畫：<code>[貼計畫]</code>。請用『實驗審稿人』角度指出 3 個漏掉的控制變因，<strong>不要直接重寫</strong>。」
+      </div>
+      <div class="ai-check">
+        <div class="ai-check-title">問完 AI 後，你要自己確認：</div>
+        <ul>
+          <li><label><input type="checkbox"> AI 指出的漏洞我同意嗎？</label></li>
+          <li><label><input type="checkbox"> AI 有沒有編造變因？</label></li>
+          <li><label><input type="checkbox"> AI 建議的擬合函數有道理嗎？</label></li>
+          <li><label><input type="checkbox"> 我能說明為什麼這樣改？</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我選定一個變因，並寫了影響回滾距離的依據</label></li>
+        <li><label><input type="checkbox"> 我控制了橡皮筋疲勞與地面材質</label></li>
+        <li><label><input type="checkbox"> 我做了三輪迭代（校準 → 初掃 → 補強）</label></li>
+        <li><label><input type="checkbox"> 我做了殘差分析，判斷擬合好壞</label></li>
+        <li><label><input type="checkbox"> 我用 CER 寫了論證</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv3 讓罐子<strong>回滾到指定位置</strong>——精準度比距離更難。
+      </div>
+      <a href="../phase3/rubber-band-lv3.html" class="ns-cta">前往 橡皮筋 Lv3 →</a>
     </div>
 
     <!-- ═══ 課後資源（摺疊）═══ -->

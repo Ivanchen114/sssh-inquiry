@@ -30,26 +30,62 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🔬 DNA 繞射 · Lv1 引導式探究</h1>
-    <p class="subtitle">光通過狹縫會怎樣？用數據找出亮紋寬度的規律。</p>
-    <div class="meta-tags">
-      <span class="tag phase1">Lv1</span>
-      <span class="tag inquiry-guided">引導式探究</span>
-      <span class="tag">2 節課</span>
-      <span class="tag">波動 + 幾何分析</span>
-    
-  <details class="learning-goals phase1">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能從數據中辨識趨勢與規律（例如：從 L vs Δy₀ 圖判斷線性關係）</li>
-        <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：用因次分析推導 Δy₀ = k·Lλ/a）</li>
-        <li>能用「主張—證據—推理」的架構進行科學論證</li>
-        <li>能評估模型的適用範圍與限制</li>
-      </ul>
+    <div class="hero-kicker">
+      <span class="hk-meta">DIFFRACTION · LV1 · 2 節課</span>
+      <span class="hk-chip">引導式探究</span>
+    </div>
+
+    <h1>🔬 DNA 繞射 · Lv1<span class="h1-accent">從 Photo 51 到 Δy₀ ∝ Lλ/a</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">用 Photo 51 出發的繞射數據，用<strong>因次分析</strong>推出亮紋寬度公式 Δy₀ = k·Lλ/a。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">這是諾貝爾級的方法——<strong>「用光看見結構」</strong>。Lv2 你才換親手做雷射實驗驗證。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">L vs Δy₀ 散佈圖 + 推導出的關係式 + <strong>CER 論證</strong>（含模型適用範圍）。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      下一步｜<strong>Lv2</strong> 你會親手用雷射與狹縫做繞射，看公式在現實是否完美。
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>從數據辨識線性趨勢（L vs Δy₀）</li>
+            <li>用因次分析推導 Δy₀ = k·Lλ/a</li>
+            <li>用 CER 進行科學論證</li>
+            <li>評估模型適用範圍與限制</li>
+          </ul>
+        </div>
+      </div>
     </details>
   </div>
-  </div>
   <!-- ═══ 步驟導航列 ═══ -->
+  <!-- ═══ 啟動 PK（SOIL 九宮格 #1：勾學生既有經驗） ═══ -->
+  <div class="pk-hook">
+    <span class="pk-label">先想想</span>
+    <div class="pk-title">在動手之前——你已經知道的「光」</div>
+    <div class="pk-body">
+      不用查資料、不用問同學，憑你<strong>本來就有的經驗</strong>回答：
+      <ul>
+        <li>瞇著眼睛看路燈，會看到一條條光芒——光不是該直直走嗎？</li>
+        <li>CD 背面對著光會出現彩虹，為什麼？</li>
+        <li>透過紗窗看遠方燈光，燈會散開成格子狀光點，這跟縫的大小有關嗎？</li>
+      </ul>
+    </div>
+  </div>
+
   <nav class="step-nav">
     <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
     <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
@@ -65,7 +101,7 @@
     <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
       <div class="stage-intro">
         <div class="stage-label">階段一 · 發現問題</div>
-        <div class="stage-title">從光的波性出發，預測並理解繞射圖案的變化</div>
+        <div class="stage-title">先寫直覺預測：什麼會改變繞射圖案？</div>
         <p class="stage-desc">Lv1 的研究問題老師已經定好了：<strong>繞射亮紋寬度 Δy₀ 和哪些變因有關？</strong>你的工作是——先用直覺預測 Δy₀ 怎麼變，然後透過 Rosalind Franklin 的 Photo 51 歷史脈絡理解「為什麼這個問題值得問」。後面做完分析再回來對照直覺 vs 數據。</p>
         <span class="who-bar teacher">🔒 研究問題：老師提供</span>
         <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
@@ -170,7 +206,7 @@
     <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
       <div class="stage-intro phase2">
         <div class="stage-label">階段二 · 規劃研究</div>
-        <div class="stage-title">看老師怎麼設計這個研究：控制變因 + 兩個活動的對照</div>
+        <div class="stage-title">看老師怎麼設計：控制變因 + 兩個對照活動。</div>
         <p class="stage-desc">Lv1 你不用自己規劃——老師已經把<strong>要測什麼</strong>（Δy₀ vs L、Δy₀ vs a）、<strong>怎麼控制變因</strong>（固定兩個、變動一個）都安排好了。下面 Stage 3 會讓你做兩個對照活動：活動一固定 a、變動 L；活動二固定 L、變動 a。這樣你就能用因次分析把 Δy₀ 和 L、a、λ 的完整關係推出來。</p>
         <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
       </div>
@@ -262,7 +298,7 @@
     <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
       <div class="stage-intro phase3">
         <div class="stage-label">階段三 · 執行與分析</div>
-        <div class="stage-title">做兩組對照活動：分析 Δy₀ 和 L、a 的關係</div>
+        <div class="stage-title">做兩組對照：分析 Δy₀ 跟 L、a 的關係。</div>
         <p class="stage-desc">按照階段二的實驗設計，做兩個對照活動，畫圖、找出關係。重點是用<strong>因次分析</strong>把 Δy₀ 和 L、a、λ 的完整關係自己推出來。</p>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
@@ -444,7 +480,7 @@
     <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
       <div class="stage-intro phase4">
         <div class="stage-label">階段四 · 論證與反思</div>
-        <div class="stage-title">回頭對照預測：你的因次分析和直覺預測對了嗎？</div>
+        <div class="stage-title">對照預測：你的因次分析和直覺對了嗎？</div>
         <p class="stage-desc">回頭翻看 Stage 1 的預測（P1–P3），和你在 Stage 3 得到的數據及推導的公式對比。找出差異、思考為什麼，並寫出你自己想進一步探究的問題。</p>
         <span class="who-bar student">✏️ 本階段學生自主反思</span>
       </div>
@@ -529,6 +565,46 @@
         </div>
         <button class="step-btn" disabled>完成</button>
       </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我從 Photo 51 認識到「光可以看見結構」的歷史意義</label></li>
+        <li><label><input type="checkbox"> 我用因次分析推出 Δy₀ = k·Lλ/a</label></li>
+        <li><label><input type="checkbox"> 我畫了 L vs Δy₀ 散佈圖，並做線性回歸</label></li>
+        <li><label><input type="checkbox"> 我能說明 k 的物理意義（不只是擬合常數）</label></li>
+        <li><label><input type="checkbox"> 我用 CER 寫了論證，並標出公式適用範圍（小角度近似）</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <!-- ═══ 後設反思（SOIL 九宮格 #9：自知層） ═══ -->
+    <div class="metacog-reflect">
+      <div class="mc-title">回頭看你的學習路徑（這頁的核心收穫不在數據，而在「你看見自己」）</div>
+      <ul class="mc-questions">
+        <li><strong>回扣 PK · 你原本怎麼猜的？</strong>
+          翻回「先想想」三題——你原本以為光通過窄縫會<strong>直直穿過</strong>，還是<strong>散開</strong>？
+        </li>
+        <li><strong>自知 · 你的思考慣性是什麼？</strong>
+          哪題猜錯？是不是預設了「光一定走直線」？
+        </li>
+        <li><strong>洞見 · 數據 vs 直覺誰可信？</strong>
+          「縫越窄、繞射越明顯」你是從數據（Δy 與狹縫寬 a 的反比）看到，還是憑印象？
+        </li>
+        <li><strong>下一步 · 你發現自己什麼？</strong>
+          你對「自己怎麼想『光的行為』」多知道一件什麼事？
+        </li>
+      </ul>
+      <div class="mc-note">這四題沒有標準答案。它在乎的不是「你會不會繞射」，而是「你<strong>知不知道自己原本不知道什麼</strong>」——這是 Lv2／Lv3 自主提問的種子。</div>
+    </div>
+
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv2 你會親手用雷射 + 狹縫做繞射，看公式在真實世界<strong>是否完美</strong>。
+      </div>
+      <a href="../phase2/diffraction-lv2.html" class="ns-cta">前往 DNA 繞射 Lv2 →</a>
     </div>
 
     <!-- ═══ 課後資源（摺疊）═══ -->

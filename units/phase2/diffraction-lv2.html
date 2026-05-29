@@ -30,24 +30,46 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🔬 DNA 繞射模組 · Lv2 結構式探究</h1>
-    <p class="subtitle">自己動手用雷射和狹縫做繞射實驗——數據真的和公式一樣完美嗎？</p>
-    <div class="meta-tags">
-      <span class="tag phase2">Lv2</span>
-      <span class="tag inquiry-structured">結構式探究</span>
-      <span class="tag">4 節課</span>
-      <span class="tag">實驗設計 · 數據蒐集</span>
-    
-  <details class="learning-goals phase2">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能從現象或理論出發，提出可驗證的研究問題（例如：狹縫寬度如何影響亮紋寬度？）</li>
-        <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：控制螢幕距離與雷射波長）</li>
-        <li>能有系統地蒐集數據，並判斷數據的可靠性（用直尺或相機軟體測量）</li>
-        <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
-      </ul>
+    <div class="hero-kicker">
+      <span class="hk-meta">DIFFRACTION · LV2 · 4 節課</span>
+      <span class="hk-chip">結構式探究</span>
+    </div>
+
+    <h1>🔬 DNA 繞射 · Lv2<span class="h1-accent" style="color:var(--phase2);">親手驗證公式</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">用<strong>雷射 + 狹縫</strong>自己設計實驗，選一個變因（L、a、λ）驗證 Δy₀ = k·Lλ/a 是否成立。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">Lv1 公式是「<strong>推</strong>」出來的，Lv2 你要「<strong>驗</strong>」它——理論與現實的差距就是研究機會。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">完整實驗計畫 + ≥ 3 次重複數據 + 線性回歸與斜率分析 + <strong>CER 論證</strong>。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      從 Lv1 來｜你會用因次分析推公式。Lv2 你要<strong>用實驗驗證</strong>它。
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>提出可驗證的研究問題（例：狹縫寬度如何影響亮紋寬度？）</li>
+            <li>設計含操縱／控制／應變變因的實驗計畫</li>
+            <li>系統蒐集數據（用直尺或相機軟體量測）</li>
+            <li>用圖表呈現結果並 CER 論證</li>
+          </ul>
+        </div>
+      </div>
     </details>
-  </div>
   </div>
   <nav class="step-nav">
     <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
@@ -412,6 +434,62 @@
         </div>
         <button class="step-btn primary" data-step="next" disabled style="padding:8px 16px;border:1px solid var(--border);border-radius:6px;cursor:not-allowed;color:var(--text-muted);background:var(--bg);">下一步 →</button>
       </div>
+    </div>
+
+    <!-- ═══ 🤖 AI 協作邊界（Lv2：實驗審稿人） ═══ -->
+    <div class="ai-collab">
+      <div class="ai-title">🤖 AI 在這頁的角色：<span style="font-weight:500;">實驗審稿人</span></div>
+      <div class="ai-grid">
+        <div class="ai-can">
+          <h4>AI 可以幫你</h4>
+          <ul>
+            <li>檢查實驗對準步驟是否完整（雷射 / 狹縫 / 螢幕三點共線）</li>
+            <li>建議量測哪幾組 L 才有足夠的線性區間</li>
+            <li>幫你算線性回歸斜率對應的 λ 或 a 是否合理</li>
+            <li>對「為什麼這組偏離」反問你檢查項</li>
+          </ul>
+        </div>
+        <div class="ai-cant">
+          <h4>AI 不可以替你</h4>
+          <ul>
+            <li>替你決定要測哪個變因</li>
+            <li>編造任何亮紋寬度</li>
+            <li>替你寫結論</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ai-prompt">
+        <strong>你可以這樣問：</strong>「我的繞射 Lv2 計畫：<code>[貼計畫]</code>。請用『實驗審稿人』角度指出 3 個誤差來源或漏掉的控制變因，<strong>不要直接重寫</strong>。」
+      </div>
+      <div class="ai-check">
+        <div class="ai-check-title">問完 AI 後，你要自己確認：</div>
+        <ul>
+          <li><label><input type="checkbox"> AI 指出的漏洞我同意嗎？</label></li>
+          <li><label><input type="checkbox"> AI 有沒有編造一個量測法？</label></li>
+          <li><label><input type="checkbox"> AI 建議的方法有跳過我自己的思路嗎？</label></li>
+          <li><label><input type="checkbox"> 我能說明為什麼這樣改？</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我選定一個變因（L、a、λ）並寫了預期關係</label></li>
+        <li><label><input type="checkbox"> 我列了 ≥ 3 個控制變因（環境光、雷射對準、螢幕垂直⋯）</label></li>
+        <li><label><input type="checkbox"> 每水準量測 ≥ 3 次，亮紋寬度用 5 個亮紋平均算</label></li>
+        <li><label><input type="checkbox"> 我做了線性回歸，並用斜率反推實驗參數</label></li>
+        <li><label><input type="checkbox"> 我用 CER 寫了「公式是否成立」的論證</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv3「用光看見結構」挑戰賽——你拿到<strong>未知狹縫</strong>，反推它的特徵。
+      </div>
+      <a href="../phase3/diffraction-lv3.html" class="ns-cta">前往 DNA 繞射 Lv3 →</a>
     </div>
 
     <!-- POST-CLASS SECTION -->

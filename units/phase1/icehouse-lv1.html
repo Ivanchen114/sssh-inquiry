@@ -30,26 +30,62 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🧊 冰屋 · Lv1 引導式探究</h1>
-    <p class="subtitle">從鹽冰降溫數據認識吸熱反應與溫度變化，建立「冰鹽比例 vs 最低溫度」的定量模型。</p>
-    <div class="meta-tags">
-      <span class="tag phase1">Lv1</span>
-      <span class="tag inquiry-guided">引導式探究</span>
-      <span class="tag">2 節課</span>
-      <span class="tag">熱學 + 相變</span>
-    
-  <details class="learning-goals phase1">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能從數據中辨識趨勢與規律（例如：從加鹽量 vs 最低溫圖判斷飽和現象）</li>
-        <li>能用數學模型（圖表、公式）描述觀察到的關係（例如：用溶解度解釋降溫的非線性）</li>
-        <li>能用「主張—證據—推理」的架構進行科學論證</li>
-        <li>能評估模型的適用範圍與限制</li>
-      </ul>
+    <div class="hero-kicker">
+      <span class="hk-meta">ICEHOUSE · LV1 · 2 節課</span>
+      <span class="hk-chip">引導式探究</span>
+    </div>
+
+    <h1>🧊 冰屋 · Lv1<span class="h1-accent">鹽冰降溫的飽和點</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">分析<strong>冰鹽比例 vs 最低溫度</strong>的數據，找出飽和點（共晶點 -21°C）並用溶解度解釋非線性現象。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">熱學的<strong>飽和／極限</strong>是隔熱／保冷設計的物理基礎。Lv2 才換你動手測自己的方案。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">加鹽量 vs 最低溫度散佈圖 + 飽和點分析 + <strong>CER 論證</strong>（含模型適用範圍）。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      下一步｜<strong>Lv2</strong> 你會自己設計保冷實驗，比較材料與隔熱層如何影響保冷效能。
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>從數據辨識飽和現象（不是線性關係）</li>
+            <li>用溶解度解釋非線性降溫</li>
+            <li>用 CER 進行科學論證</li>
+            <li>評估模型適用範圍（共晶點 -21°C）</li>
+          </ul>
+        </div>
+      </div>
     </details>
   </div>
-  </div>
   <!-- ═══ 步驟導航列 ═══ -->
+  <!-- ═══ 啟動 PK（SOIL 九宮格 #1：勾學生既有經驗） ═══ -->
+  <div class="pk-hook">
+    <span class="pk-label">先想想</span>
+    <div class="pk-title">在動手之前——你已經知道的「冷與熱」</div>
+    <div class="pk-body">
+      不用查資料、不用問同學，憑你<strong>本來就有的經驗</strong>回答：
+      <ul>
+        <li>冬天蓋棉被會暖——棉被自己會發熱嗎？那暖從哪來？</li>
+        <li>手搖飲用保麗龍杯比較不容易融冰，為什麼？</li>
+        <li>古早做冰淇淋要在冰塊裡加粗鹽。加鹽到底讓溫度升還是降？</li>
+      </ul>
+    </div>
+  </div>
+
   <nav class="step-nav">
     <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
     <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
@@ -66,7 +102,7 @@
     <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
       <div class="stage-intro">
         <div class="stage-label">階段一 · 發現問題</div>
-        <div class="stage-title">在動手之前，先用直覺預測「保溫盒的熱流失」</div>
+        <div class="stage-title">先寫直覺預測：保溫盒的熱怎麼流失？</div>
         <p class="stage-desc">Lv1 老師已定好研究問題：<strong>哪些因素影響冰塊融化速度？</strong>你的工作是——在做鹽冰實驗前，把你的<strong>直覺預測</strong>寫下來。做完實驗回來對照，你會親眼看到「直覺 vs 數據」的落差。</p>
         <span class="who-bar teacher">🔒 研究問題：老師提供</span>
         <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
@@ -124,7 +160,7 @@
     <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
       <div class="stage-intro phase2">
         <div class="stage-label">階段二 · 規劃研究</div>
-        <div class="stage-title">看老師怎麼設計這個研究：三種熱傳遞 + 鹽冰降溫原理</div>
+        <div class="stage-title">看老師怎麼設計：三種熱傳遞 + 鹽冰降溫。</div>
         <p class="stage-desc">Lv1 你不用自己規劃實驗——老師已經把<strong>要測什麼</strong>（加鹽量 vs 最低溫）、<strong>怎麼操作</strong>（控制冰量 200g，改變鹽量），<strong>量什麼</strong>（每 2 分鐘測溫度）都定好了。下一 Lv 你就要自己設計實驗了。</p>
         <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
       </div>
@@ -252,7 +288,7 @@
     <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
       <div class="stage-intro phase3">
         <div class="stage-label">階段三 · 執行與分析</div>
-        <div class="stage-title">動手操作鹽冰實驗：測、記錄、畫圖、找出飽和點</div>
+        <div class="stage-title">操作鹽冰實驗：測、畫圖、找出飽和點。</div>
         <p class="stage-desc">按照階段二的實驗設計，實際操作、記錄溫度、畫「加鹽量 vs 最低溫」圖、分析規律。重點不是算對一個「飽和點」——是看懂「為什麼加到 80g 之後溫度不再明顯下降」。</p>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
@@ -400,7 +436,7 @@
     <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
       <div class="stage-intro phase4">
         <div class="stage-label">階段四 · 論證與反思</div>
-        <div class="stage-title">對照預測、論證結果、長出你自己的下一個問題</div>
+        <div class="stage-title">對照預測、論證結果，再長出一個帶去 Lv2 的問題。</div>
         <p class="stage-desc">回頭對照 P1–P3 的預測——對了幾題？差在哪？用 CER 架構把你的結論論證完整（主張、證據、理由）。最後試著從你的意外或疑惑生出一個<strong>自己的探究問題</strong>，帶到 Lv2 去。</p>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
@@ -492,6 +528,46 @@
         </div>
         <button class="step-btn" disabled>完成</button>
       </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我量了 ≥ 5 組不同冰鹽比例的最低溫度</label></li>
+        <li><label><input type="checkbox"> 我畫了加鹽量 vs 最低溫散佈圖，看出飽和現象</label></li>
+        <li><label><input type="checkbox"> 我能說明為什麼有飽和點（涉及溶解度與共晶點）</label></li>
+        <li><label><input type="checkbox"> 我做了溫度計校正（冰水混合應 0°C）</label></li>
+        <li><label><input type="checkbox"> 我用 CER 論證冰鹽比例對降溫的影響，含適用範圍</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <!-- ═══ 後設反思（SOIL 九宮格 #9：自知層） ═══ -->
+    <div class="metacog-reflect">
+      <div class="mc-title">回頭看你的學習路徑（這頁的核心收穫不在數據，而在「你看見自己」）</div>
+      <ul class="mc-questions">
+        <li><strong>回扣 PK · 你原本怎麼猜的？</strong>
+          翻回「先想想」三題——你原本以為「冰加鹽」會讓溫度<strong>更低</strong>，還是只是融得快？
+        </li>
+        <li><strong>自知 · 你的思考慣性是什麼？</strong>
+          哪題猜錯？是不是覺得「保溫＝會發熱」「加越多效果越強」？
+        </li>
+        <li><strong>洞見 · 數據 vs 直覺誰可信？</strong>
+          「降溫有飽和點」你是從<strong>加鹽量 vs 最低溫</strong>的數據看到，還是用想的？
+        </li>
+        <li><strong>下一步 · 你發現自己什麼？</strong>
+          你對「自己怎麼想熱的流動」多知道一件什麼事？
+        </li>
+      </ul>
+      <div class="mc-note">這四題沒有標準答案。它在乎的不是「你會不會保溫與降溫」，而是「你<strong>知不知道自己原本不知道什麼</strong>」——這是 Lv2／Lv3 自主提問的種子。</div>
+    </div>
+
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv2 你會自己設計保冷實驗——比較不同材料與隔熱層的效能。
+      </div>
+      <a href="../phase2/icehouse-lv2.html" class="ns-cta">前往 冰屋 Lv2 →</a>
     </div>
 
     <!-- ═══ 課後資源（摺疊）═══ -->

@@ -30,15 +30,55 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🧊 冰屋模組 · Lv2 結構式探究</h1>
-    <p class="subtitle">設計自己的保冷實驗，比較不同材料與隔熱層如何影響容器的保冷效能。</p>
-    <div class="meta-tags">
+    <div class="hero-kicker">
+      <span class="hk-meta">ICEHOUSE · LV2 · 4 節課</span>
+      <span class="hk-chip">結構式探究</span>
+    </div>
+
+    <h1>🧊 冰屋 · Lv2<span class="h1-accent" style="color:var(--phase2);">設計保冷實驗</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">選一個變因（<strong>材質／隔熱層／開口面積</strong>）自己設計實驗，比較不同條件的保冷效能。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">Lv1 你會分析「鹽冰怎麼降溫」，Lv2 你要回答<strong>「怎麼讓冷的東西保持冷」</strong>——從現象進到工程應用。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">完整實驗計畫 + 溫度-時間曲線（≥ 3 種條件）+ <strong>CER 論證</strong>。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      從 Lv1 來｜你會解釋鹽冰飽和。Lv2 你要<strong>讓冷不要跑掉</strong>——熱傳導／對流／輻射全上場。
+    </p>
+
+    <div class="meta-tags" style="display:none;">
       <span class="tag phase2">Lv2</span>
       <span class="tag inquiry-structured">結構式探究</span>
       <span class="tag">4 節課</span>
       <span class="tag">隔熱設計 · 實驗對照 · 數據分析</span>
-    
-  <details class="learning-goals phase2">
+    </div>
+
+  <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>提出可驗證的研究問題（例：材質如何影響保冷？）</li>
+            <li>設計含操縱／控制／應變變因的實驗計畫</li>
+            <li>系統蒐集溫度-時間數據（每 2 分鐘記錄）</li>
+            <li>用圖表呈現結果並 CER 論證</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+  <details class="learning-goals phase2" style="display:none;">
       <summary>🎯 4 個學習目標</summary>
       <ul>
         <li>能從現象或理論出發，提出可驗證的研究問題（例如：容器材質如何影響保冷效能？）</li>
@@ -48,7 +88,7 @@
       </ul>
     </details>
   </div>
-  </div>
+
   <nav class="step-nav">
     <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
     <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
@@ -418,6 +458,62 @@
         </div>
         <button class="step-btn primary" data-step="next" disabled>下一步 →</button>
       </div>
+    </div>
+
+    <!-- ═══ 🤖 AI 協作邊界（Lv2：實驗審稿人） ═══ -->
+    <div class="ai-collab">
+      <div class="ai-title">🤖 AI 在這頁的角色：<span style="font-weight:500;">實驗審稿人</span></div>
+      <div class="ai-grid">
+        <div class="ai-can">
+          <h4>AI 可以幫你</h4>
+          <ul>
+            <li>檢查保冷實驗有哪些控制變因要對齊（初溫、室溫、容器大小）</li>
+            <li>提示三種熱傳遞方式（傳導／對流／輻射）各對應什麼隔熱設計</li>
+            <li>建議用什麼模型擬合溫度衰減（指數型）</li>
+            <li>對「為什麼這組保冷比預期差」反問檢查項</li>
+          </ul>
+        </div>
+        <div class="ai-cant">
+          <h4>AI 不可以替你</h4>
+          <ul>
+            <li>替你決定要測哪個變因</li>
+            <li>編造溫度數據</li>
+            <li>替你寫結論</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ai-prompt">
+        <strong>你可以這樣問：</strong>「我的冰屋 Lv2 計畫：<code>[貼計畫]</code>。請用『實驗審稿人』角度指出 3 個漏掉的控制變因，<strong>不要直接重寫</strong>。」
+      </div>
+      <div class="ai-check">
+        <div class="ai-check-title">問完 AI 後，你要自己確認：</div>
+        <ul>
+          <li><label><input type="checkbox"> AI 指出的漏洞我同意嗎？</label></li>
+          <li><label><input type="checkbox"> AI 有沒有編造熱傳遞機制？</label></li>
+          <li><label><input type="checkbox"> AI 的建議有跳過我的思路嗎？</label></li>
+          <li><label><input type="checkbox"> 我能說明為什麼這樣改？</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我選定一個變因並寫了影響保冷的物理機制</label></li>
+        <li><label><input type="checkbox"> 我把所有樣本平衡到同一初溫</label></li>
+        <li><label><input type="checkbox"> 我每 2 分鐘記錄一次溫度，並記環境溫度</label></li>
+        <li><label><input type="checkbox"> 我畫了溫度-時間曲線（≥ 3 組對照）</label></li>
+        <li><label><input type="checkbox"> 我用 CER 寫了「哪種設計保冷最佳、為什麼」</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv3 保冷箱設計競賽——你要整合 Lv1（鹽冰）+ Lv2（隔熱）做出最強保冷系統。
+      </div>
+      <a href="../phase3/icehouse-lv3.html" class="ns-cta">前往 冰屋 Lv3 →</a>
     </div>
 
     <!-- POST-CLASS -->

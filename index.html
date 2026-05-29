@@ -241,6 +241,49 @@
     .hero-entry.e-class:hover { border-color: #1e7a52; }
     .hero-entry.e-export { border-left: 4px solid #b5621e; }
     .hero-entry.e-export:hover { border-color: #b5621e; }
+
+    /* ── 「我卡在這裡」內容求救入口 ── */
+    .stuck-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 14px 0 4px;
+      padding: 10px 14px;
+      background: #fff4ec;
+      border-left: 4px solid var(--phase3);
+      border-radius: 0 8px 8px 0;
+    }
+    .stuck-bar .sb-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #6b3a10;
+      letter-spacing: 0.02em;
+      margin-right: 4px;
+    }
+    .stuck-bar .sb-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      background: white;
+      border: 1px solid #fbd9b7;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--phase3);
+      text-decoration: none;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .stuck-bar .sb-chip:hover {
+      background: #fef3e2;
+      border-color: var(--phase3);
+    }
+    .stuck-bar .sb-chip span { font-size: 14px; }
+    @media (max-width: 600px) {
+      .stuck-bar { padding: 12px 12px; }
+      .stuck-bar .sb-label { width: 100%; margin-bottom: 4px; }
+    }
   </style>
 </head>
 <body>
@@ -273,6 +316,16 @@
     <div class="hero-task">
       <strong>本學期任務</strong>：選 2–3 個物理主題，從給你數據建模（Lv1），到自己設計實驗（Lv2），到自己提問做研究（Lv3）。
       <span class="ht-sub">不需要 9 個主題全跑——廣度不如深度。下方有三組老師推薦的路線可以選。</span>
+    </div>
+
+    <!-- 我卡在這裡（內容求救入口，連到對應工具頁） -->
+    <div class="stuck-bar">
+      <span class="sb-label">我卡在這裡 →</span>
+      <a href="tools/good-question.html" class="sb-chip"><span>❓</span>題目</a>
+      <a href="units/phase2/research-plan.html" class="sb-chip"><span>📋</span>實驗設計</a>
+      <a href="tools/excel.html" class="sb-chip"><span>📊</span>數據分析</a>
+      <a href="units/phase2/report.html" class="sb-chip"><span>📝</span>報告</a>
+      <a href="tools/orid.html" class="sb-chip"><span>🪞</span>反思</a>
     </div>
 
     <!-- 從哪裡開始（學生入口三按鈕） -->

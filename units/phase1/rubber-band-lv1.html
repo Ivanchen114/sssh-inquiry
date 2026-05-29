@@ -30,26 +30,62 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🥫 橡皮筋動力罐 · Lv1 引導式探究</h1>
-    <p class="subtitle">橡皮筋不是理想彈簧——用數據建立「飽和模型」並論證為什麼</p>
-    <div class="meta-tags">
-      <span class="tag phase1">Lv1</span>
-      <span class="tag inquiry-guided">引導式探究</span>
-      <span class="tag">2 節課</span>
-      <span class="tag">飽和曲線 + CER</span>
+    <div class="hero-kicker">
+      <span class="hk-meta">RUBBER-BAND · LV1 · 2 節課</span>
+      <span class="hk-chip">引導式探究</span>
     </div>
-  
-  <details class="learning-goals phase1">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能從數據形狀選出合適的經驗模型（線性 / 冪次 / <strong>飽和模型</strong>），並用殘差與擬合形狀判斷</li>
-        <li>能用「主張—證據—推理」的 CER 架構論證：為什麼橡皮筋會出現飽和？</li>
-        <li>能辨識「理想彈簧模型 E_p = ½kx²」在橡皮筋上的失效邊界</li>
-        <li>能從「推出距離 vs 回滾距離」的差距估算摩擦損耗比</li>
-      </ul>
+
+    <h1>🥫 橡皮筋動力罐 · Lv1<span class="h1-accent">建立飽和模型</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">分析<strong>轉圈數 vs 回滾距離</strong>數據，發現「越轉越多 ≠ 越滾越遠」的<strong>飽和現象</strong>，並用 CER 論證為什麼。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">橡皮筋<strong>不是理想彈簧</strong>——E_p = ½kx² 在哪個範圍失效？這是「模型適用邊界」的入門練習。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">轉圈數 vs 回滾距離散佈圖 + 飽和點估算 + 摩擦損耗比 + <strong>CER 論證</strong>。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      下一步｜<strong>Lv2</strong> 你會自己選變因（罐重／表面／橡皮筋條數）設計變因控制實驗。
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>從數據形狀選擇模型（線性／冪次／飽和）並用殘差判斷</li>
+            <li>用 CER 論證為什麼出現飽和</li>
+            <li>辨識理想彈簧模型 E_p = ½kx² 的失效邊界</li>
+            <li>從推出 vs 回滾差距估算摩擦損耗比</li>
+          </ul>
+        </div>
+      </div>
     </details>
   </div>
   <!-- ═══ 步驟導航列 ═══ -->
+  <!-- ═══ 啟動 PK（SOIL 九宮格 #1：勾學生既有經驗） ═══ -->
+  <div class="pk-hook">
+    <span class="pk-label">先想想</span>
+    <div class="pk-title">在動手之前——你已經知道的「橡皮筋儲能」</div>
+    <div class="pk-body">
+      不用查資料、不用問同學，憑你<strong>本來就有的經驗</strong>回答：
+      <ul>
+        <li>拉橡皮筋彈出去，拉越長射越遠嗎？有沒有「再拉就斷」的極限？</li>
+        <li>發條玩具、迴力車轉越多圈跑越遠嗎？會不會轉太多反而卡住或打滑？</li>
+        <li>橡皮筋連續拉很多次之後，是不是會變鬆、彈性變差？</li>
+      </ul>
+    </div>
+  </div>
+
   <nav class="step-nav">
     <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
     <button class="step-tab"><span class="step-num">2</span>規劃研究</button>
@@ -63,7 +99,7 @@
     <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
       <div class="stage-intro">
         <div class="stage-label">階段一 · 發現問題</div>
-        <div class="stage-title">從生活經驗出發，預測「橡皮筋拉力 vs 伸長量」的關係</div>
+        <div class="stage-title">先用生活經驗預測：橡皮筋拉力 vs 伸長量。</div>
         <p class="stage-desc">Lv1 老師已經把問題定好了：<strong>橡皮筋的拉力和伸長量是什麼關係？</strong>你的工作是——在看任何數據前，用生活直覺回答三個預測題。做完實驗回來對照，你會看到直覺 vs 數據的落差。</p>
         <span class="who-bar teacher">🔒 研究問題：老師提供</span>
         <span class="who-bar student" style="margin-left:6px;">✏️ 直覺預測：你來寫</span>
@@ -125,7 +161,7 @@
     <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
       <div class="stage-intro phase2">
         <div class="stage-label">階段二 · 規劃研究</div>
-        <div class="stage-title">看老師怎麼規劃這個研究：橡皮筋不是彈簧，所以要測什麼？</div>
+        <div class="stage-title">看老師怎麼規劃：橡皮筋不是彈簧，要測什麼？</div>
         <p class="stage-desc">Lv1 你不用自己設計——但規劃研究的第一步是「釐清你在研究什麼」。橡皮筋<strong>不遵守胡克定律</strong>（不是彈簧），所以<strong>不能假設拉力和伸長量成正比</strong>。這個認知決定了 Stage 3 要比較三種模型：線性、冪次、飽和。</p>
         <span class="who-bar teacher">🔒 本階段全部由老師提供</span>
       </div>
@@ -270,7 +306,7 @@
         <p class="stage-desc">按照階段二的規劃，把橡皮筋的拉力-伸長量數據用三種模型去擬合，比較殘差、擬合形狀、物理合理性，找出最適合的模型。重點不是算對一個係數——是看懂「為什麼飽和模型才合理」。</p>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
-      <div class="step-action">用數據比較三種模型：線性、冪次、飽和模型——哪個最合理？</div>
+      <div class="step-action">同一組數據分別套線性、冪次、飽和三模型，比殘差挑出最貼的。</div>
 
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">下表是同一個橡皮筋動力罐，轉不同圈數時的推出距離和回滾距離（每組重複 3 次）：</p>
       <div style="overflow-x:auto;margin-bottom:16px;">
@@ -385,7 +421,7 @@
     <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
       <div class="stage-intro phase4">
         <div class="stage-label">階段四 · 論證與反思</div>
-        <div class="stage-title">用 CER 論證結論、對照預測、長出自己的下一個問題</div>
+        <div class="stage-title">用 CER 論證、對照預測，再長出自己的下一個問題。</div>
         <p class="stage-desc">這階段有兩件事：先用 <strong>CER（主張-證據-推理）</strong>把 Stage 3 的結論論證完整。然後對照 Stage 1 的預測——對了幾題？差在哪？從意外或疑惑長出一個<strong>自己的探究問題</strong>，帶到 Lv2。</p>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
@@ -554,6 +590,46 @@
         </div>
         <button class="step-btn" disabled>完成</button>
       </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我量了 ≥ 5 種不同轉圈數的回滾距離</label></li>
+        <li><label><input type="checkbox"> 我畫了轉圈數 vs 回滾距離散佈圖，看出飽和形狀</label></li>
+        <li><label><input type="checkbox"> 我用 CER 解釋為什麼飽和（橡皮筋非線性／斷裂風險）</label></li>
+        <li><label><input type="checkbox"> 我比較推出 vs 回滾距離，估算摩擦損耗比</label></li>
+        <li><label><input type="checkbox"> 我說明理想彈簧 E_p = ½kx² 在橡皮筋上的失效邊界</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <!-- ═══ 後設反思（SOIL 九宮格 #9：自知層） ═══ -->
+    <div class="metacog-reflect">
+      <div class="mc-title">回頭看你的學習路徑（這頁的核心收穫不在數據，而在「你看見自己」）</div>
+      <ul class="mc-questions">
+        <li><strong>回扣 PK · 你原本怎麼猜的？</strong>
+          翻回「先想想」三題——你原本以為「轉越多圈」一定「推越遠」嗎？
+        </li>
+        <li><strong>自知 · 你的思考慣性是什麼？</strong>
+          P1～P3 哪題猜錯？是不是用「越多就越多」的線性直覺，忽略了會飽和、會打滑？
+        </li>
+        <li><strong>洞見 · 數據 vs 直覺誰可信？</strong>
+          「距離會飽和」你是從<strong>圈數 vs 距離</strong>的數據看到，還是憑感覺？
+        </li>
+        <li><strong>下一步 · 你發現自己什麼？</strong>
+          你對「自己怎麼想『儲能與極限』」多知道一件什麼事？
+        </li>
+      </ul>
+      <div class="mc-note">這四題沒有標準答案。它在乎的不是「你會不會橡皮筋動力罐」，而是「你<strong>知不知道自己原本不知道什麼</strong>」——這是 Lv2／Lv3 自主提問的種子。</div>
+    </div>
+
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv2 你會自己選變因設計實驗——什麼決定回滾距離？
+      </div>
+      <a href="../phase2/rubber-band-lv2.html" class="ns-cta">前往 橡皮筋 Lv2 →</a>
     </div>
 
     <!-- ═══ 課後資源（摺疊）═══ -->

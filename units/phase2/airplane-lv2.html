@@ -30,24 +30,46 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>✈️ 紙飛機 · Lv2 結構式探究</h1>
-    <p class="subtitle">把 lv1 的經驗模型搬到真實教室——這次你是唯一的投擲員</p>
-    <div class="meta-tags">
-      <span class="tag phase2">Lv2</span>
-      <span class="tag inquiry-structured">結構式探究</span>
-      <span class="tag">4 節課</span>
-      <span class="tag">變因設計 + 擬合選擇 + 迭代</span>
-    
-  <details class="learning-goals phase2">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能將 lv1 的虛擬模型轉成可在教室執行的實驗計畫（選變因、決水準、寫流程）</li>
-        <li>能提出可驗證的假設（「A 從 X 增到 Y，距離會...」），並預見誤差來源</li>
-        <li>能選擇合適的擬合模型（線性 vs 二次 vs 飽和）並用殘差判讀</li>
-        <li>能在「計畫—執行—迭代」循環中，發現原計畫的缺陷並改進</li>
-      </ul>
+    <div class="hero-kicker">
+      <span class="hk-meta">AIRPLANE · LV2 · 4 節課</span>
+      <span class="hk-chip">結構式探究</span>
+    </div>
+
+    <h1>✈️ 紙飛機 · Lv2<span class="h1-accent" style="color:var(--phase2);">模型搬到真實教室</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">把 Lv1 的虛擬經驗模型搬到真實教室，<strong>你是唯一投擲員</strong>，測一個變因驗證模型是否成立。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">虛擬模型 ≠ 真實實驗。投擲員變異、空氣、地面條件——<strong>看你的模型搬出去還能不能用</strong>。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">完整實驗計畫 + 真實數據（含投擲員變異）+ <strong>擬合曲線選擇</strong>（線性／二次／飽和）+ CER 論證。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      從 Lv1 來｜你建了虛擬經驗模型。Lv2 你要<strong>把它「實驗證偽」</strong>——真實世界可能比虛擬更複雜。
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>把虛擬模型轉成可執行的教室實驗計畫</li>
+            <li>提出可驗證的假設並預見誤差來源</li>
+            <li>選擇合適的擬合模型（線性／二次／飽和），用殘差判讀</li>
+            <li>在「計畫—執行—迭代」循環中改進原計畫</li>
+          </ul>
+        </div>
+      </div>
     </details>
-  </div>
   </div>
   <nav class="step-nav">
     <button class="step-tab active"><span class="step-num">1</span>發現問題</button>
@@ -75,7 +97,9 @@
       </div>
 
 
-      <div style="background:var(--bg);border-radius:8px;padding:12px 16px;margin-bottom:14px;">
+      <details class="teacher-aside">
+<summary>📖 回顧：接續 lv1 的經驗模型（需要時展開）</summary>
+<div style="background:var(--bg);border-radius:8px;padding:12px 16px;margin-bottom:14px;">
         <div style="font-weight:700;font-size:13px;margin-bottom:6px;color:var(--text-primary);">📎 接續 lv1 的經驗模型</div>
         <div style="font-family:'DM Mono',monospace;font-size:13px;background:white;padding:8px 12px;border-radius:4px;margin:6px 0;">
           D = D<sub>max</sub> · f(A) · g(x_cg) · h(v)
@@ -85,6 +109,7 @@
         </div>
       </div>
 
+      </details>
       <div class="section-title">可選研究問題</div>
       <div style="display:grid;gap:10px;margin-bottom:16px;">
         <div class="q-item phase2">
@@ -242,7 +267,9 @@
         </div>
       </div>
 
-      <!-- 力道控制挑戰 -->
+      <details class="teacher-aside">
+<summary>🎛️ 力道變異 3 個控制策略（執行時再展開）</summary>
+<!-- 力道控制挑戰 -->
       <div class="section-title">紙飛機實驗的核心挑戰：力道變異</div>
       <div class="card" style="margin-bottom:16px;">
         <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px;">lv1 模擬器裡雜訊 ±15% 是假設，真實世界可能更大。<strong>力道變異</strong>是紙飛機實驗最難控的源頭——你無法精確重複肌肉出力。</p>
@@ -262,7 +289,10 @@
         </div>
       </div>
 
-      <!-- 擬合前思考：該選哪種模型？ -->
+      </details>
+      <details class="teacher-aside">
+<summary>📐 擬合模型對照：形狀決定模型（分析時再展開）</summary>
+<!-- 擬合前思考：該選哪種模型？ -->
       <div class="section-title">擬合選擇：形狀決定模型</div>
       <div class="card" style="margin-bottom:16px;">
         <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:10px;">lv1 告訴你三種形狀：<strong>有最佳值（倒 U）/ 飽和 / 單調</strong>。每種對應不同的擬合模型：</p>
@@ -288,6 +318,7 @@
         </div>
       </div>
 
+      </details>
       <!-- Layer 2: 計畫反思 -->
       <div class="think-block record">
         <div class="think-prompt">✏️ 寫下你的「六格」回答（第 1、2、5、6 格最關鍵）</div>
@@ -489,6 +520,62 @@
         </div>
         <button class="step-btn" data-step="next" disabled>下一步 →</button>
       </div>
+    </div>
+
+    <!-- ═══ 🤖 AI 協作邊界（Lv2：實驗審稿人） ═══ -->
+    <div class="ai-collab">
+      <div class="ai-title">🤖 AI 在這頁的角色：<span style="font-weight:500;">實驗審稿人</span></div>
+      <div class="ai-grid">
+        <div class="ai-can">
+          <h4>AI 可以幫你</h4>
+          <ul>
+            <li>檢查投擲流程是否漏掉控制項目（出手高度／角度／施力）</li>
+            <li>提示哪種擬合函數合理（看圖型）</li>
+            <li>幫你算殘差判讀擬合好壞</li>
+            <li>對「為什麼這組偏離曲線」反問檢查項</li>
+          </ul>
+        </div>
+        <div class="ai-cant">
+          <h4>AI 不可以替你</h4>
+          <ul>
+            <li>替你決定要測哪個變因</li>
+            <li>編造投擲距離數據</li>
+            <li>替你寫結論</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ai-prompt">
+        <strong>你可以這樣問：</strong>「我的紙飛機 Lv2 計畫：<code>[貼計畫]</code>。請用『實驗審稿人』角度指出 3 個漏掉的控制項目，<strong>不要直接重寫</strong>。」
+      </div>
+      <div class="ai-check">
+        <div class="ai-check-title">問完 AI 後，你要自己確認：</div>
+        <ul>
+          <li><label><input type="checkbox"> AI 指出的漏洞我同意嗎？</label></li>
+          <li><label><input type="checkbox"> AI 有沒有編造投擲員無法控制的變因？</label></li>
+          <li><label><input type="checkbox"> AI 建議的擬合模型有道理嗎？</label></li>
+          <li><label><input type="checkbox"> 我能說明為什麼這樣改？</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我選定一個變因，並寫了預期關係形狀</label></li>
+        <li><label><input type="checkbox"> 一個人從頭投到尾（控制投擲員變異）</label></li>
+        <li><label><input type="checkbox"> 每水準投擲 ≥ 5 次，記平均與標準差</label></li>
+        <li><label><input type="checkbox"> 我嘗試 ≥ 2 種擬合模型，用殘差選一個</label></li>
+        <li><label><input type="checkbox"> 我用 CER 論證「真實實驗 vs Lv1 虛擬模型」的差距</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv3 從「飛最遠」改為「<strong>飛最準</strong>」——你會發現精準的物理跟飛遠不同。
+      </div>
+      <a href="../phase3/airplane-lv3.html" class="ns-cta">前往 紙飛機 Lv3 →</a>
     </div>
 
     <!-- ═══ POST-CLASS ═══ -->

@@ -30,48 +30,46 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🕰️ 單擺模組 · Lv2 結構式探究</h1>
-    <p class="subtitle">Lv1 我們驗證了 T 和 L 的關係。現在——你來設計實驗。</p>
-
-    <div class="task-statement">
-      <span class="ts-label">本頁任務</span>
-      <span class="ts-body">從 T = 2π√(L/g) 沒寫進去的變因（質量／擺角／繩材／擺錘形狀）裡挑一個，自己設計一份完整實驗計畫，蒐集 ≥ 3 次重複的數據，並用 CER 結構論證該變因「真的有影響」或「真的沒影響」。</span>
+    <div class="hero-kicker">
+      <span class="hk-meta">PENDULUM · LV2 · 2 節課</span>
+      <span class="hk-chip">結構式探究</span>
     </div>
 
-    <div class="meta-tags">
-      <span class="tag phase2">Lv2</span>
-      <span class="tag inquiry-structured">結構式探究</span>
-      <span class="tag">2 節課</span>
-      <span class="tag">自主設計</span>
+    <h1>🕰️ 單擺 · Lv2<span class="h1-accent">自己設計實驗</span></h1>
 
-  <details class="learning-goals phase2">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能從現象或理論出發，提出可驗證的研究問題（例如：質量是否影響週期？）</li>
-        <li>能設計含操縱變因、控制變因與應變變因的實驗計畫，並說明每個控制的理由</li>
-        <li>能有系統地蒐集數據（每個水準至少 3 次），並用不確定度判斷結果差異的意義</li>
-        <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
-      </ul>
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">從 T = 2π√(L/g) <strong>沒寫進去的變因</strong>（質量／角度／繩材）挑一個，自己設計實驗證明它有沒有影響。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">Lv2 學「<strong>如何規劃</strong>」——把「我的假設要怎麼被檢驗」翻譯成完整實驗計畫，下一 Lv 才能自己提問。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">一份完整實驗計畫（操縱／控制／應變變因）+ ≥ 3 次重複數據 + <strong>CER 論證</strong>。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      從 Lv1 來｜你用老師給的擺長量到 <strong>T² ∝ L</strong>，這頁要補答公式裡沒寫進去的變因。
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>從現象或理論提出可驗證的研究問題</li>
+            <li>設計含操縱／控制／應變變因的實驗計畫，並說明每個控制的理由</li>
+            <li>系統蒐集數據（每水準 ≥ 3 次），用不確定度判斷差異是否顯著</li>
+            <li>用圖表呈現結果並以數據為據分析發表</li>
+          </ul>
+        </div>
+      </div>
     </details>
-  </div>
-  </div>
-
-  <!-- ═══ 📍 從哪裡來 ═══ -->
-  <div class="prev-recall">
-    <div class="pr-label">📍 從 Lv1 來</div>
-    <div class="pr-body">
-      在 Lv1，你用老師給的 5 種擺長量到 <strong>T² ∝ L</strong>，反推 g ≈ 9.8 m/s²。但 T = 2π√(L/g) 還有一堆「<strong>沒寫進去的東西</strong>」——擺角真的小到不影響嗎？繩子粗一點會不會變？質量真的全無關？這頁你來補答。
-    </div>
-  </div>
-
-  <!-- ═══ ⚠️ 常見錯誤先行 ═══ -->
-  <div class="common-mistakes common-mistakes--banner">
-    <div class="cm-title">⚠️ 進來前先看：Lv2 學生最常踩的 3 個坑</div>
-    <ul>
-      <li><strong>假設沒有「為什麼」</strong>——只寫「我覺得角度會影響週期」就上線，沒給依據。<em>解法：先說「為什麼這變因可能影響」，再寫預測方向，最後才寫驗證方法。</em></li>
-      <li><strong>控制變因寫得太少</strong>——只控擺長，忘了質量、空氣阻力、繩子伸縮、起擺點高度。<em>解法：對每個控制變因問一句「為什麼要控制這個？」答不出來就還沒想清楚。</em></li>
-      <li><strong>數據蒐集太省</strong>——一個水準只測 1–2 次就下「有顯著差異」的結論。<em>解法：每個水準至少 3 次，先看標準差有沒有重疊，再決定要不要加測。</em></li>
-    </ul>
   </div>
 
   <nav class="step-nav">
@@ -86,12 +84,10 @@
     <div class="step-panel active" data-stage="1" data-stage-name="發現問題">
       <div class="stage-intro">
         <div class="stage-label">階段一 · 發現問題</div>
-        <div class="stage-title">從 Lv1 的意外或疑惑，長出你自己的研究問題</div>
-        <p class="stage-desc">Lv2 你要<strong>自己選題並提假設</strong>。老師不再給研究問題——你的任務是把 Lv1 的預測失準、意外現象、或沒解釋清楚的地方，寫成一個<strong>可驗證的研究問題</strong>，並提出有依據的假設。這是整份研究的起點。</p>
+        <div class="stage-title">挑一個變因，寫研究問題與假設。</div>
         <span class="who-bar student">✏️ 本階段學生主導</span>
-        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：問題發想引導、假設檢核表</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供問題清單與假設檢核表</span>
       </div>
-      <div class="step-action">從以下問題中選一個你最感興趣的，作為你的研究主題。</div>
       <!-- 現象起手 -->
       <div style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:18px;">
         <div style="font-weight:700;font-size:14px;color:#78350f;margin-bottom:6px;">🔍 Lv1 留下的疑問：擺角真的不影響週期嗎？</div>
@@ -156,12 +152,10 @@
     <div class="step-panel" data-stage="2" data-stage-name="規劃研究">
       <div class="stage-intro phase2">
         <div class="stage-label">階段二 · 規劃研究</div>
-        <div class="stage-title">自己設計實驗：操縱變因、控制變因、重複次數</div>
-        <p class="stage-desc">Lv2 的核心——<strong>你自己設計實驗計畫</strong>。要說明：操縱什麼、控制什麼、怎麼測、重複幾次、誤差如何處理。每個設計選擇都要有理由。老師會給你一份檢核表確保你沒漏掉關鍵項目。</p>
+        <div class="stage-title">自己設計實驗：操縱／控制／重複次數。</div>
         <span class="who-bar student">✏️ 本階段學生主導</span>
-        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師提供鷹架：實驗設計檢核表</span>
+        <span class="who-bar teacher" style="margin-left:6px;">🪜 老師：實驗設計檢核表</span>
       </div>
-      <div class="step-action">設計你的實驗計畫，包含變因控制和理論預測。</div>
 
       <div class="activity-block">
         <div class="activity-header phase2">實驗計畫表</div>
@@ -254,11 +248,9 @@
     <div class="step-panel" data-stage="3" data-stage-name="執行與分析">
       <div class="stage-intro phase3">
         <div class="stage-label">階段三 · 執行與分析</div>
-        <div class="stage-title">按自己的計畫執行、記錄、做初步分析</div>
-        <p class="stage-desc">依照你在 Stage 2 寫的計畫實際操作：收集數據、畫圖、判斷數據可靠性（至少 3 次重複）。初步分析要能看出變因的關係——線性？平方？飽和？</p>
+        <div class="stage-title">執行計畫、記錄、做初步分析。</div>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
-      <div class="step-action">開始實驗，記錄你的數據。</div>
 
       <div class="section-title">執行實驗</div>
       <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
@@ -330,11 +322,9 @@
     <div class="step-panel" data-stage="4" data-stage-name="論證與反思">
       <div class="stage-intro phase4">
         <div class="stage-label">階段四 · 論證與反思</div>
-        <div class="stage-title">用 CER 論證結果、對組內發表、反思下一步</div>
-        <p class="stage-desc">用 <strong>CER（主張–證據–推理）</strong>架構把你的結論寫完整；對組內或全班做一次<strong>初步發表</strong>（口頭或迷你海報）；最後反思：哪些結論可信？哪些還有疑問？下一 Lv（Lv3）你想挑戰什麼？</p>
+        <div class="stage-title">寫 CER、發表、反思下一步。</div>
         <span class="who-bar student">✏️ 本階段學生全程執行</span>
       </div>
-      <div class="step-action">分析你的數據，回答討論問題。</div>
 
       <div class="activity-block">
         <div class="activity-header phase2">討論與發表問題</div>
@@ -441,6 +431,15 @@
       </div>
       <div class="ai-prompt">
         <strong>你可以這樣問：</strong>「以下是我的單擺 Lv2 實驗計畫：<code>[貼上計畫]</code>。請用『實驗審稿人』的角度，指出 3 個可能被忽略的控制變因或邏輯漏洞，並對每個問題只給<strong>提問</strong>，不要直接告訴我答案或重寫我的計畫。」
+      </div>
+      <div class="ai-check">
+        <div class="ai-check-title">問完 AI 後，你要自己確認：</div>
+        <ul>
+          <li><label><input type="checkbox"> AI 指出的「漏掉的控制變因」我同意嗎？為什麼？</label></li>
+          <li><label><input type="checkbox"> AI 有沒有編造一個你根本沒提到的物理量？</label></li>
+          <li><label><input type="checkbox"> AI 的回答有沒有跳過我自己原本的思路？</label></li>
+          <li><label><input type="checkbox"> 我能用自己的話，向同學解釋為什麼要做這個修改嗎？</label></li>
+        </ul>
       </div>
     </div>
 

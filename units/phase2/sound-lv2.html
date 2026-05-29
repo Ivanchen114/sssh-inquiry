@@ -30,24 +30,46 @@
     <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="page-header">
-    <h1>🔊 聲音模組 · Lv2 結構式探究</h1>
-    <p class="subtitle">什麼影響聲音？你來設計實驗、你來回答。</p>
-    <div class="meta-tags">
-      <span class="tag phase2">Lv2</span>
-      <span class="tag inquiry-structured">結構式探究</span>
-      <span class="tag">4 節課</span>
-      <span class="tag">變因設計</span>
-    
-  <details class="learning-goals phase2">
-      <summary>🎯 4 個學習目標</summary>
-      <ul>
-        <li>能從現象或理論出發，提出可驗證的研究問題（例如：弦的長度如何影響頻率？）</li>
-        <li>能設計含操縱變因、控制變因與應變變因的實驗計畫（例如：用頻譜 app 量化聲音特徵）</li>
-        <li>能有系統地蒐集數據，並判斷數據的可靠性（控制環境噪音、app 取樣率）</li>
-        <li>能用圖表呈現結果，並以數據為基礎進行分析與發表</li>
-      </ul>
+    <div class="hero-kicker">
+      <span class="hk-meta">SOUND · LV2 · 4 節課</span>
+      <span class="hk-chip">結構式探究</span>
+    </div>
+
+    <h1>🔊 聲音 · Lv2<span class="h1-accent" style="color:var(--phase2);">自己設計實驗</span></h1>
+
+    <div class="hero-frames">
+      <div class="hero-frame hf-do">
+        <span class="hf-label">今天做什麼</span>
+        <span class="hf-body">選一個變因（<strong>弦長／張力／材質／管長</strong>）自己設計實驗，量化它如何影響頻率或音色。</span>
+      </div>
+      <div class="hero-frame hf-why">
+        <span class="hf-label">為什麼做</span>
+        <span class="hf-body">Lv1 你能看出「頻率對應音高」。Lv2 你要回答：<strong>什麼決定頻率本身？</strong>——從現象進到機制。</span>
+      </div>
+      <div class="hero-frame hf-deliver">
+        <span class="hf-label">今天交什麼</span>
+        <span class="hf-body">完整實驗計畫（變因、量測法、≥ 3 次重複）+ 頻譜數據 + <strong>CER 論證</strong>。</span>
+      </div>
+    </div>
+
+    <p class="hero-bridge">
+      從 Lv1 來｜你已會讀波形圖。Lv2 你要動手<strong>改變因</strong>，看頻率怎麼變。
+    </p>
+
+    <details class="page-context">
+      <summary>📖 開工前查表（學習目標）</summary>
+      <div class="pc-body">
+        <div class="pc-section">
+          <div class="pc-section-title">🎯 學習目標</div>
+          <ul>
+            <li>從現象提出可驗證的研究問題（例：弦長如何影響頻率？）</li>
+            <li>設計含操縱／控制／應變變因的實驗計畫</li>
+            <li>系統蒐集數據（控制環境噪音、app 取樣率）</li>
+            <li>用圖表呈現結果並以數據為據分析發表</li>
+          </ul>
+        </div>
+      </div>
     </details>
-  </div>
   </div>
   <!-- Step Navigation -->
   <nav class="step-nav">
@@ -73,7 +95,6 @@
         <div style="font-weight:700;font-size:14px;color:#78350f;margin-bottom:6px;">🔍 Lv1 的意外：敲擊 vs 吹奏，音高方向相反</div>
         <div style="font-size:13px;color:#78350f;line-height:1.8;">同一瓶水：用筷子敲瓶身，加水音高<strong>變低</strong>；對瓶口吹氣，加水音高<strong>變高</strong>。為什麼方向相反？聲音的「來源」不一樣嗎？是水在振動，還是空氣柱在振動？Lv2 你要選一條你最想追的線——弦、空氣柱、還是物體本身的振動。</div>
       </div>
-
 
       <div class="section-title">可能的研究問題</div>
       <div style="display:grid;gap:10px;margin-bottom:20px;">
@@ -237,7 +258,6 @@
           <textarea class="think-input" data-key="sound-lv2-plan-analysis" rows="2" placeholder="預期看到 ___ 趨勢；畫 ___ vs ___ 圖；如果 ___ 就支持假設" style="width:100%;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;line-height:1.6;"></textarea>
         </div>
       </div>
-
 
       <div class="step-footer">
         <button class="step-btn" data-step="prev">← 上一步</button>
@@ -410,6 +430,65 @@
     </div>
 
     <!-- Post-class Section -->
+    
+
+    <!-- ═══ 🤖 AI 協作邊界（Lv2：實驗審稿人） ═══ -->
+    <div class="ai-collab">
+      <div class="ai-title">🤖 AI 在這頁的角色：<span style="font-weight:500;">實驗審稿人</span></div>
+      <div class="ai-grid">
+        <div class="ai-can">
+          <h4>AI 可以幫你</h4>
+          <ul>
+            <li>檢查你的實驗設計遺漏哪些控制變因（如環境溫度影響聲速）</li>
+            <li>提示頻譜量測可能的誤差來源</li>
+            <li>建議你用什麼數學關係去檢驗（f ∝ 1/L？f ∝ √T？）</li>
+            <li>幫你檢查圖表是否完整（座標軸、單位、誤差棒）</li>
+          </ul>
+        </div>
+        <div class="ai-cant">
+          <h4>AI 不可以替你</h4>
+          <ul>
+            <li>替你決定要測哪個變因</li>
+            <li>編造你沒實際量到的頻率值</li>
+            <li>替你寫整段「結論」</li>
+            <li>對「我這樣設計對嗎」直接給答案</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ai-prompt">
+        <strong>你可以這樣問：</strong>「我的聲音 Lv2 實驗計畫：<code>[貼計畫]</code>。請用『實驗審稿人』角度指出 3 個可能被忽略的控制變因或量測誤差，<strong>不要直接重寫</strong>。」
+      </div>
+      <div class="ai-check">
+        <div class="ai-check-title">問完 AI 後，你要自己確認：</div>
+        <ul>
+          <li><label><input type="checkbox"> AI 指出的「漏掉的控制變因」我同意嗎？為什麼？</label></li>
+          <li><label><input type="checkbox"> AI 有沒有編造一個我根本沒提到的物理量？</label></li>
+          <li><label><input type="checkbox"> AI 的建議有沒有跳過我自己原本的思路？</label></li>
+          <li><label><input type="checkbox"> 我能用自己的話向同學解釋為什麼要做這個修改？</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ═══ ✅ 完成檢核 ═══ -->
+    <div class="checklist-card">
+      <div class="ck-title">✅ 完成檢核 · 做完這頁前先勾起來</div>
+      <ul class="ck-list">
+        <li><label><input type="checkbox"> 我選定一個變因，並寫了「為什麼這變因可能影響聲音」的依據</label></li>
+        <li><label><input type="checkbox"> 我列出至少 3 個控制變因（環境噪音、溫度、距離⋯），對每個寫了控制理由</label></li>
+        <li><label><input type="checkbox"> 我每個水準量測 ≥ 3 次，並用頻譜 app 取數據</label></li>
+        <li><label><input type="checkbox"> 我用對應的數學關係（f ∝ 1/L 等）檢驗趨勢，不只是「看起來」</label></li>
+        <li><label><input type="checkbox"> 我用 CER 寫了「這變因確實影響聲音」的論證</label></li>
+      </ul>
+    </div>
+
+    <!-- ═══ ➡️ 下一步 ═══ -->
+    <div class="next-step">
+      <div class="ns-text">
+        <strong>下一步</strong>：Lv3 沒有老師指定的變因——只有「水瓶琴做出 Do Re Mi」的競賽。你會發現音準誤差比想像難控制。
+      </div>
+      <a href="../phase3/sound-lv3.html" class="ns-cta">前往 聲音 Lv3 →</a>
+    </div>
+
     <div class="post-class">
       <button class="post-class-toggle">
         <span>📦 課後資源（AI 檢核、學習歷程、教師筆記）</span>

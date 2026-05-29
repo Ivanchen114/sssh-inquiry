@@ -21,6 +21,20 @@
   --active-text: #2952c4;
 
   --sidebar-w: 256px;
+
+  /* ── 字級階層 5 級 token（套 soil-teaching-page 憲法 56/36/22/14/11） ── */
+  /* mobile-first 寫死 px；用 clamp 讓桌機更大、手機收斂到憲法位 */
+  --fs-l1: clamp(36px, 4.5vw, 56px); /* Hero h1（每頁唯一） */
+  --fs-l2: clamp(24px, 2.8vw, 36px); /* 副標／stage-title／step header */
+  --fs-l3: clamp(18px, 1.8vw, 22px); /* sub-section header／task-statement／checklist title */
+  --fs-l4: clamp(15px, 1.2vw, 16.5px); /* body／卡片內文／按鈕 */
+  --fs-l5: clamp(11px, 0.9vw, 12px); /* caption／kicker／chip／tag */
+
+  /* ── 向後相容別名（舊 class 還會用到） ── */
+  --fs-display:  var(--fs-l1);
+  --fs-headline: var(--fs-l3);
+  --fs-body:     var(--fs-l4);
+  --fs-caption:  var(--fs-l5);
 }
 
 /* ── Reset ───────────────────────────────────────── */
@@ -33,11 +47,23 @@ body {
   font-family: 'Noto Sans TC', sans-serif;
   background: var(--bg);
   color: var(--text-primary);
-  font-size: 15.5px;
+  font-size: var(--fs-body);
   line-height: 1.8;
   display: flex;
   min-height: 100vh;
 }
+
+/* ── 關鍵字強調（SOIL：選取重點） ────────────────── */
+.kw {
+  font-weight: 700;
+  color: var(--phase1);
+  font-size: 1.05em;
+  letter-spacing: 0.01em;
+}
+.kw.kw-warn { color: #b45309; }
+.kw.kw-ok   { color: #047857; }
+.kw.kw-2    { color: var(--phase2); }
+.kw.kw-3    { color: var(--phase3); }
 
 h1, h2, h3, h4 {
   font-family: 'Noto Serif TC', serif;
@@ -303,10 +329,12 @@ body.no-sidebar-transition #sidebar-toggle { transition: none !important; }
 }
 .page-header .breadcrumb a:hover { color: var(--text-secondary); }
 .page-header h1 {
-  font-size: 28px;
+  font-size: var(--fs-l1);
   font-weight: 900;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 .page-header .subtitle {
   font-size: 15px;
@@ -327,16 +355,17 @@ body.no-sidebar-transition #sidebar-toggle { transition: none !important; }
   font-size: 15px;
 }
 
-/* ── 標籤 ────────────────────────────────────────── */
+/* ── 標籤（L5 mono uppercase chip） ───────────────── */
 .tag {
   display: inline-block;
-  font-size: 11px;
-  padding: 2px 8px;
+  font-size: var(--fs-l5);
+  padding: 3px 9px;
   border-radius: 3px;
   border: 1px solid var(--border);
   color: var(--text-secondary);
   background: var(--sidebar-bg);
   font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
 }
 .tag.phase1 { border-color: #bfcef8; color: var(--phase1); background: #f0f3fe; }
 .tag.phase2 { border-color: #b3dcc8; color: var(--phase2); background: #f0f9f4; }
@@ -478,20 +507,24 @@ body.no-sidebar-transition #sidebar-toggle { transition: none !important; }
   margin: 0 0 18px;
 }
 .stage-intro .stage-label {
-  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
   font-weight: 700;
   color: var(--text-muted);
   letter-spacing: 0.12em;
-  margin-bottom: 4px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
 }
 .stage-intro .stage-title {
-  font-size: 15px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: var(--fs-l2);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 6px;
+  line-height: 1.3;
 }
 .stage-intro .stage-desc {
-  font-size: 13px;
+  font-size: var(--fs-l4);
   color: var(--text-secondary);
   line-height: 1.75;
   margin: 0;
@@ -510,34 +543,45 @@ body.no-sidebar-transition #sidebar-toggle { transition: none !important; }
 .who-bar + .who-bar { margin-left: 12px; }
 .who-bar.student { color: var(--phase1); font-weight: 600; }
 
-/* 老師提供區塊（灰底＋左色條＋小字頭；無 ::before 浮標） */
+/* 老師提供區塊：套憲法「讀／做視覺切開」——這是「讀」，視覺權重壓低 */
 .teacher-block {
-  background: #f8fafc;
-  border-left: 3px solid #94a3b8;
+  background: #f5f4f0;
+  border-left: 2px solid #cfcdc6;
   border-radius: 0 6px 6px 0;
   padding: 12px 18px;
   margin: 12px 0;
 }
 .teacher-block .tb-title {
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: var(--fs-l3);
   font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 8px;
-  letter-spacing: 0.02em;
+  margin: 0 0 10px;
+  letter-spacing: 0.01em;
 }
 .teacher-block .tb-title::before {
-  content: '🔒 老師提供 · ';
-  color: var(--text-muted);
-  font-weight: 600;
-  font-size: 11.5px;
-  letter-spacing: 0.05em;
-  margin-right: 2px;
+  content: '老師';
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: white;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
 }
 .teacher-block p,
 .teacher-block li {
-  font-size: 13px;
+  font-size: var(--fs-l4);
   color: var(--text-secondary);
-  line-height: 1.85;
+  line-height: 1.8;
   margin: 0 0 6px;
 }
 .teacher-block p:last-child { margin-bottom: 0; }
@@ -624,31 +668,42 @@ body.no-sidebar-transition #sidebar-toggle { transition: none !important; }
   color: var(--text-primary);
 }
 
-/* 學生填寫區塊：頁面上唯一用綠色強調的東西 */
+/* 學生填寫區塊：「做」=綠色 action 區，視覺權重高於 teacher-block */
 .student-block {
-  background: white;
-  border-left: 3px solid var(--phase1);
-  border-radius: 0 6px 6px 0;
-  padding: 12px 18px;
-  margin: 14px 0;
+  background: #ecfdf5;
+  border-left: 4px solid #059669;
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
 }
 .student-block .sb-title {
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: var(--fs-l3);
   font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 8px;
-  letter-spacing: 0.02em;
+  color: #065f46;
+  margin: 0 0 12px;
+  letter-spacing: 0.01em;
 }
 .student-block .sb-title::before {
-  content: '✏️ 你的填寫 · ';
-  color: var(--phase1);
-  font-weight: 600;
-  font-size: 11.5px;
-  letter-spacing: 0.05em;
+  content: '你要做';
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: #d1fae5;
+  color: #047857;
+  flex-shrink: 0;
 }
-/* phase 修飾只保留語意，視覺統一為綠 */
+/* phase 修飾統一綠 */
 .student-block.phase2,
-.student-block.phase3 { border-left-color: var(--phase1); }
+.student-block.phase3 { border-left-color: #059669; }
 
 /* 在 student-block 內的 think-block：移除外框、去底色，直接坐在容器裡 */
 .student-block .think-block.record,
@@ -1062,10 +1117,23 @@ tr:nth-child(even) td { background: #fafaf8; }
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+/* 套憲法 #23：進度條減壓 — 3px 漸層條於 step-nav 頂部，JS 設 --step-progress */
+.step-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: var(--step-progress, 25%);
+  background: linear-gradient(90deg, var(--phase1) 0%, #047857 100%);
+  transition: width 0.45s cubic-bezier(.4, 0, .2, 1);
+  z-index: 51;
+  border-radius: 0 2px 2px 0;
+}
 .step-tab {
-  padding: 12px 16px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 14px 18px;
+  font-size: var(--fs-l4);
+  font-weight: 700;
   color: var(--text-muted);
   cursor: pointer;
   border-bottom: 2px solid transparent;
@@ -1076,7 +1144,7 @@ tr:nth-child(even) td { background: #fafaf8; }
   border-top: none;
   border-left: none;
   border-right: none;
-  font-family: inherit;
+  font-family: 'Noto Serif TC', serif;
 }
 .step-tab:hover { color: var(--text-secondary); }
 .step-tab.active {
@@ -1992,24 +2060,152 @@ textarea.fill-blank {
    ── 沿用既有色彩變數，保留 WCAG AA 對比
    ════════════════════════════════════════════════════════════════ */
 
+/* ════════════════════════════════════════════════════════════════
+   ContentTypeChip（soil-teaching-page 憲法 F）
+   ── 學 / 做 / REF / 交出  4 型 × 2 尺寸（lg 配 L3、sm 配 L4/L5）
+   ── 視覺權重對齊搭配的標題字級
+   ════════════════════════════════════════════════════════════════ */
+.ctc {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+/* 尺寸 */
+.ctc-lg { font-size: var(--fs-l5); padding: 3px 8px; }
+.ctc-sm { font-size: 10px; padding: 1.5px 6px; }
+
+/* 4 型別 */
+.ctc-read    { background: #eef2fb; color: #1d4ed8; }   /* 學：藍 */
+.ctc-do      { background: #d1fae5; color: #047857; }   /* 做：綠 */
+.ctc-deliver { background: #fef3c7; color: #92400e; }   /* 交出：琥珀 */
+.ctc-ref     { background: #f5f4f0; color: var(--text-secondary); border: 1px solid var(--border); }   /* REF：低權重灰 */
+
+/* ════════════════════════════════════════════════════════════════
+   Hero 模板（soil-teaching-page 憲法）
+   ── 結構：kicker → 雙段 h1 → 三段色框 → italic 銜接段
+   ──「本頁任務」「為什麼學」「下一步」三件事一次到位
+   ════════════════════════════════════════════════════════════════ */
+
+/* kicker：L5 mono uppercase，放在 h1 上方 */
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.hero-kicker .hk-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+.hero-kicker .hk-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  background: #f0ede6;
+  color: var(--text-secondary);
+}
+
+/* h1 在 hero 內已有 .page-header h1 規範，這裡只補 accent 第二段 */
+.page-header h1 .h1-accent {
+  color: var(--phase1);
+  display: block;
+  margin-top: 4px;
+}
+
+/* 三段色框：今天做什麼 / 為什麼做 / 今天交什麼 */
+.hero-frames {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0 14px;
+}
+.hero-frame {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: var(--fs-l4);
+  line-height: 1.65;
+}
+.hero-frame .hf-label {
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-top: 2px;
+  white-space: nowrap;
+}
+.hero-frame .hf-body {
+  color: var(--text-primary);
+}
+.hero-frame .hf-body strong { font-weight: 700; }
+
+/* 三色：藍（做什麼）/ 琥珀（為什麼）/ 綠（交什麼） */
+.hero-frame.hf-do    { background: #eef2fb; }
+.hero-frame.hf-do    .hf-label { color: #1d4ed8; }
+.hero-frame.hf-why   { background: #fef3c7; }
+.hero-frame.hf-why   .hf-label { color: #b45309; }
+.hero-frame.hf-deliver { background: #d1fae5; }
+.hero-frame.hf-deliver .hf-label { color: #047857; }
+
+/* italic 銜接段（從上 Lv 連到本 Lv） */
+.hero-bridge {
+  margin: 8px 0 0;
+  padding: 6px 0 6px 14px;
+  border-left: 2px solid var(--border);
+  font-size: var(--fs-l5);
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  max-width: 760px;
+}
+.hero-bridge strong {
+  color: var(--text-secondary);
+  font-style: normal;
+}
+
+@media (max-width: 600px) {
+  .hero-frame { padding: 10px 12px; gap: 8px; flex-direction: column; }
+  .hero-frame .hf-label { padding-top: 0; }
+}
+
 /* ── 任務句（每頁 h1 之下，回答「本頁要學會什麼」） */
 .task-statement {
   margin: 16px 0 0;
-  padding: 14px 18px;
+  padding: 18px 22px;
   border-left: 4px solid var(--phase1);
   background: #eef2fb;
   border-radius: 0 8px 8px 0;
-  font-size: 14.5px;
-  line-height: 1.75;
+  font-size: var(--fs-l3);
+  line-height: 1.6;
   color: #1c2e6b;
 }
 .task-statement .ts-label {
   display: inline-block;
-  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   color: var(--phase1);
-  margin-right: 6px;
+  margin-right: 10px;
+  text-transform: uppercase;
 }
 .task-statement .ts-body {
   color: var(--text-primary);
@@ -2030,24 +2226,171 @@ textarea.fill-blank {
   border-left: 4px solid #d97706;
   border-radius: 0 6px 6px 0;
 }
+/* tight 變體：精簡單行版本，視覺權重最低 */
+.common-mistakes--tight ul {
+  line-height: 1.7;
+}
+.common-mistakes--tight ul li {
+  margin-bottom: 0;
+}
+
+/* 開工前查表：把學習目標、量測準則、Lv 角色合併成一個 details */
+.page-context {
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.page-context > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  font-size: var(--fs-l4);
+  font-weight: 700;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+.page-context > summary::before {
+  content: 'REF';
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 1.5px 6px;
+  border-radius: 3px;
+  background: #f5f4f0;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.page-context > summary::-webkit-details-marker { display: none; }
+.page-context > summary::after {
+  content: '▼';
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+}
+.page-context[open] > summary::after { transform: rotate(180deg); }
+.page-context > summary:hover { color: var(--text-primary); }
+.page-context .pc-body {
+  padding: 4px 18px 16px;
+  border-top: 1px solid var(--border-light);
+}
+.page-context .pc-role {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin: 10px 0 14px;
+}
+.page-context .pc-role strong { color: var(--text-primary); }
+.page-context .pc-section {
+  margin-bottom: 12px;
+}
+.page-context .pc-section:last-child { margin-bottom: 0; }
+.page-context .pc-section-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.page-context .pc-section ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--text-secondary);
+}
+.page-context .pc-section code {
+  background: white;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+}
+
+/* ── teacher-aside：階段內可折疊的「背景／歷史／脈絡」（次要資訊） */
+.teacher-aside {
+  margin: 6px 0 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  background: var(--bg);
+}
+.teacher-aside > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+.teacher-aside > summary::before {
+  content: 'REF';
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #f5f4f0;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.teacher-aside > summary::-webkit-details-marker { display: none; }
+.teacher-aside > summary::after {
+  content: '▼';
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+}
+.teacher-aside[open] > summary::after { transform: rotate(180deg); }
+.teacher-aside > summary:hover { color: var(--text-primary); }
+.teacher-aside > p {
+  padding: 6px 14px;
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin: 0;
+}
+.teacher-aside > p:first-of-type { padding-top: 8px; border-top: 1px solid var(--border-light); }
+.teacher-aside > p:last-child { padding-bottom: 12px; }
+.teacher-aside p strong { color: var(--text-primary); }
 .common-mistakes .cm-title {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: 'Noto Serif TC', serif;
   font-weight: 700;
-  font-size: 14px;
+  font-size: var(--fs-l3);
   color: #92400e;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .common-mistakes ul {
   margin: 0;
   padding-left: 22px;
-  font-size: 13.5px;
+  font-size: var(--fs-l4);
   color: #78350f;
   line-height: 1.85;
 }
 .common-mistakes ul li { margin-bottom: 2px; }
-.common-mistakes ul li strong { color: #92400e; }
+.common-mistakes ul li strong {
+  color: #92400e;
+  font-size: 1.04em;
+}
 
 /* ── 完成檢核（page-body 結尾，學生自評是否完成本頁） */
 .checklist-card {
@@ -2060,17 +2403,32 @@ textarea.fill-blank {
 .checklist-card .ck-title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-family: 'Noto Serif TC', serif;
   font-weight: 700;
-  font-size: 15px;
+  font-size: var(--fs-l3);
   color: #065f46;
   margin-bottom: 12px;
+}
+.checklist-card .ck-title::before {
+  content: '交出';
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: #fef3c7;
+  color: #92400e;
+  flex-shrink: 0;
 }
 .checklist-card .ck-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fs-l4);
   color: #064e3b;
   line-height: 1.8;
 }
@@ -2145,19 +2503,20 @@ textarea.fill-blank {
 @media (max-width: 720px) {
   .route-grid { grid-template-columns: 1fr; }
 }
+/* 套憲法 E 規則 2：邊框/底色/陰影三選一——這裡只用「左邊條色 + bg」 */
 .route-card {
   padding: 16px 18px;
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
+  border-radius: 0 8px 8px 0;
+  border-left: 4px solid var(--border);
   background: var(--card-bg, var(--sidebar-bg));
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-left-color 0.15s;
 }
 .route-card:hover {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border-left-color: var(--text-secondary);
 }
-.route-card.r-a { border-top: 3px solid #2952c4; }
-.route-card.r-b { border-top: 3px solid #1e7a52; }
-.route-card.r-c { border-top: 3px solid #a3551a; }
+.route-card.r-a { border-left-color: #2952c4; }
+.route-card.r-b { border-left-color: #1e7a52; }
+.route-card.r-c { border-left-color: #a3551a; }
 
 .route-card .rc-label {
   font-size: 10px;
@@ -2207,6 +2566,181 @@ textarea.fill-blank {
   color: var(--text-secondary);
 }
 
+/* ════════════════════════════════════════════════════════════════
+   Stage-level mini-checklist — SOIL 學習 L（每個 stage 一次）
+   ── 放在 step-panel 內、step-footer 之前
+   ── 視覺權重低於頁尾 checklist-card，但仍用「交出」chip
+   ════════════════════════════════════════════════════════════════ */
+.step-completion {
+  margin: 20px 0 14px;
+  padding: 12px 16px;
+  background: #ecfdf5;
+  border-left: 3px solid #059669;
+  border-radius: 0 6px 6px 0;
+}
+.step-completion .sc-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: var(--fs-l4);
+  font-weight: 700;
+  color: #065f46;
+  margin: 0 0 8px;
+}
+.step-completion .sc-title::before {
+  content: '交出';
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: #fef3c7;
+  color: #92400e;
+  flex-shrink: 0;
+}
+.step-completion .sc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--fs-l4);
+  color: #064e3b;
+  line-height: 1.75;
+}
+.step-completion .sc-list li { padding: 3px 0; }
+.step-completion .sc-list label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+  width: 100%;
+}
+.step-completion .sc-list input[type="checkbox"] {
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  accent-color: #059669;
+  cursor: pointer;
+}
+.step-completion .sc-list label:has(input:checked) {
+  color: #6b7280;
+  text-decoration: line-through;
+  text-decoration-color: #9ca3af;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   啟動 PK（先備知識）— SOIL 九宮格 第 1 格
+   ── 在 Hero 之後、step-nav 之前，勾學生既有經驗
+   ── 設計：暖黃底（不同於 teacher-block 灰），表示「主動連結舊經驗」
+   ════════════════════════════════════════════════════════════════ */
+.pk-hook {
+  margin: 18px 0;
+  padding: 16px 20px;
+  background: #fefce8;
+  border-left: 4px solid #ca8a04;
+  border-radius: 0 8px 8px 0;
+}
+.pk-hook .pk-label {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: #fef3c7;
+  color: #92400e;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.pk-hook .pk-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: var(--fs-l3);
+  font-weight: 700;
+  color: #713f12;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+.pk-hook .pk-body {
+  font-size: var(--fs-l4);
+  color: #78350f;
+  line-height: 1.75;
+}
+.pk-hook .pk-body strong { color: #422006; }
+.pk-hook ul {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  font-size: var(--fs-l4);
+  color: #78350f;
+  line-height: 1.85;
+}
+.pk-hook ul li { margin-bottom: 4px; }
+
+/* ════════════════════════════════════════════════════════════════
+   後設反思 — SOIL 九宮格 第 9 格
+   ── 在 checklist 之後、next-step 之前
+   ── 引導學生「我怎麼學會的？」自評
+   ── 設計：紫底（思考性的視覺），與 ai-collab 紫色家族
+   ════════════════════════════════════════════════════════════════ */
+.metacog-reflect {
+  margin: 24px 0;
+  padding: 18px 22px;
+  background: #faf5ff;
+  border-left: 4px solid #7c3aed;
+  border-radius: 0 8px 8px 0;
+}
+.metacog-reflect .mc-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: var(--fs-l3);
+  font-weight: 700;
+  color: #4c1d95;
+  margin: 0 0 12px;
+}
+.metacog-reflect .mc-title::before {
+  content: '想一想';
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--fs-l5);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: #ede9fe;
+  color: #6b21a8;
+  flex-shrink: 0;
+}
+.metacog-reflect .mc-questions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--fs-l4);
+  color: var(--text-primary);
+  line-height: 1.8;
+}
+.metacog-reflect .mc-questions li {
+  padding: 6px 0;
+  border-bottom: 1px dashed #e9d5ff;
+}
+.metacog-reflect .mc-questions li:last-child { border-bottom: none; }
+.metacog-reflect .mc-questions li strong { color: #5b21b6; }
+.metacog-reflect .mc-note {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e9d5ff;
+  font-size: var(--fs-l5);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
 /* ── 上一階段回顧（Lv2/Lv3 必填，回顧 Lv1/Lv2 的觸發點） */
 .prev-recall {
   margin: 18px 0;
@@ -2240,8 +2774,9 @@ textarea.fill-blank {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: 'Noto Serif TC', serif;
   font-weight: 700;
-  font-size: 15px;
+  font-size: var(--fs-l3);
   color: #6b21a8;
   margin-bottom: 14px;
 }
@@ -2307,6 +2842,51 @@ textarea.fill-blank {
   font-family: 'DM Mono', monospace;
   font-size: 12px;
   color: #6b21a8;
+}
+
+/* 問完 AI 後自評（每個 ai-collab 結尾必出現） */
+.ai-collab .ai-check {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: white;
+  border: 1px dashed #d8b4fe;
+  border-radius: 6px;
+}
+.ai-collab .ai-check-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #6b21a8;
+  margin-bottom: 8px;
+}
+.ai-collab .ai-check ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+.ai-collab .ai-check ul li {
+  padding: 3px 0;
+}
+.ai-collab .ai-check label {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.ai-collab .ai-check input[type="checkbox"] {
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  accent-color: #7c3aed;
+  cursor: pointer;
+}
+.ai-collab .ai-check label:has(input:checked) {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  text-decoration-color: #c4b5fd;
 }
 
 /* ── 手機版微調 */

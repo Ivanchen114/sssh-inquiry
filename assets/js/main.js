@@ -1,128 +1,139 @@
 // ═══════════════════════════════════════════════════
 //  Sidebar 資料結構
+//  ── 5 個第一層 group：首頁 / 主題模組 / 工具箱 / 期末 / 行政
+//  ── 主題模組內含 9 個可收合 sublabel module（單擺、彈簧⋯）
 // ═══════════════════════════════════════════════════
 const NAV_DATA = [
+  // ─── 區 1：首頁與起手 ───
   {
-    label: '課程',
+    label: '🏠 首頁與起手',
     items: [
-      { name: '🧭 網站操作說明', path: 'tools/guide.html' },
       { name: '課程總覽', path: 'index.html' },
-      { name: '📅 本週學習記錄（匯出）', path: 'tools/weekly-export.html' },
+      { name: '🧭 網站操作說明', path: 'tools/guide.html' },
+      { name: '💉 課程說明 × 疫苗選擇', path: 'units/phase1/vaccine.html' },
+      { name: '📏 有效數字與不確定度', path: 'units/phase1/uncertainty.html' },
     ]
   },
+
+  // ─── 區 2：主題模組（標題列 + 9 個可收合 sublabel module）───
+  { label: '📦 主題模組（9 主題 × 3 階段）', items: [] },
   {
-    label: '測量工具',
-    items: [
-      { name: '課程說明 × 疫苗選擇', path: 'units/phase1/vaccine.html' },
-      { name: '有效數字與不確定度', path: 'units/phase1/uncertainty.html' },
-    ]
-  },
-  {
-    sublabel: '主題 · 單擺',
+    sublabel: '單擺',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究', path: 'units/phase1/pendulum-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究', path: 'units/phase2/pendulum-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：10 秒競賽', path: 'units/phase3/pendulum-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：振幅 vs 擺長 → 找 g', path: 'units/phase1/pendulum-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：自己設計實驗', path: 'units/phase2/pendulum-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：10 秒競賽', path: 'units/phase3/pendulum-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · 彈簧',
+    sublabel: '彈簧',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：虎克定律', path: 'units/phase1/spring-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/spring-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：橡皮筋磅秤', path: 'units/phase3/spring-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：虎克定律', path: 'units/phase1/spring-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：變因設計', path: 'units/phase2/spring-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：橡皮筋磅秤', path: 'units/phase3/spring-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · 浮力',
+    sublabel: '浮力',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：阿基米德', path: 'units/phase1/buoyancy-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：鐵達尼號', path: 'units/phase2/buoyancy-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：智造微船', path: 'units/phase3/buoyancy-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：阿基米德', path: 'units/phase1/buoyancy-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：鐵達尼號', path: 'units/phase2/buoyancy-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式:智造微船', path: 'units/phase3/buoyancy-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · 聲音',
+    sublabel: '聲音',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：頻率與波形', path: 'units/phase1/sound-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：聲音變因', path: 'units/phase2/sound-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：水瓶琴競賽', path: 'units/phase3/sound-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：頻率與波形', path: 'units/phase1/sound-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：聲音變因', path: 'units/phase2/sound-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：水瓶琴競賽', path: 'units/phase3/sound-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · 翻滾仔',
+    sublabel: '翻滾仔',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：滾動數據', path: 'units/phase1/roller-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/roller-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：競速競賽', path: 'units/phase3/roller-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：滾動數據', path: 'units/phase1/roller-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：變因設計', path: 'units/phase2/roller-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：競速競賽', path: 'units/phase3/roller-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · 橡皮筋動力罐',
+    sublabel: '橡皮筋動力罐',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：能量轉換', path: 'units/phase1/rubber-band-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/rubber-band-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：精準回滾', path: 'units/phase3/rubber-band-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：能量轉換', path: 'units/phase1/rubber-band-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：變因設計', path: 'units/phase2/rubber-band-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：精準回滾', path: 'units/phase3/rubber-band-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · DNA 繞射',
+    sublabel: 'DNA 繞射',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：繞射數據', path: 'units/phase1/diffraction-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：光學實驗', path: 'units/phase2/diffraction-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：用光看結構', path: 'units/phase3/diffraction-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：繞射數據', path: 'units/phase1/diffraction-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：光學實驗', path: 'units/phase2/diffraction-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：用光看結構', path: 'units/phase3/diffraction-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · 冰屋',
+    sublabel: '冰屋',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：鹽冰降溫', path: 'units/phase1/icehouse-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：保冷方案', path: 'units/phase2/icehouse-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：保冷箱競賽', path: 'units/phase3/icehouse-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：鹽冰降溫', path: 'units/phase1/icehouse-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：保冷方案', path: 'units/phase2/icehouse-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：保冷箱競賽', path: 'units/phase3/icehouse-lv3.html', week: 'Lv3' },
     ]
   },
   {
-    sublabel: '主題 · 紙飛機',
+    sublabel: '紙飛機',
     phase: 1,
     items: [
-      { name: 'Lv1 引導式探究：拋體運動', path: 'units/phase1/airplane-lv1.html', week: 'Lv1' },
-      { name: 'Lv2 結構式探究：變因設計', path: 'units/phase2/airplane-lv2.html', week: 'Lv2' },
-      { name: 'Lv3 開放式探究：定點降落', path: 'units/phase3/airplane-lv3.html', week: 'Lv3' },
+      { name: 'Lv1 引導式：拋體運動', path: 'units/phase1/airplane-lv1.html', week: 'Lv1' },
+      { name: 'Lv2 結構式：變因設計', path: 'units/phase2/airplane-lv2.html', week: 'Lv2' },
+      { name: 'Lv3 開放式：定點降落', path: 'units/phase3/airplane-lv3.html', week: 'Lv3' },
     ]
   },
+
+  // ─── 區 3：工具箱（學生卡住時去查）───
   {
-    sublabel: '研究工具',
-    phase: 2,
+    label: '🧰 工具箱',
     items: [
-      { name: '論證建模工具', path: 'units/phase2/argument-model.html' },
-      { name: '研究規劃表', path: 'units/phase2/research-plan.html' },
-      { name: '問題發現單', path: 'units/phase3/question-discover.html' },
-      { name: '冪級數與線性化', path: 'units/phase2/power-law.html' },
-      { name: '報告撰寫規範', path: 'units/phase2/report.html' },
+      { name: '❓ 什麼是好的探究問題', path: 'tools/good-question.html' },
+      { name: '📋 研究規劃表', path: 'units/phase2/research-plan.html' },
+      { name: '💡 問題發現單', path: 'units/phase3/question-discover.html' },
+      { name: '📈 冪級數與線性化', path: 'units/phase2/power-law.html' },
+      { name: '🔍 論證建模工具', path: 'units/phase2/argument-model.html' },
+      { name: '📊 Excel 數據分析', path: 'tools/excel.html' },
+      { name: '📊 數據分析工坊', path: 'tools/data-workshop.html' },
+      { name: '🎤 表達與分享', path: 'tools/presentation.html' },
+      { name: '🖼️ Gallery Walk 回饋', path: 'tools/gallery-feedback.html' },
+      { name: '🪞 ORID 反思框架', path: 'tools/orid.html' },
+      { name: '📝 報告撰寫規範', path: 'units/phase2/report.html' },
+      { name: '📂 學習歷程指引', path: 'tools/portfolio.html' },
+      { name: '工具箱總覽', path: 'tools/index.html' },
+    ]
+  },
+
+  // ─── 區 4：期末成果 ───
+  {
+    label: '🏁 期末成果',
+    items: [
       { name: '期末成果發表', path: 'units/phase3/final.html' },
+      { name: '自主探究指引', path: 'tools/independent-research.html' },
     ]
   },
+
+  // ─── 區 5：行政 ───
   {
-    label: '資源',
+    label: '📋 行政',
     items: [
-      { name: '工具箱', path: 'tools/index.html' },
-      { name: '　表達與分享', path: 'tools/presentation.html' },
-      { name: '　🖼️ Gallery Walk 回饋', path: 'tools/gallery-feedback.html' },
-      { name: '　ORID 反思框架', path: 'tools/orid.html' },
-      { name: '　Excel 數據分析', path: 'tools/excel.html' },
-      { name: '　數據分析工坊', path: 'tools/data-workshop.html' },
-      { name: '　學習歷程指引', path: 'tools/portfolio.html' },
-      { name: '　自主探究指引', path: 'tools/independent-research.html' },
-      { name: '　什麼是好的探究問題', path: 'tools/good-question.html' },
-      { name: '　課綱能力對應', path: 'tools/curriculum-map.html' },
+      { name: '📅 本週學習記錄匯出', path: 'tools/weekly-export.html' },
+      { name: '課綱能力對應', path: 'tools/curriculum-map.html' },
       { name: '練習場', path: 'practice/index.html' },
     ]
   }
@@ -610,10 +621,13 @@ function initStepEngine() {
     if (document.activeElement && typeof document.activeElement.blur === 'function') {
       document.activeElement.blur();
     }
-    // 捲到頁面最上方（讓 H1 + meta + 學習目標 chip + step-nav 都在視野內）
-    window.scrollTo(0, 0);
+    // 捲到 step-nav 黏在視野頂部的位置——切 tab 後學生立刻看到對應 stage 內容，
+    // 而不是被丟回 Hero 區。
+    const stepNav = document.querySelector('.step-nav');
+    const targetTop = stepNav ? absoluteTop(stepNav) : 0;
+    window.scrollTo(0, targetTop);
     try {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
     } catch (_) { /* 舊瀏覽器忽略 */ }
   }
 
@@ -627,6 +641,11 @@ function initStepEngine() {
     tabs.forEach((t, i) => {
       t.classList.toggle('active', i === index);
     });
+    // 更新 sticky bar 進度條（憲法 #23）
+    const stepNav = document.querySelector('.step-nav');
+    if (stepNav) {
+      stepNav.style.setProperty('--step-progress', `${((index + 1) / panels.length) * 100}%`);
+    }
     // 更新所有步驟底部的圓點和按鈕
     document.querySelectorAll('.step-footer').forEach(footer => {
       const dots = footer.querySelectorAll('.step-dot');
