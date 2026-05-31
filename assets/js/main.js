@@ -125,6 +125,8 @@ const NAV_DATA = [
     items: [
       { name: '期末成果發表', path: 'units/phase3/final.html' },
       { name: '自主探究指引', path: 'tools/independent-research.html' },
+      { name: '🧭 研究提案表（定題）', path: 'tools/inquiry-proposal.html' },
+      { name: '🗣️ 同儕互評表（發表）', path: 'tools/inquiry-peer-review.html' },
     ]
   },
 

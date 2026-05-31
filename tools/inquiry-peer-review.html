@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自主探究 · 同儕互評表 · 探究與實作</title>
+  <meta name="description" content="同儕互評表：評探究歷程（設計→預測→執行→分析），不評結果漂不漂亮。">
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script>window.SITE_ROOT = '..';</script>
+  <style>
+    .pp-step{background:var(--bg);border-left:4px solid var(--express);border-radius:0 8px 8px 0;padding:12px 16px;margin:18px 0 10px;font-weight:700;color:var(--express);}
+    .copy-btn{display:inline-flex;align-items:center;gap:8px;background:var(--text-primary);color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+    .rate{display:flex;gap:6px;margin:4px 0 2px;}
+    .rate label{font-size:13px;display:flex;align-items:center;gap:3px;cursor:pointer;color:var(--text-secondary);}
+  </style>
+</head>
+<body>
+<div id="sidebar-mount"></div>
+<div id="sidebar-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99;"></div>
+<div id="main-content">
+  <div id="mobile-header">
+    <span style="font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;">探究與實作</span>
+    <button id="menu-btn" aria-label="開啟選單"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+
+  <div class="page-header">
+    <div class="hero-kicker"><span class="hk-meta">自主探究 · 發表</span><span class="hk-chip">同儕互評表</span></div>
+    <h1>🗣️ 同儕互評</h1>
+    <p class="hero-bridge">評的是<strong>研究歷程</strong>（設計→預測→執行→分析→反思），<strong>不是</strong>誰的數字漂亮、誰贏比賽。給回饋要具體、能幫對方變好。</p>
+  </div>
+
+  <div class="page-body">
+
+    <div class="think-block record">
+      <div class="think-prompt">被評的組別／題目</div>
+      <textarea class="think-input" data-key="pr-target" rows="1" placeholder="第 ___ 組｜研究問題：___"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <div class="pp-step">① 設計邏輯</div>
+    <div class="think-block record">
+      <div class="think-prompt">他們為什麼選這個變因／設計？有理由或依據嗎？</div>
+      <textarea class="think-input" data-key="pr-design" rows="2"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <div class="pp-step">② 預測 vs 結果</div>
+    <div class="think-block record">
+      <div class="think-prompt">他們的數據和原本的假設差多少？差距的解釋合理嗎？</div>
+      <textarea class="think-input" data-key="pr-predict" rows="2"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <div class="pp-step">③ 證據與分析</div>
+    <div class="think-block record">
+      <div class="think-prompt">結論有用數據（圖表、不確定度、誤差棒）撐住嗎？還是只是「感覺」？</div>
+      <textarea class="think-input" data-key="pr-evidence" rows="2"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <div class="pp-step">④ 失敗／限制分析</div>
+    <div class="think-block record">
+      <div class="think-prompt">他們有沒有誠實面對失敗或限制？分析到位嗎？</div>
+      <textarea class="think-input" data-key="pr-failure" rows="2"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <div class="pp-step">⑤ 一個具體建議</div>
+    <div class="think-block record">
+      <div class="think-prompt">如果他們再做一次，你會建議改哪一件事？（具體、可執行）</div>
+      <textarea class="think-input" data-key="pr-suggest" rows="2"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <div class="pp-step">⑥ 從失敗能不能長出新問題</div>
+    <div class="think-block record">
+      <div class="think-prompt">從他們的經驗，你能幫他們想一個「可以用實驗回答」的新問題嗎？</div>
+      <textarea class="think-input" data-key="pr-newq" rows="2"></textarea>
+      <div class="think-status"></div>
+    </div>
+
+    <div class="card" style="margin:14px 0;">
+      <div style="font-weight:700;font-size:13px;margin-bottom:8px;">歷程完整度（圈一個）</div>
+      <div class="rate" id="pr-score">
+        <label><input type="radio" name="prscore" value="設計完整、分析扎實"> A 設計完整、分析扎實</label>
+        <label><input type="radio" name="prscore" value="大致完整、有小漏洞"> B 大致完整、有小漏洞</label>
+        <label><input type="radio" name="prscore" value="部分缺漏、需補強"> C 部分缺漏、需補強</label>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">提醒：A 不等於「結果成功」。失敗但歷程完整、分析誠實，一樣是 A。</p>
+    </div>
+
+    <div style="margin:20px 0;">
+      <button class="copy-btn" onclick="copyAll(this)">📋 複製互評（貼到 Classroom 或交給對方）</button>
+      <span id="copyMsg" style="margin-left:10px;font-size:13px;color:var(--express);"></span>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+function copyAll(btn){
+  var labels={'pr-target':'被評組別/題目','pr-design':'① 設計邏輯','pr-predict':'② 預測vs結果',
+    'pr-evidence':'③ 證據與分析','pr-failure':'④ 失敗/限制分析','pr-suggest':'⑤ 一個建議','pr-newq':'⑥ 新問題'};
+  var out='【自主探究 · 同儕互評】\n\n';
+  document.querySelectorAll('[data-key]').forEach(function(el){
+    if((el.value||'').trim()) out+=(labels[el.dataset.key]||el.dataset.key)+'：\n'+el.value.trim()+'\n\n';
+  });
+  var sc=document.querySelector('input[name=prscore]:checked');
+  out+='歷程完整度：'+(sc?sc.value:'未圈')+'\n';
+  navigator.clipboard.writeText(out).then(function(){document.getElementById('copyMsg').textContent='✅ 已複製';});
+}
+</script>
+</body>
+</html>

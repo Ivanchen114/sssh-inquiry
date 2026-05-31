@@ -223,7 +223,27 @@
         </div>
 
         <!-- Layer 2: 設計決策記錄 -->
-        <div class="think-block record">
+        <!-- 模糊好奇→可測問題 改寫練習（補斷層B）-->
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:12px;font-size:13px;line-height:1.75;">
+        <div style="font-weight:700;color:#92400e;margin-bottom:8px;">🔧 先把「模糊好奇」磨成「可測問題」</div>
+        <div style="color:#b45309;">模糊：「怎樣的船載最多？」</div>
+        <div style="color:var(--text-muted);font-size:12px;margin:3px 0;">↓ 補上：操縱什麼變因（幾個水準）→ 量什麼 → 教室做得到</div>
+        <div style="color:#15803d;">可測：「用同一張鋁箔，底面積:牆高 取 3 種比例，量各自最大載重，找最佳比例」</div>
+        <div style="border-top:1px dashed #fcd34d;margin-top:8px;padding-top:8px;color:#78350f;">換你：把你的「設計直覺」磨成可測問題——操縱哪個設計變因、量最大載重、在限制內做得到。</div>
+      </div>
+      <!-- 可證偽性檢核（補齊：與 rubber-band/airplane 一致）-->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 暖身：以下四個假設，哪個<strong>最具可證偽性</strong>（最容易被數據反駁）？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 船越大，載得越多</button>
+          <button class="think-opt" data-val="b">B. 鋼鐵做的船很厲害，能浮起來</button>
+          <button class="think-opt" data-val="c">C. 底面積:牆高從 1:1 改到 2:1，最大載重增加（排水體積變大）</button>
+          <button class="think-opt" data-val="d">D. 設計好的船通常載比較多</button>
+        </div>
+        <div class="think-feedback" style="display:none;">C 對。可證偽性 = 假設能被數據「打臉」的明確程度。<br>A 太弱（只要有一點變化就算對，幾乎不可能被反駁）；B 模糊到無法測量；D 用「通常／比較好」這種閃爍語，無法用實驗判定。<br>C 給了<strong>方向 + 量化 + 機制</strong>——數據一相反就被推翻。<strong>好假設要敢於可能錯。</strong></div>
+      </div>
+
+      <div class="think-block record">
           <div class="think-prompt">✏️ 你決定選的船型是什麼？為什麼這樣設計能最大化載重？</div>
           <textarea class="think-input" data-key="buoyancy-lv2-design" placeholder="例如：矩形船，長 15 cm、寬 10 cm、牆高 8 cm。因為矩形容易製作，底面積夠大能排水多，高度適中不容易翻…"></textarea>
           <div class="think-status"></div>

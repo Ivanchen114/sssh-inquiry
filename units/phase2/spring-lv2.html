@@ -191,7 +191,27 @@
         </div>
 
         <!-- Layer 2: 選題記錄 -->
-        <div class="think-block record">
+        <!-- 模糊好奇→可測問題 改寫練習（補斷層B）-->
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:12px;font-size:13px;line-height:1.75;">
+        <div style="font-weight:700;color:#92400e;margin-bottom:8px;">🔧 先把「模糊好奇」磨成「可測問題」</div>
+        <div style="color:#b45309;">模糊：「什麼會影響彈簧的軟硬？」</div>
+        <div style="color:var(--text-muted);font-size:12px;margin:3px 0;">↓ 補上：操縱什麼變因（幾個水準）→ 量什麼 → 教室做得到</div>
+        <div style="color:#15803d;">可測：「彈簧圈數取 10/20/30 圈，各掛 5 種重量量出彈力常數 k，看 k 與圈數的關係」</div>
+        <div style="border-top:1px dashed #fcd34d;margin-top:8px;padding-top:8px;color:#78350f;">換你：把下面要選的研究問題，照「操縱 ___（水準 ___）→ 量 ___ → 教室做得到」磨一遍再寫。</div>
+      </div>
+      <!-- 可證偽性檢核（補齊：與 rubber-band/airplane 一致）-->
+      <div class="think-block choice" data-answer="c">
+        <div class="think-prompt">🎯 暖身：以下四個假設，哪個<strong>最具可證偽性</strong>（最容易被數據反駁）？</div>
+        <div class="think-options">
+          <button class="think-opt" data-val="a">A. 掛越重，彈簧伸越長</button>
+          <button class="think-opt" data-val="b">B. 彈簧很有彈性，能存很多能量</button>
+          <button class="think-opt" data-val="c">C. 掛重 50→250gw，伸長量與重量成正比；超過 250gw 偏離直線</button>
+          <button class="think-opt" data-val="d">D. 好的彈簧通常比較耐用</button>
+        </div>
+        <div class="think-feedback" style="display:none;">C 對。可證偽性 = 假設能被數據「打臉」的明確程度。<br>A 太弱（只要有一點變化就算對，幾乎不可能被反駁）；B 模糊到無法測量；D 用「通常／比較好」這種閃爍語，無法用實驗判定。<br>C 給了<strong>方向 + 量化 + 機制</strong>——數據一相反就被推翻。<strong>好假設要敢於可能錯。</strong></div>
+      </div>
+
+      <div class="think-block record">
           <div class="think-prompt">✏️ 你打算選哪個研究問題？簡單說明你的選擇理由。</div>
           <textarea class="think-input" data-key="spring-lv2-q1" placeholder="例如：選問題 B，因為我想驗證彈簧原長是否真的影響 k 值，實驗在教室裡容易做…"></textarea>
           <div class="think-status"></div>
