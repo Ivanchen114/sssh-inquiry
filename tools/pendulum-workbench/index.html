@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><base href="/tools/pendulum-workbench/">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="在單擺實驗桌量測、計時、留下數據，再到分析電腦畫圖與補測。">
+<title>單擺工作臺｜松山高中探究與實作</title>
+<link rel="stylesheet" href="workbench.css">
+<script defer src="model.js"></script><script defer src="workbench.js"></script>
+</head>
+<body data-workspace="bench">
+<header class="topbar"><a class="brand" href="../../index.html"><span class="brand-mark">松</span><span>松山高中<span class="brand-sub">探究與實作 · 實驗工作室</span></span></a><div class="save-status" id="saveStatus" role="status">紀錄保存在這部裝置</div><button id="exportProject" class="quiet">下載實驗檔</button><a class="quiet studio-link" href="../inquiry-studio/catalog.html">生活探究</a><button id="infoButton" class="quiet">說明</button><button id="fullscreenButton" class="quiet">全螢幕 ⛶</button></header>
+<main>
+<section class="intro"><div><div class="eyebrow">EXPERIMENT 01 / MECHANICS</div><h1>讓時間，擺得準。</h1><p>替學校設計一座計時擺。你會如何找出擺長與來回時間的關係？</p></div><span class="edition">單擺工作臺 <span>2.5D 原型 · 模擬實驗</span></span></section>
+<nav class="stations" aria-label="實驗工作區"><button data-view="bench" aria-current="page"><span>01</span> 實驗桌</button><button data-view="notebook"><span>02</span> 實驗筆記 <b id="recordCount">0</b></button><button data-view="analysis"><span>03</span> 分析電腦</button><button data-view="report"><span>04</span> 我的論證</button></nav>
+<section id="bench" class="view active" aria-label="實驗桌">
+<button id="controlsToggle" class="controls-toggle" aria-expanded="false" aria-controls="instrumentConsole">操作器材</button><div class="bench-layout"><div class="scene-wrap">
+<div class="scene-tag"><i></i> LAB 01 <span id="sceneState">等待你的第一個預測</span></div>
+<div class="scene-stage"><svg id="room" viewBox="0 0 1100 650" role="img" aria-label="單擺實驗桌。中央擺錘與左側尺可以拖動；也可打開器材面板使用數值控制。">
+<defs>
+ <linearGradient id="wall" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="950" y2="650"><stop stop-color="#f2eee3"/><stop offset=".55" stop-color="#e3e2d8"/><stop offset="1" stop-color="#c8cec2"/></linearGradient>
+ <radialGradient id="daylight" gradientUnits="userSpaceOnUse" cx="150" cy="160" r="960"><stop stop-color="#fffae6" stop-opacity=".6"/><stop offset="1" stop-color="#fff9e3" stop-opacity="0"/></radialGradient>
+ <linearGradient id="wood" gradientUnits="userSpaceOnUse" x1="0" y1="520" x2="0" y2="660"><stop stop-color="#c6a17a"/><stop offset=".5" stop-color="#b88f66"/><stop offset="1" stop-color="#98714f"/></linearGradient>
+ <linearGradient id="deskEdge" x2="0" y2="1"><stop stop-color="#7c583c"/><stop offset=".08" stop-color="#9b7350"/><stop offset="1" stop-color="#6b503b"/></linearGradient>
+ <linearGradient id="metal"><stop stop-color="#34423e"/><stop offset=".17" stop-color="#718078"/><stop offset=".36" stop-color="#e3e8db"/><stop offset=".48" stop-color="#b4c2b5"/><stop offset=".7" stop-color="#66746c"/><stop offset="1" stop-color="#283b32"/></linearGradient>
+ <linearGradient id="paint" x2=".75" y2="1"><stop stop-color="#587464"/><stop offset=".5" stop-color="#365243"/><stop offset="1" stop-color="#1f392e"/></linearGradient>
+ <linearGradient id="basePaint" x2="0" y2="1"><stop stop-color="#63766a"/><stop offset="1" stop-color="#304a3c"/></linearGradient>
+ <radialGradient id="ball" cx=".29" cy=".22" r=".8"><stop stop-color="#fff4ca"/><stop offset=".14" stop-color="#e7cb83"/><stop offset=".4" stop-color="#b88c3f"/><stop offset=".72" stop-color="#795728"/><stop offset=".89" stop-color="#483d25"/><stop offset="1" stop-color="#ad9153"/></radialGradient>
+ <linearGradient id="glass" x2=".6" y2="1"><stop stop-color="#c4d7ce"/><stop offset=".45" stop-color="#dfe8d6"/><stop offset="1" stop-color="#f7efd9"/></linearGradient>
+ <linearGradient id="screen" x2="1" y2="1"><stop stop-color="#213c33"/><stop offset="1" stop-color="#0e251e"/></linearGradient>
+ <linearGradient id="screenReflection" x2="1" y2="1"><stop stop-color="#e2f0df" stop-opacity=".12"/><stop offset="1" stop-color="#e2f0df" stop-opacity="0"/></linearGradient>
+ <linearGradient id="rulerFinish"><stop stop-color="#c4ad77"/><stop offset=".06" stop-color="#f5e8bb"/><stop offset=".82" stop-color="#e3ce97"/><stop offset="1" stop-color="#bd9f63"/></linearGradient>
+ <linearGradient id="paperFinish" x2=".7" y2="1"><stop stop-color="#fffcf0"/><stop offset="1" stop-color="#e6dcc1"/></linearGradient>
+ <pattern id="grid" width="33" height="33" patternUnits="userSpaceOnUse"><path d="M33 0H0V33" fill="none" stroke="#546552" stroke-opacity=".075" stroke-width=".6"/></pattern>
+ <pattern id="wallTexture" width="37" height="31" patternUnits="userSpaceOnUse"><g fill="#7a7868" opacity=".08"><circle cx="3" cy="8" r=".4"/><circle cx="17" cy="24" r=".35"/><circle cx="32" cy="13" r=".5"/></g></pattern>
+ <pattern id="woodGrain" width="640" height="49" patternUnits="userSpaceOnUse" patternTransform="skewY(-1.15)"><g fill="none" stroke="#5e3f28" stroke-width=".6" opacity=".16"><path d="M0 4Q140 0 290 6T640 4M0 10Q150 18 340 9T640 11M0 30Q220 20 480 31T640 30M0 42Q140 38 380 45T640 42"/><path d="M30 17Q230 29 490 17M120 36Q240 28 340 36"/></g><path d="M0 2H640M0 33H640" stroke="#f4d8ad" opacity=".12" stroke-width=".8"/></pattern>
+ <filter id="shadow" x="-.6" y="-.6" width="2.2" height="2.2"><feDropShadow dx="3" dy="5" stdDeviation="3" flood-color="#2d3023" flood-opacity=".22"/></filter>
+ <filter id="softShadow" x="-.3" y="-1" width="1.6" height="3"><feGaussianBlur stdDeviation="6"/></filter>
+ <filter id="boardShadow" x="-.2" y="-.2" width="1.4" height="1.4"><feDropShadow dx="5" dy="8" stdDeviation="7" flood-color="#384234" flood-opacity=".12"/></filter>
+</defs>
+<rect x="-4000" y="-4000" width="9000" height="9000" fill="url(#wall)"/><rect x="-4000" y="545" width="9000" height="5000" fill="url(#wood)"/><path fill="url(#wall)" d="M0 0h1100v650H0z"/>
+<rect x="-1500" y="-1000" width="4000" height="1800" fill="url(#wallTexture)"/>
+<rect x="-1500" y="-1000" width="4000" height="1800" fill="url(#daylight)"/>
+<path d="M0 0H255V410H0" fill="#99ada0"/>
+<path d="M0 3H246V401H0" fill="#d6dccc"/>
+<path d="M12 18H228V381H12" fill="#9daf9f"/>
+<path d="M0 18H224V374H0z" fill="url(#glass)"/>
+<path d="M0 219h227M104 18v360" stroke="#8eaa99" stroke-width="17" opacity=".22"/>
+<path d="M0 215h225M100 18v358" stroke="#f7f5eb" stroke-width="12"/>
+<path d="M0 209h225M94 18v356" stroke="#fffdf2" stroke-width="2" opacity=".9"/>
+<path d="M0 385h250v17H0" fill="#a5ad99" opacity=".4"/>
+<path d="M0 378h242l12 12H0z" fill="#f5f0df"/><path d="M0 390h254v7H0" fill="#c7c6b2"/>
+<path d="M10 399L398 650H790L220 399" fill="#fff9d9" opacity=".17"/>
+<rect x="326" y="56" width="400" height="464" rx="5" fill="#e9eade" stroke="#c4cbb9" filter="url(#boardShadow)"/>
+<path d="M331 61H721" stroke="#fffdf1" stroke-opacity=".8"/>
+<g fill="#87917d" stroke="#e1e5d5" stroke-width="1"><circle cx="337" cy="67" r="2.3"/><circle cx="715" cy="67" r="2.3"/><circle cx="337" cy="509" r="2.3"/><circle cx="715" cy="509" r="2.3"/></g>
+<rect x="326" y="56" width="400" height="464" fill="url(#grid)"/>
+<text x="349" y="83" fill="#69786a" font-size="9" letter-spacing="2.5">PENDULUM / 01</text>
+<path d="M-4000 625L5000 445V5000H-4000z" fill="url(#wood)"/>
+<path d="M-4000 625L5000 445V5000H-4000z" fill="url(#woodGrain)"/>
+<path d="M-4000 671L5000 491V5000H-4000z" fill="url(#deskEdge)"/>
+<path d="M-4000 674L5000 494" stroke="#4c3828" stroke-opacity=".5" stroke-width="2"/>
+<path d="M-4000 671L5000 491" stroke="#e5c49c" stroke-width="2"/>
+<path d="M52 575L1060 553M194 625L976 608" stroke="#795b3a" opacity=".18" stroke-width="2"/>
+<!-- lamp -->
+<ellipse cx="131" cy="544" rx="66" ry="16" fill="#8a735b" opacity=".3"/>
+<path d="M86 537h99l-10-13h-79z" fill="url(#paint)"/>
+<path d="M133 526L100 381L162 291" fill="none" stroke="url(#paint)" stroke-width="10"/>
+<circle cx="100" cy="381" r="11" fill="#476754"/>
+<path d="M153 280Q187 264 215 314L153 350Q135 319 153 280" fill="url(#paint)"/>
+<path d="M155 283Q177 274 191 290" fill="none" stroke="#829b83" stroke-width="2" opacity=".6"/><circle cx="100" cy="381" r="4" fill="#c4cbb6"/><path d="M153 350L215 314" stroke="#e4d8a8" stroke-width="6"/>
+<!-- stand -->
+<ellipse cx="567" cy="551" rx="147" ry="16" fill="#3b3427" opacity=".25" filter="url(#softShadow)"/>
+<path d="M653 125V533M526 123H653" fill="none" stroke="#3c4c3a" stroke-width="10" opacity=".07"/>
+<path d="M413 551l287 0v9H413z" fill="#283f33"/>
+<path d="M440 530h233l27 25H413z" fill="url(#basePaint)"/>
+<path d="M443 532h226l22 20H420z" fill="none" stroke="#809486" stroke-width=".8"/>
+<g fill="#b7c3ad" stroke="#354e3e" stroke-width="1"><ellipse cx="448" cy="544" rx="4" ry="2"/><ellipse cx="668" cy="544" rx="4" ry="2"/></g>
+<rect x="642" y="100" width="14" height="437" fill="url(#metal)"/>
+<path d="M646 109H514" stroke="#4b5f50" stroke-width="12" stroke-linecap="round"/>
+<path d="M642 105H520" stroke="#b3c1aa" stroke-width="2" stroke-linecap="round"/>
+<rect x="639" y="98" width="26" height="26" rx="4" fill="url(#metal)" stroke="#768979" stroke-width=".7"/>
+<circle cx="652" cy="111" r="4" fill="#394c3d"/><path d="M650 109l4 4" stroke="#a5b39d"/>
+<path d="M650 513v17" stroke="#d6decb" stroke-width="1"/>
+<line x1="520" y1="110" x2="520" y2="515" stroke="#769185" stroke-dasharray="4 7"/>
+<path id="angleArc" d="" fill="none" stroke="#5d7d6a" stroke-width="2"/>
+<line id="string" x1="520" y1="110" x2="570" y2="350" stroke="#766b51" stroke-width="1.5"/>
+<circle cx="520" cy="110" r="6" fill="#384d42"/>
+<g id="bobHandle" class="drag-target"><circle id="bobHit" r="29" fill="transparent"/><circle id="bob" r="18" fill="url(#ball)" filter="url(#shadow)"/><ellipse cx="-5" cy="-7" rx="5" ry="3" fill="#fffbe7" opacity=".26" transform="rotate(-35)"/><circle r="1.8" fill="#493e25"/><circle cx="-.4" cy="-.5" r=".7" fill="#e2c581"/></g>
+<!-- movable ruler, 330 SVG units per metre -->
+<g id="ruler" class="drag-target" transform="translate(390 110)"><rect x="0" y="-17" width="46" height="430" rx="3" fill="url(#rulerFinish)" stroke="#b5a06c" stroke-width=".7" filter="url(#shadow)"/><g id="rulerTicks"></g><text x="11" y="-4" font-size="10" fill="#685937">cm</text></g>
+<!-- computer -->
+<ellipse cx="918" cy="549" rx="97" ry="10" fill="#3b3427" opacity=".2" filter="url(#softShadow)"/>
+<g filter="url(#shadow)"><rect x="787" y="349" width="250" height="169" rx="8" fill="#394d42" stroke="#839281" stroke-width="1"/>
+<rect x="792" y="354" width="240" height="159" rx="5" fill="#1b3026"/>
+<rect x="800" y="363" width="224" height="140" rx="2" fill="url(#screen)"/>
+<path d="M800 365h224v32L800 480z" fill="url(#screenReflection)"/>
+<circle cx="912" cy="508" r="1.5" fill="#b0c38e"/>
+<path d="M896 518h29l4 24h-38z" fill="url(#metal)"/><path d="M865 541h91l17 9H850z" fill="url(#basePaint)"/>
+<text x="819" y="387" fill="#a7bca5" font-size="8" letter-spacing="1.8">DATA WORKSPACE</text>
+<path d="M819 398H1005" stroke="#759779" stroke-opacity=".3"/>
+<text id="monitorCount" x="820" y="447" fill="#e4eaca" font-size="36" font-family="ui-monospace,monospace">00</text>
+<text x="876" y="447" fill="#b3c4a9" font-size="10">筆量測紀錄</text>
+<text x="820" y="483" fill="#a2b89b" font-size="9">收集證據，再整理成解釋。</text></g>
+<path d="M783 551l236-4 30 21-258 6z" fill="#899586"/><path d="M784 549l235-4 28 20-257 6z" fill="#d5d9c7" stroke="#eef0e3" stroke-width=".7"/>
+<path d="M797 551l209-4M801 556l211-4M808 562l201-4" stroke="#788a76" stroke-width="2.2" stroke-dasharray="8 3"/>
+<path d="M860 565l93-2" stroke="#abb7a1" stroke-width="3"/>
+<!-- notebook -->
+<ellipse cx="317" cy="558" rx="103" ry="12" fill="#443728" opacity=".2" filter="url(#softShadow)"/>
+<g transform="translate(235 493) rotate(-8)">
+<path d="M0 0h145l28 76H15z" fill="#2d4939"/>
+<path d="M7 1h129l29 67H20z" fill="#b9b69c"/>
+<path d="M7-1h129l29 67H20z" fill="#e3d9bd"/>
+<path d="M7-4h129l28 67H21z" fill="url(#paperFinish)"/>
+<path d="M15-3l15 65" stroke="#cbc2a8" stroke-width=".7"/>
+<text x="27" y="9" fill="#6b765f" font-size="6" letter-spacing="1.3">FIELD NOTES</text>
+<path d="M26 18h96M29 28h94M32 38h92M35 48h90" stroke="#b1bea3" stroke-width=".7"/>
+<path d="M117 5l23 55" stroke="#5a654c" stroke-opacity=".16" stroke-width="7"/>
+<path d="M114 2l22 53" stroke="#c28b43" stroke-width="4"/><path d="M113 3l22 51" stroke="#f5d393" stroke-width="1"/>
+<path d="M134 52l4 11 0-12" fill="#d3bd86"/><path d="M137 59l1 4 0-4" fill="#384032"/>
+<path d="M112-2l2 5" stroke="#acb69e" stroke-width="4"/>
+</g>
+<rect x="48" y="607" width="133" height="19" rx="2" fill="#3f4030" opacity=".58"/>
+<text x="58" y="620" fill="#e7d7b9" font-size="8" letter-spacing="1.7">SSSH / INQUIRY STUDIO</text>
+</svg>
+<button class="scene-hotspot notebook-hotspot" data-view="notebook">打開筆記 ↗</button><button class="scene-hotspot computer-hotspot" data-view="analysis">使用電腦 ↗</button></div>
+<div class="scene-caption"><span>拖動擺錘設定角度；拖動尺，選擇量測位置。</span><button id="zoomRuler" aria-pressed="false">放大讀尺</button></div>
+</div>
+<aside class="console" id="instrumentConsole" hidden><button id="closeControls" class="close-controls" aria-label="收起器材面板">×</button>
+<div class="console-heading"><span class="eyebrow">YOUR WORKBENCH</span><h2>準備一次量測</h2></div>
+<div id="predictionGate" class="first-thought"><label for="prediction">先留下你的預測<br><span>擺長加倍，來回一次的時間會如何改變？為什麼？</span></label><textarea id="prediction" rows="3" placeholder="我預測……，因為……"></textarea><button id="savePrediction" class="primary">保存預測，開始操作</button></div>
+<fieldset id="setup"><legend class="sr-only">實驗條件</legend>
+<label class="range-label" for="length">懸掛長度 <output id="lengthOut">60 cm</output></label><input id="length" type="range" min="20" max="120" step="1" value="60">
+<label class="range-label" for="angle">釋放角度 <output id="angleOut">15°</output></label><input id="angle" type="range" min="-45" max="45" step="1" value="15">
+<label for="mass">擺錘質量</label><select id="mass"><option value="50">50 g · 黃銅擺錘</option><option value="100" selected>100 g · 黃銅擺錘</option><option value="200">200 g · 黃銅擺錘</option></select>
+<details class="ruler-settings"><summary>調整尺的位置</summary><label for="rulerX">左右位置</label><input id="rulerX" type="range" min="300" max="610" value="390"><label for="rulerY">零刻度上下位置</label><input id="rulerY" type="range" min="65" max="145" value="110"></details>
+</fieldset>
+<div class="button-pair"><button id="release" class="primary">釋放擺錘</button><button id="resetSwing">重新架設</button></div>
+<div class="stopwatch"><span class="eyebrow">STOPWATCH / 手動計時</span><output id="timer">00.00<span> s</span></output><button id="timerButton" disabled>開始計時</button><p>選定同一個位置與方向，自己數完整來回。</p><button id="recordFromTimer" hidden>記錄這次量測 →</button></div>
+<form id="measurementForm"><div class="input-pair"><label>量得擺長（cm）<input id="measuredLength" type="number" min="1" max="150" step="0.1" placeholder="讀尺後填入" required></label><label>完整來回（次）<input id="cycles" type="number" min="1" max="100" step="1" value="10" required></label></div><label for="observation">這次觀察 <span class="optional">選填</span></label><input id="observation" type="text" maxlength="300" placeholder="例如：起始點、計時方式、想重測的原因"><button id="saveMeasurement" class="primary" disabled>將這次量測放進筆記</button></form>
+<p id="actionStatus" class="action-status" role="status">先保存預測，再開始你的第一次實驗。</p>
+</aside></div>
+</section>
+<section id="notebook" class="view paper-view" aria-labelledby="notebookTitle" hidden><div class="section-head"><div><span class="eyebrow">FIELD NOTES</span><h2 id="notebookTitle">每一次測量，都留下來。</h2><p>保留原始紀錄。若某次不納入分析，請留下理由；也能隨時重新納入。</p></div><button data-view="bench" class="primary">回實驗桌補測 ↗</button></div><div class="prediction-saved"><span>我的最初預測</span><p id="initialPrediction">尚未留下預測。</p></div><div id="dataTable" class="table-scroll"></div><div class="footer-actions"><button id="exportCsv">下載數據 CSV</button><button data-view="analysis">帶著數據去分析 →</button></div></section>
+<section id="analysis" class="view paper-view" aria-labelledby="analysisTitle" hidden><div class="section-head"><div><span class="eyebrow">DATA WORKSPACE</span><h2 id="analysisTitle">讓數據說話。</h2><p>選擇你要比較的量，再決定直線是否適合描述這些資料。</p></div><button data-view="bench" class="primary">回實驗桌補測 ↗</button></div>
+<div class="analysis-controls"><label>橫軸<select id="xAxis"><option value="length">量得擺長 L（m）</option><option value="angle">釋放角度的大小（°）</option><option value="mass">擺錘質量（g）</option></select></label><label>縱軸<select id="yAxis"><option value="period">週期 T（s）</option><option value="squared">週期平方 T²（s²）</option></select></label><button id="fitButton" class="primary">試做直線擬合</button></div><p id="analysisNotice" class="analysis-notice"></p>
+<div class="chart-layout"><div class="chart-main"><svg id="plot" viewBox="0 0 760 410" role="img" aria-label="量測數據散佈圖"></svg><p class="chart-caption">每個點代表一筆納入分析的手動量測；點旁數字對應筆記編號。</p></div><div class="fit-panel"><span class="eyebrow">MODEL CHECK</span><h3>這條線合適嗎？</h3><p id="fitResult">先收集數據，選好橫軸與縱軸，再試做直線擬合。</p><svg id="residualPlot" viewBox="0 0 360 240" role="img" aria-label="殘差圖"></svg><p class="small">殘差＝量測值 − 直線預測值。觀察偏差是否有規律，再決定要補測什麼。</p></div></div><label class="reflection-label" for="analysisNote">根據圖表，你想保留哪個解釋，或回去補測什麼？</label><textarea id="analysisNote" data-note="analysisNote" rows="3" placeholder="請指出筆記編號或圖中的具體證據。"></textarea></section>
+<section id="report" class="view paper-view" aria-labelledby="reportTitle" hidden><div class="section-head"><div><span class="eyebrow">EVIDENCE → EXPLANATION</span><h2 id="reportTitle">寫下你如何知道。</h2><p>用自己的量測回答研究問題，再回頭看最初的預測。</p></div><button id="exportReport" class="primary">下載探究紀錄</button></div><div class="report-grid"><label>我的主張<textarea data-note="claim" rows="4" placeholder="擺長與來回一次的時間，有什麼關係？你的資料適用於哪些條件？"></textarea></label><label>支持主張的證據<textarea data-note="evidence" rows="4" placeholder="引用筆記編號、數值、圖表或擬合結果。"></textarea></label><label>我如何解釋證據<textarea data-note="reasoning" rows="4" placeholder="這些證據為什麼支持你的主張？還有沒有其他可能？"></textarea></label><label>回看預測與下一步<textarea data-note="reflection" rows="4" placeholder="我要修改或保留哪個預測？根據什麼？若改成實體單擺，還要確認什麼？"></textarea></label></div><p class="small">下載內容包括最初預測、全部量測與排除理由、目前分析設定、你的分析筆記與論證。</p></section>
+<dialog id="infoDialog"><button id="closeInfo" class="close-controls" aria-label="關閉說明">×</button><h2>實驗說明與備份</h2><footer class="bottom-bar"><details><summary>這個實驗如何模擬？</summary><p>以 θ″＝−(9.81/L) sin θ 數值積分，保留大角度效應；繩子無質量、不可伸長，擺錘視為質點，沒有摩擦或空氣阻力。擺長是支點到擺錘中心的距離；擺錘外觀大小僅供辨識，不模擬形狀效應。</p><p>尺每格 1 cm。碼錶以實際經過時間計時，讀值至 0.01 s；畫面卡頓、切換分頁或離開實驗桌會中止該次計時，避免不完整觀察混入數據。系統不加入隨機誤差。學生輸入的長度與計時，才是分析使用的資料。</p><p>所有紀錄均標示為模擬實驗，不能獨立驗證產生資料的物理模型。可另做實體實驗比較。紀錄保存在此瀏覽器；清除網站資料會移除紀錄，請下載實驗檔備份。</p></details><div><button id="importButton" class="quiet">載入實驗檔</button><input type="file" id="importFile" accept="application/json,.json" hidden><a href="../../units/phase1/pendulum-lv1.html">回單擺課程 ↗</a></div></footer></dialog>
+</main>
+<dialog id="excludeDialog"><form id="excludeForm"><h2>保留資料，說明判斷</h2><p>這筆原始資料會留在筆記中，但暫不參與畫圖與擬合。</p><label for="excludeReason">不納入分析的理由</label><textarea id="excludeReason" required maxlength="300" rows="3"></textarea><div class="footer-actions"><button type="button" id="cancelExclude">取消</button><button class="primary" type="submit">保存理由</button></div></form></dialog>
+<dialog id="importDialog"><h2>載入另一份實驗紀錄</h2><p>這會取代這個工作臺目前顯示的紀錄。先前紀錄可先下載備份。</p><div class="footer-actions"><button id="backupBeforeImport">下載目前紀錄</button><button id="cancelImport">取消</button><button id="confirmImport" class="primary">取代並載入</button></div></dialog>
+<noscript>此工作臺需要啟用 JavaScript 才能進行實驗。</noscript>
+</body></html>

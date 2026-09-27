@@ -1,0 +1,12 @@
+tests/
+**/*.md
+tools/inquiry-studio/art/everyday-lab-original.png
+.deploy-config
+deploy.sh
+*.command
+
+.git
+.vercel
+.env*
+tests/**
+.vercelignore
