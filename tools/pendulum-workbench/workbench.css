@@ -71,3 +71,5 @@ body.has-timing .intro{display:none}
 
 .studio-link{font-size:12px;text-decoration:none;color:var(--green);white-space:nowrap;padding:8px;border-radius:8px}.studio-link:hover{background:#e7ebdb}.studio-link:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 @media(max-width:650px){.topbar #fullscreenButton{display:none}}
+
+.storage-warning{position:fixed;z-index:1000;left:12px;right:12px;top:72px;max-height:45vh;overflow:auto;background:#fff3d8;color:#513d21;border:2px solid #a47835;border-radius:12px;padding:12px;box-shadow:0 6px 30px #0003}.storage-warning p{margin:0 0 8px}.storage-warning button{margin:4px;min-height:44px}#importError{color:#963d2b}input[type=range]{min-height:44px}#advanceTime{min-height:44px}

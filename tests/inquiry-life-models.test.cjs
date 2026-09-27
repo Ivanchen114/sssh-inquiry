@@ -12,3 +12,12 @@ test('parachute time is longer than free fall and final displacement equals heig
 test('zero-lift zero-drag glider agrees with independent projectile solution',()=>{const c={...defaults('glider'),lift:0,drag:0},r=m.glider(c),vy=c.speed*Math.sin(c.angle*Math.PI/180),vx=c.speed*Math.cos(c.angle*Math.PI/180),t=(vy+Math.sqrt(vy*vy+2*9.81*c.height))/9.81;near(r.time,t,1e-5);near(r.range,vx*t,1e-4);assert.equal(r.path.at(-1).y,0);assert.equal(r.landed,true);});
 test('incline threshold is independent of mass, static friction balances downslope force',()=>{const c=defaults('grip'),theta=Math.atan(c.friction)*180/Math.PI;assert.equal(m.grip({...c,angle:theta-.01}).moving,false);assert.equal(m.grip({...c,angle:theta+.01}).moving,true);near(m.grip({...c,mass:1600}).threshold,m.grip(c).threshold);const r=m.grip(c);near(r.friction,c.mass/1000*9.81*Math.sin(c.angle*Math.PI/180));});
 test('all eight models have finite defaults and each control endpoint remains finite',()=>{for(const [key,spec]of Object.entries(specs)){const c=defaults(key);const cases=[c,...spec.controls.flatMap(([k,,,min,max])=>[{...c,[k]:min},{...c,[k]:max}])];for(const input of cases){for(const t of [0,spec.maxMinutes||0]){const r=m[key](input,t);for(const [k,v]of Object.entries(r))if(typeof v==='number')assert.ok(Number.isFinite(v),`${key}.${k} with ${JSON.stringify(input)} @${t}`);if(spec.flight){assert.ok(r.time>0&&r.time<100);if(key==='glider')assert.equal(r.landed,true);}}}}});
+
+test('oven and glider expose conservative operational boundaries without clipping equations',()=>{
+ const L=require('../tools/inquiry-studio/life-models.js');
+ const c={diameter:6,initial:25,oven:160,convection:15};
+ assert.equal(L.oven(c,0).withinRange,true);
+ const hot=L.oven(c,120);assert(hot.core>100);assert.equal(hot.withinRange,false);
+ const ballistic={mass:10,area:200,lift:0,drag:0,height:1.5,speed:4,angle:10};assert.equal(L.glider(ballistic).withinRange,true);
+ const loop={...ballistic,lift:1,speed:15};assert.equal(L.glider(loop).withinRange,false);
+});

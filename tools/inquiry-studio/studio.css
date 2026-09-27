@@ -18,3 +18,5 @@
 #configControls input[type=range]{accent-color:#486448}.catalog-link{background:#f9f8ef9c;border-color:#859a7233}.catalog-link:hover{background:#fffdf2}
 .console-heading .eyebrow{color:#7c7755}.console-heading h2{letter-spacing:.03em}.model-settings{border-color:#b7c5a680}
 @media(prefers-reduced-motion:no-preference){.instrument-hud button,.catalog-link{transition:background .18s,box-shadow .18s}}
+
+.model-caveat{font-size:13px;line-height:1.6;padding:10px 12px;border-left:3px solid #a9844d;background:#fbf4de;color:#55482f}

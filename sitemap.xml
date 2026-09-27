@@ -7,7 +7,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://sssh-inquiry.vercel.app/practice/</loc>
+    <loc>https://sssh-inquiry.vercel.app/practice</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -49,7 +49,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://sssh-inquiry.vercel.app/tools/</loc>
+    <loc>https://sssh-inquiry.vercel.app/tools</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -74,12 +74,6 @@
   </url>
   <url>
     <loc>https://sssh-inquiry.vercel.app/units/phase1/airplane-lv1</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://sssh-inquiry.vercel.app/units/phase1/buoyancy-lab</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -334,4 +328,17 @@
     <loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio/catalog</loc>
     <lastmod>2026-09-27</lastmod>
   </url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/pendulum-workbench</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=rubber</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=sound</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=roller</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=boat</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=thermos</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=cooler</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=oven</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=lighting</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=circuit</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=parachute</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=glider</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://sssh-inquiry.vercel.app/tools/inquiry-studio?lab=grip</loc><lastmod>2026-09-27</lastmod></url>
 </urlset>
