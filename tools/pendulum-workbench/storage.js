@@ -15,10 +15,21 @@ class RecordStore {
     this.block('corrupt','舊檔含異常資料，已暫停儲存。可讀紀錄僅供檢視；請先下載原始檔，再套用可讀紀錄。');
    }else this.block('unavailable','無法讀取裝置儲存空間。請下載本頁副本，勿關閉本頁。');
   }
-  if(!this.blocked&&!this.locks?.request)this.block('unsupported','此瀏覽器無法保護多分頁儲存，已暫停寫入；請使用支援 Web Locks 的瀏覽器。');
+  if(!this.blocked&&!this.locks?.request)this.block('unsupported','此瀏覽器不支援安全儲存所需功能，已暫停自動儲存。仍可操作與下載本頁副本；離開前請下載，或更新瀏覽器後再載入副本。');
   return value;
  }
- archiveRaw(){const key=this.key+'-corrupt-'+Date.now()+'-'+Math.random().toString(36).slice(2);this.storage.setItem(key,this.raw);if(this.storage.getItem(key)!==this.raw)throw Error('原始檔備份失敗');return key;}
+ archiveRaw(){
+  const prefix=this.key+'-corrupt-';
+  // Reuse exact bytes, including archives made by older releases. Do not prune user backups.
+  for(let i=0;i<this.storage.length;i++){
+   const key=this.storage.key(i);
+   if(key?.startsWith(prefix)&&this.storage.getItem(key)===this.raw)return key;
+  }
+  const key=prefix+Date.now()+'-'+Math.random().toString(36).slice(2);
+  this.storage.setItem(key,this.raw);
+  if(this.storage.getItem(key)!==this.raw)throw Error('原始檔備份失敗');
+  return key;
+ }
  observe(){try{if(this.storage.getItem(this.key)!==this.raw)this.block('conflict','另一個分頁已更新紀錄。已停止覆寫；先下載本頁副本，再重新載入最新紀錄。');}catch{this.block('unavailable','無法讀取儲存空間；請下載本頁副本。');}}
  write(value,{recover=false}={}){
   let snapshot;try{snapshot=JSON.stringify(this.validate(JSON.parse(JSON.stringify(value))));}catch{this.block('invalid','本頁資料未通過檢查，未覆寫舊檔；請下載本頁副本。');return Promise.resolve(false);}

@@ -16,7 +16,7 @@ function validate(p){
  if(!p.axes||!['length','angle','mass'].includes(p.axes.x)||!['period','squared'].includes(p.axes.y))throw Error('圖表設定格式不正確。');
  return p;
 }
-const store=new window.InquiryStorage.RecordStore({key:KEY,storage:{getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)},locks:navigator.locks,validate,empty:empty});
+const store=new window.InquiryStorage.RecordStore({key:KEY,storage:{get length(){return localStorage.length;},key:index=>localStorage.key(index),getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)},locks:navigator.locks,validate,empty:empty});
 project=store.load();
 window.InquiryStorage.mount(store,()=>project,download);
 function save(){return store.write(project);}

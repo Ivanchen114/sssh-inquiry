@@ -13,7 +13,7 @@ function validate(d){
  const ids=new Set();for(const r of d.records){if(!Number.isInteger(r.id)||r.id<1||ids.has(r.id)||!r.conditions||!r.values||!r.meta||typeof r.outcome!=='string'||typeof r.observation!=='string'||typeof r.reason!=='string'||r.observation.length>500||r.reason.length>500||typeof r.excluded!=='boolean'||r.excluded&&!r.reason.trim()||!Number.isFinite(Date.parse(r.at)))throw Error('量測紀錄格式錯誤。');ids.add(r.id);for(const [key,, ,min,max]of spec.controls)if(!finite(r.conditions[key],min,max))throw Error('實驗條件超出範圍。');for(const value of Object.values(r.values))if(value!==null&&!finite(value,-1e8,1e8))throw Error('讀值格式錯誤。');for(const [key]of spec.outputs)if(!Object.hasOwn(r.values,key))throw Error('缺少讀值欄位。');for(const v of Object.values(r.meta))if(typeof v!=='number'||!Number.isFinite(v))throw Error('量測來源資訊錯誤。');}
  for(const key of ['nextInquiry','analysisNote','claim','evidence','reasoning','reflection','designPlan'])if(d.notes[key]!==undefined&&(typeof d.notes[key]!=='string'||d.notes[key].length>20000))throw Error('筆記格式錯誤。');return d;
 }
-const store=new window.InquiryStorage.RecordStore({key:KEY,storage:{getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)},locks:navigator.locks,validate,empty:blank});
+const store=new window.InquiryStorage.RecordStore({key:KEY,storage:{get length(){return localStorage.length;},key:index=>localStorage.key(index),getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)},locks:navigator.locks,validate,empty:blank});
 data=store.load();
 window.InquiryStorage.mount(store,()=>data,download);
 runId=Math.max(0,...data.records.map(r=>r.meta.run||0));
